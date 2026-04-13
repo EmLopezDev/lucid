@@ -1,0 +1,22 @@
+{
+    "name": "lucid",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "server": "npm run dev --prefix server",
+        "client": "npm run dev --prefix client",
+        "watch": "npm run server & npm run client",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "install:server": "npm install --prefix server",
+        "install:client": "npm install --prefix client",
+        "install": "npm run install:server && npm run install:client"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "commonjs",
+    "devDependencies": {
+        "@types/node": "^25.6.0",
+        "typescript": "^6.0.2"
+    }
+}
