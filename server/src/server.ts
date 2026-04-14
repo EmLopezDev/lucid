@@ -1,11 +1,14 @@
 import http from "http";
 import app from "./app";
+import config from "./config";
+import { mongoConnect } from "./services/mongo";
 
 const server = http.createServer(app);
 
-const PORT = 8000;
+const PORT = config.PORT;
 
-const startServer = () => {
+const startServer = async () => {
+    await mongoConnect();
     server.listen(PORT, () => {
         console.log(`Listening on port: ${PORT}`);
     });
