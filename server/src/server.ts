@@ -1,9 +1,14 @@
 import http from "http";
+import app from "./app";
 
-const server = http.createServer();
+const server = http.createServer(app);
 
 const PORT = 8000;
 
-server.listen(PORT, () => {
-    console.log(`Listening on port: ${PORT}`);
-});
+const startServer = () => {
+    server.listen(PORT, () => {
+        console.log(`Listening on port: ${PORT}`);
+    });
+};
+
+startServer();
