@@ -1,13 +1,14 @@
-import express, { type Response, type Request } from "express";
+import express from "express";
+import {
+    authRegisterUser,
+    authSignInUser,
+    authSignOutUser,
+} from "./authController";
 
 const authRouter = express.Router();
 
-authRouter.get("/register", (_req: Request, res: Response) => {
-    res.json("Register Page");
-});
-
-authRouter.get("/signin", (_req: Request, res: Response) => {
-    res.json("Signin Page");
-});
+authRouter.post("/register", authRegisterUser);
+authRouter.post("/signin", authSignInUser);
+authRouter.post("/signout", authSignOutUser);
 
 export default authRouter;

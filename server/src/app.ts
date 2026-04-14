@@ -7,7 +7,7 @@ import api from "./routes/api";
 const app = express();
 
 app.use(helmet());
-
+// TODO: Change wildcard to actual URLs
 app.use(cors({ origin: ["*"], credentials: true }));
 
 app.use(
