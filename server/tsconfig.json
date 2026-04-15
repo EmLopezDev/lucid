@@ -5,6 +5,7 @@
         "ignoreDeprecations": "6.0",
         "resolveJsonModule": true,
         "module": "esnext",
+        "moduleResolution": "bundler",
         "target": "esnext",
         "types": ["node"],
         "sourceMap": true,

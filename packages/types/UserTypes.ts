@@ -1,7 +1,7 @@
 import * as z from "zod";
 
 export const BaseUser = z.object({
-    id: z.uuid(),
+    _id: z.uuid(),
     first_name: z.string().regex(/^[a-zA-Z\s]+$/, {
         error: "Missing or Invalid field",
     }),
@@ -16,7 +16,7 @@ export const BaseUser = z.object({
 });
 
 export const User = BaseUser.pick({
-    id: true,
+    _id: true,
     first_name: true,
     last_name: true,
     email: true,
@@ -43,6 +43,7 @@ export const UserSignin = BaseUser.pick({
 
 export type UserSigninType = z.infer<typeof UserSignin>;
 
+// TODO: Remove UserSelect if not needed
 export const UserSelect = BaseUser.pick({
-    id: true,
+    _id: true,
 });
