@@ -2,12 +2,15 @@
 
 .register-page {
     min-height: calc(100svh - 60px);
-    padding: u.em(20);
+    max-width: u.rem(768);
+    width: 100%;
+    padding: u.em(40) u.rem(24);
+    margin: 0 auto;
 
     &__form {
         display: flex;
         flex-direction: column;
-        gap: u.rem(20);
+        gap: u.rem(8);
 
         &-label {
             display: flex;
@@ -16,11 +19,11 @@
         }
 
         &-input {
-            height: u.em(50);
+            height: u.em(56);
             width: 100%;
             border-radius: u.em(5);
             border: none;
-            padding: u.em(10);
+            padding: u.em(12);
         }
 
         &-buttons {
@@ -31,10 +34,25 @@
 
             &-item {
                 min-width: u.rem(100);
-                padding: u.em(25);
+                padding: u.rem(16) u.em(24);
                 border-radius: u.em(5);
                 border: none;
             }
         }
+
+        &-error {
+            color: red;
+            height: u.rem(24);
+        }
     }
+}
+
+.horizontal-center {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.hidden {
+    opacity: 0;
 }
