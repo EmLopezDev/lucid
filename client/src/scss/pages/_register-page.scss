@@ -1,1 +1,40 @@
+@use "../utils/" as u;
 
+.register-page {
+    min-height: calc(100svh - 60px);
+    padding: u.em(20);
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        gap: u.rem(20);
+
+        &-label {
+            display: flex;
+            flex-direction: column;
+            gap: u.rem(10);
+        }
+
+        &-input {
+            height: u.em(50);
+            width: 100%;
+            border-radius: u.em(5);
+            border: none;
+            padding: u.em(10);
+        }
+
+        &-buttons {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            gap: u.rem(15);
+
+            &-item {
+                min-width: u.rem(100);
+                padding: u.em(25);
+                border-radius: u.em(5);
+                border: none;
+            }
+        }
+    }
+}
