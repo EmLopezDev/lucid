@@ -8,6 +8,7 @@ interface SignInPageContextType {
     onPasswordChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     showFormDataError: () => JSX.Element;
     onSubmitForm: (e: React.SubmitEvent<HTMLFormElement>) => void;
+    onResetForm: () => void;
 }
 
 export const SignInPageContext = createContext<SignInPageContextType | null>(

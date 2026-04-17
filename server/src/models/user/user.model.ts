@@ -17,7 +17,7 @@ export const registerUser = async (user: UserRegisterType) => {
     const userExists = await findUserByEmail(user.email);
 
     if (userExists) {
-        throw new Error("User already exists");
+        throw new Error("User already exist");
     }
 
     const session = await mongoose.startSession();
@@ -44,7 +44,7 @@ export const signinUser = async (user: UserSigninType) => {
     const userExists = await findUserByEmail(user.email);
 
     if (!userExists) {
-        throw new Error("User doesn't exists");
+        throw new Error("User doesn't exist");
     }
 
     await signInAuthCredentials({

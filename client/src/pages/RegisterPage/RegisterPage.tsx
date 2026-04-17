@@ -1,7 +1,7 @@
 import { RegisterPageProvider } from "./RegisterPageContext";
 import { useRegisterPageContext } from "./useRegisterPageContext";
 import Input from "../../components/Input/Input";
-import { Form } from "../../components/Form/Form";
+import Form from "../../components/Form/Form";
 
 const RegisterPageContent = () => {
     const {
@@ -16,7 +16,7 @@ const RegisterPageContent = () => {
     } = useRegisterPageContext();
     return (
         <Form
-            handleSubmit={onSubmitForm}
+            onSubmit={onSubmitForm}
             errorText={showFormDataError()}
             onResetForm={onResetForm}
             primaryButtonText="Register"

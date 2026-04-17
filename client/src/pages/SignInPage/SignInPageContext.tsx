@@ -58,14 +58,12 @@ export const SignInPageProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const showFormDataError = () => {
-        if (formDataError === "No user found") {
+        if (formDataError === "User doesn't exist") {
             return (
-                <p>
-                    <span className="register-page__error">
-                        {`${formDataError}`} try
-                    </span>
+                <>
+                    <span>{`${formDataError} try`}&nbsp;</span>
                     <Link to="/register"> registering</Link>
-                </p>
+                </>
             );
         } else {
             return (
@@ -104,6 +102,12 @@ export const SignInPageProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    const onResetForm = () => {
+        setFormData({ email: "", password: "" });
+        setErrors({ email: "", password: "" });
+        setFormDataError("");
+    };
+
     const contextValue = {
         formDataError,
         errors,
@@ -111,6 +115,7 @@ export const SignInPageProvider = ({ children }: { children: ReactNode }) => {
         onPasswordChange,
         showFormDataError,
         onSubmitForm,
+        onResetForm,
     };
 
     return (

@@ -6,23 +6,23 @@ type FormType = {
     children: ReactNode;
     primaryButtonText?: string;
     secondaryButtonText?: string;
-    handleSubmit: (e: SubmitEvent<HTMLFormElement>) => void;
-    onResetForm: () => void;
+    onSubmit: (e: SubmitEvent<HTMLFormElement>) => void;
+    onResetForm?: () => void;
 };
 
-export const Form = ({
+const Form = ({
     errorText,
     children,
     primaryButtonText = "Submit",
     secondaryButtonText = "Cancel",
-    handleSubmit,
+    onSubmit,
     onResetForm,
 }: FormType) => {
     return (
         <form
             className="form"
             noValidate
-            onSubmit={handleSubmit}
+            onSubmit={onSubmit}
         >
             {children}
             <div className="form-buttons">
@@ -40,3 +40,5 @@ export const Form = ({
         </form>
     );
 };
+
+export default Form;
