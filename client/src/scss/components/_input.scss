@@ -1,0 +1,9 @@
+@use "../utils/" as u;
+
+.input {
+    height: u.em(56);
+    width: 100%;
+    border-radius: u.em(5);
+    border: none;
+    padding: u.em(12);
+}

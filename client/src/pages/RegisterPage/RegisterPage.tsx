@@ -1,5 +1,6 @@
 import { RegisterPageProvider } from "./RegisterPageContext";
 import { useRegisterPageContext } from "./useRegisterPageContext";
+import Input from "../../components/Input/Input";
 
 const RegisterPageContent = () => {
     const {
@@ -20,8 +21,7 @@ const RegisterPageContent = () => {
             >
                 <label className="register-page__form-label">
                     First Name
-                    <input
-                        className="register-page__form-input"
+                    <Input
                         type="text"
                         name="first_name"
                         required
@@ -33,8 +33,7 @@ const RegisterPageContent = () => {
                 </label>
                 <label className="register-page__form-label">
                     Last Name
-                    <input
-                        className="register-page__form-input"
+                    <Input
                         type="text"
                         name="last_name"
                         required
@@ -46,8 +45,7 @@ const RegisterPageContent = () => {
                 </label>
                 <label className="register-page__form-label">
                     Email
-                    <input
-                        className="register-page__form-input"
+                    <Input
                         type="email"
                         name="email"
                         required
@@ -59,8 +57,7 @@ const RegisterPageContent = () => {
                 </label>
                 <label className="register-page__form-label">
                     Password
-                    <input
-                        className="register-page__form-input"
+                    <Input
                         type="password"
                         name="password"
                         required
