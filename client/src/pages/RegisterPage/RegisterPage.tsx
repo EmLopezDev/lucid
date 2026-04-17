@@ -15,48 +15,46 @@ const RegisterPageContent = () => {
         onResetForm,
     } = useRegisterPageContext();
     return (
-        <div className="register-page">
-            <Form
-                handleSubmit={onSubmitForm}
-                errorText={showFormDataError()}
-                onResetForm={onResetForm}
-                primaryButtonText="Register"
-                secondaryButtonText="Clear"
-            >
-                <Input
-                    type="text"
-                    name="first_name"
-                    label="First Name"
-                    errorText={errors.first_name}
-                    required
-                    onChange={onFirstNameChange}
-                />
-                <Input
-                    type="text"
-                    name="last_name"
-                    label="Last Name"
-                    errorText={errors.last_name}
-                    required
-                    onChange={onLastNameChange}
-                />
-                <Input
-                    type="email"
-                    name="email"
-                    label="Email"
-                    errorText={errors.email}
-                    required
-                    onChange={onEmailChange}
-                />
-                <Input
-                    type="password"
-                    name="password"
-                    label="Password"
-                    errorText={errors.password}
-                    required
-                    onChange={onPasswordChange}
-                />
-            </Form>
-        </div>
+        <Form
+            handleSubmit={onSubmitForm}
+            errorText={showFormDataError()}
+            onResetForm={onResetForm}
+            primaryButtonText="Register"
+            secondaryButtonText="Clear"
+        >
+            <Input
+                type="text"
+                name="first_name"
+                label="First Name"
+                errorText={errors.first_name}
+                required
+                onChange={onFirstNameChange}
+            />
+            <Input
+                type="text"
+                name="last_name"
+                label="Last Name"
+                errorText={errors.last_name}
+                required
+                onChange={onLastNameChange}
+            />
+            <Input
+                type="email"
+                name="email"
+                label="Email"
+                errorText={errors.email}
+                required
+                onChange={onEmailChange}
+            />
+            <Input
+                type="password"
+                name="password"
+                label="Password"
+                errorText={errors.password}
+                required
+                onChange={onPasswordChange}
+            />
+        </Form>
     );
 };
 

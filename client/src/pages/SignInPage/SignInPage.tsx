@@ -1,12 +1,15 @@
 import { SignInPageProvider } from "./SignInPageContext";
 
-//TODO: Convert to arrow function
-function SignInPage() {
+const SignInPageContent = () => {
+    return <div>SignInPage</div>;
+};
+
+const SignInPage = () => {
     return (
         <SignInPageProvider>
-            <div>SignInPage</div>
+            <SignInPageContent />
         </SignInPageProvider>
     );
-}
+};
 
 export default SignInPage;

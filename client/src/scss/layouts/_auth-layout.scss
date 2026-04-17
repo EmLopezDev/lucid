@@ -1,0 +1,9 @@
+@use "../utils/" as u;
+
+.auth-layout {
+    min-height: calc(100svh - 60px);
+    max-width: u.rem(768);
+    width: 100%;
+    padding: u.em(40) u.rem(24);
+    margin: 0 auto;
+}
