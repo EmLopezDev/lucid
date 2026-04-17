@@ -11,9 +11,7 @@ interface SignInPageContextType {
     onResetForm: () => void;
 }
 
-export const SignInPageContext = createContext<SignInPageContextType | null>(
-    null,
-);
+export const SignInPageContext = createContext<SignInPageContextType | null>(null);
 
 export const useSignInPageContext = () => {
     const context = useContext(SignInPageContext);

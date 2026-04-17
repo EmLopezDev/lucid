@@ -98,25 +98,18 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
                 </>
             );
         } else {
-            return (
-                <span className="register-page__form-error center">
-                    {formDataError}
-                </span>
-            );
+            return <span className="register-page__form-error center">{formDataError}</span>;
         }
     };
 
     const registerUser = async (d: UserRegisterType) => {
-        const response = await fetch(
-            "http://localhost:8000/api/v1/auth/register",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(d),
+        const response = await fetch("http://localhost:8000/api/v1/auth/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
             },
-        );
+            body: JSON.stringify(d),
+        });
         if (response.ok) {
             const data = await response.json();
             if (data) {
@@ -155,8 +148,6 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <RegisterPageContext.Provider value={contextValue}>
-            {children}
-        </RegisterPageContext.Provider>
+        <RegisterPageContext.Provider value={contextValue}>{children}</RegisterPageContext.Provider>
     );
 };

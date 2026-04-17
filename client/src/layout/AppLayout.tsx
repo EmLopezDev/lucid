@@ -1,36 +1,36 @@
 import { Outlet } from "react-router";
 import { Link } from "react-router";
 
-function HomeLayout() {
+function AppLayout() {
     return (
-        <div className="home-layout">
-            <nav className="home-layout__nav">
+        <div className="app-layout">
+            <nav className="app-layout__nav">
                 <Link
-                    className="home-layout__header-nav-title"
+                    className="app-layout__header-nav-title"
                     to="/"
                 >
                     LUCID
                 </Link>
-                <div className="home-layout__nav-auth">
+                <div className="app-layout__nav-auth">
                     <Link
-                        className="home-layout__nav-auth-item"
+                        className="app-layout__nav-auth-item"
                         to="/signin"
                     >
                         Sign In
                     </Link>
                     <Link
-                        className="home-layout__nav-auth-item"
+                        className="app-layout__nav-auth-item"
                         to="/register"
                     >
                         Register
                     </Link>
                 </div>
             </nav>
-            <section className="home-layout__outlet">
+            <main className="app-layout__outlet">
                 <Outlet />
-            </section>
+            </main>
         </div>
     );
 }
 
-export default HomeLayout;
+export default AppLayout;

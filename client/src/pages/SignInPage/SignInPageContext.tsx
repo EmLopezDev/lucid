@@ -66,23 +66,18 @@ export const SignInPageProvider = ({ children }: { children: ReactNode }) => {
                 </>
             );
         } else {
-            return (
-                <span className="register-page__error">{formDataError}</span>
-            );
+            return <span className="register-page__error">{formDataError}</span>;
         }
     };
 
     const signInUser = async (d: UserSigninType) => {
-        const response = await fetch(
-            "http://localhost:8000/api/v1/auth/signin",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(d),
+        const response = await fetch("http://localhost:8000/api/v1/auth/signin", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
             },
-        );
+            body: JSON.stringify(d),
+        });
         if (response.ok) {
             const data = await response.json();
             if (data) {
@@ -118,9 +113,5 @@ export const SignInPageProvider = ({ children }: { children: ReactNode }) => {
         onResetForm,
     };
 
-    return (
-        <SignInPageContext.Provider value={contextValue}>
-            {children}
-        </SignInPageContext.Provider>
-    );
+    return <SignInPageContext.Provider value={contextValue}>{children}</SignInPageContext.Provider>;
 };

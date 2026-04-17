@@ -1,6 +1,6 @@
 @use "../utils/" as u;
 
-.auth-layout {
+.app-content-layout {
     min-height: calc(100svh - 60px);
     max-width: u.rem(768);
     width: 100%;

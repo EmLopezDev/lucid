@@ -1,10 +1,4 @@
-import {
-    createContext,
-    useContext,
-    type JSX,
-    type SubmitEvent,
-    type ChangeEvent,
-} from "react";
+import { createContext, useContext, type JSX, type SubmitEvent, type ChangeEvent } from "react";
 import { type UserRegisterType } from "../../../../packages/types";
 
 interface RegisterPageContextType {
@@ -19,15 +13,12 @@ interface RegisterPageContextType {
     onResetForm: () => void;
 }
 
-export const RegisterPageContext =
-    createContext<RegisterPageContextType | null>(null);
+export const RegisterPageContext = createContext<RegisterPageContextType | null>(null);
 
 export const useRegisterPageContext = () => {
     const context = useContext(RegisterPageContext);
     if (!context) {
-        throw new Error(
-            "useRegisterContext must be used within an AppProvider",
-        );
+        throw new Error("useRegisterContext must be used within an AppProvider");
     }
     return context;
 };
