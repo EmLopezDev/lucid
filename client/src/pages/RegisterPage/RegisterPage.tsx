@@ -1,6 +1,7 @@
 import { RegisterPageProvider } from "./RegisterPageContext";
 import { useRegisterPageContext } from "./useRegisterPageContext";
 import Input from "../../components/Input/Input";
+import Button from "../../components/Button/Button";
 
 const RegisterPageContent = () => {
     const {
@@ -68,15 +69,14 @@ const RegisterPageContent = () => {
                     </span>
                 </label>
                 <div className="register-page__form-buttons">
-                    <button className="register-page__form-buttons-item">
-                        Clear
-                    </button>
-                    <button
-                        className="register-page__form-buttons-item"
+                    <Button
                         type="submit"
-                    >
-                        Register
-                    </button>
+                        text="Clear"
+                    />
+                    <Button
+                        type="submit"
+                        text="Register"
+                    />
                 </div>
                 <p className="horizontal-center">{showFormDataError()}</p>
             </form>

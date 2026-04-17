@@ -1,11 +1,11 @@
-import type { ChangeEvent } from "react";
+import { type ChangeEvent, type InputHTMLAttributes } from "react";
 
 type Input = {
     type: "text" | "email" | "password";
     name: string;
     required: boolean;
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-} & React.InputHTMLAttributes<HTMLInputElement>;
+} & InputHTMLAttributes<HTMLInputElement>;
 
 const Input = ({
     name = "",
@@ -15,14 +15,16 @@ const Input = ({
     ...props
 }: Input) => {
     return (
-        <input
-            className="input"
-            type={type}
-            name={name}
-            required={required}
-            onChange={onChange}
-            {...props}
-        />
+        <>
+            <input
+                className="input"
+                type={type}
+                name={name}
+                required={required}
+                onChange={onChange}
+                {...props}
+            />
+        </>
     );
 };
 
