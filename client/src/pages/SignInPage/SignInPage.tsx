@@ -1,5 +1,11 @@
+import { SignInPageProvider } from "./SignInPageContext";
+
 function SignInPage() {
-    return <div>SignInPage</div>;
+    return (
+        <SignInPageProvider>
+            <div>SignInPage</div>
+        </SignInPageProvider>
+    );
 }
 
 export default SignInPage;

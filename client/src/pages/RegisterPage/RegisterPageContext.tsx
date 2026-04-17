@@ -1,10 +1,10 @@
 import { type ReactNode, useState } from "react";
 import { nameCheck, emailCheck } from "../../lib/string";
 import { Link, useNavigate } from "react-router";
-import { RegisterContext } from "./useRegisterPageContext";
+import { RegisterPageContext } from "./useRegisterPageContext";
 import { type UserRegisterType } from "../../../../packages/types";
 
-export const RegisterProvider = ({ children }: { children: ReactNode }) => {
+export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
     const [formData, setFormData] = useState<UserRegisterType>({
         first_name: "",
         last_name: "",
@@ -147,8 +147,8 @@ export const RegisterProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <RegisterContext.Provider value={contextValue}>
+        <RegisterPageContext.Provider value={contextValue}>
             {children}
-        </RegisterContext.Provider>
+        </RegisterPageContext.Provider>
     );
 };

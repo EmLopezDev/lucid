@@ -1,5 +1,5 @@
-import { RegisterProvider } from "./RegisterPageContext";
-import { useRegisterContext } from "./useRegisterPageContext";
+import { RegisterPageProvider } from "./RegisterPageContext";
+import { useRegisterPageContext } from "./useRegisterPageContext";
 
 const RegisterPageContent = () => {
     const {
@@ -10,7 +10,7 @@ const RegisterPageContent = () => {
         onPasswordChange,
         errors,
         showFormDataError,
-    } = useRegisterContext();
+    } = useRegisterPageContext();
     return (
         <div className="register-page">
             <form
@@ -89,9 +89,9 @@ const RegisterPageContent = () => {
 
 const RegisterPage = () => {
     return (
-        <RegisterProvider>
+        <RegisterPageProvider>
             <RegisterPageContent />
-        </RegisterProvider>
+        </RegisterPageProvider>
     );
 };
 
