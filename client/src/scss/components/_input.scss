@@ -16,7 +16,7 @@
     height: u.em(56);
     width: 100%;
     border-radius: u.em(5);
-    border: none;
+    border: 1px solid black;
     padding: u.em(12);
 
     &__error {
