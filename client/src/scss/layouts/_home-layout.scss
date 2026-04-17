@@ -14,6 +14,7 @@
         right: 0;
         padding: u.rem(10) u.rem(24);
         border-bottom: 1px solid black;
+        background-color: var(--color-bg-app);
 
         &-auth {
             display: flex;

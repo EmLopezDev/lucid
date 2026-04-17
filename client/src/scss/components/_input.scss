@@ -1,9 +1,26 @@
 @use "../utils/" as u;
 
+.input__container {
+    display: flex;
+    flex-direction: column;
+    gap: u.rem(10);
+}
+
+.input__label {
+    display: flex;
+    flex-direction: column;
+    gap: u.rem(10);
+}
+
 .input {
     height: u.em(56);
     width: 100%;
     border-radius: u.em(5);
     border: none;
     padding: u.em(12);
+
+    &__error {
+        color: red;
+        height: u.rem(24);
+    }
 }

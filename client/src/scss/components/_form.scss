@@ -1,0 +1,22 @@
+@use "../utils/" as u;
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: u.rem(8);
+
+    &-buttons {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        gap: u.rem(15);
+    }
+
+    &-error {
+        display: flex;
+        justify-content: center;
+        color: red;
+        height: u.rem(24);
+        margin-block-start: u.rem(24);
+    }
+}

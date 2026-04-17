@@ -11,38 +11,7 @@
         display: flex;
         flex-direction: column;
         gap: u.rem(8);
-
-        &-label {
-            display: flex;
-            flex-direction: column;
-            gap: u.rem(10);
-        }
-
-        &-buttons {
-            width: 100%;
-            display: flex;
-            justify-content: flex-end;
-            gap: u.rem(15);
-
-            &-item {
-                min-width: u.rem(100);
-                padding: u.rem(16) u.em(24);
-                border-radius: u.em(5);
-                border: none;
-            }
-        }
-
-        &-error {
-            color: red;
-            height: u.rem(24);
-        }
     }
-}
-
-.horizontal-center {
-    width: 100%;
-    display: flex;
-    justify-content: center;
 }
 
 .hidden {

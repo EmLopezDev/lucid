@@ -4,27 +4,46 @@ type Input = {
     type: "text" | "email" | "password";
     name: string;
     required: boolean;
+    label?: string;
+    errorText?: string;
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 } & InputHTMLAttributes<HTMLInputElement>;
 
 const Input = ({
+    type = "text",
     name = "",
     required = false,
-    type = "text",
+    label = "",
+    errorText = "",
     onChange,
     ...props
 }: Input) => {
     return (
-        <>
-            <input
-                className="input"
-                type={type}
-                name={name}
-                required={required}
-                onChange={onChange}
-                {...props}
-            />
-        </>
+        <div className="input__container">
+            {label ? (
+                <label className="input__label">
+                    {label}
+                    <input
+                        className="input"
+                        type={type}
+                        name={name}
+                        required={required}
+                        onChange={onChange}
+                        {...props}
+                    />
+                </label>
+            ) : (
+                <input
+                    className="input"
+                    type={type}
+                    name={name}
+                    required={required}
+                    onChange={onChange}
+                    {...props}
+                />
+            )}
+            <span className="input__error">{errorText}</span>
+        </div>
     );
 };
 

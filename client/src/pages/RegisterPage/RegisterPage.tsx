@@ -1,85 +1,61 @@
 import { RegisterPageProvider } from "./RegisterPageContext";
 import { useRegisterPageContext } from "./useRegisterPageContext";
 import Input from "../../components/Input/Input";
-import Button from "../../components/Button/Button";
+import { Form } from "../../components/Form/Form";
 
 const RegisterPageContent = () => {
     const {
-        onSubmitForm,
+        errors,
         onFirstNameChange,
         onLastNameChange,
         onEmailChange,
         onPasswordChange,
-        errors,
         showFormDataError,
+        onSubmitForm,
+        onResetForm,
     } = useRegisterPageContext();
     return (
         <div className="register-page">
-            <form
-                className="register-page__form"
-                noValidate
-                onSubmit={onSubmitForm}
+            <Form
+                handleSubmit={onSubmitForm}
+                errorText={showFormDataError()}
+                onResetForm={onResetForm}
+                primaryButtonText="Register"
+                secondaryButtonText="Clear"
             >
-                <label className="register-page__form-label">
-                    First Name
-                    <Input
-                        type="text"
-                        name="first_name"
-                        required
-                        onChange={onFirstNameChange}
-                    />
-                    <span className="register-page__form-error">
-                        {errors.first_name}
-                    </span>
-                </label>
-                <label className="register-page__form-label">
-                    Last Name
-                    <Input
-                        type="text"
-                        name="last_name"
-                        required
-                        onChange={onLastNameChange}
-                    />
-                    <span className="register-page__form-error">
-                        {errors.last_name}
-                    </span>
-                </label>
-                <label className="register-page__form-label">
-                    Email
-                    <Input
-                        type="email"
-                        name="email"
-                        required
-                        onChange={onEmailChange}
-                    />
-                    <span className="register-page__form-error">
-                        {errors.email}
-                    </span>
-                </label>
-                <label className="register-page__form-label">
-                    Password
-                    <Input
-                        type="password"
-                        name="password"
-                        required
-                        onChange={onPasswordChange}
-                    />
-                    <span className="register-page__form-error">
-                        {errors.password}
-                    </span>
-                </label>
-                <div className="register-page__form-buttons">
-                    <Button
-                        type="submit"
-                        text="Clear"
-                    />
-                    <Button
-                        type="submit"
-                        text="Register"
-                    />
-                </div>
-                <p className="horizontal-center">{showFormDataError()}</p>
-            </form>
+                <Input
+                    type="text"
+                    name="first_name"
+                    label="First Name"
+                    errorText={errors.first_name}
+                    required
+                    onChange={onFirstNameChange}
+                />
+                <Input
+                    type="text"
+                    name="last_name"
+                    label="Last Name"
+                    errorText={errors.last_name}
+                    required
+                    onChange={onLastNameChange}
+                />
+                <Input
+                    type="email"
+                    name="email"
+                    label="Email"
+                    errorText={errors.email}
+                    required
+                    onChange={onEmailChange}
+                />
+                <Input
+                    type="password"
+                    name="password"
+                    label="Password"
+                    errorText={errors.password}
+                    required
+                    onChange={onPasswordChange}
+                />
+            </Form>
         </div>
     );
 };

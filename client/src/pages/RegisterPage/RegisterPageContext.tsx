@@ -1,4 +1,4 @@
-import { type ReactNode, useState } from "react";
+import { useState, type ReactNode } from "react";
 import { nameCheck, emailCheck } from "../../lib/string";
 import { Link, useNavigate } from "react-router";
 import { RegisterPageContext } from "./useRegisterPageContext";
@@ -128,11 +128,18 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    const onSubmitForm = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    const onSubmitForm = (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (isFormDataValid(formData)) {
             registerUser(formData);
         }
+    };
+
+    const onResetForm = () => {
+        console.log("CLICK");
+        setFormData({ first_name: "", last_name: "", email: "", password: "" });
+        setErrors({ first_name: "", last_name: "", email: "", password: "" });
+        setFormDataError("");
     };
 
     const contextValue = {
@@ -144,6 +151,7 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
         onPasswordChange,
         showFormDataError,
         onSubmitForm,
+        onResetForm,
     };
 
     return (
