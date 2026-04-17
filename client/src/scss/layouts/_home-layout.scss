@@ -8,7 +8,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        position: sticky;
+        position: fixed;
         top: 0;
         left: 0;
         right: 0;
@@ -24,6 +24,7 @@
 
     &__outlet {
         height: calc(100svh - 60px);
+        padding-block-start: u.rem(60);
         width: 100%;
     }
 }
