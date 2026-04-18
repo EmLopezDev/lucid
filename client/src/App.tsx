@@ -9,8 +9,7 @@ import AuthorizedRoutes from "./routes/AuthorizedRoutes";
 import { useUserContext } from "./contexts/UserContext/useUserContext";
 
 function App() {
-    const { user, isUserAuthenticated } = useUserContext();
-    console.log("USER", user);
+    const { isUserAuthenticated } = useUserContext();
     return (
         <Routes>
             <Route element={<AppLayout isUserAuthenticated={isUserAuthenticated} />}>
