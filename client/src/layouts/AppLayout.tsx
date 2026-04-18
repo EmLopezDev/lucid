@@ -34,7 +34,7 @@ function AppLayout({ isUserAuthenticated }: AppLayoutType) {
                     <div className="app-layout__nav-auth">
                         <Link
                             className="app-layout__nav-auth-item"
-                            to="/library"
+                            to="/user/library"
                         >
                             Library
                         </Link>

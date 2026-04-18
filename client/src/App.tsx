@@ -30,7 +30,7 @@ function App() {
                     />
                     <Route element={<AuthorizedRoutes isAuthenticated={isUserAuthenticated} />}>
                         <Route
-                            path="/library"
+                            path="/user/library"
                             element={<UserLibraryPage />}
                         />
                     </Route>
