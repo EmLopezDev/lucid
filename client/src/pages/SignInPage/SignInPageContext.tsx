@@ -1,9 +1,19 @@
-import { type ReactNode, useState } from "react";
+import { useState, type ReactNode, type JSX, type ChangeEvent, type SubmitEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import { type UserSigninType } from "../../../../packages/types";
 import { SignInPageContext } from "./useSignInPageContext";
 import { emailCheck } from "../../lib/string";
-// import { useUserContext } from "./UserContext";
+import { useUserContext } from "../../contexts/UserContext/useUserContext";
+
+export interface SignInPageContextType {
+    formDataError: string;
+    errors: UserSigninType;
+    onEmailChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    onPasswordChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    showFormDataError: () => JSX.Element;
+    onSubmitForm: (e: SubmitEvent<HTMLFormElement>) => void;
+    onResetForm: () => void;
+}
 
 export const SignInPageProvider = ({ children }: { children: ReactNode }) => {
     const [formData, setFormData] = useState<UserSigninType>({
@@ -18,7 +28,7 @@ export const SignInPageProvider = ({ children }: { children: ReactNode }) => {
 
     const [formDataError, setFormDataError] = useState("");
 
-    // const { setUser } = useUserContext();
+    const { setUser } = useUserContext();
 
     const navigation = useNavigate();
 
@@ -81,7 +91,7 @@ export const SignInPageProvider = ({ children }: { children: ReactNode }) => {
         if (response.ok) {
             const data = await response.json();
             if (data) {
-                // setUser(data);
+                setUser(data);
                 navigation("/");
             }
         } else {

@@ -11,8 +11,8 @@ export const BaseUser = z.object({
     email: z.email(),
     password: z.string().min(8, { error: "Must be a minimum of 8 characters" }),
     created_at: z.date(),
-    updated_at: z.date(),
-    deleted_at: z.date(),
+    updated_at: z.nullable(z.date()).default(null),
+    deleted_at: z.nullable(z.date()).default(null),
 });
 
 export const User = BaseUser.pick({

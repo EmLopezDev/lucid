@@ -1,15 +1,5 @@
-import { createContext, useContext, type JSX } from "react";
-import { type UserSigninType } from "../../../../packages/types";
-
-interface SignInPageContextType {
-    formDataError: string;
-    errors: UserSigninType;
-    onEmailChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    onPasswordChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    showFormDataError: () => JSX.Element;
-    onSubmitForm: (e: React.SubmitEvent<HTMLFormElement>) => void;
-    onResetForm: () => void;
-}
+import { createContext, useContext } from "react";
+import { type SignInPageContextType } from "./SignInPageContext";
 
 export const SignInPageContext = createContext<SignInPageContextType | null>(null);
 

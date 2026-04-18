@@ -1,8 +1,20 @@
-import { useState, type ReactNode } from "react";
+import { useState, type ChangeEvent, type JSX, type ReactNode, type SubmitEvent } from "react";
 import { nameCheck, emailCheck } from "../../lib/string";
 import { Link, useNavigate } from "react-router";
 import { RegisterPageContext } from "./useRegisterPageContext";
 import { type UserRegisterType } from "../../../../packages/types";
+
+export interface RegisterPageContextType {
+    formDataError: string;
+    errors: UserRegisterType;
+    onFirstNameChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    onLastNameChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    onEmailChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    onPasswordChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    showFormDataError: () => JSX.Element;
+    onSubmitForm: (e: SubmitEvent<HTMLFormElement>) => void;
+    onResetForm: () => void;
+}
 
 export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
     const [formData, setFormData] = useState<UserRegisterType>({
@@ -88,7 +100,7 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const showFormDataError = () => {
-        if (formDataError === "User already exists") {
+        if (formDataError === "User already exist") {
             return (
                 <>
                     <span className="register-page__form-error">
