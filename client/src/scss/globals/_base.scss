@@ -12,10 +12,11 @@ ul {
     list-style: none;
 }
 
+// TODO: Change bg to var color
 body {
     min-height: 100svh;
     width: 100%;
-    background-color: var(--color-bg-app);
+    background-color: #0d0d14;
 }
 
 button {

@@ -1,0 +1,8 @@
+.user-library-page {
+    color: #f0eff8;
+    &__games {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 12px;
+    }
+}

@@ -1,0 +1,24 @@
+@use "../utils/" as u;
+
+.card {
+    min-height: u.em(110);
+    border: u.em(0.5) solid black;
+    border-radius: u.em(12);
+    overflow: hidden;
+    background-color: #1a1a2e;
+    color: #f0eff8;
+    cursor: pointer;
+
+    &__banner {
+        height: u.em(110);
+        display: flex;
+        align-items: flex-end;
+        padding: 8px;
+        background: linear-gradient(135deg, #854f0b, #ef9f27);
+        padding: u.em(12) u.em(12) u.em(10);
+    }
+
+    &__content {
+        padding: u.em(10) u.rem(12) u.rem(10);
+    }
+}

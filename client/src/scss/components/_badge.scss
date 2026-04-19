@@ -1,0 +1,31 @@
+@use "../utils/" as u;
+
+.badge {
+    font-size: u.em(9);
+    font-weight: 500;
+    padding: u.em(2) u.em(7);
+    border-radius: u.em(99);
+    letter-spacing: u.em(0.3);
+    position: relative;
+    z-index: 1;
+
+    &__wishlist {
+        background: rgba(239, 159, 39, 0.3);
+        color: #ef9f27;
+    }
+
+    &__completed {
+        background: rgba(29, 158, 117, 0.3);
+        color: #5dcaa5;
+    }
+
+    &__playing {
+        background: rgba(127, 119, 221, 0.3);
+        color: #afa9ec;
+    }
+
+    &__paused {
+        background: rgba(152, 150, 184, 0.3);
+        color: #9896b8;
+    }
+}
