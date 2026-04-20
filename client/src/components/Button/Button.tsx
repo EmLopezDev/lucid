@@ -1,7 +1,7 @@
 import { type ButtonHTMLAttributes } from "react";
 
 type ButtonType = {
-    type: "submit" | "button" | "reset";
+    type?: "submit" | "button" | "reset";
     text: string;
     onClick?: () => void;
 } & ButtonHTMLAttributes<HTMLButtonElement>;

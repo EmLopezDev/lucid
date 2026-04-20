@@ -4,13 +4,15 @@ import { capitalizeString } from "../../lib/string";
 
 type CardType = {
     data: UserLibraryDataType;
+    handleCardSelect: (id: string) => void;
 };
 
-const Card = ({ data }: CardType) => {
+const Card = ({ data, handleCardSelect }: CardType) => {
     return (
         <article
             className="card"
             key={data._id}
+            onClick={() => handleCardSelect(data._id)}
         >
             <div className="card__banner">{data.status && <Badge status={data.status} />}</div>
             <section className="card__content">

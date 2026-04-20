@@ -1,7 +1,23 @@
+import { useState } from "react";
 import UserLibraryMockData from "../../data/UserLibraryMockData";
 import Card from "../../components/Card/Card";
+import CardDetail from "../../components/CardDetail/CardDetail";
+import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 
 const UserLibraryPage = () => {
+    const [selectedCard, setSelectedCard] = useState<UserLibraryDataType | null>(null);
+
+    const onCardSelect = (id: string) => {
+        const [card] = UserLibraryMockData.filter((data) => data._id === id);
+        if (!selectedCard) {
+            setSelectedCard(card);
+        } else if (selectedCard && selectedCard._id !== id) {
+            setSelectedCard(card);
+        } else {
+            setSelectedCard(null);
+        }
+    };
+
     return (
         <div className="user-library-page">
             <div className="user-library-page__filters">
@@ -33,20 +49,21 @@ const UserLibraryPage = () => {
                     <button>List</button>
                 </div>
             </div>
-            <div style={{ display: "flex" }}>
-                <div style={{ flex: 1 }}>
+            <div className="user-library-page__content">
+                <div className="user-library-page__content--main-col">
                     <div className="user-library-page__games">
                         {UserLibraryMockData.map((data) => {
                             return (
                                 <Card
                                     key={data._id}
                                     data={data}
+                                    handleCardSelect={onCardSelect}
                                 />
                             );
                         })}
                     </div>
                 </div>
-                {/* <div style={{ width: "240px" }}>CARD DETAILS</div> */}
+                {selectedCard && <CardDetail data={selectedCard} />}
             </div>
         </div>
     );

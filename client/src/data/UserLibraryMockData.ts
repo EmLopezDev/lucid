@@ -12,7 +12,8 @@ const UserLibraryMockData: UserLibraryDataType[] = [
         favorite: true,
         ownership: { type: "wishlist" },
         rating: "goat",
-        rating_comment: null,
+        rating_comment:
+            "Amazing game, loved every single second of it. Kept me on the edge of my seat",
         status: "wishlist",
         price: "39.99",
     },

@@ -1,8 +1,25 @@
+@use "../utils/" as u;
+
 .user-library-page {
     color: #f0eff8;
+
+    &__filters {
+        border-bottom: u.rem(1) solid rgba(127, 119, 221, 0.18);
+    }
+
+    &__content {
+        display: flex;
+
+        &--main-col {
+            flex: 1;
+            min-width: 0;
+            padding: u.em(14) u.em(16);
+        }
+    }
+
     &__games {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 12px;
+        gap: u.em(12);
     }
 }

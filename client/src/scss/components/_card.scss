@@ -2,7 +2,7 @@
 
 .card {
     min-height: u.em(110);
-    border: u.em(1) solid hsla(245, 60%, 67%, 0.18);
+    border: u.em(1) solid hsla(245, 60%, 67%, 0.2);
     border-radius: u.em(12);
     overflow: hidden;
     background-color: #1a1a2e;
@@ -33,7 +33,7 @@
 
     &__title {
         font-weight: 600;
-        font-size: u.rem(13);
+        font-size: u.rem(12);
         line-height: 1.3;
         letter-spacing: 0;
     }
