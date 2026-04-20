@@ -1,7 +1,7 @@
 import * as z from "zod";
 
 export const Status = z
-    .literal(["playing", "paused", "completed", "wishlist"])
+    .literal(["playing", "paused", "completed", "dropped", "wishlist"])
     .nullable()
     .default(null);
 
@@ -15,14 +15,6 @@ const Own = z.object({
     type: z.literal(["own"]),
     date_played: z.date().nullable().default(null),
     date_purchased: z.date().nullable().default(null),
-    purchase_amount: z
-        .string()
-        .regex(/^(0|[1-9]\d*)\.\d{2}$/, {
-            message: "Must be an amount with two decimals",
-        })
-        .refine((val) => parseFloat(val) > 0, { message: "Money amount must be greater than 0" })
-        .nullable()
-        .default(null),
 });
 
 export const UserLibraryData = z.object({
@@ -37,6 +29,7 @@ export const UserLibraryData = z.object({
     rating: z.literal(["goat", "loved", "liked", "alright", "hated"]).nullable().default(null),
     rating_comment: z.string().nullable().default(null),
     status: Status,
+    price: z.string().nullable().default(null),
 });
 
 export type UserLibraryDataType = z.infer<typeof UserLibraryData>;

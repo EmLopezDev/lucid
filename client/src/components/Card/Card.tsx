@@ -1,5 +1,6 @@
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 import Badge from "../Badge/Badge";
+import { capitalizeString } from "../../lib/string";
 
 type CardType = {
     data: UserLibraryDataType;
@@ -18,10 +19,11 @@ const Card = ({ data }: CardType) => {
                     <span>{data.genre}</span> &#8226; <span>{data.platform}</span>
                 </div>
                 <div className="card__meta">
-                    <span>{data.ownership.type === "own" && data.ownership.purchase_amount}</span>
-                    <span>{data.rating || "No Rating"}</span>
+                    <span className="card__meta--price">
+                        {data.price === "Free" ? "Free" : `$${data.price}`}
+                    </span>
+                    <span>{capitalizeString(data.rating || "No Rating")}</span>
                 </div>
-                <span className="card__status">{data.status || "No Status"}</span>
             </section>
         </article>
     );

@@ -2,23 +2,59 @@
 
 .card {
     min-height: u.em(110);
-    border: u.em(0.5) solid black;
+    border: u.em(1) solid hsla(245, 60%, 67%, 0.18);
     border-radius: u.em(12);
     overflow: hidden;
     background-color: #1a1a2e;
-    color: #f0eff8;
+    color: hsl(247, 39%, 95%);
     cursor: pointer;
+
+    &:hover {
+        background-color: #1f1f35;
+        border: u.em(1) solid hsla(245, 60%, 67%, 0.5);
+    }
+
+    &:active {
+        background-color: #1f1f35;
+        border: u.em(1) solid #7f77dd;
+    }
 
     &__banner {
         height: u.em(110);
         display: flex;
         align-items: flex-end;
-        padding: 8px;
-        background: linear-gradient(135deg, #854f0b, #ef9f27);
+        background: linear-gradient(135deg, hsla(33, 85%, 28%, 0.6), hsla(36, 86%, 55%, 0.9));
         padding: u.em(12) u.em(12) u.em(10);
     }
 
     &__content {
-        padding: u.em(10) u.rem(12) u.rem(10);
+        padding: u.em(10) u.rem(12);
+    }
+
+    &__title {
+        font-weight: 600;
+        font-size: u.rem(13);
+        line-height: 1.3;
+        letter-spacing: 0;
+    }
+
+    &__genre {
+        font-weight: 400;
+        font-size: u.rem(10);
+        line-height: 1.4;
+        color: #6663a0;
+        margin-block-end: u.em(16);
+    }
+
+    &__meta {
+        display: flex;
+        justify-content: space-between;
+        font-weight: 600;
+        font-size: u.rem(12);
+        line-height: 1.2;
+
+        &--price {
+            color: #1d9e75;
+        }
     }
 }
