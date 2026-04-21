@@ -54,12 +54,14 @@ const CardDetail = ({ data }: CardDetailType) => {
                     </div>
                     <div className="card-detail__buttons">
                         <Button
-                            style={{ padding: "4px 4px" }}
-                            text="Edit"
+                            size="small"
+                            text="remove"
+                            variant="danger"
                         />
                         <Button
-                            style={{ padding: "4px" }}
-                            text="Remove"
+                            text="edit"
+                            size="small"
+                            variant="secondary"
                         />
                     </div>
                 </div>

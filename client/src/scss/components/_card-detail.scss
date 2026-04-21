@@ -12,19 +12,19 @@
 .card-detail {
     background-color: #13131f;
     color: hsl(247, 39%, 95%);
-    padding: u.em(16);
 
     &__image {
         height: u.em(150);
-        margin-block-end: u.em(12);
         display: flex;
         align-items: center;
         justify-content: center;
+        background: linear-gradient(135deg, hsla(33, 85%, 28%, 0.6), hsla(36, 86%, 55%, 0.9));
     }
 
     &__content {
         display: flex;
         flex-direction: column;
+        padding: u.em(16);
 
         &__title {
             font-weight: 600;
@@ -125,6 +125,8 @@
 
     &__buttons {
         display: flex;
+        justify-content: flex-end;
+        gap: u.em(8);
         width: 100%;
     }
 }

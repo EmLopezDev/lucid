@@ -9,14 +9,14 @@
     color: hsl(247, 39%, 95%);
     cursor: pointer;
 
-    &:hover {
-        background-color: #1f1f35;
-        border: u.em(1) solid hsla(245, 60%, 67%, 0.5);
-    }
-
-    &:active {
+    &__selected {
         background-color: #1f1f35;
         border: u.em(1) solid #7f77dd;
+    }
+
+    &:hover:not(.card__selected) {
+        background-color: #1f1f35;
+        border: u.em(1) solid hsla(245, 60%, 67%, 0.5);
     }
 
     &__banner {

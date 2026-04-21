@@ -4,18 +4,28 @@
     color: #f0eff8;
 
     &__filters {
+        height: u.em(80);
+        display: flex;
+        flex-wrap: wrap;
         border-bottom: u.rem(1) solid rgba(127, 119, 221, 0.18);
         position: sticky;
         top: u.em(60);
         background-color: #0d0d14;
+        padding: u.em(14) u.em(16);
         z-index: 99;
-        height: u.em(50);
+
+        &__select {
+            height: u.em(56);
+            border-radius: u.em(5);
+            border: 1px solid black;
+            padding: u.em(12);
+        }
     }
 
     &__content {
         display: flex;
         overflow: hidden;
-        height: calc(100svh - 110px);
+        height: calc(100svh - 140px);
 
         &--main-col {
             flex: 1;

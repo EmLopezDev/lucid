@@ -1,16 +1,22 @@
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 import Badge from "../Badge/Badge";
 import { capitalizeString } from "../../lib/string";
+import { cx } from "css-variants";
 
 type CardType = {
     data: UserLibraryDataType;
+    selectedId: string;
     handleCardSelect: (id: string) => void;
 };
 
-const Card = ({ data, handleCardSelect }: CardType) => {
+const Card = ({ data, selectedId, handleCardSelect }: CardType) => {
+    const className = cx({
+        card: true,
+        card__selected: selectedId === data._id,
+    });
     return (
         <article
-            className="card"
+            className={className}
             key={data._id}
             onClick={() => handleCardSelect(data._id)}
         >

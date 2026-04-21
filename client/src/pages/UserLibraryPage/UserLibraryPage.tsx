@@ -3,6 +3,7 @@ import UserLibraryMockData from "../../data/UserLibraryMockData";
 import Card from "../../components/Card/Card";
 import CardDetail from "../../components/CardDetail/CardDetail";
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
+import Input from "../../components/Input/Input";
 
 const UserLibraryPage = () => {
     const [selectedCard, setSelectedCard] = useState<UserLibraryDataType | null>(null);
@@ -21,11 +22,13 @@ const UserLibraryPage = () => {
     return (
         <div className="user-library-page">
             <div className="user-library-page__filters">
-                <input
+                <Input
                     type="search"
                     placeholder="Search library..."
+                    onChange={() => {}}
                 />
                 <select
+                    className="user-library-page__filters__select"
                     name="status-filter"
                     id=""
                 >
@@ -36,6 +39,7 @@ const UserLibraryPage = () => {
                     <option value="wishlist">Wishlist</option>
                 </select>
                 <select
+                    className="user-library-page__filters__select"
                     name="sort-filter"
                     id=""
                 >
@@ -57,6 +61,7 @@ const UserLibraryPage = () => {
                                 <Card
                                     key={data._id}
                                     data={data}
+                                    selectedId={selectedCard?._id || ""}
                                     handleCardSelect={onCardSelect}
                                 />
                             );

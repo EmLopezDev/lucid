@@ -1,7 +1,7 @@
 import { type ChangeEvent, type InputHTMLAttributes } from "react";
 
 type Input = {
-    type?: "text" | "email" | "password";
+    type?: "text" | "email" | "password" | "search";
     name?: string;
     required?: boolean;
     label?: string;
