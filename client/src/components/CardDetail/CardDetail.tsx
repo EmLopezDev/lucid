@@ -48,14 +48,9 @@ const CardDetail = ({ data }: CardDetailType) => {
                     </div>
                     <div className="card-detail__comment">
                         <span className="card-detail__comment--title">Comments</span>
-                        {data.rating_comment ? (
-                            <div className="card-detail__comment--text">{data.rating_comment}</div>
-                        ) : (
-                            <textarea
-                                name=""
-                                id=""
-                            ></textarea>
-                        )}
+                        <div className="card-detail__comment--text">
+                            {data.rating_comment ? data.rating_comment : "No comments added yet."}
+                        </div>
                     </div>
                     <div className="card-detail__buttons">
                         <Button

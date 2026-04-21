@@ -1,10 +1,13 @@
 @use "../utils/" as u;
 
 .card-detail__container {
-    min-height: 100svh;
+    height: calc(100svh - 60px);
     width: u.em(240);
-    flex-shrink: 0;
-    border-left: u.rem(1) solid rgba(127, 119, 221, 0.18);
+    border-left: u.em(1) solid rgba(127, 119, 221, 0.18);
+    position: sticky;
+    top: u.em(110);
+    right: 0;
+    overflow: hidden;
 }
 .card-detail {
     background-color: #13131f;
