@@ -3,7 +3,7 @@ import HomePage from "./pages/HomePage/HomePage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import SignInPage from "./pages/SignInPage/SignInPage";
 import AppLayout from "./layouts/AppLayout";
-import AppContentLayout from "./layouts/AppContentLayout";
+import AppAuthLayout from "./layouts/AppAuthLayout";
 import UserLibraryPage from "./pages/UserLibraryPage/UserLibraryPage";
 import AuthorizedRoutes from "./routes/AuthorizedRoutes";
 import { useUserContext } from "./contexts/UserContext/useUserContext";
@@ -18,7 +18,7 @@ function App() {
                     index
                     element={<HomePage />}
                 />
-                <Route element={<AppContentLayout />}>
+                <Route element={<AppAuthLayout />}>
                     <Route
                         path="/register"
                         element={<RegisterPage />}
@@ -27,12 +27,12 @@ function App() {
                         path="/signin"
                         element={<SignInPage />}
                     />
-                    <Route element={<AuthorizedRoutes isAuthenticated={isUserAuthenticated} />}>
-                        <Route
-                            path="/user/library"
-                            element={<UserLibraryPage />}
-                        />
-                    </Route>
+                </Route>
+                <Route element={<AuthorizedRoutes isAuthenticated={isUserAuthenticated} />}>
+                    <Route
+                        path="/user/library"
+                        element={<UserLibraryPage />}
+                    />
                 </Route>
             </Route>
         </Routes>

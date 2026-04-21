@@ -1,4 +1,4 @@
-@use "typography" as t;
+@use "variables" as v;
 
 *,
 ::before,
@@ -29,7 +29,7 @@ button {
     max-width: 1800px;
     margin: 0 auto;
     color: var(--color-text-primary);
-    font-family: t.$font-family;
+    font-family: v.$font-family;
 }
 
 // TODO: Used to for debugging, remove when done with app

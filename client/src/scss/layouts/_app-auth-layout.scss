@@ -1,7 +1,8 @@
+@use "../globals/" as g;
 @use "../utils/" as u;
 
-.app-content-layout {
-    min-height: calc(100svh - 60px);
+.app-auth-layout {
+    min-height: g.$app-content-height;
     max-width: u.rem(768);
     width: 100%;
     padding: u.em(40) u.rem(24);

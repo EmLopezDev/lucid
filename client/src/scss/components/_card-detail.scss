@@ -1,7 +1,8 @@
 @use "../utils/" as u;
 
 .card-detail__container {
-    width: u.em(200);
+    min-height: 100svh;
+    width: u.em(240);
     flex-shrink: 0;
     border-left: u.rem(1) solid rgba(127, 119, 221, 0.18);
 }
