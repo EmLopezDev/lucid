@@ -28,10 +28,15 @@ const Input = ({
         [`${inputSize}`]: inputSize,
     });
 
+    const inputLabelClassName = cx({
+        input__label: true,
+        [`input__label__${inputSize}`]: inputSize,
+    });
+
     return (
         <div className="input__container">
             {label ? (
-                <label className="input__label">
+                <label className={inputLabelClassName}>
                     {label}
                     <input
                         className={inputClassName}

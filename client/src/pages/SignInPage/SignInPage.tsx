@@ -20,16 +20,19 @@ const SignInPageContent = () => {
             onResetForm={onResetForm}
             primaryButtonText="Sign In"
             secondaryButtonText="Clear"
+            buttonSize="large"
         >
             <Input
                 label="Email"
                 type="email"
+                inputSize="large"
                 onChange={onEmailChange}
                 errorText={errors.email}
             />
             <Input
                 label="Password"
                 type="password"
+                inputSize="large"
                 onChange={onPasswordChange}
                 errorText={errors.password}
             />

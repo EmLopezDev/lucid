@@ -26,6 +26,7 @@ const RegisterPageContent = () => {
                 type="text"
                 name="first_name"
                 label="First Name"
+                inputSize="large"
                 errorText={errors.first_name}
                 required
                 onChange={onFirstNameChange}
@@ -34,6 +35,7 @@ const RegisterPageContent = () => {
                 type="text"
                 name="last_name"
                 label="Last Name"
+                inputSize="large"
                 errorText={errors.last_name}
                 required
                 onChange={onLastNameChange}
@@ -42,6 +44,7 @@ const RegisterPageContent = () => {
                 type="email"
                 name="email"
                 label="Email"
+                inputSize="large"
                 errorText={errors.email}
                 required
                 onChange={onEmailChange}
@@ -50,6 +53,7 @@ const RegisterPageContent = () => {
                 type="password"
                 name="password"
                 label="Password"
+                inputSize="large"
                 errorText={errors.password}
                 required
                 onChange={onPasswordChange}

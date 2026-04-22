@@ -4,6 +4,7 @@ import Button from "../Button/Button";
 type FormType = {
     errorText: JSX.Element;
     children: ReactNode;
+    buttonSize?: "small" | "medium" | "large";
     primaryButtonText?: string;
     secondaryButtonText?: string;
     onSubmit: (e: SubmitEvent<HTMLFormElement>) => void;
@@ -13,6 +14,7 @@ type FormType = {
 const Form = ({
     errorText,
     children,
+    buttonSize = "medium",
     primaryButtonText = "Submit",
     secondaryButtonText = "Cancel",
     onSubmit,
@@ -30,10 +32,12 @@ const Form = ({
                     type="reset"
                     text={secondaryButtonText}
                     onClick={onResetForm}
+                    size={buttonSize}
                 />
                 <Button
                     type="submit"
                     text={primaryButtonText}
+                    size={buttonSize}
                 />
             </div>
             <p className="form-error">{errorText}</p>

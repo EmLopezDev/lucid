@@ -12,6 +12,19 @@
     display: flex;
     flex-direction: column;
     gap: u.rem(10);
+    color: #f0eff8;
+
+    &__small {
+        font-size: u.rem(12);
+    }
+
+    &__medium {
+        font-size: u.rem(14);
+    }
+
+    &__large {
+        font-size: u.rem(16);
+    }
 }
 
 .input {
