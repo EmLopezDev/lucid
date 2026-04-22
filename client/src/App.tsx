@@ -18,7 +18,7 @@ function App() {
                     index
                     element={<HomePage />}
                 />
-                <Route element={<AppAuthLayout />}>
+                <Route element={<AppAuthLayout isAuthenticated={isUserAuthenticated} />}>
                     <Route
                         path="/register"
                         element={<RegisterPage />}

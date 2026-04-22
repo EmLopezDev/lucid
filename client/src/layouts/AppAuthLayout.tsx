@@ -1,6 +1,18 @@
-import { Outlet } from "react-router";
+import { Navigate, Outlet } from "react-router";
 
-const AppAuthLayout = () => {
+type AppAuthLayoutType = {
+    isAuthenticated?: boolean;
+};
+
+const AppAuthLayout = ({ isAuthenticated = true }: AppAuthLayoutType) => {
+    if (isAuthenticated) {
+        return (
+            <Navigate
+                to="/"
+                replace
+            />
+        );
+    }
     return (
         <div className="app-auth-layout">
             <Outlet />
