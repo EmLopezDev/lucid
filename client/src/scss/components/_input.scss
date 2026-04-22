@@ -4,6 +4,8 @@
     display: flex;
     flex-direction: column;
     gap: u.rem(10);
+    min-width: u.em(160);
+    width: 100%;
 }
 
 .input__label {
@@ -13,14 +15,35 @@
 }
 
 .input {
-    height: u.em(56);
     width: 100%;
-    border-radius: u.em(5);
-    border: 1px solid black;
-    padding: u.em(12);
+    background: #1a1a2e;
+    border: u.em(1) solid rgba(127, 119, 221, 0.35);
+    border-radius: u.em(8);
+    color: #f0eff8;
+    outline: none;
+    transition: border-color 0.15s;
+
+    &:focus {
+        border-color: #7f77dd;
+    }
 
     &__error {
         color: red;
         height: u.rem(24);
     }
+}
+
+.small {
+    padding: u.em(12);
+    font-size: u.rem(12);
+}
+
+.medium {
+    padding: u.em(14) u.em(12);
+    font-size: u.rem(14);
+}
+
+.large {
+    padding: u.em(16) u.em(12);
+    font-size: u.rem(16);
 }

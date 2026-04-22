@@ -1,0 +1,29 @@
+@use "../utils/" as u;
+
+.select {
+    background: #1a1a2e;
+    border: u.em(0.5) solid rgba(127, 119, 221, 0.35);
+    border-radius: u.em(8);
+    color: #9896b8;
+    outline: none;
+    cursor: pointer;
+
+    &:focus {
+        border-color: #7f77dd;
+    }
+}
+
+.small {
+    padding: u.em(10) u.em(12);
+    font-size: u.rem(12);
+}
+
+.medium {
+    padding: u.em(14) u.em(12);
+    font-size: u.rem(14);
+}
+
+.large {
+    padding: u.em(16) u.em(12);
+    font-size: u.rem(16);
+}
