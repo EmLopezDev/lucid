@@ -1,9 +1,10 @@
 // Define the shape of each option
 import { cx } from "css-variants";
 import { capitalizeString } from "../../lib/string";
+import type { ChangeEvent } from "react";
 
 export interface SelectOptionType {
-    value: string | number;
+    value: string;
     label: string;
 }
 
@@ -13,7 +14,7 @@ interface SelectType {
     selectSize?: "small" | "medium" | "large";
     options: SelectOptionType[];
     value: string | number;
-    onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+    onChange: (option: SelectOptionType) => void;
 }
 
 const Select = ({ id, selectSize = "medium", options, value, onChange }: SelectType) => {
@@ -21,12 +22,18 @@ const Select = ({ id, selectSize = "medium", options, value, onChange }: SelectT
         select: true,
         [`${selectSize}`]: selectSize,
     });
+
+    const handleChangeSelect = (e: ChangeEvent<HTMLSelectElement>) => {
+        const value: SelectOptionType = { value: e.target.value, label: e.target.value };
+        onChange(value);
+    };
+
     return (
         <select
             id={id}
             className={selectClassName}
             value={value}
-            onChange={onChange}
+            onChange={handleChangeSelect}
         >
             {options.map((option) => (
                 <option

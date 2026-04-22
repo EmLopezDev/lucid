@@ -154,7 +154,7 @@ const UserLibraryMockData: UserLibraryDataType[] = [
         },
         rating: null,
         rating_comment: null,
-        status: "playing",
+        status: "paused",
         price: "59.99",
     },
     {

@@ -1,42 +1,23 @@
-import { useState } from "react";
-import UserLibraryMockData from "../../data/UserLibraryMockData";
 import Card from "../../components/Card/Card";
 import CardDetail from "../../components/CardDetail/CardDetail";
-import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
-import Select, { type SelectOptionType } from "../../components/Select/Select";
+import Select from "../../components/Select/Select";
+import { UserLibraryPageProvider } from "./UserLibraryPageContext";
+import { useUserLibraryPageContext } from "./useUserLibraryPageContext";
 
-const UserLibraryPage = () => {
-    const [selectedCard, setSelectedCard] = useState<UserLibraryDataType | null>(null);
-    const [statusValue, setStatusValue] = useState("");
-    const [filterValue, setFilterValue] = useState("");
-
-    const onCardSelect = (id: string) => {
-        const [card] = UserLibraryMockData.filter((data) => data._id === id);
-        if (!selectedCard) {
-            setSelectedCard(card);
-        } else if (selectedCard && selectedCard._id !== id) {
-            setSelectedCard(card);
-        } else {
-            setSelectedCard(null);
-        }
-    };
-    const statusOptions: SelectOptionType[] = [
-        { value: "all", label: "all" },
-        { value: "playing", label: "playing" },
-        { value: "completed", label: "completed" },
-        { value: "paused", label: "paused" },
-        { value: "wishlist", label: "wishlist" },
-    ];
-
-    const filterOptions: SelectOptionType[] = [
-        { value: "recently", label: "recently added" },
-        { value: "alphabetical", label: "Title A-Z" },
-        { value: "rated", label: "Highest Rated" },
-        { value: "price", label: "Highest Price" },
-    ];
-
+const UserLibraryPageContent = () => {
+    const {
+        libraryData,
+        selectedCard,
+        statusValue,
+        filterValue,
+        statusOptions,
+        filterOptions,
+        onStatusSelect,
+        onFilterSelect,
+        onCardSelect,
+    } = useUserLibraryPageContext();
     return (
         <div className="user-library-page">
             <div className="user-library-page__controls">
@@ -49,15 +30,15 @@ const UserLibraryPage = () => {
                     />
                     <Select
                         id="status-options"
-                        value={statusValue}
+                        value={statusValue.value}
                         options={statusOptions}
-                        onChange={(e) => setStatusValue(e.target.value)}
+                        onChange={onStatusSelect}
                     />
                     <Select
                         id="filter-options"
-                        value={filterValue}
+                        value={filterValue.value}
                         options={filterOptions}
-                        onChange={(e) => setFilterValue(e.target.value)}
+                        onChange={onFilterSelect}
                     />
                 </div>
                 <div className="user-library-page__add__button">
@@ -67,7 +48,7 @@ const UserLibraryPage = () => {
             <div className="user-library-page__content">
                 <div className="user-library-page__content--main-col">
                     <div className="user-library-page__games">
-                        {UserLibraryMockData.map((data) => {
+                        {libraryData.map((data) => {
                             return (
                                 <Card
                                     key={data._id}
@@ -82,6 +63,14 @@ const UserLibraryPage = () => {
                 {selectedCard && <CardDetail data={selectedCard} />}
             </div>
         </div>
+    );
+};
+
+const UserLibraryPage = () => {
+    return (
+        <UserLibraryPageProvider>
+            <UserLibraryPageContent />
+        </UserLibraryPageProvider>
     );
 };
 
