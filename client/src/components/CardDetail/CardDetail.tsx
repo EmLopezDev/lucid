@@ -42,14 +42,14 @@ const CardDetail = ({ data }: CardDetailType) => {
                         <div className="card-detail__grid__stat">
                             <span className="card-detail__grid__stat--title">Rating</span>
                             <span className="card-detail__grid__stat--rating">
-                                {capitalizeString(data.rating || "no rating")}
+                                {data.rating || capitalizeString("no rating")}
                             </span>
                         </div>
                     </div>
                     <div className="card-detail__comment">
                         <span className="card-detail__comment--title">Comments</span>
                         <div className="card-detail__comment--text">
-                            {data.rating_comment ? data.rating_comment : "No comments added yet."}
+                            {data.comment ? data.comment : "No comments added yet."}
                         </div>
                     </div>
                     <div className="card-detail__buttons">

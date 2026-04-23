@@ -1,6 +1,5 @@
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 import Badge from "../Badge/Badge";
-import { capitalizeString } from "../../lib/string";
 import { cx } from "css-variants";
 
 type CardType = {
@@ -30,7 +29,7 @@ const Card = ({ data, selectedId, handleCardSelect }: CardType) => {
                     <span className="card__meta--price">
                         {data.price === "0.00" ? "Free" : `$${data.price}`}
                     </span>
-                    <span>{capitalizeString(data.rating || "No Rating")}</span>
+                    <span>{data.rating ? data.rating : "No Rating"}</span>
                 </div>
             </section>
         </article>

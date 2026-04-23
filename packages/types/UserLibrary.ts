@@ -26,8 +26,16 @@ export const UserLibraryData = z.object({
     platform: z.literal(["PC", "Playstation", "Xbox", "Switch"]),
     favorite: z.boolean().default(false),
     ownership: z.discriminatedUnion("type", [WishList, Own]),
-    rating: z.literal(["goat", "loved", "liked", "alright", "hated"]).nullable().default(null),
-    rating_comment: z.string().nullable().default(null),
+    rating: z.coerce
+        .number()
+        .min(0)
+        .max(5)
+        .refine((n) => n.toString().split(".")[1]?.length <= 2, {
+            message: "Max 2 decimal places allowed",
+        })
+        .nullable()
+        .default(null),
+    comment: z.string().nullable().default(null),
     status: Status,
     price: z.string().nullable().default(null),
     created_at: z.date(),
