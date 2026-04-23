@@ -1,4 +1,4 @@
-import { useEffect, useEffectEvent, useState, type ReactNode } from "react";
+import { useCallback, useState, type ReactNode } from "react";
 import { UserLibraryPageContext } from "./useUserLibraryPageContext";
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 import { type SelectOptionType } from "../../components/Select/Select";
@@ -14,9 +14,9 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
         value: "all",
         label: "all",
     });
-    const [filterValue, setFilterValue] = useState<SelectOptionType>({
+    const [sortValue, setSortValue] = useState<SelectOptionType>({
         value: "recently",
-        label: "recently added",
+        label: "recently",
     });
 
     const statusOptions: SelectOptionType[] = [
@@ -28,7 +28,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
         { value: "wishlist", label: "wishlist" },
     ];
 
-    const filterOptions: SelectOptionType[] = [
+    const sortOptions: SelectOptionType[] = [
         { value: "recently", label: "recently added" },
         { value: "alphabetical", label: "Title A-Z" },
         { value: "rated", label: "Highest Rated" },
@@ -45,59 +45,53 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
             setSelectedCard(null);
         }
     };
-
-    const onStatusSelect = (option: SelectOptionType) => {
-        setStatusValue(option);
-    };
-
-    const onFilterSelect = (option: SelectOptionType) => {
-        setFilterValue(option);
-    };
-
-    const handleUpdateLibrary = useEffectEvent((value: UserLibraryDataType[]) => {
+    const onLibraryUpdate = (value: UserLibraryDataType[]) => {
         setLibraryData(value);
-    });
+    };
 
-    useEffect(() => {
-        console.log(statusValue);
-        if (statusValue.value === "all") {
-            handleUpdateLibrary(UserLibraryMockData);
-        }
-        if (statusValue.value === "playing") {
-            const filterPlaying = UserLibraryMockData.filter((data) => data.status === "playing");
-            handleUpdateLibrary(filterPlaying);
-        }
-        if (statusValue.value === "completed") {
-            const filterCompleted = UserLibraryMockData.filter(
-                (data) => data.status === "completed",
+    const onStatusSelect = useCallback((option: SelectOptionType) => {
+        setStatusValue(option);
+        if (option.value === "all") {
+            onLibraryUpdate(UserLibraryMockData);
+        } else {
+            const filterByStatus = UserLibraryMockData.filter(
+                (data) => data.status === option.value,
             );
-            handleUpdateLibrary(filterCompleted);
+            onLibraryUpdate(filterByStatus);
         }
-        if (statusValue.value === "dropped") {
-            const filterDropped = UserLibraryMockData.filter((data) => data.status === "dropped");
-            handleUpdateLibrary(filterDropped);
-        }
-        if (statusValue.value === "paused") {
-            const filterPaused = UserLibraryMockData.filter((data) => data.status === "paused");
-            handleUpdateLibrary(filterPaused);
-        }
+    }, []);
 
-        if (statusValue.value === "wishlist") {
-            const filterWishlist = UserLibraryMockData.filter((data) => data.status === "wishlist");
-            handleUpdateLibrary(filterWishlist);
-        }
-    }, [statusValue]);
+    const onSortSelect = useCallback(
+        (option: SelectOptionType) => {
+            setSortValue(option);
+            if (option.value === "recently") {
+                const sortByDate = libraryData.sort(
+                    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+                );
+                onLibraryUpdate(sortByDate);
+            } else if (option.value === "alphabetical") {
+                const sortByTitle = libraryData.sort((a, b) => a.title.localeCompare(b.title));
+                onLibraryUpdate(sortByTitle);
+            } else if (option.value === "price") {
+                const sortByPrice = libraryData.sort(
+                    (a, b) => Number(b.price ?? 0) - Number(a.price ?? 0),
+                );
+                onLibraryUpdate(sortByPrice);
+            }
+        },
+        [libraryData],
+    );
 
     const contextValue = {
         libraryData,
         statusOptions,
-        filterOptions,
+        sortOptions,
         selectedCard,
         setSelectedCard,
         statusValue,
-        filterValue,
+        sortValue,
         onStatusSelect,
-        onFilterSelect,
+        onSortSelect,
         onCardSelect,
     };
     return (

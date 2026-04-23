@@ -28,7 +28,7 @@ const Card = ({ data, selectedId, handleCardSelect }: CardType) => {
                 </div>
                 <div className="card__meta">
                     <span className="card__meta--price">
-                        {data.price === "Free" ? "Free" : `$${data.price}`}
+                        {data.price === "0.00" ? "Free" : `$${data.price}`}
                     </span>
                     <span>{capitalizeString(data.rating || "No Rating")}</span>
                 </div>

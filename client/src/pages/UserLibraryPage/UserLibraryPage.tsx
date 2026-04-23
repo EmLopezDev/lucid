@@ -11,11 +11,11 @@ const UserLibraryPageContent = () => {
         libraryData,
         selectedCard,
         statusValue,
-        filterValue,
+        sortValue,
         statusOptions,
-        filterOptions,
+        sortOptions,
         onStatusSelect,
-        onFilterSelect,
+        onSortSelect,
         onCardSelect,
     } = useUserLibraryPageContext();
     return (
@@ -35,10 +35,10 @@ const UserLibraryPageContent = () => {
                         onChange={onStatusSelect}
                     />
                     <Select
-                        id="filter-options"
-                        value={filterValue.value}
-                        options={filterOptions}
-                        onChange={onFilterSelect}
+                        id="sort-options"
+                        value={sortValue.value}
+                        options={sortOptions}
+                        onChange={onSortSelect}
                     />
                 </div>
                 <div className="user-library-page__add__button">

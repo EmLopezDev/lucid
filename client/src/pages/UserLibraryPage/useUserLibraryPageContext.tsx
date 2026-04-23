@@ -5,13 +5,13 @@ import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary
 interface UserLibraryPageContextType {
     libraryData: UserLibraryDataType[];
     statusOptions: SelectOptionType[];
-    filterOptions: SelectOptionType[];
+    sortOptions: SelectOptionType[];
     selectedCard: UserLibraryDataType | null;
     statusValue: SelectOptionType;
-    filterValue: SelectOptionType;
+    sortValue: SelectOptionType;
     setSelectedCard: Dispatch<SetStateAction<UserLibraryDataType | null>>;
     onStatusSelect: (option: SelectOptionType) => void;
-    onFilterSelect: (option: SelectOptionType) => void;
+    onSortSelect: (option: SelectOptionType) => void;
     onCardSelect: (id: string) => void;
 }
 

@@ -30,6 +30,9 @@ export const UserLibraryData = z.object({
     rating_comment: z.string().nullable().default(null),
     status: Status,
     price: z.string().nullable().default(null),
+    created_at: z.date(),
+    updated_at: z.date().nullable().default(null),
+    deleted_at: z.date().nullable().default(null),
 });
 
 export type UserLibraryDataType = z.infer<typeof UserLibraryData>;

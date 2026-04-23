@@ -16,6 +16,9 @@ const UserLibraryMockData: UserLibraryDataType[] = [
             "Amazing game, loved every single second of it. Kept me on the edge of my seat",
         status: "wishlist",
         price: "39.99",
+        created_at: new Date("2021-05-15"),
+        updated_at: null,
+        deleted_at: null,
     },
     {
         _id: crypto.randomUUID(),
@@ -33,7 +36,10 @@ const UserLibraryMockData: UserLibraryDataType[] = [
         rating: "liked",
         rating_comment: null,
         status: "playing",
-        price: "Free",
+        price: "0.00",
+        created_at: new Date("2020-05-15"),
+        updated_at: null,
+        deleted_at: null,
     },
     {
         _id: crypto.randomUUID(),
@@ -52,6 +58,9 @@ const UserLibraryMockData: UserLibraryDataType[] = [
         rating_comment: null,
         status: "completed",
         price: "19.99",
+        created_at: new Date("2021-06-15"),
+        updated_at: null,
+        deleted_at: null,
     },
     {
         _id: crypto.randomUUID(),
@@ -70,6 +79,9 @@ const UserLibraryMockData: UserLibraryDataType[] = [
         rating_comment: null,
         status: "playing",
         price: "59.99",
+        created_at: new Date("2021-05-01"),
+        updated_at: null,
+        deleted_at: null,
     },
     {
         _id: crypto.randomUUID(),
@@ -81,13 +93,16 @@ const UserLibraryMockData: UserLibraryDataType[] = [
         favorite: false,
         ownership: {
             type: "own",
-            date_played: new Date(),
+            date_played: new Date("2019-05-15"),
             date_purchased: null,
         },
         rating: "alright",
         rating_comment: null,
         status: "dropped",
         price: "19.99",
+        created_at: new Date(),
+        updated_at: null,
+        deleted_at: null,
     },
     {
         _id: crypto.randomUUID(),
@@ -102,6 +117,9 @@ const UserLibraryMockData: UserLibraryDataType[] = [
         rating_comment: null,
         status: "wishlist",
         price: "39.99",
+        created_at: new Date("2021-05-15"),
+        updated_at: null,
+        deleted_at: null,
     },
     {
         _id: crypto.randomUUID(),
@@ -119,7 +137,10 @@ const UserLibraryMockData: UserLibraryDataType[] = [
         rating: "liked",
         rating_comment: null,
         status: "playing",
-        price: "Free",
+        price: "0.00",
+        created_at: new Date("2023-12-15"),
+        updated_at: null,
+        deleted_at: null,
     },
     {
         _id: crypto.randomUUID(),
@@ -138,6 +159,9 @@ const UserLibraryMockData: UserLibraryDataType[] = [
         rating_comment: null,
         status: "completed",
         price: "19.99",
+        created_at: new Date("2015-08-15"),
+        updated_at: null,
+        deleted_at: null,
     },
     {
         _id: crypto.randomUUID(),
@@ -156,6 +180,9 @@ const UserLibraryMockData: UserLibraryDataType[] = [
         rating_comment: null,
         status: "paused",
         price: "59.99",
+        created_at: new Date("2022-05-15"),
+        updated_at: null,
+        deleted_at: null,
     },
     {
         _id: crypto.randomUUID(),
@@ -170,6 +197,9 @@ const UserLibraryMockData: UserLibraryDataType[] = [
         rating_comment: null,
         status: "wishlist",
         price: "19.99",
+        created_at: new Date("2018-02-15"),
+        updated_at: null,
+        deleted_at: null,
     },
     {
         _id: crypto.randomUUID(),
@@ -184,6 +214,9 @@ const UserLibraryMockData: UserLibraryDataType[] = [
         rating_comment: null,
         status: "wishlist",
         price: "39.99",
+        created_at: new Date(),
+        updated_at: null,
+        deleted_at: null,
     },
 ];
 
