@@ -61,10 +61,12 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
     };
 
     const onSearchTitle = (event: ChangeEvent<HTMLInputElement>) => {
+        setSelectedCard(null);
         setFilters((prevState) => ({ ...prevState, searchTitle: event.target.value }));
     };
 
     const onStatusSelect = (option: SelectOptionType) => {
+        setSelectedCard(null);
         setFilters((prevState) => ({
             ...prevState,
             statusValue: { value: option.value, label: option.label },
@@ -72,6 +74,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
     };
 
     const onSortSelect = (option: SortOptionType) => {
+        setSelectedCard(null);
         setFilters((prevState) => ({
             ...prevState,
             sortValue: { value: option.value, label: option.label },
@@ -102,6 +105,10 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
             }
             if (filters.sortValue.value === "alphabetical") {
                 dataCopy = dataCopy.sort((a, b) => a.title.localeCompare(b.title));
+            }
+
+            if (filters.sortValue.value === "rated") {
+                dataCopy = dataCopy.sort((a, b) => Number(b.rating ?? 0) - Number(a.rating ?? 0));
             }
             if (filters.sortValue.value === "price") {
                 dataCopy = dataCopy.sort((a, b) => Number(b.price ?? 0) - Number(a.price ?? 0));
