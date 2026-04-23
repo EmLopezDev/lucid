@@ -7,14 +7,14 @@ import {
 } from "react";
 import { type SelectOptionType } from "../../components/Select/Select";
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
+import { type FilterType } from "./UserLibraryPageContext";
 
 interface UserLibraryPageContextType {
+    filters: FilterType;
     libraryData: UserLibraryDataType[];
     statusOptions: SelectOptionType[];
     sortOptions: SelectOptionType[];
     selectedCard: UserLibraryDataType | null;
-    statusValue: SelectOptionType;
-    sortValue: SelectOptionType;
     setSelectedCard: Dispatch<SetStateAction<UserLibraryDataType | null>>;
     onSearchTitle: (e: ChangeEvent<HTMLInputElement>) => void;
     onStatusSelect: (option: SelectOptionType) => void;

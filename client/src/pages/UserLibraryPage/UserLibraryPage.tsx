@@ -8,10 +8,11 @@ import { useUserLibraryPageContext } from "./useUserLibraryPageContext";
 
 const UserLibraryPageContent = () => {
     const {
+        filters,
         libraryData,
         selectedCard,
-        statusValue,
-        sortValue,
+        // statusValue,
+        // sortValue,
         statusOptions,
         sortOptions,
         onStatusSelect,
@@ -31,13 +32,13 @@ const UserLibraryPageContent = () => {
                     />
                     <Select
                         id="status-options"
-                        value={statusValue.value}
+                        value={filters.statusValue.value}
                         options={statusOptions}
                         onChange={onStatusSelect}
                     />
                     <Select
                         id="sort-options"
-                        value={sortValue.value}
+                        value={filters.sortValue.value}
                         options={sortOptions}
                         onChange={onSortSelect}
                     />
@@ -47,21 +48,27 @@ const UserLibraryPageContent = () => {
                 </div>
             </div>
             <div className="user-library-page__content">
-                <div className="user-library-page__content--main-col">
-                    <div className="user-library-page__games">
-                        {libraryData.map((data) => {
-                            return (
-                                <Card
-                                    key={data._id}
-                                    data={data}
-                                    selectedId={selectedCard?._id || ""}
-                                    handleCardSelect={onCardSelect}
-                                />
-                            );
-                        })}
-                    </div>
-                </div>
-                {selectedCard && <CardDetail data={selectedCard} />}
+                {!libraryData.length ? (
+                    <div className="user-library-page__content--none">No Games Found</div>
+                ) : (
+                    <>
+                        <div className="user-library-page__content--main-col">
+                            <div className="user-library-page__games">
+                                {libraryData.map((data) => {
+                                    return (
+                                        <Card
+                                            key={data._id}
+                                            data={data}
+                                            selectedId={selectedCard?._id || ""}
+                                            handleCardSelect={onCardSelect}
+                                        />
+                                    );
+                                })}
+                            </div>
+                        </div>
+                        {selectedCard && <CardDetail data={selectedCard} />}
+                    </>
+                )}
             </div>
         </div>
     );

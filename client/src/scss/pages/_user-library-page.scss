@@ -40,6 +40,15 @@
         overflow: hidden;
         height: calc(100svh - 185px);
 
+        &--none {
+            width: 100%;
+            padding: u.em(14) u.em(16);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: u.rem(24);
+        }
+
         &--main-col {
             flex: 1;
             min-width: 0;
