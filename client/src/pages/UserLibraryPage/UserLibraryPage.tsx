@@ -17,6 +17,7 @@ const UserLibraryPageContent = () => {
         onStatusSelect,
         onSortSelect,
         onCardSelect,
+        onSearchTitle,
     } = useUserLibraryPageContext();
     return (
         <div className="user-library-page">
@@ -25,7 +26,7 @@ const UserLibraryPageContent = () => {
                     <Input
                         type="search"
                         placeholder="Search library..."
-                        onChange={() => {}}
+                        onChange={onSearchTitle}
                         hasErrorText={false}
                     />
                     <Select

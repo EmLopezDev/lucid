@@ -1,4 +1,10 @@
-import { createContext, useContext, type Dispatch, type SetStateAction } from "react";
+import {
+    createContext,
+    useContext,
+    type Dispatch,
+    type SetStateAction,
+    type ChangeEvent,
+} from "react";
 import { type SelectOptionType } from "../../components/Select/Select";
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 
@@ -10,6 +16,7 @@ interface UserLibraryPageContextType {
     statusValue: SelectOptionType;
     sortValue: SelectOptionType;
     setSelectedCard: Dispatch<SetStateAction<UserLibraryDataType | null>>;
+    onSearchTitle: (e: ChangeEvent<HTMLInputElement>) => void;
     onStatusSelect: (option: SelectOptionType) => void;
     onSortSelect: (option: SelectOptionType) => void;
     onCardSelect: (id: string) => void;

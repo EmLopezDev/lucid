@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useState, type ReactNode, type ChangeEvent } from "react";
 import { nameCheck, emailCheck } from "../../lib/string";
 import { Link, useNavigate } from "react-router";
 import { RegisterPageContext } from "./useRegisterPageContext";
@@ -23,25 +23,25 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
 
     const navigate = useNavigate();
 
-    const onFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onFirstNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         setFormData((prevState: UserRegisterType) => {
             return Object.assign({}, prevState, { first_name: e.target.value });
         });
     };
 
-    const onLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onLastNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         setFormData((prevState: UserRegisterType) => {
             return Object.assign({}, prevState, { last_name: e.target.value });
         });
     };
 
-    const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
         setFormData((prevState: UserRegisterType) => {
             return Object.assign({}, prevState, { email: e.target.value });
         });
     };
 
-    const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
         setFormData((prevState: UserRegisterType) => {
             return Object.assign({}, prevState, { password: e.target.value });
         });

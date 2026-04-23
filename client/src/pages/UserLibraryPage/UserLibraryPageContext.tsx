@@ -1,15 +1,24 @@
-import { useCallback, useState, type ReactNode } from "react";
+import { useCallback, useState, type ChangeEvent, type ReactNode } from "react";
 import { UserLibraryPageContext } from "./useUserLibraryPageContext";
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 import { type SelectOptionType } from "../../components/Select/Select";
 import UserLibraryMockData from "../../data/UserLibraryMockData";
 
 export type StatusType = "all" | "playing" | "completed" | "paused" | "wishlist";
-export type FilterType = "recently" | "alphabetical" | "rated" | "price";
+export type SortType = "recently" | "alphabetical" | "rated" | "price";
 
 export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) => {
     const [libraryData, setLibraryData] = useState<UserLibraryDataType[]>(UserLibraryMockData);
     const [selectedCard, setSelectedCard] = useState<UserLibraryDataType | null>(null);
+    // const [filters, setFilters] = useState<{
+    //     searchTitle: string;
+    //     status: StatusType;
+    //     sort: SortType;
+    // }>({
+    //     searchTitle: "",
+    //     status: "all",
+    //     sort: "recently",
+    // });
     const [statusValue, setStatusValue] = useState<SelectOptionType>({
         value: "all",
         label: "all",
@@ -49,17 +58,27 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
         setLibraryData(value);
     };
 
-    const onStatusSelect = useCallback((option: SelectOptionType) => {
-        setStatusValue(option);
-        if (option.value === "all") {
-            onLibraryUpdate(UserLibraryMockData);
-        } else {
-            const filterByStatus = UserLibraryMockData.filter(
-                (data) => data.status === option.value,
-            );
-            onLibraryUpdate(filterByStatus);
-        }
+    const onSearchTitle = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        const title = e.target.value.toLowerCase();
+        const filterByTitle = UserLibraryMockData.filter((data) =>
+            data.title.toLowerCase().startsWith(title),
+        );
+        console.log(filterByTitle);
+        onLibraryUpdate(filterByTitle);
     }, []);
+
+    const onStatusSelect = useCallback(
+        (option: SelectOptionType) => {
+            setStatusValue(option);
+            if (option.value === "all") {
+                onLibraryUpdate(UserLibraryMockData);
+            } else {
+                const filterByStatus = libraryData.filter((data) => data.status === option.value);
+                onLibraryUpdate(filterByStatus);
+            }
+        },
+        [libraryData],
+    );
 
     const onSortSelect = useCallback(
         (option: SelectOptionType) => {
@@ -90,6 +109,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
         setSelectedCard,
         statusValue,
         sortValue,
+        onSearchTitle,
         onStatusSelect,
         onSortSelect,
         onCardSelect,

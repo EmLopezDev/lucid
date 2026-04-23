@@ -32,13 +32,13 @@ export const SignInPageProvider = ({ children }: { children: ReactNode }) => {
 
     const navigation = useNavigate();
 
-    const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
         setFormData((prevState: UserSigninType) => {
             return Object.assign({}, prevState, { email: e.target.value });
         });
     };
 
-    const onPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
         setFormData((prevState: UserSigninType) => {
             return Object.assign({}, prevState, { password: e.target.value });
         });
