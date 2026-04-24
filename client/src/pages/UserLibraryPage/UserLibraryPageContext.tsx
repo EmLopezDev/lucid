@@ -25,7 +25,6 @@ export type FilterType = {
 };
 
 export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) => {
-    // const [libraryData, setLibraryData] = useState<UserLibraryDataType[]>(UserLibraryMockData);
     const [selectedCard, setSelectedCard] = useState<UserLibraryDataType | null>(null);
     const [filters, setFilters] = useState<FilterType>({
         searchTitle: "",
@@ -81,40 +80,44 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
         }));
     };
 
-    const filterData = useCallback(() => {
-        let dataCopy = [...UserLibraryMockData];
-        if (filters.searchTitle) {
-            dataCopy = dataCopy.filter((data) =>
-                data.title.toLowerCase().startsWith(filters.searchTitle.toLowerCase()),
+    const filterByTitle = (data: UserLibraryDataType[], title: string) => {
+        if (!title) return data;
+        return data.filter((d) => {
+            return d.title.toLowerCase().startsWith(title.toLowerCase());
+        });
+    };
+
+    const filterByStatus = (data: UserLibraryDataType[], status: StatusType | string) => {
+        if (status === "all") {
+            return [...data];
+        } else {
+            return data.filter((d) => d.status === status);
+        }
+    };
+
+    const filterBySort = (data: UserLibraryDataType[], sort: SortValueType | string) => {
+        if (sort === "recently") {
+            return data.sort(
+                (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
             );
+        } else if (sort === "alphabetical") {
+            return data.sort((a, b) => a.title.localeCompare(b.title));
+        } else if (sort === "rated") {
+            return data.sort((a, b) => Number(b.rating ?? 0) - Number(a.rating ?? 0));
+        } else {
+            return data.sort((a, b) => Number(b.price ?? 0) - Number(a.price ?? 0));
         }
-        if (filters.statusValue) {
-            if (filters.statusValue.value === "all") {
-                dataCopy = [...dataCopy];
-            }
-            if (filters.statusValue.value !== "all") {
-                dataCopy = dataCopy.filter((data) => data.status === filters.statusValue.value);
-            }
-        }
+    };
 
-        if (filters.sortValue) {
-            if (filters.sortValue.value === "recently") {
-                dataCopy = dataCopy.sort(
-                    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
-                );
-            }
-            if (filters.sortValue.value === "alphabetical") {
-                dataCopy = dataCopy.sort((a, b) => a.title.localeCompare(b.title));
-            }
-
-            if (filters.sortValue.value === "rated") {
-                dataCopy = dataCopy.sort((a, b) => Number(b.rating ?? 0) - Number(a.rating ?? 0));
-            }
-            if (filters.sortValue.value === "price") {
-                dataCopy = dataCopy.sort((a, b) => Number(b.price ?? 0) - Number(a.price ?? 0));
-            }
-        }
-        return dataCopy;
+    const filterData = useCallback(() => {
+        const dataCopy = [...UserLibraryMockData];
+        const { searchTitle, statusValue, sortValue } = filters;
+        // TODO: make these function calls look better
+        const filteredDataCopy = filterBySort(
+            filterByStatus(filterByTitle(dataCopy, searchTitle), statusValue.value),
+            sortValue.value,
+        );
+        return filteredDataCopy;
     }, [filters]);
 
     const contextValue = {
