@@ -1,4 +1,4 @@
-import { useCallback, useState, type ChangeEvent, type ReactNode } from "react";
+import { useEffect, useEffectEvent, useState, type ChangeEvent, type ReactNode } from "react";
 import { UserLibraryPageContext } from "./useUserLibraryPageContext";
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 import { type SelectOptionType } from "../../components/Select/Select";
@@ -25,6 +25,7 @@ export type FilterType = {
 };
 
 export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) => {
+    const [libraryData, setLibraryData] = useState<UserLibraryDataType[]>(UserLibraryMockData);
     const [selectedCard, setSelectedCard] = useState<UserLibraryDataType | null>(null);
     const [filters, setFilters] = useState<FilterType>({
         searchTitle: "",
@@ -109,7 +110,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
         }
     };
 
-    const filterData = useCallback(() => {
+    const filterData = useEffectEvent(() => {
         const dataCopy = [...UserLibraryMockData];
         const { searchTitle, statusValue, sortValue } = filters;
         // TODO: make these function calls look better
@@ -117,12 +118,23 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
             filterByStatus(filterByTitle(dataCopy, searchTitle), statusValue.value),
             sortValue.value,
         );
-        return filteredDataCopy;
-    }, [filters]);
+        setLibraryData(filteredDataCopy);
+    });
+
+    const onDeleteGameById = (id: string) => {
+        const gameIndexToDelete = UserLibraryMockData.findIndex((data) => data._id === id);
+        UserLibraryMockData.splice(gameIndexToDelete, 1);
+        setSelectedCard(null);
+        setLibraryData(UserLibraryMockData);
+    };
+
+    useEffect(() => {
+        filterData();
+    }, [libraryData]);
 
     const contextValue = {
         filters,
-        libraryData: filterData(),
+        libraryData,
         statusOptions,
         sortOptions,
         selectedCard,
@@ -131,6 +143,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
         onStatusSelect,
         onSortSelect,
         onCardSelect,
+        onDeleteGameById,
     };
     return (
         <UserLibraryPageContext.Provider value={contextValue}>

@@ -19,6 +19,7 @@ const UserLibraryPageContent = () => {
         onSortSelect,
         onCardSelect,
         onSearchTitle,
+        onDeleteGameById,
     } = useUserLibraryPageContext();
     return (
         <div className="user-library-page">
@@ -66,7 +67,12 @@ const UserLibraryPageContent = () => {
                                 })}
                             </div>
                         </div>
-                        {selectedCard && <CardDetail data={selectedCard} />}
+                        {selectedCard && (
+                            <CardDetail
+                                data={selectedCard}
+                                handleOnDeleteById={onDeleteGameById}
+                            />
+                        )}
                     </>
                 )}
             </div>

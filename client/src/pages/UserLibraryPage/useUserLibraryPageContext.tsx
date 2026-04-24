@@ -20,6 +20,7 @@ interface UserLibraryPageContextType {
     onStatusSelect: (option: SelectOptionType) => void;
     onSortSelect: (option: SelectOptionType) => void;
     onCardSelect: (id: string) => void;
+    onDeleteGameById: (id: string) => void;
 }
 
 export const UserLibraryPageContext = createContext<UserLibraryPageContextType | null>(null);
