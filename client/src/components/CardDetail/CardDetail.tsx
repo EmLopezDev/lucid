@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 import CardDetailContent from "./CardDetailContent";
+import CardDetailEditContent from "./CardDetailEditContent";
 
 type CardDetailType = {
     data: UserLibraryDataType;
@@ -15,10 +16,11 @@ const CardDetail = ({ data, handleOnDeleteById }: CardDetailType) => {
                 <div className="card-detail__image">IMAGE GOES HERE</div>
                 <div className="card-detail__content">
                     {editMode ? (
-                        <div>Edit Mode</div>
+                        <CardDetailEditContent data={data} />
                     ) : (
                         <CardDetailContent
                             data={data}
+                            setEditMode={setEditMode}
                             handleOnDeleteById={handleOnDeleteById}
                         />
                     )}

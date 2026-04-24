@@ -5,10 +5,11 @@ import Button from "../Button/Button";
 
 type CardDetailContentType = {
     data: UserLibraryDataType;
+    setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
     handleOnDeleteById: (id: string) => void;
 };
 
-const CardDetailContent = ({ data, handleOnDeleteById }: CardDetailContentType) => {
+const CardDetailContent = ({ data, setEditMode, handleOnDeleteById }: CardDetailContentType) => {
     return (
         <>
             <span className="card-detail__content__title">{data.title}</span>
@@ -61,6 +62,7 @@ const CardDetailContent = ({ data, handleOnDeleteById }: CardDetailContentType) 
                     text="edit"
                     size="small"
                     variant="secondary"
+                    onClick={() => setEditMode(true)}
                 />
             </div>
         </>

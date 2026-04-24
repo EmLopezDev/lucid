@@ -11,7 +11,7 @@ import { type FilterType } from "./UserLibraryPageContext";
 
 interface UserLibraryPageContextType {
     filters: FilterType;
-    libraryData: UserLibraryDataType[];
+    filteredData: UserLibraryDataType[];
     statusOptions: SelectOptionType[];
     sortOptions: SelectOptionType[];
     selectedCard: UserLibraryDataType | null;

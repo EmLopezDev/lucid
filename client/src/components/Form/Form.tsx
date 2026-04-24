@@ -2,7 +2,7 @@ import { type ReactNode, type SubmitEvent, type JSX } from "react";
 import Button from "../Button/Button";
 
 type FormType = {
-    errorText: JSX.Element;
+    errorText?: JSX.Element;
     children: ReactNode;
     buttonSize?: "small" | "medium" | "large";
     primaryButtonText?: string;
@@ -33,6 +33,7 @@ const Form = ({
                     text={secondaryButtonText}
                     onClick={onResetForm}
                     size={buttonSize}
+                    variant="secondary"
                 />
                 <Button
                     type="submit"
@@ -40,7 +41,7 @@ const Form = ({
                     size={buttonSize}
                 />
             </div>
-            <p className="form-error">{errorText}</p>
+            {errorText && <p className="form-error">{errorText}</p>}
         </form>
     );
 };

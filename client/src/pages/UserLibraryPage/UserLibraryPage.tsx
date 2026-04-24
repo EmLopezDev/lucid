@@ -9,10 +9,8 @@ import { useUserLibraryPageContext } from "./useUserLibraryPageContext";
 const UserLibraryPageContent = () => {
     const {
         filters,
-        libraryData,
+        filteredData,
         selectedCard,
-        // statusValue,
-        // sortValue,
         statusOptions,
         sortOptions,
         onStatusSelect,
@@ -49,13 +47,13 @@ const UserLibraryPageContent = () => {
                 </div>
             </div>
             <div className="user-library-page__content">
-                {!libraryData.length ? (
+                {!filteredData.length ? (
                     <div className="user-library-page__content--none">No Games Found</div>
                 ) : (
                     <>
                         <div className="user-library-page__content--main-col">
                             <div className="user-library-page__games">
-                                {libraryData.map((data) => {
+                                {filteredData.map((data) => {
                                     return (
                                         <Card
                                             key={data._id}

@@ -1,4 +1,4 @@
-import { useEffect, useEffectEvent, useState, type ChangeEvent, type ReactNode } from "react";
+import { useCallback, useMemo, useState, type ChangeEvent, type ReactNode } from "react";
 import { UserLibraryPageContext } from "./useUserLibraryPageContext";
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 import { type SelectOptionType } from "../../components/Select/Select";
@@ -24,6 +24,51 @@ export type FilterType = {
     sortValue: SortOptionType;
 };
 
+const statusOptions: StatusOptionType[] = [
+    { value: "all", label: "all" },
+    { value: "playing", label: "playing" },
+    { value: "completed", label: "completed" },
+    { value: "paused", label: "paused" },
+    { value: "dropped", label: "dropped" },
+    { value: "wishlist", label: "wishlist" },
+];
+
+const sortOptions: SortOptionType[] = [
+    { value: "recently", label: "recently added" },
+    { value: "alphabetical", label: "Title A-Z" },
+    { value: "rated", label: "Highest Rated" },
+    { value: "price", label: "Highest Price" },
+];
+
+const filterByTitle = (data: UserLibraryDataType[], title: string) => {
+    if (!title) return data;
+    return data.filter((d) => {
+        return d.title.toLowerCase().startsWith(title.toLowerCase());
+    });
+};
+
+const filterByStatus = (data: UserLibraryDataType[], status: StatusType | string) => {
+    if (status === "all") {
+        return [...data];
+    } else {
+        return data.filter((d) => d.status === status);
+    }
+};
+
+const filterBySort = (data: UserLibraryDataType[], sort: SortValueType | string) => {
+    if (sort === "recently") {
+        return [...data].sort(
+            (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+        );
+    } else if (sort === "alphabetical") {
+        return [...data].sort((a, b) => a.title.localeCompare(b.title));
+    } else if (sort === "rated") {
+        return [...data].sort((a, b) => Number(b.rating ?? 0) - Number(a.rating ?? 0));
+    } else {
+        return [...data].sort((a, b) => Number(b.price ?? 0) - Number(a.price ?? 0));
+    }
+};
+
 export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) => {
     const [libraryData, setLibraryData] = useState<UserLibraryDataType[]>(UserLibraryMockData);
     const [selectedCard, setSelectedCard] = useState<UserLibraryDataType | null>(null);
@@ -33,118 +78,74 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
         sortValue: { value: "recently", label: "recently added" },
     });
 
-    const statusOptions: StatusOptionType[] = [
-        { value: "all", label: "all" },
-        { value: "playing", label: "playing" },
-        { value: "completed", label: "completed" },
-        { value: "paused", label: "paused" },
-        { value: "dropped", label: "dropped" },
-        { value: "wishlist", label: "wishlist" },
-    ];
+    const onCardSelect = useCallback(
+        (id: string) => {
+            setSelectedCard((prev) => {
+                const card = libraryData.find((d) => d._id === id) ?? null;
+                return prev?._id === id ? null : card;
+            });
+        },
+        [libraryData],
+    );
 
-    const sortOptions: SortOptionType[] = [
-        { value: "recently", label: "recently added" },
-        { value: "alphabetical", label: "Title A-Z" },
-        { value: "rated", label: "Highest Rated" },
-        { value: "price", label: "Highest Price" },
-    ];
-
-    const onCardSelect = (id: string) => {
-        const [card] = UserLibraryMockData.filter((data) => data._id === id);
-        if (!selectedCard) {
-            setSelectedCard(card);
-        } else if (selectedCard && selectedCard._id !== id) {
-            setSelectedCard(card);
-        } else {
-            setSelectedCard(null);
-        }
-    };
-
-    const onSearchTitle = (event: ChangeEvent<HTMLInputElement>) => {
+    const onSearchTitle = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setSelectedCard(null);
         setFilters((prevState) => ({ ...prevState, searchTitle: event.target.value }));
-    };
+    }, []);
 
-    const onStatusSelect = (option: SelectOptionType) => {
+    const onStatusSelect = useCallback((option: SelectOptionType) => {
         setSelectedCard(null);
         setFilters((prevState) => ({
             ...prevState,
             statusValue: { value: option.value, label: option.label },
         }));
-    };
+    }, []);
 
-    const onSortSelect = (option: SortOptionType) => {
+    const onSortSelect = useCallback((option: SortOptionType) => {
         setSelectedCard(null);
         setFilters((prevState) => ({
             ...prevState,
             sortValue: { value: option.value, label: option.label },
         }));
-    };
+    }, []);
 
-    const filterByTitle = (data: UserLibraryDataType[], title: string) => {
-        if (!title) return data;
-        return data.filter((d) => {
-            return d.title.toLowerCase().startsWith(title.toLowerCase());
-        });
-    };
-
-    const filterByStatus = (data: UserLibraryDataType[], status: StatusType | string) => {
-        if (status === "all") {
-            return [...data];
-        } else {
-            return data.filter((d) => d.status === status);
-        }
-    };
-
-    const filterBySort = (data: UserLibraryDataType[], sort: SortValueType | string) => {
-        if (sort === "recently") {
-            return data.sort(
-                (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
-            );
-        } else if (sort === "alphabetical") {
-            return data.sort((a, b) => a.title.localeCompare(b.title));
-        } else if (sort === "rated") {
-            return data.sort((a, b) => Number(b.rating ?? 0) - Number(a.rating ?? 0));
-        } else {
-            return data.sort((a, b) => Number(b.price ?? 0) - Number(a.price ?? 0));
-        }
-    };
-
-    const filterData = useEffectEvent(() => {
-        const dataCopy = [...UserLibraryMockData];
+    const filteredData = useMemo(() => {
         const { searchTitle, statusValue, sortValue } = filters;
-        // TODO: make these function calls look better
-        const filteredDataCopy = filterBySort(
-            filterByStatus(filterByTitle(dataCopy, searchTitle), statusValue.value),
-            sortValue.value,
-        );
-        setLibraryData(filteredDataCopy);
-    });
+        const byTitle = filterByTitle(libraryData, searchTitle);
+        const byStatus = filterByStatus(byTitle, statusValue.value);
+        return filterBySort(byStatus, sortValue.value);
+    }, [filters, libraryData]);
 
-    const onDeleteGameById = (id: string) => {
-        const gameIndexToDelete = UserLibraryMockData.findIndex((data) => data._id === id);
-        UserLibraryMockData.splice(gameIndexToDelete, 1);
+    const onDeleteGameById = useCallback((id: string) => {
+        setLibraryData((prev) => prev.filter((d) => d._id !== id));
         setSelectedCard(null);
-        setLibraryData(UserLibraryMockData);
-    };
+    }, []);
 
-    useEffect(() => {
-        filterData();
-    }, [libraryData]);
-
-    const contextValue = {
-        filters,
-        libraryData,
-        statusOptions,
-        sortOptions,
-        selectedCard,
-        setSelectedCard,
-        onSearchTitle,
-        onStatusSelect,
-        onSortSelect,
-        onCardSelect,
-        onDeleteGameById,
-    };
+    const contextValue = useMemo(
+        () => ({
+            filters,
+            filteredData,
+            statusOptions,
+            sortOptions,
+            selectedCard,
+            setSelectedCard,
+            onSearchTitle,
+            onStatusSelect,
+            onSortSelect,
+            onCardSelect,
+            onDeleteGameById,
+        }),
+        [
+            filters,
+            filteredData,
+            selectedCard,
+            onSearchTitle,
+            onStatusSelect,
+            onSortSelect,
+            onCardSelect,
+            onDeleteGameById,
+        ],
+    );
     return (
         <UserLibraryPageContext.Provider value={contextValue}>
             {children}

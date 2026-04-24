@@ -2,7 +2,7 @@ import { type ChangeEvent, type InputHTMLAttributes } from "react";
 import { cx } from "css-variants";
 
 type Input = {
-    type?: "text" | "email" | "password" | "search";
+    // type?: "text" | "email" | "password" | "search" | "number";
     inputSize?: "small" | "medium" | "large";
     name?: string;
     required?: boolean;
@@ -13,7 +13,7 @@ type Input = {
 } & InputHTMLAttributes<HTMLInputElement>;
 
 const Input = ({
-    type = "text",
+    // type = "text",
     inputSize = "medium",
     name = "",
     required = false,
@@ -40,7 +40,7 @@ const Input = ({
                     {label}
                     <input
                         className={inputClassName}
-                        type={type}
+                        // type={type}
                         name={name}
                         required={required}
                         onChange={onChange}
@@ -50,7 +50,7 @@ const Input = ({
             ) : (
                 <input
                     className={inputClassName}
-                    type={type}
+                    // type={type}
                     name={name}
                     required={required}
                     onChange={onChange}
