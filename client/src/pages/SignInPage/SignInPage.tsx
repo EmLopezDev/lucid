@@ -3,13 +3,13 @@ import Form from "../../components/Form/Form";
 import Input from "../../components/Input/Input";
 import { useSignInPageContext } from "./useSignInPageContext";
 import { Link } from "react-router";
-import { useMemo } from "react";
+import { useCallback } from "react";
 
 const SignInPageContent = () => {
     const { errors, formDataError, onEmailChange, onPasswordChange, onSubmitForm, onResetForm } =
         useSignInPageContext();
 
-    const showFormDataError = useMemo(() => {
+    const showFormDataError = useCallback(() => {
         if (formDataError === "User doesn't exist") {
             return (
                 <>
@@ -21,8 +21,6 @@ const SignInPageContent = () => {
             return <span className="register-page__error">{formDataError}</span>;
         }
     }, [formDataError]);
-
-    console.log(errors);
 
     return (
         <Form

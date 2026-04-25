@@ -1,151 +1,156 @@
-import { useState, type ReactNode, type ChangeEvent } from "react";
+import { useState, type ReactNode, type ChangeEvent, useMemo, useCallback } from "react";
 import { nameCheck, emailCheck } from "../../lib/string";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { RegisterPageContext } from "./useRegisterPageContext";
 import { type UserRegisterType } from "../../../../packages/types";
+import { objectCopy } from "../../lib/generic";
+
+const EMPTY_FORM: UserRegisterType = {
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
+};
+
+const FIELD_RULES: Record<keyof UserRegisterType, [(v: string) => boolean, string][]> = {
+    first_name: [
+        [Boolean, "First name is required"],
+        [nameCheck, "First name should only be letters"],
+    ],
+    last_name: [
+        [Boolean, "Last name is required"],
+        [nameCheck, "Last name should only be letters"],
+    ],
+    email: [
+        [Boolean, "Email is required"],
+        [emailCheck, "Email format is invalid"],
+    ],
+    password: [
+        [Boolean, "Password is required"],
+        [(v) => v.length >= 8, "Password must be at least 8 characters"],
+    ],
+};
+
+const validateForm = (data: UserRegisterType) => {
+    const errors = objectCopy(EMPTY_FORM);
+
+    for (const field in FIELD_RULES) {
+        const key = field as keyof UserRegisterType;
+        const failed = FIELD_RULES[key].find(([check]) => !check(data[key]));
+        if (failed) errors[key] = failed[1];
+    }
+
+    return errors;
+};
+
+const hasErrors = (errors: UserRegisterType) => Object.values(errors).some(Boolean);
 
 export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
-    const [formData, setFormData] = useState<UserRegisterType>({
-        first_name: "",
-        last_name: "",
-        email: "",
-        password: "",
-    });
-
-    const [errors, setErrors] = useState<UserRegisterType>({
-        first_name: "",
-        last_name: "",
-        email: "",
-        password: "",
-    });
-
+    const [formData, setFormData] = useState<UserRegisterType>(objectCopy(EMPTY_FORM));
+    const [errors, setErrors] = useState<UserRegisterType>(objectCopy(EMPTY_FORM));
     const [formDataError, setFormDataError] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const navigate = useNavigate();
 
-    const onFirstNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const onFirstNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setFormData((prevState: UserRegisterType) => {
             return Object.assign({}, prevState, { first_name: e.target.value });
         });
-    };
+    }, []);
 
-    const onLastNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const onLastNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setFormData((prevState: UserRegisterType) => {
             return Object.assign({}, prevState, { last_name: e.target.value });
         });
-    };
+    }, []);
 
-    const onEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const onEmailChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setFormData((prevState: UserRegisterType) => {
             return Object.assign({}, prevState, { email: e.target.value });
         });
-    };
+    }, []);
 
-    const onPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const onPasswordChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setFormData((prevState: UserRegisterType) => {
             return Object.assign({}, prevState, { password: e.target.value });
         });
-    };
+    }, []);
 
-    const isFormDataValid = (data: UserRegisterType) => {
-        let errors = {};
-        if (!data.first_name) {
-            errors = { ...errors, first_name: "First name is required" };
-        } else if (!nameCheck(data.first_name)) {
-            errors = {
-                ...errors,
-                first_name: "First name should only be letters",
-            };
-        }
-
-        if (!data.last_name) {
-            errors = { ...errors, last_name: "Last name is required" };
-        } else if (!nameCheck(data.last_name)) {
-            errors = {
-                ...errors,
-                last_name: "Last name should only be letters",
-            };
-        }
-
-        if (!data.email) {
-            errors = { ...errors, email: "Email is required" };
-        } else if (!emailCheck(data.email)) {
-            errors = { ...errors, email: "Email format is invalid" };
-        }
-
-        if (!data.password) {
-            errors = { ...errors, password: "Password is required" };
-        } else if (data.password.length < 8) {
-            errors = {
-                ...errors,
-                password: "Password must be at least 8 characters",
-            };
-        }
-
-        setErrors(errors as UserRegisterType);
-
-        return Object.keys(errors).length === 0;
-    };
-
-    const showFormDataError = () => {
-        if (formDataError === "User already exist") {
-            return (
-                <>
-                    <span className="register-page__form-error">
-                        {`${formDataError} try`}&nbsp;
-                    </span>
-                    <Link to="/signin"> signing in</Link>
-                </>
-            );
-        } else {
-            return <span className="register-page__form-error center">{formDataError}</span>;
-        }
-    };
-
-    const registerUser = async (d: UserRegisterType) => {
-        const response = await fetch("http://localhost:8000/api/v1/auth/register", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(d),
-        });
-        if (response.ok) {
-            const data = await response.json();
-            if (data) {
-                navigate("/signin");
+    const registerUser = useCallback(
+        async (d: UserRegisterType) => {
+            setIsSubmitting(true);
+            try {
+                const response = await fetch("http://localhost:8000/api/v1/auth/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(d),
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data) {
+                        navigate("/signin");
+                    }
+                } else {
+                    const error = await response.json();
+                    setFormDataError(error.message);
+                }
+            } catch (error) {
+                if (error instanceof Error) {
+                    setFormDataError(error.message);
+                }
+            } finally {
+                setIsSubmitting(false);
             }
-        } else {
-            const error = await response.json();
-            setFormDataError(error.message);
-        }
-    };
+        },
+        [navigate],
+    );
 
-    const onSubmitForm = (e: React.SubmitEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        if (isFormDataValid(formData)) {
+    const onSubmitForm = useCallback(
+        (e: React.SubmitEvent<HTMLFormElement>) => {
+            e.preventDefault();
+            const validationErrors = validateForm(formData);
+            if (hasErrors(validationErrors)) {
+                setErrors(validationErrors);
+                return;
+            }
             registerUser(formData);
-        }
-    };
+        },
+        [formData, registerUser],
+    );
 
-    const onResetForm = () => {
-        console.log("CLICK");
-        setFormData({ first_name: "", last_name: "", email: "", password: "" });
-        setErrors({ first_name: "", last_name: "", email: "", password: "" });
+    const onResetForm = useCallback(() => {
+        setFormData(objectCopy(EMPTY_FORM));
+        setErrors(objectCopy(EMPTY_FORM));
         setFormDataError("");
-    };
+    }, []);
 
-    const contextValue = {
-        formDataError,
-        errors,
-        onFirstNameChange,
-        onLastNameChange,
-        onEmailChange,
-        onPasswordChange,
-        showFormDataError,
-        onSubmitForm,
-        onResetForm,
-    };
+    const contextValue = useMemo(
+        () => ({
+            isSubmitting,
+            formDataError,
+            errors,
+            onFirstNameChange,
+            onLastNameChange,
+            onEmailChange,
+            onPasswordChange,
+            onSubmitForm,
+            onResetForm,
+        }),
+        [
+            isSubmitting,
+            formDataError,
+            errors,
+            onFirstNameChange,
+            onLastNameChange,
+            onEmailChange,
+            onPasswordChange,
+            onSubmitForm,
+            onResetForm,
+        ],
+    );
 
     return (
         <RegisterPageContext.Provider value={contextValue}>{children}</RegisterPageContext.Provider>

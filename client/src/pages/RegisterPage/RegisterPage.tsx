@@ -1,23 +1,41 @@
+import { Link } from "react-router";
 import { RegisterPageProvider } from "./RegisterPageContext";
 import { useRegisterPageContext } from "./useRegisterPageContext";
 import Input from "../../components/Input/Input";
 import Form from "../../components/Form/Form";
+import { useCallback } from "react";
 
 const RegisterPageContent = () => {
     const {
         errors,
+        formDataError,
         onFirstNameChange,
         onLastNameChange,
         onEmailChange,
         onPasswordChange,
-        showFormDataError,
         onSubmitForm,
         onResetForm,
     } = useRegisterPageContext();
+
+    const showFormDataError = useCallback(() => {
+        if (formDataError === "User already exist") {
+            return (
+                <>
+                    <span className="register-page__form-error">
+                        {`${formDataError} try`}&nbsp;
+                    </span>
+                    <Link to="/signin"> signing in</Link>
+                </>
+            );
+        } else {
+            return <span className="register-page__form-error center">{formDataError}</span>;
+        }
+    }, [formDataError]);
+
     return (
         <Form
             onSubmit={onSubmitForm}
-            errorText={showFormDataError()}
+            errorText={showFormDataError}
             onResetForm={onResetForm}
             primaryButtonText="Register"
             secondaryButtonText="Clear"
