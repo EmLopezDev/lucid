@@ -70,7 +70,7 @@ const filterBySort = (data: UserLibraryDataType[], sort: SortValueType | string)
 };
 
 export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) => {
-    const [libraryData, setLibraryData] = useState<UserLibraryDataType[]>(UserLibraryMockData);
+    const [libraryData, setLibraryData] = useState<UserLibraryDataType[]>([...UserLibraryMockData]);
     const [selectedCard, setSelectedCard] = useState<UserLibraryDataType | null>(null);
     const [filters, setFilters] = useState<FilterType>({
         searchTitle: "",

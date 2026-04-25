@@ -9,18 +9,18 @@ export interface UserContextType {
 }
 
 // TODO: Remove demoUser and set user state to null, this is just to avoid having to signin all the time
-const demoUser: UserType = {
-    _id: "12345",
-    first_name: "Emmanuel",
-    last_name: "Lopez",
-    email: "elopez1@gmail.com",
-    created_at: new Date(),
-    updated_at: null,
-    deleted_at: null,
-};
+// const demoUser: UserType = {
+//     _id: "12345",
+//     first_name: "Emmanuel",
+//     last_name: "Lopez",
+//     email: "elopez1@gmail.com",
+//     created_at: new Date(),
+//     updated_at: null,
+//     deleted_at: null,
+// };
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-    const [user, setUser] = useState<UserType | null>(demoUser);
+    const [user, setUser] = useState<UserType | null>(null);
 
     const isUserAuthenticated = !!user;
 

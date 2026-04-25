@@ -2,21 +2,32 @@ import { SignInPageProvider } from "./SignInPageContext";
 import Form from "../../components/Form/Form";
 import Input from "../../components/Input/Input";
 import { useSignInPageContext } from "./useSignInPageContext";
+import { Link } from "react-router";
+import { useMemo } from "react";
 
 const SignInPageContent = () => {
-    const {
-        errors,
-        onEmailChange,
-        onPasswordChange,
-        showFormDataError,
-        onSubmitForm,
-        onResetForm,
-    } = useSignInPageContext();
+    const { errors, formDataError, onEmailChange, onPasswordChange, onSubmitForm, onResetForm } =
+        useSignInPageContext();
+
+    const showFormDataError = useMemo(() => {
+        if (formDataError === "User doesn't exist") {
+            return (
+                <>
+                    <span>{`${formDataError} try`}&nbsp;</span>
+                    <Link to="/register"> registering</Link>
+                </>
+            );
+        } else {
+            return <span className="register-page__error">{formDataError}</span>;
+        }
+    }, [formDataError]);
+
+    console.log(errors);
 
     return (
         <Form
             onSubmit={onSubmitForm}
-            errorText={showFormDataError()}
+            errorText={showFormDataError}
             onResetForm={onResetForm}
             primaryButtonText="Sign In"
             secondaryButtonText="Clear"
