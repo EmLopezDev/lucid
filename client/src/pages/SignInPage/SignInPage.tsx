@@ -1,9 +1,9 @@
+import { useCallback } from "react";
+import { Link } from "react-router";
 import { SignInPageProvider } from "./SignInPageContext";
+import { useSignInPageContext } from "./useSignInPageContext";
 import Form from "../../components/Form/Form";
 import Input from "../../components/Input/Input";
-import { useSignInPageContext } from "./useSignInPageContext";
-import { Link } from "react-router";
-import { useCallback } from "react";
 
 const SignInPageContent = () => {
     const { errors, formDataError, onEmailChange, onPasswordChange, onSubmitForm, onResetForm } =

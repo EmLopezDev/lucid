@@ -4,15 +4,16 @@ import { useNavigate } from "react-router";
 import { RegisterPageContext } from "./useRegisterPageContext";
 import { type UserRegisterType } from "../../../../packages/types";
 import { objectCopy } from "../../lib/generic";
+import { isFormDataValid, type FormRules, hasErrors } from "../../lib/formValidation";
 
-const EMPTY_FORM: UserRegisterType = {
+const REGISTER_EMPTY_FORM: UserRegisterType = {
     first_name: "",
     last_name: "",
     email: "",
     password: "",
 };
 
-const FIELD_RULES: Record<keyof UserRegisterType, [(v: string) => boolean, string][]> = {
+const REGISTER_RULES: FormRules<UserRegisterType> = {
     first_name: [
         [Boolean, "First name is required"],
         [nameCheck, "First name should only be letters"],
@@ -31,23 +32,9 @@ const FIELD_RULES: Record<keyof UserRegisterType, [(v: string) => boolean, strin
     ],
 };
 
-const validateForm = (data: UserRegisterType) => {
-    const errors = objectCopy(EMPTY_FORM);
-
-    for (const field in FIELD_RULES) {
-        const key = field as keyof UserRegisterType;
-        const failed = FIELD_RULES[key].find(([check]) => !check(data[key]));
-        if (failed) errors[key] = failed[1];
-    }
-
-    return errors;
-};
-
-const hasErrors = (errors: UserRegisterType) => Object.values(errors).some(Boolean);
-
 export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
-    const [formData, setFormData] = useState<UserRegisterType>(objectCopy(EMPTY_FORM));
-    const [errors, setErrors] = useState<UserRegisterType>(objectCopy(EMPTY_FORM));
+    const [formData, setFormData] = useState<UserRegisterType>(objectCopy(REGISTER_EMPTY_FORM));
+    const [errors, setErrors] = useState<UserRegisterType>(objectCopy(REGISTER_EMPTY_FORM));
     const [formDataError, setFormDataError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -111,7 +98,7 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
     const onSubmitForm = useCallback(
         (e: React.SubmitEvent<HTMLFormElement>) => {
             e.preventDefault();
-            const validationErrors = validateForm(formData);
+            const validationErrors = isFormDataValid(formData, REGISTER_RULES, REGISTER_EMPTY_FORM);
             if (hasErrors(validationErrors)) {
                 setErrors(validationErrors);
                 return;
@@ -122,8 +109,8 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
     );
 
     const onResetForm = useCallback(() => {
-        setFormData(objectCopy(EMPTY_FORM));
-        setErrors(objectCopy(EMPTY_FORM));
+        setFormData(objectCopy(REGISTER_EMPTY_FORM));
+        setErrors(objectCopy(REGISTER_EMPTY_FORM));
         setFormDataError("");
     }, []);
 

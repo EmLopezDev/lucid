@@ -5,13 +5,14 @@ import { SignInPageContext } from "./useSignInPageContext";
 import { emailCheck } from "../../lib/string";
 import { useUserContext } from "../../contexts/UserContext/useUserContext";
 import { objectCopy } from "../../lib/generic";
+import { isFormDataValid, type FormRules, hasErrors } from "../../lib/formValidation";
 
-const EMPTY_FORM: UserSigninType = {
+const SIGNIN_EMPTY_FORM: UserSigninType = {
     email: "",
     password: "",
 };
 
-const FIELD_RULES: Record<keyof UserSigninType, [(v: string) => boolean, string][]> = {
+const SIGNIN_RULES: FormRules<UserSigninType> = {
     email: [
         [Boolean, "Email is required"],
         [emailCheck, "Email format is invalid"],
@@ -22,23 +23,9 @@ const FIELD_RULES: Record<keyof UserSigninType, [(v: string) => boolean, string]
     ],
 };
 
-const validateForm = (data: UserSigninType): UserSigninType => {
-    const errors: UserSigninType = objectCopy(EMPTY_FORM);
-
-    for (const field in FIELD_RULES) {
-        const key = field as keyof UserSigninType;
-        const failed = FIELD_RULES[key].find(([check]) => !check(data[key]));
-        if (failed) errors[key] = failed[1];
-    }
-
-    return errors;
-};
-
-const hasErrors = (errors: UserSigninType) => Object.values(errors).some(Boolean);
-
 export const SignInPageProvider = ({ children }: { children: ReactNode }) => {
-    const [formData, setFormData] = useState<UserSigninType>(objectCopy(EMPTY_FORM));
-    const [errors, setErrors] = useState<UserSigninType>(objectCopy(EMPTY_FORM));
+    const [formData, setFormData] = useState<UserSigninType>(objectCopy(SIGNIN_EMPTY_FORM));
+    const [errors, setErrors] = useState<UserSigninType>(objectCopy(SIGNIN_EMPTY_FORM));
     const [formDataError, setFormDataError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -91,7 +78,7 @@ export const SignInPageProvider = ({ children }: { children: ReactNode }) => {
         async (e: React.SubmitEvent<HTMLFormElement>) => {
             e.preventDefault();
 
-            const validationErrors = validateForm(formData);
+            const validationErrors = isFormDataValid(formData, SIGNIN_RULES, SIGNIN_EMPTY_FORM);
 
             if (hasErrors(validationErrors)) {
                 setErrors(validationErrors);
@@ -104,8 +91,8 @@ export const SignInPageProvider = ({ children }: { children: ReactNode }) => {
     );
 
     const onResetForm = useCallback(() => {
-        setFormData(objectCopy(EMPTY_FORM));
-        setErrors(objectCopy(EMPTY_FORM));
+        setFormData(objectCopy(SIGNIN_EMPTY_FORM));
+        setErrors(objectCopy(SIGNIN_EMPTY_FORM));
         setFormDataError("");
     }, []);
 
