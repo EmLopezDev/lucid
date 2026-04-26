@@ -1,22 +1,13 @@
 import { useCallback, useMemo, useState, type ChangeEvent, type ReactNode } from "react";
 import { UserLibraryPageContext } from "./useUserLibraryPageContext";
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
-import { type SelectOptionType } from "../../components/Select/Select";
+import {
+    type StatusOptionType,
+    type SortOptionType,
+    type StatusType,
+    type SortValueType,
+} from "../../../../packages/types/SelectOptionsTypes.ts";
 import UserLibraryMockData from "../../data/UserLibraryMockData";
-
-export type StatusType = "all" | "playing" | "completed" | "paused" | "dropped" | "wishlist";
-export type SortValueType = "recently" | "alphabetical" | "rated" | "price";
-export type SortLabelType = "recently added" | "Title A-Z" | "Highest Rated" | "Highest Price";
-
-export type StatusOptionType = {
-    value: StatusType | string;
-    label: StatusType | string;
-};
-
-export type SortOptionType = {
-    value: SortValueType | string;
-    label: SortLabelType | string;
-};
 
 export type FilterType = {
     searchTitle: string;
@@ -93,7 +84,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
         setFilters((prevState) => ({ ...prevState, searchTitle: event.target.value }));
     }, []);
 
-    const onStatusSelect = useCallback((option: SelectOptionType) => {
+    const onStatusSelect = useCallback((option: StatusOptionType) => {
         setSelectedCard(null);
         setFilters((prevState) => ({
             ...prevState,

@@ -5,6 +5,11 @@ import Button from "../../components/Button/Button";
 import Select from "../../components/Select/Select";
 import { UserLibraryPageProvider } from "./UserLibraryPageContext";
 import { useUserLibraryPageContext } from "./useUserLibraryPageContext";
+import {
+    type StatusType,
+    type SortValueType,
+    type SortLabelType,
+} from "../../../../packages/types";
 
 const UserLibraryPageContent = () => {
     const {
@@ -29,13 +34,13 @@ const UserLibraryPageContent = () => {
                         onChange={onSearchTitle}
                         hasErrorText={false}
                     />
-                    <Select
+                    <Select<StatusType, StatusType>
                         id="status-options"
                         value={filters.statusValue.value}
                         options={statusOptions}
                         onChange={onStatusSelect}
                     />
-                    <Select
+                    <Select<SortValueType, SortLabelType>
                         id="sort-options"
                         value={filters.sortValue.value}
                         options={sortOptions}

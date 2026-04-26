@@ -39,6 +39,9 @@ const CardDetailEditContent = ({ data }: CardDetailEditContent) => {
                     onChange={() => {}}
                     inputSize="small"
                     hasErrorText={false}
+                    placeholder="0.00"
+                    min="0"
+                    step="0.01"
                 />
                 <Input
                     label="Purchase Date"
@@ -60,6 +63,10 @@ const CardDetailEditContent = ({ data }: CardDetailEditContent) => {
                     onChange={() => {}}
                     inputSize="small"
                     hasErrorText={false}
+                    min="0"
+                    max="5"
+                    step="0.25"
+                    placeholder="0-5"
                 />
                 <label htmlFor="">
                     Comment
