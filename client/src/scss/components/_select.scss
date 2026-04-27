@@ -4,6 +4,7 @@
     position: relative;
     outline: none;
     cursor: pointer;
+    height: 100%;
 
     &__trigger {
         display: flex;
@@ -33,6 +34,22 @@
             border-bottom-right-radius: 0;
         }
 
+        &--small {
+            padding: u.em(10) u.em(12);
+            font-size: u.rem(12);
+            min-width: u.em(120);
+        }
+        &--medium {
+            padding: u.em(14) u.em(16);
+            font-size: u.rem(14);
+            min-width: u.em(160);
+        }
+        &--large {
+            padding: u.em(16) u.em(20);
+            font-size: u.rem(16);
+            min-width: u.em(200);
+        }
+
         &-label {
             flex: 1;
             overflow: hidden;
@@ -50,7 +67,7 @@
         position: absolute;
         top: 100%;
         left: 0;
-        right: 0;
+        right: auto;
         background: #1a1a2e;
         border: u.em(0.5) solid #7f77dd;
         border-top: none;
@@ -58,8 +75,11 @@
         border-bottom-right-radius: u.em(8);
         list-style: none;
         margin: 0;
-        padding: u.em(4) 0;
+        padding: 0;
         z-index: 10;
+        min-width: 100%;
+        width: max-content;
+        max-width: 90vw;
         max-height: u.em(200);
         overflow-y: auto;
 
@@ -84,18 +104,22 @@
     &__option {
         color: #9896b8;
         cursor: pointer;
+        white-space: nowrap;
         transition:
             background 0.15s ease,
             color 0.15s ease;
 
-        .select__trigger.small ~ .select__listbox & {
+        &--small {
             padding: u.em(8) u.em(12);
+            font-size: u.rem(12);
         }
-        .select__trigger.medium ~ .select__listbox & {
+        &--medium {
             padding: u.em(10) u.em(16);
+            font-size: u.rem(14);
         }
-        .select__trigger.large ~ .select__listbox & {
+        &--large {
             padding: u.em(12) u.em(20);
+            font-size: u.rem(16);
         }
 
         &--focused {
@@ -112,25 +136,4 @@
             color: #7f77dd;
         }
     }
-}
-
-.small .select__trigger,
-.select__trigger.small {
-    padding: u.em(10) u.em(12);
-    font-size: u.rem(12);
-    min-width: u.em(120);
-}
-
-.medium .select__trigger,
-.select__trigger.medium {
-    padding: u.em(14) u.em(16);
-    font-size: u.rem(14);
-    min-width: u.em(160);
-}
-
-.large .select__trigger,
-.select__trigger.large {
-    padding: u.em(16) u.em(20);
-    font-size: u.rem(16);
-    min-width: u.em(200);
 }

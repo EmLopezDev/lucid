@@ -121,12 +121,6 @@ function Select<V = string, L extends string = string>({
         [isOpen, focusedIndex, options, handleSelect, handleToggle],
     );
 
-    const triggerClassName = cx({
-        select__trigger: true,
-        [`${selectSize}`]: selectSize,
-        "select__trigger--open": isOpen,
-    });
-
     return (
         <div
             ref={containerRef}
@@ -144,7 +138,11 @@ function Select<V = string, L extends string = string>({
                     focusedIndex >= 0 ? `${listboxId}-option-${focusedIndex}` : undefined
                 }
                 tabIndex={0}
-                className={triggerClassName}
+                className={cx({
+                    select__trigger: true,
+                    [`select__trigger--${selectSize}`]: selectSize,
+                    "select__trigger--open": isOpen,
+                })}
                 onClick={handleToggle}
             >
                 <span className="select__trigger-label">
@@ -179,6 +177,7 @@ function Select<V = string, L extends string = string>({
                             aria-selected={option.value === value}
                             className={cx({
                                 select__option: true,
+                                [`select__option--${selectSize}`]: selectSize,
                                 "select__option--selected": option.value === value,
                                 "select__option--focused": index === focusedIndex,
                             })}

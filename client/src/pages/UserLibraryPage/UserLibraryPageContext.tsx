@@ -108,18 +108,12 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
 
     const onStatusSelect = useCallback((option: StatusOptionType) => {
         setSelectedCard(null);
-        setFilters((prevState) => ({
-            ...prevState,
-            statusValue: { value: option.value, label: option.label },
-        }));
+        setFilters((prevState) => ({ ...prevState, statusValue: option }));
     }, []);
 
     const onSortSelect = useCallback((option: SortOptionType) => {
         setSelectedCard(null);
-        setFilters((prevState) => ({
-            ...prevState,
-            sortValue: { value: option.value, label: option.label },
-        }));
+        setFilters((prevState) => ({ ...prevState, sortValue: option }));
     }, []);
 
     const filteredData = useMemo(() => {
