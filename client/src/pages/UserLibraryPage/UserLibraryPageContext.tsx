@@ -12,26 +12,11 @@ import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary
 import {
     type StatusOptionType,
     type SortOptionType,
-    type StatusType,
     type SortValueType,
 } from "../../../../packages/types/SelectOptionsTypes.ts";
+import { type StatusType } from "../../../../packages/types/UserLibrary";
 import UserLibraryMockData from "../../data/UserLibraryMockData";
-
-const statusOptions: StatusOptionType[] = [
-    { value: "all", label: "all" },
-    { value: "playing", label: "playing" },
-    { value: "completed", label: "completed" },
-    { value: "paused", label: "paused" },
-    { value: "dropped", label: "dropped" },
-    { value: "wishlist", label: "wishlist" },
-];
-
-const sortOptions: SortOptionType[] = [
-    { value: "recently", label: "recently added" },
-    { value: "alphabetical", label: "Title A-Z" },
-    { value: "rated", label: "Highest Rated" },
-    { value: "price", label: "Highest Price" },
-];
+import { sortOptions, statusOptions } from "../../lib/form.ts";
 
 const filterByTitle = (data: UserLibraryDataType[], title: string) => {
     if (!title) return data;

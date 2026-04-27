@@ -39,6 +39,7 @@
         display: flex;
         overflow: hidden;
         height: calc(100svh - 185px);
+        position: relative;
 
         &--none {
             width: 100%;

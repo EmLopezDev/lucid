@@ -28,7 +28,9 @@ const CardDetailContent = ({ data, setEditMode, handleOnDeleteById }: CardDetail
                 </div>
                 <div className="card-detail__grid__stat">
                     <span className="card-detail__grid__stat--title">Hours</span>
-                    <span className="card-detail__grid__stat--hours">-</span>
+                    <span className="card-detail__grid__stat--hours">
+                        {data.hours_played ?? "-"}
+                    </span>
                 </div>
                 <div className="card-detail__grid__stat">
                     <span className="card-detail__grid__stat--title">Purchased</span>

@@ -1,11 +1,12 @@
 import * as z from "zod";
 
-export const Status = z
-    .literal(["playing", "paused", "completed", "dropped", "wishlist"])
-    .nullable()
-    .default(null);
+export const Status = z.literal(["all", "playing", "completed", "paused", "dropped", "wishlist"]);
 
-export type Status = z.infer<typeof Status>;
+export type StatusType = z.infer<typeof Status>;
+
+export const Platform = z.literal(["playstation", "xbox", "nintendo", "PC"]);
+
+export type PlatformType = z.infer<typeof Platform>;
 
 const WishList = z.object({
     type: z.literal(["wishlist"]),
@@ -23,9 +24,10 @@ export const UserLibraryData = z.object({
     game_id: z.bigint(),
     title: z.string(),
     genre: z.string(),
-    platform: z.literal(["PC", "Playstation", "Xbox", "Switch"]),
+    platform: Platform,
     favorite: z.boolean().default(false),
     ownership: z.discriminatedUnion("type", [WishList, Own]),
+    hours_played: z.number().min(0).nullable().default(null),
     rating: z.coerce
         .number()
         .min(0)

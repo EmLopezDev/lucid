@@ -12,7 +12,7 @@ import { SignInPageContext } from "./useSignInPageContext";
 import { emailCheck } from "../../lib/string";
 import { useUserContext } from "../../contexts/UserContext/useUserContext";
 import { objectCopy } from "../../lib/generic";
-import { isFormDataValid, type FormRules, hasErrors } from "../../lib/formValidation";
+import { isFormDataValid, type FormRules, hasErrors } from "../../lib/form";
 
 const SIGNIN_EMPTY_FORM: UserSigninType = {
     email: "",

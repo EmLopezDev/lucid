@@ -11,7 +11,7 @@ import { useNavigate } from "react-router";
 import { RegisterPageContext } from "./useRegisterPageContext";
 import { type UserRegisterType } from "../../../../packages/types";
 import { objectCopy } from "../../lib/generic";
-import { isFormDataValid, type FormRules, hasErrors } from "../../lib/formValidation";
+import { isFormDataValid, type FormRules, hasErrors } from "../../lib/form";
 
 const REGISTER_EMPTY_FORM: UserRegisterType = {
     first_name: "",

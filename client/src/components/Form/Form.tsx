@@ -8,7 +8,7 @@ type FormType = {
     primaryButtonText?: string;
     secondaryButtonText?: string;
     onSubmit: (e: SubmitEvent<HTMLFormElement>) => void;
-    onResetForm?: () => void;
+    onCancel?: () => void;
 };
 
 const Form = ({
@@ -18,7 +18,7 @@ const Form = ({
     primaryButtonText = "Submit",
     secondaryButtonText = "Cancel",
     onSubmit,
-    onResetForm,
+    onCancel,
 }: FormType) => {
     return (
         <form
@@ -31,7 +31,7 @@ const Form = ({
                 <Button
                     type="reset"
                     text={secondaryButtonText}
-                    onClick={onResetForm}
+                    onClick={onCancel}
                     size={buttonSize}
                     variant="secondary"
                 />

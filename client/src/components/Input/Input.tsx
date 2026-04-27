@@ -2,7 +2,6 @@ import { type ChangeEvent, type InputHTMLAttributes } from "react";
 import { cx } from "css-variants";
 
 type Input = {
-    // type?: "text" | "email" | "password" | "search" | "number";
     inputSize?: "small" | "medium" | "large";
     name?: string;
     required?: boolean;
@@ -13,7 +12,6 @@ type Input = {
 } & InputHTMLAttributes<HTMLInputElement>;
 
 const Input = ({
-    // type = "text",
     inputSize = "medium",
     name = "",
     required = false,

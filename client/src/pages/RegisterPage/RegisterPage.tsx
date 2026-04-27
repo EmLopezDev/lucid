@@ -36,7 +36,7 @@ const RegisterPageContent = () => {
         <Form
             onSubmit={onSubmitForm}
             errorText={showFormDataError}
-            onResetForm={onResetForm}
+            onCancel={onResetForm}
             primaryButtonText="Register"
             secondaryButtonText="Clear"
         >

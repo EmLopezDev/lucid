@@ -39,7 +39,6 @@ const UserLibraryPageContent = () => {
                         value={filters.statusValue.value}
                         options={statusOptions}
                         onChange={onStatusSelect}
-                        selectSize="small"
                     />
                     <Select<SortValueType, SortLabelType>
                         id="sort-options"

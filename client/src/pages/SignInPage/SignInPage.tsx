@@ -26,7 +26,7 @@ const SignInPageContent = () => {
         <Form
             onSubmit={onSubmitForm}
             errorText={showFormDataError}
-            onResetForm={onResetForm}
+            onCancel={onResetForm}
             primaryButtonText="Sign In"
             secondaryButtonText="Clear"
             buttonSize="large"

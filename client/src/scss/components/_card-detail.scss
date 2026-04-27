@@ -1,13 +1,11 @@
 @use "../utils/" as u;
 
 .card-detail__container {
-    height: calc(100svh - 60px);
+    height: calc(100svh - 185px);
     width: u.em(240);
     border-left: u.em(1) solid rgba(127, 119, 221, 0.18);
-    position: sticky;
-    top: u.em(110);
-    right: 0;
-    overflow: hidden;
+    overflow: auto;
+    padding-bottom: u.em(8);
 }
 .card-detail {
     background-color: #13131f;
