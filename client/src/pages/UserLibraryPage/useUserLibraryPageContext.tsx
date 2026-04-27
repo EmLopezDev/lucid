@@ -1,27 +1,5 @@
-import {
-    createContext,
-    useContext,
-    type Dispatch,
-    type SetStateAction,
-    type ChangeEvent,
-} from "react";
-import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
-import { type FilterType } from "./UserLibraryPageContext";
-import { type SortOptionType, type StatusOptionType } from "../../../../packages/types";
-
-interface UserLibraryPageContextType {
-    filters: FilterType;
-    filteredData: UserLibraryDataType[];
-    statusOptions: StatusOptionType[];
-    sortOptions: SortOptionType[];
-    selectedCard: UserLibraryDataType | null;
-    setSelectedCard: Dispatch<SetStateAction<UserLibraryDataType | null>>;
-    onSearchTitle: (e: ChangeEvent<HTMLInputElement>) => void;
-    onStatusSelect: (option: StatusOptionType) => void;
-    onSortSelect: (option: SortOptionType) => void;
-    onCardSelect: (id: string) => void;
-    onDeleteGameById: (id: string) => void;
-}
+import { createContext, useContext } from "react";
+import { type UserLibraryPageContextType } from "./UserLibraryPageContext";
 
 export const UserLibraryPageContext = createContext<UserLibraryPageContextType | null>(null);
 

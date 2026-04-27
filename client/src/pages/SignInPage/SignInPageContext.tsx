@@ -1,4 +1,11 @@
-import { useState, useCallback, useMemo, type ReactNode, type ChangeEvent } from "react";
+import {
+    useState,
+    useCallback,
+    useMemo,
+    type ReactNode,
+    type ChangeEvent,
+    type SubmitEvent,
+} from "react";
 import { useNavigate } from "react-router";
 import { type UserSigninType } from "../../../../packages/types";
 import { SignInPageContext } from "./useSignInPageContext";
@@ -22,6 +29,16 @@ const SIGNIN_RULES: FormRules<UserSigninType> = {
         [(v) => v.length >= 8, "Password must be at least 8 characters"],
     ],
 };
+
+export interface SignInPageContextType {
+    isSubmitting: boolean;
+    formDataError: string;
+    errors: UserSigninType;
+    onEmailChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    onPasswordChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    onSubmitForm: (e: SubmitEvent<HTMLFormElement>) => void;
+    onResetForm: () => void;
+}
 
 export const SignInPageProvider = ({ children }: { children: ReactNode }) => {
     const [formData, setFormData] = useState<UserSigninType>(objectCopy(SIGNIN_EMPTY_FORM));

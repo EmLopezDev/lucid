@@ -1,4 +1,11 @@
-import { useState, type ReactNode, type ChangeEvent, useMemo, useCallback } from "react";
+import {
+    useState,
+    useMemo,
+    useCallback,
+    type ReactNode,
+    type ChangeEvent,
+    type SubmitEvent,
+} from "react";
 import { nameCheck, emailCheck } from "../../lib/string";
 import { useNavigate } from "react-router";
 import { RegisterPageContext } from "./useRegisterPageContext";
@@ -31,6 +38,18 @@ const REGISTER_RULES: FormRules<UserRegisterType> = {
         [(v) => v.length >= 8, "Password must be at least 8 characters"],
     ],
 };
+
+export interface RegisterPageContextType {
+    isSubmitting: boolean;
+    formDataError: string;
+    errors: UserRegisterType;
+    onFirstNameChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    onLastNameChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    onEmailChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    onPasswordChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    onSubmitForm: (e: SubmitEvent<HTMLFormElement>) => void;
+    onResetForm: () => void;
+}
 
 export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
     const [formData, setFormData] = useState<UserRegisterType>(objectCopy(REGISTER_EMPTY_FORM));

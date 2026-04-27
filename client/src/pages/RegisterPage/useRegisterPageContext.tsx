@@ -1,17 +1,5 @@
-import { createContext, useContext, type ChangeEvent, type SubmitEvent } from "react";
-import { type UserRegisterType } from "../../../../packages/types";
-
-interface RegisterPageContextType {
-    isSubmitting: boolean;
-    formDataError: string;
-    errors: UserRegisterType;
-    onFirstNameChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    onLastNameChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    onEmailChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    onPasswordChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    onSubmitForm: (e: SubmitEvent<HTMLFormElement>) => void;
-    onResetForm: () => void;
-}
+import { createContext, useContext } from "react";
+import { type RegisterPageContextType } from "./RegisterPageContext";
 
 export const RegisterPageContext = createContext<RegisterPageContextType | null>(null);
 

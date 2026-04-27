@@ -1,4 +1,12 @@
-import { useCallback, useMemo, useState, type ChangeEvent, type ReactNode } from "react";
+import {
+    useCallback,
+    useMemo,
+    useState,
+    type ChangeEvent,
+    type Dispatch,
+    type ReactNode,
+    type SetStateAction,
+} from "react";
 import { UserLibraryPageContext } from "./useUserLibraryPageContext";
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 import {
@@ -8,12 +16,6 @@ import {
     type SortValueType,
 } from "../../../../packages/types/SelectOptionsTypes.ts";
 import UserLibraryMockData from "../../data/UserLibraryMockData";
-
-export type FilterType = {
-    searchTitle: string;
-    statusValue: StatusOptionType;
-    sortValue: SortOptionType;
-};
 
 const statusOptions: StatusOptionType[] = [
     { value: "all", label: "all" },
@@ -59,6 +61,26 @@ const filterBySort = (data: UserLibraryDataType[], sort: SortValueType | string)
         return [...data].sort((a, b) => Number(b.price ?? 0) - Number(a.price ?? 0));
     }
 };
+
+export type FilterType = {
+    searchTitle: string;
+    statusValue: StatusOptionType;
+    sortValue: SortOptionType;
+};
+
+export interface UserLibraryPageContextType {
+    filters: FilterType;
+    filteredData: UserLibraryDataType[];
+    statusOptions: StatusOptionType[];
+    sortOptions: SortOptionType[];
+    selectedCard: UserLibraryDataType | null;
+    setSelectedCard: Dispatch<SetStateAction<UserLibraryDataType | null>>;
+    onSearchTitle: (e: ChangeEvent<HTMLInputElement>) => void;
+    onStatusSelect: (option: StatusOptionType) => void;
+    onSortSelect: (option: SortOptionType) => void;
+    onCardSelect: (id: string) => void;
+    onDeleteGameById: (id: string) => void;
+}
 
 export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) => {
     const [libraryData, setLibraryData] = useState<UserLibraryDataType[]>([...UserLibraryMockData]);

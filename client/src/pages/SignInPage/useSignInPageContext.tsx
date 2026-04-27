@@ -1,15 +1,5 @@
-import { createContext, useContext, type ChangeEvent, type SubmitEvent } from "react";
-import type { UserSigninType } from "../../../../packages/types";
-
-export interface SignInPageContextType {
-    isSubmitting: boolean;
-    formDataError: string;
-    errors: UserSigninType;
-    onEmailChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    onPasswordChange: (e: ChangeEvent<HTMLInputElement>) => void;
-    onSubmitForm: (e: SubmitEvent<HTMLFormElement>) => void;
-    onResetForm: () => void;
-}
+import { createContext, useContext } from "react";
+import { type SignInPageContextType } from "./SignInPageContext";
 
 export const SignInPageContext = createContext<SignInPageContextType | null>(null);
 
