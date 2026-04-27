@@ -1,8 +1,8 @@
 import { capitalizeString } from "../../lib/string";
-import { type Status } from "../../../../packages/types/UserLibrary";
+import { type StatusType } from "../../../../packages/types";
 
 type BadgeType = {
-    status: Status;
+    status: StatusType;
 };
 
 const Badge = ({ status }: BadgeType) => {
