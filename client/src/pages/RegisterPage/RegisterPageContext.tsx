@@ -12,6 +12,7 @@ import { RegisterPageContext } from "./useRegisterPageContext";
 import { type UserRegisterType } from "../../../../packages/types";
 import { objectCopy } from "../../lib/generic";
 import { isFormDataValid, type FormRules, hasErrors } from "../../lib/form";
+import { API_URL } from "../../config/api";
 
 const REGISTER_EMPTY_FORM: UserRegisterType = {
     first_name: "",
@@ -87,7 +88,7 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
         async (d: UserRegisterType) => {
             setIsSubmitting(true);
             try {
-                const response = await fetch("http://localhost:8000/api/v1/auth/register", {
+                const response = await fetch(`${API_URL}/api/v1/auth/register`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
