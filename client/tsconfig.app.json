@@ -6,6 +6,9 @@
         "module": "esnext",
         "types": ["vite/client"],
         "skipLibCheck": true,
+        "paths": {
+            "@lucid/types": ["../packages/types/index.ts"]
+        },
 
         /* Bundler mode */
         "moduleResolution": "bundler",

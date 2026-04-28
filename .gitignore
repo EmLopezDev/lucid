@@ -9,6 +9,11 @@ lerna-debug.log*
 
 # Dependencies
 node_modules
+dist
+client/dist
+client/node_modules
+server/node_modules
+server/dist
 dist-ssr
 *.local
 
