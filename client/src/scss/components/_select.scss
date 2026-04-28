@@ -6,6 +6,7 @@
     cursor: pointer;
     height: 100%;
     width: 100%;
+    min-width: 0;
 
     &__trigger {
         display: flex;
@@ -38,7 +39,6 @@
         &--small {
             padding: u.em(10) u.em(12);
             font-size: u.rem(12);
-            min-width: u.em(120);
         }
         &--medium {
             padding: u.em(14) u.em(16);
