@@ -5,6 +5,7 @@
     flex-direction: column;
     gap: u.rem(10);
     width: 100%;
+    min-width: 0;
 }
 
 .input__label {
