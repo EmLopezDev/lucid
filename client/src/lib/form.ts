@@ -1,5 +1,6 @@
 import { objectCopy } from "./generic";
 import {
+    type StatusFilterOptionType,
     type StatusOptionType,
     type SortOptionType,
     type PlatformOptionType,
@@ -26,6 +27,14 @@ export const hasErrors = <T extends Record<string, string>>(errors: T) =>
     Object.values(errors).some(Boolean);
 
 export const statusOptions: StatusOptionType[] = [
+    { value: "playing", label: "playing" },
+    { value: "completed", label: "completed" },
+    { value: "paused", label: "paused" },
+    { value: "dropped", label: "dropped" },
+    { value: "wishlist", label: "wishlist" },
+];
+
+export const statusFilterOptions: StatusFilterOptionType[] = [
     { value: "all", label: "all" },
     { value: "playing", label: "playing" },
     { value: "completed", label: "completed" },

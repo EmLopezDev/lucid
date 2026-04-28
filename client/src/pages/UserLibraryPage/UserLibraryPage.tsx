@@ -6,7 +6,7 @@ import Select from "../../components/Select/Select";
 import { UserLibraryPageProvider } from "./UserLibraryPageContext";
 import { useUserLibraryPageContext } from "./useUserLibraryPageContext";
 import {
-    type StatusType,
+    type StatusFilterType,
     type SortValueType,
     type SortLabelType,
 } from "../../../../packages/types";
@@ -16,7 +16,7 @@ const UserLibraryPageContent = () => {
         filters,
         filteredData,
         selectedCard,
-        statusOptions,
+        statusFilterOptions,
         sortOptions,
         onStatusSelect,
         onSortSelect,
@@ -34,10 +34,10 @@ const UserLibraryPageContent = () => {
                         onChange={onSearchTitle}
                         hasErrorText={false}
                     />
-                    <Select<StatusType, StatusType>
+                    <Select<StatusFilterType, StatusFilterType>
                         id="status-options"
                         value={filters.statusValue.value}
-                        options={statusOptions}
+                        options={statusFilterOptions}
                         onChange={onStatusSelect}
                     />
                     <Select<SortValueType, SortLabelType>

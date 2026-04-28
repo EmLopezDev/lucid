@@ -10,13 +10,14 @@ import {
 import { UserLibraryPageContext } from "./useUserLibraryPageContext";
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 import {
+    type StatusFilterOptionType,
     type StatusOptionType,
     type SortOptionType,
     type SortValueType,
 } from "../../../../packages/types/SelectOptionsTypes.ts";
 import { type StatusType } from "../../../../packages/types/UserLibrary";
 import UserLibraryMockData from "../../data/UserLibraryMockData";
-import { sortOptions, statusOptions } from "../../lib/form.ts";
+import { sortOptions, statusFilterOptions, statusOptions } from "../../lib/form.ts";
 
 const filterByTitle = (data: UserLibraryDataType[], title: string) => {
     if (!title) return data;
@@ -49,19 +50,20 @@ const filterBySort = (data: UserLibraryDataType[], sort: SortValueType | string)
 
 export type FilterType = {
     searchTitle: string;
-    statusValue: StatusOptionType;
+    statusValue: StatusFilterOptionType;
     sortValue: SortOptionType;
 };
 
 export interface UserLibraryPageContextType {
     filters: FilterType;
     filteredData: UserLibraryDataType[];
+    statusFilterOptions: StatusFilterOptionType[];
     statusOptions: StatusOptionType[];
     sortOptions: SortOptionType[];
     selectedCard: UserLibraryDataType | null;
     setSelectedCard: Dispatch<SetStateAction<UserLibraryDataType | null>>;
     onSearchTitle: (e: ChangeEvent<HTMLInputElement>) => void;
-    onStatusSelect: (option: StatusOptionType) => void;
+    onStatusSelect: (option: StatusFilterOptionType) => void;
     onSortSelect: (option: SortOptionType) => void;
     onCardSelect: (id: string) => void;
     onDeleteGameById: (id: string) => void;
@@ -91,7 +93,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
         setFilters((prevState) => ({ ...prevState, searchTitle: event.target.value }));
     }, []);
 
-    const onStatusSelect = useCallback((option: StatusOptionType) => {
+    const onStatusSelect = useCallback((option: StatusFilterOptionType) => {
         setSelectedCard(null);
         setFilters((prevState) => ({ ...prevState, statusValue: option }));
     }, []);
@@ -118,6 +120,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
             filters,
             filteredData,
             statusOptions,
+            statusFilterOptions,
             sortOptions,
             selectedCard,
             setSelectedCard,

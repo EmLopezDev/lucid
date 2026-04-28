@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const Status = z.literal(["all", "playing", "completed", "paused", "dropped", "wishlist"]);
+export const Status = z.literal(["playing", "completed", "paused", "dropped", "wishlist"]);
 
 export type StatusType = z.infer<typeof Status>;
 

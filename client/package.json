@@ -1,20 +1,13 @@
 {
-    "homepage": "https://EmLopezDev.github.io/lucid/",
     "name": "client",
     "private": true,
     "version": "0.0.0",
     "type": "module",
-    "files": [
-        "dist"
-    ],
-    "main": "./index.html",
     "scripts": {
         "dev": "vite",
         "build": "tsc -b && vite build",
         "lint": "eslint .",
-        "preview": "vite preview",
-        "predeploy": "npm run build",
-        "deploy": "gh-pages -d dist"
+        "preview": "vite preview"
     },
     "dependencies": {
         "css-variants": "^2.3.5",
@@ -30,7 +23,6 @@
         "eslint": "^9.39.4",
         "eslint-plugin-react-hooks": "^7.0.1",
         "eslint-plugin-react-refresh": "^0.5.2",
-        "gh-pages": "^6.3.0",
         "globals": "^17.4.0",
         "sass-embedded": "^1.99.0",
         "typescript-eslint": "^8.58.0",
