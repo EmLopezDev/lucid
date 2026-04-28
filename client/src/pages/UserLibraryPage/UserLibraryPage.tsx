@@ -72,6 +72,7 @@ const UserLibraryPageContent = () => {
                         </div>
                         {selectedCard && (
                             <CardDetail
+                                key={selectedCard._id}
                                 data={selectedCard}
                                 handleOnDeleteById={onDeleteGameById}
                             />

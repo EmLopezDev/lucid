@@ -69,8 +69,10 @@ export interface UserLibraryPageContextType {
     onDeleteGameById: (id: string) => void;
 }
 
+const initialLibraryData = [...UserLibraryMockData];
+
 export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) => {
-    const [libraryData, setLibraryData] = useState<UserLibraryDataType[]>([...UserLibraryMockData]);
+    const [libraryData, setLibraryData] = useState<UserLibraryDataType[]>(initialLibraryData);
     const [selectedCard, setSelectedCard] = useState<UserLibraryDataType | null>(null);
     const [filters, setFilters] = useState<FilterType>({
         searchTitle: "",
@@ -80,13 +82,19 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
 
     const onCardSelect = useCallback(
         (id: string) => {
-            setSelectedCard((prev) => {
-                const card = libraryData.find((d) => d._id === id) ?? null;
-                return prev?._id === id ? null : card;
-            });
+            const card = libraryData.find((d) => d._id === id) ?? null;
+            setSelectedCard((prev) => (prev?._id === id ? null : card));
         },
         [libraryData],
     );
+
+    //     const onCardSelect = useCallback(
+    //     (id: string) => {
+    //         const card = libraryData.find((d) => d._id === id) ?? null;
+    //         setSelectedCard((prev) => (prev?._id === id ? null : card));
+    //     },
+    //     [libraryData],
+    // );
 
     const onSearchTitle = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setSelectedCard(null);
