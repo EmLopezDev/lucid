@@ -65,7 +65,15 @@ const CardDetailEditContent = ({ data, onSubmit, onCancel }: CardDetailEditConte
                 onSubmit={handleOnSubmit}
                 onCancel={onCancel}
             >
-                <div style={{ width: "100%", display: "flex", gap: "8px" }}>
+                <div
+                    style={{
+                        width: "100%",
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr",
+                        gap: "8px",
+                        boxSizing: "border-box",
+                    }}
+                >
                     <Select<PlatformType, PlatformType>
                         id="1"
                         options={platformOptions}
@@ -80,33 +88,31 @@ const CardDetailEditContent = ({ data, onSubmit, onCancel }: CardDetailEditConte
                         onChange={onStatusSelect}
                         selectSize="small"
                     />
-                </div>
-                {data.ownership.type === "own" && (
-                    <div style={{ width: "100%", display: "flex", gap: "8px" }}>
-                        <Input
-                            label="Purchase Date"
-                            type="date"
-                            value={
-                                data.ownership.date_purchased?.toISOString().split("T")[0] ??
-                                new Date().toISOString().split("T")[0]
-                            }
-                            onChange={() => {}}
-                            inputSize="small"
-                            hasErrorText={false}
-                        />
-                        <Input
-                            label="Price"
-                            type="number"
-                            onChange={() => {}}
-                            inputSize="small"
-                            hasErrorText={false}
-                            placeholder="0.00"
-                            min="0"
-                            step="0.01"
-                        />
-                    </div>
-                )}
-                <div style={{ width: "100%", display: "flex", gap: "8px" }}>
+                    {data.ownership.type === "own" && (
+                        <>
+                            <Input
+                                label="Price"
+                                type="number"
+                                onChange={() => {}}
+                                inputSize="small"
+                                hasErrorText={false}
+                                placeholder="0.00"
+                                min="0"
+                                step="0.01"
+                            />
+                            <Input
+                                label="Purchase Date"
+                                type="date"
+                                value={
+                                    data.ownership.date_purchased?.toISOString().split("T")[0] ??
+                                    new Date().toISOString().split("T")[0]
+                                }
+                                onChange={() => {}}
+                                inputSize="small"
+                                hasErrorText={false}
+                            />
+                        </>
+                    )}
                     <Input
                         label="Hours"
                         type="number"

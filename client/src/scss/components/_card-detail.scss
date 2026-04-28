@@ -4,7 +4,8 @@
     height: calc(100svh - 185px);
     width: u.em(240);
     border-left: u.em(1) solid rgba(127, 119, 221, 0.18);
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
     padding-bottom: u.em(8);
 }
 .card-detail {
@@ -23,6 +24,8 @@
         display: flex;
         flex-direction: column;
         padding: u.em(16);
+        box-sizing: border-box; // ✅ padding included in width calculation
+        overflow: hidden;
 
         &__title {
             font-weight: 600;
