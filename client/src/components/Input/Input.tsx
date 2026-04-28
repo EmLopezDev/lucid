@@ -1,61 +1,68 @@
-import { type ChangeEvent, type InputHTMLAttributes } from "react";
+import { type ChangeEvent, type InputHTMLAttributes, useId } from "react";
 import { cx } from "css-variants";
 
-type Input = {
+type InputProps = {
     inputSize?: "small" | "medium" | "large";
-    name?: string;
-    required?: boolean;
     label?: string;
     errorText?: string;
     hasErrorText?: boolean;
     onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-} & InputHTMLAttributes<HTMLInputElement>;
+} & Omit<InputHTMLAttributes<HTMLInputElement>, "onChange">;
 
 const Input = ({
     inputSize = "medium",
-    name = "",
-    required = false,
-    label = "",
-    errorText = "",
+    label,
+    errorText,
     hasErrorText = true,
     onChange,
+    id,
     ...props
-}: Input) => {
-    const inputClassName = cx({
-        input: true,
-        [`${inputSize}`]: inputSize,
-    });
-
-    const inputLabelClassName = cx({
-        input__label: true,
-        [`input__label__${inputSize}`]: inputSize,
-    });
+}: InputProps) => {
+    const generatedId = useId();
+    const inputId = id ?? generatedId; // ✅ use provided id or generate one
 
     return (
         <div className="input__container">
-            {label ? (
-                <label className={inputLabelClassName}>
+            {label && (
+                <label
+                    htmlFor={inputId}
+                    className={cx({
+                        input__label: true,
+                        [`input__label--${inputSize}`]: inputSize,
+                    })}
+                >
                     {label}
-                    <input
-                        className={inputClassName}
-                        // type={type}
-                        name={name}
-                        required={required}
-                        onChange={onChange}
-                        {...props}
-                    />
+                    {props.required && (
+                        <span
+                            className="input__required"
+                            aria-hidden="true"
+                        >
+                            *
+                        </span>
+                    )}
                 </label>
-            ) : (
-                <input
-                    className={inputClassName}
-                    // type={type}
-                    name={name}
-                    required={required}
-                    onChange={onChange}
-                    {...props}
-                />
             )}
-            {hasErrorText && <span className="input__error">{errorText}</span>}
+            <input
+                id={inputId}
+                className={cx({
+                    input: true,
+                    [`input--${inputSize}`]: inputSize,
+                })}
+                onChange={onChange}
+                aria-invalid={!!errorText}
+                aria-describedby={hasErrorText ? `${inputId}-error` : undefined}
+                {...props}
+            />
+            {hasErrorText && (
+                <span
+                    id={`${inputId}-error`}
+                    className="input__error"
+                    role="alert"
+                    aria-live="polite"
+                >
+                    {errorText}
+                </span>
+            )}
         </div>
     );
 };
