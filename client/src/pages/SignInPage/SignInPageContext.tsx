@@ -13,6 +13,7 @@ import { emailCheck } from "../../lib/string";
 import { useUserContext } from "../../contexts/UserContext/useUserContext";
 import { objectCopy } from "../../lib/generic";
 import { isFormDataValid, type FormRules, hasErrors } from "../../lib/form";
+import { API_URL } from "../../config/api";
 
 const SIGNIN_EMPTY_FORM: UserSigninType = {
     email: "",
@@ -65,7 +66,7 @@ export const SignInPageProvider = ({ children }: { children: ReactNode }) => {
         async (d: UserSigninType) => {
             setIsSubmitting(true);
             try {
-                const response = await fetch("http://localhost:8000/api/v1/auth/signin", {
+                const response = await fetch(`${API_URL}/api/v1/auth/signin`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
