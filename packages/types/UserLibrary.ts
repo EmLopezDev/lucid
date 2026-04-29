@@ -8,16 +8,6 @@ export const Platform = z.literal(["playstation", "xbox", "nintendo", "PC"]);
 
 export type PlatformType = z.infer<typeof Platform>;
 
-const WishList = z.object({
-    type: z.literal(["wishlist"]),
-});
-
-const Own = z.object({
-    type: z.literal(["own"]),
-    date_played: z.date().nullable().default(null),
-    date_purchased: z.date().nullable().default(null),
-});
-
 export const UserLibraryData = z.object({
     _id: z.uuid(),
     user_id: z.uuid(),
@@ -26,7 +16,8 @@ export const UserLibraryData = z.object({
     genre: z.string(),
     platform: Platform,
     favorite: z.boolean().default(false),
-    ownership: z.discriminatedUnion("type", [WishList, Own]),
+    date_played: z.date().nullable().default(null),
+    date_purchased: z.date().nullable().default(null),
     hours_played: z.number().min(0).nullable().default(null),
     rating: z.coerce
         .number()
