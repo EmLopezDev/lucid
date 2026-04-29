@@ -29,9 +29,7 @@ const CardDetailContent = ({ data, setEditMode, handleOnDeleteById }: CardDetail
                 <div className="card-detail__grid__stat">
                     <span className="card-detail__grid__stat--title">Purchased</span>
                     <span className="card-detail__grid__stat--date">
-                        {(data.ownership.type === "own" &&
-                            data.ownership.date_purchased?.toLocaleDateString()) ||
-                            "-"}
+                        {data.date_purchased?.toLocaleDateString() || "-"}
                     </span>
                 </div>
                 <div className="card-detail__grid__stat">

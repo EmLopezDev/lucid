@@ -80,31 +80,26 @@ const CardDetailEditContent = ({ data, onSubmit, onCancel }: CardDetailEditConte
                         onChange={onStatusSelect}
                         selectSize="small"
                     />
-                    {data.ownership.type === "own" && (
-                        <>
-                            <Input
-                                label="Price"
-                                type="number"
-                                onChange={() => {}}
-                                inputSize="small"
-                                hasErrorText={false}
-                                placeholder="0.00"
-                                min="0"
-                                step="0.01"
-                            />
-                            <Input
-                                label="Purchase Date"
-                                type="date"
-                                value={
-                                    data.ownership.date_purchased?.toISOString().split("T")[0] ??
-                                    new Date().toISOString().split("T")[0]
-                                }
-                                onChange={() => {}}
-                                inputSize="small"
-                                hasErrorText={false}
-                            />
-                        </>
-                    )}
+                    <>
+                        <Input
+                            label="Price"
+                            type="number"
+                            onChange={() => {}}
+                            inputSize="small"
+                            hasErrorText={false}
+                            placeholder="0.00"
+                            min="0"
+                            step="0.01"
+                        />
+                        <Input
+                            label="Purchase Date"
+                            type="date"
+                            value={data.date_purchased?.toISOString().split("T")[0] ?? ""}
+                            onChange={() => {}}
+                            inputSize="small"
+                            hasErrorText={false}
+                        />
+                    </>
                     <Input
                         label="Hours"
                         type="number"
