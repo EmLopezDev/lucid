@@ -65,15 +65,7 @@ const CardDetailEditContent = ({ data, onSubmit, onCancel }: CardDetailEditConte
                 onSubmit={handleOnSubmit}
                 onCancel={onCancel}
             >
-                <div
-                    style={{
-                        width: "100%",
-                        display: "grid",
-                        gridTemplateColumns: "1fr 1fr",
-                        gap: "8px",
-                        boxSizing: "border-box",
-                    }}
-                >
+                <div className="card-detail__content__edit">
                     <Select<PlatformType, PlatformType>
                         id="1"
                         options={platformOptions}
