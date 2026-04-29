@@ -45,6 +45,12 @@
         &__status {
             margin-block-end: u.em(12);
         }
+
+        &__edit {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: u.em(8);
+        }
     }
 
     &__grid {

@@ -21,7 +21,7 @@ const Own = z.object({
 export const UserLibraryData = z.object({
     _id: z.uuid(),
     user_id: z.uuid(),
-    game_id: z.bigint(),
+    game_id: z.string(),
     title: z.string(),
     genre: z.string(),
     platform: Platform,
