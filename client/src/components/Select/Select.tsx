@@ -27,6 +27,9 @@ function Select<V = string, L extends string = string>({
     const listboxRef = useRef<HTMLUListElement>(null);
     const listboxId = useId();
 
+    const generateId = useId();
+    const selectId = id ?? generateId;
+
     const selectedOption = options.find((o) => o.value === value);
 
     // Close on outside click
@@ -123,13 +126,13 @@ function Select<V = string, L extends string = string>({
 
     return (
         <div
+            id={selectId}
             ref={containerRef}
             className="select"
             onKeyDown={handleKeyDown}
         >
             {/* Trigger button */}
             <div
-                id={id}
                 role="combobox"
                 aria-haspopup="listbox"
                 aria-expanded={isOpen}

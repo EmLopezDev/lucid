@@ -19,7 +19,7 @@ const Input = ({
     ...props
 }: InputProps) => {
     const generatedId = useId();
-    const inputId = id ?? generatedId; // ✅ use provided id or generate one
+    const inputId = id ?? generatedId;
 
     return (
         <div className="input__container">
