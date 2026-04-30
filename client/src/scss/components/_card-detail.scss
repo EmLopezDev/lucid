@@ -21,10 +21,10 @@
         background: linear-gradient(135deg, hsla(33, 85%, 28%, 0.6), hsla(36, 86%, 55%, 0.9));
     }
 
-    &__button {
+    &__button--close {
         position: absolute;
-        top: 5px;
-        right: 5px;
+        top: u.em(2);
+        right: u.em(2);
     }
 
     &__content {

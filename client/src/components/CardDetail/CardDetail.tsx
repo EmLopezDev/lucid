@@ -3,13 +3,15 @@ import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary
 import { objectCopy } from "../../lib/generic";
 import CardDetailContent from "./CardDetailContent";
 import CardDetailEditContent from "./CardDetailEditContent";
+import Button from "../Button/Button";
 
 type CardDetailType = {
     data: UserLibraryDataType;
     handleOnDeleteById: (id: string) => void;
+    onClose: () => void;
 };
 
-const CardDetail = ({ data, handleOnDeleteById }: CardDetailType) => {
+const CardDetail = ({ data, handleOnDeleteById, onClose }: CardDetailType) => {
     const [gameData, setGameData] = useState(objectCopy(data));
     const [editMode, setEditMode] = useState(false);
 
@@ -22,15 +24,23 @@ const CardDetail = ({ data, handleOnDeleteById }: CardDetailType) => {
         setGameData(data);
     }, [data]);
 
+    const handleCloseCardDetail = useCallback(() => {
+        onClose();
+        setEditMode(false);
+    }, [onClose]);
+
     return (
         <aside className="card-detail__container">
             <div className="card-detail">
-                <button
-                    onClick={onCancelEditMode}
-                    className="card-detail__button"
-                >
-                    X
-                </button>
+                <span className="card-detail__button--close">
+                    <Button
+                        icon="close"
+                        aria-label="close card detail"
+                        variant="transparent"
+                        buttonSize="small"
+                        onClick={handleCloseCardDetail}
+                    />
+                </span>
                 <div className="card-detail__image">IMAGE GOES HERE</div>
                 <div className="card-detail__content">
                     {editMode ? (

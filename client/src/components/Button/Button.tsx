@@ -1,19 +1,19 @@
 import { type ButtonHTMLAttributes, type ReactNode } from "react";
 import { cx } from "css-variants";
+import Icon from "../Icon/Icon";
+import { type IconName } from "../Icon/IconMap";
 
 type ButtonBase = {
     type?: "submit" | "button" | "reset";
-    variant?: "primary" | "secondary" | "danger";
+    variant?: "primary" | "secondary" | "danger" | "transparent";
     buttonSize?: "small" | "medium" | "large";
-    "aria-label"?: string;
     className?: string;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 type ButtonIconOnly = ButtonBase & {
-    icon: ReactNode;
+    icon: IconName; // just the name string
     children?: never;
     iconPosition?: never;
-    "aria-label": string;
 };
 
 type ButtonTextOnly = ButtonBase & {
@@ -23,7 +23,7 @@ type ButtonTextOnly = ButtonBase & {
 };
 
 type ButtonIconText = ButtonBase & {
-    icon: ReactNode;
+    icon: IconName; // just the name string
     children: ReactNode;
     iconPosition?: "left" | "right";
 };
@@ -37,7 +37,7 @@ const Button = ({
     icon,
     iconPosition = "left",
     children,
-    className = "",
+    className,
     ...props
 }: ButtonProps) => {
     const isIconOnly = !!icon && !children;
@@ -50,48 +50,35 @@ const Button = ({
         className,
     });
 
+    // Icon size stays in sync with button size automatically
+    const iconElement = icon ? (
+        <Icon
+            name={icon}
+            size={buttonSize}
+        />
+    ) : null;
+
     return (
         <button
             className={buttonClassName}
             type={type}
             {...props}
         >
-            {/* Icon only */}
-            {isIconOnly && (
-                <span
-                    className="button__icon"
-                    aria-hidden="true"
-                >
-                    {icon}
-                </span>
-            )}
+            {isIconOnly && iconElement}
 
-            {/* Text only */}
             {!icon && children}
 
-            {/* Icon left + text */}
             {icon && children && iconPosition === "left" && (
                 <>
-                    <span
-                        className="button__icon button__icon--left"
-                        aria-hidden="true"
-                    >
-                        {icon}
-                    </span>
+                    {iconElement}
                     {children}
                 </>
             )}
 
-            {/* Icon right + text */}
             {icon && children && iconPosition === "right" && (
                 <>
                     {children}
-                    <span
-                        className="button__icon button__icon--right"
-                        aria-hidden="true"
-                    >
-                        {icon}
-                    </span>
+                    {iconElement}
                 </>
             )}
         </button>
