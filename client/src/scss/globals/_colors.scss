@@ -1,22 +1,4 @@
 :root {
-    --color-bg-app: hsl(250, 37%, 97%);
-    --color-bg-surface: hsl(0, 0%, 100%);
-    --color-bg-card: hsl(250, 46%, 95%);
-    --color-bg-card-hover: hsl(248, 43%, 93%);
-    --color-text-primary: hsl(245, 32%, 14%);
-    --color-text-secondary: hsl(243, 24%, 51%);
-    --color-text-tertiary: hsl(244, 19%, 65%);
-    --color-brand: hsl(245, 43%, 50%);
-    --color-brand-hover: hsl(246, 45%, 37%);
-    --color-brand-bg: hsl(244, 89%, 96%);
-    --color-brand-rgb: 127, 119, 221;
-    --color-border: rgba(127, 119, 221, 0.35);
-    --color-danger: #d85a30;
-    --color-success: #1d9e75;
-    --color-error: #e05c5c;
-}
-
-.darkmode {
     --color-bg-app: hsl(240, 21%, 6%);
     --color-bg-surface: hsl(240, 24%, 10%);
     --color-bg-card: hsl(240, 28%, 14%);
@@ -27,6 +9,24 @@
     --color-brand: hsl(245, 60%, 67%);
     --color-brand-hover: hsl(245, 64%, 79%);
     --color-brand-bg: hsl(244, 35%, 17%);
+    --color-brand-rgb: 127, 119, 221;
+    --color-border: rgba(127, 119, 221, 0.35);
+    --color-danger: #d85a30;
+    --color-success: #1d9e75;
+    --color-error: #e05c5c;
+}
+
+.lightmode {
+    --color-bg-app: hsl(250, 37%, 97%);
+    --color-bg-surface: hsl(0, 0%, 100%);
+    --color-bg-card: hsl(250, 46%, 95%);
+    --color-bg-card-hover: hsl(248, 43%, 93%);
+    --color-text-primary: hsl(245, 32%, 14%);
+    --color-text-secondary: hsl(243, 24%, 51%);
+    --color-text-tertiary: hsl(244, 19%, 65%);
+    --color-brand: hsl(245, 43%, 50%);
+    --color-brand-hover: hsl(246, 45%, 37%);
+    --color-brand-bg: hsl(244, 89%, 96%);
     --color-brand-rgb: 127, 119, 221;
     --color-border: rgba(127, 119, 221, 0.35);
     --color-danger: #d85a30;
