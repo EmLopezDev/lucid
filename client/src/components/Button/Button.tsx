@@ -1,37 +1,96 @@
-import { type ButtonHTMLAttributes } from "react";
+import { type ButtonHTMLAttributes, type ReactNode } from "react";
 import { cx } from "css-variants";
-import { capitalizeString } from "../../lib/string";
 
-type ButtonType = {
+type ButtonBase = {
     type?: "submit" | "button" | "reset";
     variant?: "primary" | "secondary" | "danger";
-    size?: "small" | "medium" | "large";
-    text: string;
-    onClick?: () => void;
+    buttonSize?: "small" | "medium" | "large";
+    "aria-label"?: string;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
+
+type ButtonIconOnly = ButtonBase & {
+    icon: ReactNode;
+    children?: never;
+    iconPosition?: never;
+    "aria-label": string;
+};
+
+type ButtonTextOnly = ButtonBase & {
+    children: ReactNode;
+    icon?: never;
+    iconPosition?: never;
+};
+
+type ButtonIconText = ButtonBase & {
+    icon: ReactNode;
+    children: ReactNode;
+    iconPosition?: "left" | "right";
+};
+
+type ButtonProps = ButtonIconOnly | ButtonTextOnly | ButtonIconText;
 
 const Button = ({
     type = "button",
-    size = "medium",
+    buttonSize = "medium",
     variant = "primary",
-    text = "",
-    onClick,
+    icon,
+    iconPosition = "left",
+    children,
     ...props
-}: ButtonType) => {
+}: ButtonProps) => {
+    const isIconOnly = !!icon && !children;
+
     const className = cx({
         button: true,
-        [`${size}`]: true,
-        [`${variant}`]: true,
+        [`button--${buttonSize}`]: true,
+        [`button--${variant}`]: true,
+        "button--icon-only": isIconOnly,
     });
 
     return (
         <button
             className={className}
             type={type}
-            onClick={onClick}
             {...props}
         >
-            {capitalizeString(text)}
+            {/* Icon only */}
+            {isIconOnly && (
+                <span
+                    className="button__icon"
+                    aria-hidden="true"
+                >
+                    {icon}
+                </span>
+            )}
+
+            {/* Text only */}
+            {!icon && children}
+
+            {/* Icon left + text */}
+            {icon && children && iconPosition === "left" && (
+                <>
+                    <span
+                        className="button__icon button__icon--left"
+                        aria-hidden="true"
+                    >
+                        {icon}
+                    </span>
+                    {children}
+                </>
+            )}
+
+            {/* Icon right + text */}
+            {icon && children && iconPosition === "right" && (
+                <>
+                    {children}
+                    <span
+                        className="button__icon button__icon--right"
+                        aria-hidden="true"
+                    >
+                        {icon}
+                    </span>
+                </>
+            )}
         </button>
     );
 };

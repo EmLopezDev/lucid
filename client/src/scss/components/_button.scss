@@ -1,43 +1,69 @@
 @use "../utils/" as u;
 
 .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: u.em(6);
     border-radius: u.em(8);
     text-align: center;
     transition: all 0.15s;
     letter-spacing: 0.3px;
     flex: 1;
-}
 
-.primary {
-    border: 1px solid #7f77dd;
-    color: white;
-    background-color: #7f77dd;
-}
+    // Variants
+    &--primary {
+        border: 1px solid #7f77dd;
+        color: white;
+        background-color: #7f77dd;
+    }
 
-.secondary {
-    background: #1a1a2e;
-    border: 0.5px solid rgba(127, 119, 221, 0.35);
-    color: #9896b8;
-}
+    &--secondary {
+        background: #1a1a2e;
+        border: 0.5px solid rgba(127, 119, 221, 0.35);
+        color: #9896b8;
+    }
 
-.danger {
-    background: #1a1a2e;
-    border: 0.5px solid rgba(127, 119, 221, 0.35);
-    color: #d85a30;
-}
+    &--danger {
+        background: #1a1a2e;
+        border: 0.5px solid rgba(127, 119, 221, 0.35);
+        color: #d85a30;
+    }
 
-.small {
-    padding: u.em(10);
-    font-size: u.rem(12);
-    font-weight: 600;
-}
+    // Sizes
+    &--small {
+        padding: u.em(10);
+        font-size: u.rem(12);
+        font-weight: 600;
+    }
 
-.medium {
-    padding: u.rem(12);
-    font-size: u.rem(14);
-}
+    &--medium {
+        padding: u.rem(12);
+        font-size: u.rem(14);
+    }
 
-.large {
-    padding: u.rem(14);
-    font-size: u.rem(16);
+    &--large {
+        padding: u.rem(14);
+        font-size: u.rem(16);
+    }
+
+    // Icon-only: equal padding on all sides to keep it square
+    &--icon-only {
+        &.button--small {
+            padding: u.em(10);
+        }
+        &.button--medium {
+            padding: u.rem(12);
+        }
+        &.button--large {
+            padding: u.rem(14);
+        }
+    }
+
+    // Icon wrapper
+    &__icon {
+        display: inline-flex;
+        align-items: center;
+        flex-shrink: 0;
+    }
 }

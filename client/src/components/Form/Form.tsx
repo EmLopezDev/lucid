@@ -30,16 +30,18 @@ const Form = ({
             <div className="form-buttons">
                 <Button
                     type="reset"
-                    text={secondaryButtonText}
                     onClick={onCancel}
-                    size={buttonSize}
+                    buttonSize={buttonSize}
                     variant="secondary"
-                />
+                >
+                    {secondaryButtonText}
+                </Button>
                 <Button
                     type="submit"
-                    text={primaryButtonText}
-                    size={buttonSize}
-                />
+                    buttonSize={buttonSize}
+                >
+                    {primaryButtonText}
+                </Button>
             </div>
             {errorText && <p className="form-error">{errorText()}</p>}
         </form>

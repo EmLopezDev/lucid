@@ -48,7 +48,7 @@ const UserLibraryPageContent = () => {
                     />
                 </div>
                 <div className="user-library-page__add__button">
-                    <Button text="add game" />
+                    <Button>Add game</Button>
                 </div>
             </div>
             <div className="user-library-page__content">

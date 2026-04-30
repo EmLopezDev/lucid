@@ -53,17 +53,19 @@ const CardDetailContent = ({ data, setEditMode, handleOnDeleteById }: CardDetail
             </div>
             <div className="card-detail__buttons">
                 <Button
-                    size="small"
-                    text="remove"
+                    buttonSize="small"
                     variant="danger"
                     onClick={() => handleOnDeleteById(data._id)}
-                />
+                >
+                    Remove
+                </Button>
                 <Button
-                    text="edit"
-                    size="small"
+                    buttonSize="small"
                     variant="secondary"
                     onClick={() => setEditMode(true)}
-                />
+                >
+                    Edit
+                </Button>
             </div>
         </>
     );
