@@ -2,21 +2,21 @@
 
 .card {
     min-height: u.em(110);
-    border: u.em(1) solid hsla(245, 60%, 67%, 0.2);
+    border: u.em(1) solid rgba(var(--color-brand-rgb), 0.2);
     border-radius: u.em(12);
     overflow: hidden;
-    background-color: #1a1a2e;
-    color: hsl(247, 39%, 95%);
+    background-color: var(--color-bg-card);
+    color: var(--color-text-primary);
     cursor: pointer;
 
     &__selected {
-        background-color: #1f1f35;
-        border: u.em(1) solid #7f77dd;
+        background-color: var(--color-bg-card-hover);
+        border: u.em(1) solid var(--color-brand);
     }
 
     &:hover:not(.card__selected) {
-        background-color: #1f1f35;
-        border: u.em(1) solid hsla(245, 60%, 67%, 0.5);
+        background-color: var(--color-bg-card-hover);
+        border: u.em(1) solid rgba(var(--color-brand-rgb), 0.5);
     }
 
     &__banner {
@@ -42,7 +42,7 @@
         font-weight: 400;
         font-size: u.rem(10);
         line-height: 1.4;
-        color: #6663a0;
+        color: var(--color-text-tertiary);
         margin-block-end: u.em(16);
     }
 
@@ -54,7 +54,7 @@
         line-height: 1.2;
 
         &--price {
-            color: #1d9e75;
+            color: var(--color-success);
         }
     }
 }

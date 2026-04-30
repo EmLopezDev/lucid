@@ -3,15 +3,14 @@
 .card-detail__container {
     height: calc(100svh - 185px);
     width: u.em(240);
-    border-left: u.em(1) solid rgba(127, 119, 221, 0.18);
+    border-left: u.em(1) solid rgba(var(--color-brand-rgb), 0.18);
     overflow-x: hidden;
     overflow-y: auto;
     padding-bottom: u.em(8);
 }
 .card-detail {
-    background-color: #13131f;
-    color: hsl(247, 39%, 95%);
-    position: relative;
+    background-color: var(--color-bg-surface);
+    color: var(--color-text-primary);
 
     &__image {
         height: u.em(150);
@@ -45,7 +44,7 @@
             font-weight: 400;
             font-size: u.rem(12);
             line-height: 1.4;
-            color: #6663a0;
+            color: var(--color-text-tertiary);
             margin-block-end: u.em(12);
         }
 
@@ -70,14 +69,14 @@
             display: flex;
             flex-direction: column;
             gap: u.em(4);
-            background-color: #1a1a2e;
-            border: u.em(0.5) solid rgba(127, 119, 221, 0.18);
+            background-color: var(--color-bg-card);
+            border: u.em(0.5) solid rgba(var(--color-brand-rgb), 0.18);
             border-radius: u.em(8);
             padding: u.em(8) u.em(10);
 
             &--title {
                 font-size: 9px;
-                color: #6663a0;
+                color: var(--color-text-tertiary);
                 font-weight: 500;
                 letter-spacing: 0.5px;
                 text-transform: uppercase;
@@ -87,7 +86,7 @@
                 font-family: var(--df);
                 font-size: u.rem(14);
                 font-weight: 700;
-                color: #1d9e75;
+                color: var(--color-success);
             }
 
             &--hours {
@@ -119,7 +118,7 @@
         &--title {
             font-size: u.rem(10);
             font-weight: 500;
-            color: #6663a0;
+            color: var(--color-text-tertiary);
             letter-spacing: u.em(1);
             text-transform: uppercase;
             display: inline-block;
@@ -127,12 +126,12 @@
         }
 
         &--text {
-            background: #1a1a2e;
+            background: var(--color-bg-card);
             padding: 10px 12px;
             font-size: 11px;
-            color: #9896b8;
+            color: var(--color-text-secondary);
             line-height: 1.6;
-            border-left: 2px solid #7f77dd;
+            border-left: 2px solid var(--color-brand);
             border-radius: 0 8px 8px 0;
         }
     }

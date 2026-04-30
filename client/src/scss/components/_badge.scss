@@ -20,17 +20,17 @@
     }
 
     &__playing {
-        background: rgba(127, 119, 221, 0.3);
+        background: rgba(var(--color-brand-rgb), 0.3);
         color: #afa9ec;
     }
 
     &__paused {
         background: rgba(152, 150, 184, 0.3);
-        color: #9896b8;
+        color: var(--color-text-secondary);
     }
 
     &__dropped {
         background-color: rgba(216, 90, 48, 0.18);
-        color: #d85a30;
+        color: var(--color-danger);
     }
 }
