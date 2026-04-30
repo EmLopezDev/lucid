@@ -37,7 +37,7 @@
 
     &__content {
         display: flex;
-        overflow: hidden;
+        overflow: clip;
         height: calc(100svh - 185px);
         position: relative;
 

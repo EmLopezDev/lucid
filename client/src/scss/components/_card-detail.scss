@@ -1,37 +1,62 @@
 @use "../utils/" as u;
 
 .card-detail__container {
-    height: calc(100svh - 185px);
-    width: u.em(240);
+    height: calc(100svh - 184px);
     border-left: u.em(1) solid rgba(var(--color-brand-rgb), 0.18);
-    overflow-x: hidden;
+    overflow-x: clip;
     overflow-y: auto;
-    padding-bottom: u.em(8);
+
+    // Small screens: overlay the card grid instead of sitting beside it
+    @include u.breakpoint-max("small") {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        z-index: 1;
+        border-left: none;
+        border-top: u.em(1) solid rgba(var(--color-brand-rgb), 0.18);
+    }
+
+    // Medium screens and up: side panel
+    @include u.breakpoint-min("medium") {
+        width: u.em(240);
+    }
+
+    // Large screens: wider panel gives the date picker room to render
+    @include u.breakpoint-min("large") {
+        width: u.em(300);
+    }
 }
 .card-detail {
     background-color: var(--color-bg-surface);
     color: var(--color-text-primary);
+    position: relative;
+    height: calc(100svh - 185px);
 
     &__image {
-        height: u.em(150);
+        height: u.em(180);
         display: flex;
         align-items: center;
         justify-content: center;
         background: linear-gradient(135deg, hsla(33, 85%, 28%, 0.6), hsla(36, 86%, 55%, 0.9));
+
+        @include u.breakpoint-max("small") {
+            height: u.em(220);
+        }
     }
 
     &__button--close {
         position: absolute;
-        top: u.em(2);
-        right: u.em(2);
+        top: 0;
+        right: 0;
     }
 
     &__content {
         display: flex;
         flex-direction: column;
         padding: u.em(16);
-        box-sizing: border-box; // ✅ padding included in width calculation
-        overflow: hidden;
+        overflow: visible;
+        background-color: var(--color-bg-surface);
 
         &__title {
             font-weight: 600;
