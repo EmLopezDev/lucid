@@ -35,18 +35,20 @@ const UserLibraryPageContent = () => {
                         onChange={onSearchTitle}
                         hasErrorText={false}
                     />
-                    <Select<StatusFilterType, StatusFilterType>
-                        id="status-options"
-                        value={filters.statusValue.value}
-                        options={statusFilterOptions}
-                        onChange={onStatusSelect}
-                    />
-                    <Select<SortValueType, SortLabelType>
-                        id="sort-options"
-                        value={filters.sortValue.value}
-                        options={sortOptions}
-                        onChange={onSortSelect}
-                    />
+                    <div className="user-library-page__filters--select">
+                        <Select<StatusFilterType, StatusFilterType>
+                            id="status-options"
+                            value={filters.statusValue.value}
+                            options={statusFilterOptions}
+                            onChange={onStatusSelect}
+                        />
+                        <Select<SortValueType, SortLabelType>
+                            id="sort-options"
+                            value={filters.sortValue.value}
+                            options={sortOptions}
+                            onChange={onSortSelect}
+                        />
+                    </div>
                 </div>
                 <div className="user-library-page__add__button">
                     <Button>Add game</Button>

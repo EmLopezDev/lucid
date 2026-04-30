@@ -21,13 +21,15 @@
     &__filters {
         display: flex;
         gap: u.em(10);
-        width: 100%;
 
-        &__select {
-            height: u.em(56);
-            border-radius: u.em(5);
-            border: 1px solid var(--color-border);
-            padding: u.em(12);
+        @include u.breakpoint-max("small") {
+            flex-wrap: wrap;
+        }
+
+        &--select {
+            width: 100%;
+            display: flex;
+            gap: u.em(10);
         }
     }
 
@@ -40,6 +42,10 @@
         overflow: clip;
         height: calc(100svh - 185px);
         position: relative;
+
+        @include u.breakpoint-max("small") {
+            height: calc(100svh - 235px);
+        }
 
         &--none {
             width: 100%;

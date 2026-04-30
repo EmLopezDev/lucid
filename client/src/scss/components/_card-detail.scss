@@ -1,6 +1,7 @@
 @use "../utils/" as u;
 
 .card-detail__container {
+    background-color: var(--color-bg-surface);
     height: calc(100svh - 184px);
     border-left: u.em(1) solid rgba(var(--color-brand-rgb), 0.18);
     overflow-x: clip;
@@ -8,6 +9,7 @@
 
     // Small screens: overlay the card grid instead of sitting beside it
     @include u.breakpoint-max("small") {
+        height: calc(100svh - 234px);
         position: absolute;
         top: 0;
         right: 0;
@@ -28,10 +30,9 @@
     }
 }
 .card-detail {
-    background-color: var(--color-bg-surface);
     color: var(--color-text-primary);
     position: relative;
-    height: calc(100svh - 185px);
+    height: 100%;
 
     &__image {
         height: u.em(180);
@@ -54,7 +55,7 @@
     &__content {
         display: flex;
         flex-direction: column;
-        padding: u.em(16);
+        padding: u.em(16) u.em(16) u.em(24) u.em(16);
         overflow: visible;
         background-color: var(--color-bg-surface);
 
