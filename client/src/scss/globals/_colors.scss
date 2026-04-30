@@ -9,6 +9,11 @@
     --color-brand: hsl(245, 43%, 50%);
     --color-brand-hover: hsl(246, 45%, 37%);
     --color-brand-bg: hsl(244, 89%, 96%);
+    --color-brand-rgb: 127, 119, 221;
+    --color-border: rgba(127, 119, 221, 0.35);
+    --color-danger: #d85a30;
+    --color-success: #1d9e75;
+    --color-error: #e05c5c;
 }
 
 .darkmode {
@@ -22,4 +27,9 @@
     --color-brand: hsl(245, 60%, 67%);
     --color-brand-hover: hsl(245, 64%, 79%);
     --color-brand-bg: hsl(244, 35%, 17%);
+    --color-brand-rgb: 127, 119, 221;
+    --color-border: rgba(127, 119, 221, 0.35);
+    --color-danger: #d85a30;
+    --color-success: #1d9e75;
+    --color-error: #e05c5c;
 }

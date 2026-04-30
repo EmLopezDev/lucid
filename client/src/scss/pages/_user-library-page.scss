@@ -1,7 +1,7 @@
 @use "../utils/" as u;
 
 .user-library-page {
-    color: #f0eff8;
+    color: var(--color-text-primary);
     width: 100%;
 
     &__controls {
@@ -10,10 +10,10 @@
         display: flex;
         flex-direction: column;
         gap: u.em(10);
-        border-bottom: u.rem(1) solid rgba(127, 119, 221, 0.18);
+        border-bottom: u.rem(1) solid rgba(var(--color-brand-rgb), 0.18);
         position: sticky;
         top: u.em(60);
-        background-color: #0d0d14;
+        background-color: var(--color-bg-app);
         padding: u.em(14) u.em(16);
         z-index: 99;
     }
@@ -26,7 +26,7 @@
         &__select {
             height: u.em(56);
             border-radius: u.em(5);
-            border: 1px solid black;
+            border: 1px solid var(--color-border);
             padding: u.em(12);
         }
     }
