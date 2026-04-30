@@ -10,6 +10,7 @@ import {
     type StatusOptionType,
 } from "../../../../packages/types";
 import { platformOptions, statusOptions } from "../../lib/form";
+import Textarea from "../Textarea/Textarea";
 
 type CardDetailEditContent = {
     data: UserLibraryDataType;
@@ -121,13 +122,10 @@ const CardDetailEditContent = ({ data, onSubmit, onCancel }: CardDetailEditConte
                         placeholder="0-5"
                     />
                 </div>
-                <label htmlFor="">
-                    Comment
-                    <textarea
-                        name=""
-                        id=""
-                    ></textarea>
-                </label>
+                <Textarea
+                    label="Comment"
+                    onChange={() => {}}
+                />
             </Form>
         </>
     );

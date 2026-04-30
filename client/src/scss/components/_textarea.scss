@@ -1,0 +1,90 @@
+@use "../utils/" as u;
+
+.textarea {
+    width: 100%;
+    background: var(--color-bg-card);
+    border: u.em(0.5) solid var(--color-border);
+    border-radius: u.em(8);
+    color: var(--color-text-primary);
+    outline: none;
+    transition: border-color 0.15s ease;
+    min-width: 0;
+    resize: vertical; // only allow vertical resize to avoid breaking layouts
+    font-family: inherit;
+    line-height: 1.6;
+
+    &:focus {
+        border-color: var(--color-brand);
+    }
+
+    &::placeholder {
+        color: var(--color-text-secondary);
+    }
+
+    &--small {
+        padding: u.em(10) u.em(12);
+        font-size: u.rem(12);
+    }
+    &--medium {
+        padding: u.em(14) u.em(12);
+        font-size: u.rem(14);
+    }
+    &--large {
+        padding: u.em(16) u.em(12);
+        font-size: u.rem(16);
+    }
+
+    &__container {
+        display: flex;
+        flex-direction: column;
+        gap: u.rem(6);
+        width: 100%;
+    }
+
+    &__label {
+        color: var(--color-text-secondary);
+        font-weight: 500;
+
+        &--small {
+            font-size: u.rem(12);
+        }
+        &--medium {
+            font-size: u.rem(14);
+        }
+        &--large {
+            font-size: u.rem(16);
+        }
+    }
+
+    &__required {
+        color: var(--color-brand);
+        margin-left: u.em(4);
+    }
+
+    &__footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        min-height: u.rem(16); // reserves space so layout doesn't shift
+    }
+
+    &__error {
+        color: var(--color-error);
+        font-size: u.rem(12);
+    }
+
+    &__counter {
+        font-size: u.rem(12);
+        color: var(--color-text-secondary);
+        margin-left: auto; // pushes counter right even when no error
+
+        &--warn {
+            color: var(--color-danger);
+        }
+
+        &--limit {
+            color: var(--color-error);
+            font-weight: 600;
+        }
+    }
+}
