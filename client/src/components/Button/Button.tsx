@@ -1,37 +1,86 @@
-import { type ButtonHTMLAttributes } from "react";
+import { type ButtonHTMLAttributes, type ReactNode } from "react";
 import { cx } from "css-variants";
-import { capitalizeString } from "../../lib/string";
+import Icon from "../Icon/Icon";
+import { type IconName } from "../Icon/IconMap";
 
-type ButtonType = {
+type ButtonBase = {
     type?: "submit" | "button" | "reset";
-    variant?: "primary" | "secondary" | "danger";
-    size?: "small" | "medium" | "large";
-    text: string;
-    onClick?: () => void;
+    variant?: "primary" | "secondary" | "danger" | "transparent";
+    buttonSize?: "small" | "medium" | "large";
+    className?: string;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
+
+type ButtonIconOnly = ButtonBase & {
+    icon: IconName; // just the name string
+    children?: never;
+    iconPosition?: never;
+};
+
+type ButtonTextOnly = ButtonBase & {
+    children: ReactNode;
+    icon?: never;
+    iconPosition?: never;
+};
+
+type ButtonIconText = ButtonBase & {
+    icon: IconName; // just the name string
+    children: ReactNode;
+    iconPosition?: "left" | "right";
+};
+
+type ButtonProps = ButtonIconOnly | ButtonTextOnly | ButtonIconText;
 
 const Button = ({
     type = "button",
-    size = "medium",
+    buttonSize = "medium",
     variant = "primary",
-    text = "",
-    onClick,
+    icon,
+    iconPosition = "left",
+    children,
+    className,
     ...props
-}: ButtonType) => {
-    const className = cx({
+}: ButtonProps) => {
+    const isIconOnly = !!icon && !children;
+
+    const buttonClassName = cx({
         button: true,
-        [`${size}`]: true,
-        [`${variant}`]: true,
+        [`button--${buttonSize}`]: true,
+        [`button--${variant}`]: true,
+        "button--icon-only": isIconOnly,
+        className,
     });
+
+    // Icon size stays in sync with button size automatically
+    const iconElement = icon ? (
+        <Icon
+            name={icon}
+            size={buttonSize}
+        />
+    ) : null;
 
     return (
         <button
-            className={className}
+            className={buttonClassName}
             type={type}
-            onClick={onClick}
             {...props}
         >
-            {capitalizeString(text)}
+            {isIconOnly && iconElement}
+
+            {!icon && children}
+
+            {icon && children && iconPosition === "left" && (
+                <>
+                    {iconElement}
+                    {children}
+                </>
+            )}
+
+            {icon && children && iconPosition === "right" && (
+                <>
+                    {children}
+                    {iconElement}
+                </>
+            )}
         </button>
     );
 };

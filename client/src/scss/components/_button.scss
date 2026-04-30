@@ -1,12 +1,16 @@
 @use "../utils/" as u;
 
 .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: u.em(6);
     border-radius: u.em(8);
     text-align: center;
     transition: all 0.15s;
     letter-spacing: 0.3px;
     flex: 1;
-}
+    cursor: pointer;
 
 .primary {
     border: 1px solid var(--color-brand);
@@ -26,18 +30,73 @@
     color: var(--color-danger);
 }
 
-.small {
-    padding: u.em(10);
-    font-size: u.rem(12);
-    font-weight: 600;
-}
+    &--secondary {
+        background: #1a1a2e;
+        border: 0.5px solid rgba(127, 119, 221, 0.35);
+        color: #9896b8;
 
-.medium {
-    padding: u.rem(12);
-    font-size: u.rem(14);
-}
+        &:not(:disabled):hover {
+            background-color: rgba(127, 119, 221, 0.1);
+            border-color: rgba(127, 119, 221, 0.6);
+            color: white;
+        }
+    }
 
-.large {
-    padding: u.rem(14);
-    font-size: u.rem(16);
+    &--danger {
+        background: #1a1a2e;
+        border: 0.5px solid rgba(127, 119, 221, 0.35);
+        color: #d85a30;
+
+        &:not(:disabled):hover {
+            background-color: rgba(216, 90, 48, 0.1);
+            border-color: rgba(216, 90, 48, 0.6);
+        }
+    }
+
+    // Transparent — for absolute positioning over other elements
+    &--transparent {
+        background: transparent;
+        border: none;
+        color: inherit;
+
+        &:not(:disabled):hover {
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+    }
+
+    // Sizes
+    &--small {
+        padding: u.em(10);
+        font-size: u.rem(12);
+        font-weight: 600;
+    }
+
+    &--medium {
+        padding: u.rem(12);
+        font-size: u.rem(14);
+    }
+
+    &--large {
+        padding: u.rem(14);
+        font-size: u.rem(16);
+    }
+
+    // Icon-only: equal padding keeps it square
+    &--icon-only {
+        &.button--small {
+            padding: u.em(10);
+        }
+        &.button--medium {
+            padding: u.rem(12);
+        }
+        &.button--large {
+            padding: u.rem(14);
+        }
+    }
+
+    &__icon {
+        display: inline-flex;
+        align-items: center;
+        flex-shrink: 0;
+    }
 }
