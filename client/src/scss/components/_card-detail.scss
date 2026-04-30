@@ -2,11 +2,31 @@
 
 .card-detail__container {
     height: calc(100svh - 185px);
-    width: u.em(240);
     border-left: u.em(1) solid rgba(var(--color-brand-rgb), 0.18);
     overflow-x: hidden;
     overflow-y: auto;
     padding-bottom: u.em(8);
+
+    // Small screens: overlay the card grid instead of sitting beside it
+    @include u.breakpoint-max("small") {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        z-index: 10;
+        border-left: none;
+        border-top: u.em(1) solid rgba(var(--color-brand-rgb), 0.18);
+    }
+
+    // Medium screens and up: side panel
+    @include u.breakpoint-min("medium") {
+        width: u.em(240);
+    }
+
+    // Large screens: wider panel gives the date picker room to render
+    @include u.breakpoint-min("large") {
+        width: u.em(300);
+    }
 }
 .card-detail {
     background-color: var(--color-bg-surface);
