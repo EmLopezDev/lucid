@@ -11,7 +11,6 @@
     letter-spacing: 0.3px;
     flex: 1;
 
-    // Variants
     &--primary {
         border: 1px solid #7f77dd;
         color: white;
@@ -30,7 +29,6 @@
         color: #d85a30;
     }
 
-    // Sizes
     &--small {
         padding: u.em(10);
         font-size: u.rem(12);
@@ -47,7 +45,6 @@
         font-size: u.rem(16);
     }
 
-    // Icon-only: equal padding on all sides to keep it square
     &--icon-only {
         &.button--small {
             padding: u.em(10);

@@ -6,6 +6,7 @@ type ButtonBase = {
     variant?: "primary" | "secondary" | "danger";
     buttonSize?: "small" | "medium" | "large";
     "aria-label"?: string;
+    className?: string;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 type ButtonIconOnly = ButtonBase & {
@@ -36,20 +37,22 @@ const Button = ({
     icon,
     iconPosition = "left",
     children,
+    className = "",
     ...props
 }: ButtonProps) => {
     const isIconOnly = !!icon && !children;
 
-    const className = cx({
+    const buttonClassName = cx({
         button: true,
         [`button--${buttonSize}`]: true,
         [`button--${variant}`]: true,
         "button--icon-only": isIconOnly,
+        className,
     });
 
     return (
         <button
-            className={className}
+            className={buttonClassName}
             type={type}
             {...props}
         >

@@ -1,0 +1,50 @@
+@use "../utils/" as u;
+
+.icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    svg {
+        width: 100%;
+        height: 100%;
+    }
+
+    // Sizes — aligned to Button's small/medium/large scale
+    &--small {
+        width: u.rem(14);
+        height: u.rem(14);
+    }
+
+    &--medium {
+        width: u.rem(18);
+        height: u.rem(18);
+    }
+
+    &--large {
+        width: u.rem(22);
+        height: u.rem(22);
+    }
+
+    // Colors
+    &--inherit {
+        color: inherit; // picks up color from parent (e.g. Button)
+    }
+
+    &--default {
+        color: white;
+    }
+
+    &--primary {
+        color: #7f77dd;
+    }
+
+    &--danger {
+        color: #d85a30;
+    }
+
+    &--muted {
+        color: #9896b8;
+    }
+}
