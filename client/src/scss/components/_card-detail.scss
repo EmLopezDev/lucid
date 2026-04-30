@@ -20,6 +20,12 @@
         background: linear-gradient(135deg, hsla(33, 85%, 28%, 0.6), hsla(36, 86%, 55%, 0.9));
     }
 
+    &__button--close {
+        position: absolute;
+        top: u.em(2);
+        right: u.em(2);
+    }
+
     &__content {
         display: flex;
         flex-direction: column;

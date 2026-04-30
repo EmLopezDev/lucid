@@ -23,6 +23,7 @@ const UserLibraryPageContent = () => {
         onCardSelect,
         onSearchTitle,
         onDeleteGameById,
+        onCloseCardDetail,
     } = useUserLibraryPageContext();
     return (
         <div className="user-library-page">
@@ -48,7 +49,7 @@ const UserLibraryPageContent = () => {
                     />
                 </div>
                 <div className="user-library-page__add__button">
-                    <Button text="add game" />
+                    <Button>Add game</Button>
                 </div>
             </div>
             <div className="user-library-page__content">
@@ -75,6 +76,7 @@ const UserLibraryPageContent = () => {
                                 key={selectedCard._id}
                                 data={selectedCard}
                                 handleOnDeleteById={onDeleteGameById}
+                                onClose={onCloseCardDetail}
                             />
                         )}
                     </>

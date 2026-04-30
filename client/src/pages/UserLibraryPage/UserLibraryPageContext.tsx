@@ -67,6 +67,7 @@ export interface UserLibraryPageContextType {
     onSortSelect: (option: SortOptionType) => void;
     onCardSelect: (id: string) => void;
     onDeleteGameById: (id: string) => void;
+    onCloseCardDetail: () => void;
 }
 
 export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) => {
@@ -79,6 +80,13 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
         statusValue: { value: "all", label: "all" },
         sortValue: { value: "recently", label: "recently added" },
     });
+
+    const filteredData = useMemo(() => {
+        const { searchTitle, statusValue, sortValue } = filters;
+        const byTitle = filterByTitle(libraryData, searchTitle);
+        const byStatus = filterByStatus(byTitle, statusValue.value);
+        return filterBySort(byStatus, sortValue.value);
+    }, [filters, libraryData]);
 
     const onCardSelect = useCallback(
         (id: string) => {
@@ -103,15 +111,12 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
         setFilters((prevState) => ({ ...prevState, sortValue: option }));
     }, []);
 
-    const filteredData = useMemo(() => {
-        const { searchTitle, statusValue, sortValue } = filters;
-        const byTitle = filterByTitle(libraryData, searchTitle);
-        const byStatus = filterByStatus(byTitle, statusValue.value);
-        return filterBySort(byStatus, sortValue.value);
-    }, [filters, libraryData]);
-
     const onDeleteGameById = useCallback((id: string) => {
         setLibraryData((prev) => prev.filter((d) => d._id !== id));
+        setSelectedCard(null);
+    }, []);
+
+    const onCloseCardDetail = useCallback(() => {
         setSelectedCard(null);
     }, []);
 
@@ -129,6 +134,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
             onSortSelect,
             onCardSelect,
             onDeleteGameById,
+            onCloseCardDetail,
         }),
         [
             filters,
