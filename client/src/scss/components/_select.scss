@@ -13,10 +13,10 @@
         align-items: center;
         justify-content: space-between;
         gap: u.em(8);
-        background: #1a1a2e;
-        border: u.em(0.5) solid rgba(127, 119, 221, 0.35);
+        background: var(--color-bg-card);
+        border: u.em(0.5) solid var(--color-border);
         border-radius: u.em(8);
-        color: #9896b8;
+        color: var(--color-text-secondary);
         outline: none;
         cursor: pointer;
         width: 100%;
@@ -27,11 +27,11 @@
         text-overflow: ellipsis;
 
         &:focus {
-            border-color: #7f77dd;
+            border-color: var(--color-brand);
         }
 
         &--open {
-            border-color: #7f77dd;
+            border-color: var(--color-brand);
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
         }
@@ -60,7 +60,7 @@
 
         &-icon {
             font-size: u.em(10);
-            color: #7f77dd;
+            color: var(--color-brand);
         }
     }
 
@@ -69,8 +69,8 @@
         top: 100%;
         left: 0;
         right: auto;
-        background: #1a1a2e;
-        border: u.em(0.5) solid #7f77dd;
+        background: var(--color-bg-card);
+        border: u.em(0.5) solid var(--color-brand);
         border-top: none;
         border-bottom-left-radius: u.em(8);
         border-bottom-right-radius: u.em(8);
@@ -93,17 +93,17 @@
         }
 
         &::-webkit-scrollbar-thumb {
-            background: rgba(127, 119, 221, 0.35);
+            background: var(--color-border);
             border-radius: u.em(4);
 
             &:hover {
-                background: #7f77dd;
+                background: var(--color-brand);
             }
         }
     }
 
     &__option {
-        color: #9896b8;
+        color: var(--color-text-secondary);
         cursor: pointer;
         white-space: nowrap;
         transition:
@@ -124,17 +124,17 @@
         }
 
         &--focused {
-            background: rgba(127, 119, 221, 0.15);
+            background: rgba(var(--color-brand-rgb), 0.15);
             color: #fff;
         }
 
         &--selected {
-            color: #7f77dd;
+            color: var(--color-brand);
         }
 
         &--selected#{&}--focused {
-            background: rgba(127, 119, 221, 0.15);
-            color: #7f77dd;
+            background: rgba(var(--color-brand-rgb), 0.15);
+            color: var(--color-brand);
         }
     }
 }
