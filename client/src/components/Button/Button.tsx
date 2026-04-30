@@ -7,11 +7,10 @@ type ButtonBase = {
     type?: "submit" | "button" | "reset";
     variant?: "primary" | "secondary" | "danger" | "transparent";
     buttonSize?: "small" | "medium" | "large";
-    className?: string;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 type ButtonIconOnly = ButtonBase & {
-    icon: IconName; // just the name string
+    icon: IconName;
     children?: never;
     iconPosition?: never;
 };
@@ -23,7 +22,7 @@ type ButtonTextOnly = ButtonBase & {
 };
 
 type ButtonIconText = ButtonBase & {
-    icon: IconName; // just the name string
+    icon: IconName;
     children: ReactNode;
     iconPosition?: "left" | "right";
 };
@@ -37,20 +36,17 @@ const Button = ({
     icon,
     iconPosition = "left",
     children,
-    className,
     ...props
 }: ButtonProps) => {
     const isIconOnly = !!icon && !children;
 
-    const buttonClassName = cx({
+    const className = cx({
         button: true,
         [`button--${buttonSize}`]: true,
         [`button--${variant}`]: true,
         "button--icon-only": isIconOnly,
-        className,
     });
 
-    // Icon size stays in sync with button size automatically
     const iconElement = icon ? (
         <Icon
             name={icon}
@@ -60,7 +56,7 @@ const Button = ({
 
     return (
         <button
-            className={buttonClassName}
+            className={className}
             type={type}
             {...props}
         >
