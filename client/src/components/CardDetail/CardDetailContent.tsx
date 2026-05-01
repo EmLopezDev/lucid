@@ -1,7 +1,8 @@
 import type { UserLibraryDataType } from "../../../../packages/types/UserLibrary";
-import { capitalizeString } from "../../lib/string";
 import Badge from "../Badge/Badge";
 import Button from "../Button/Button";
+import StarRating from "../StarRating/StarRating";
+import { formatDate } from "../../lib/date";
 
 type CardDetailContentType = {
     data: UserLibraryDataType;
@@ -10,6 +11,7 @@ type CardDetailContentType = {
 };
 
 const CardDetailContent = ({ data, setEditMode, handleOnDeleteById }: CardDetailContentType) => {
+    const datePurchased = data.date_purchased ? formatDate(data.date_purchased) : "-";
     return (
         <>
             <span className="card-detail__content__title">{data.title}</span>
@@ -28,9 +30,7 @@ const CardDetailContent = ({ data, setEditMode, handleOnDeleteById }: CardDetail
                 </div>
                 <div className="card-detail__grid__stat">
                     <span className="card-detail__grid__stat--title">Purchased</span>
-                    <span className="card-detail__grid__stat--date">
-                        {data.date_purchased?.toLocaleDateString() || "-"}
-                    </span>
+                    <span className="card-detail__grid__stat--date">{datePurchased}</span>
                 </div>
                 <div className="card-detail__grid__stat">
                     <span className="card-detail__grid__stat--title">Hours</span>
@@ -41,7 +41,10 @@ const CardDetailContent = ({ data, setEditMode, handleOnDeleteById }: CardDetail
                 <div className="card-detail__grid__stat">
                     <span className="card-detail__grid__stat--title">Rating</span>
                     <span className="card-detail__grid__stat--rating">
-                        {data.rating || capitalizeString("no rating")}
+                        <StarRating
+                            rating={data.rating}
+                            showValue
+                        />
                     </span>
                 </div>
             </div>

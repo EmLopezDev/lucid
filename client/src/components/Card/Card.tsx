@@ -1,6 +1,7 @@
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 import Badge from "../Badge/Badge";
 import { cx } from "css-variants";
+import StarRating from "../StarRating/StarRating";
 
 type CardType = {
     data: UserLibraryDataType;
@@ -29,7 +30,10 @@ const Card = ({ data, selectedId, handleCardSelect }: CardType) => {
                     <span className="card__meta--price">
                         {data.price === "0.00" ? "Free" : `$${data.price}`}
                     </span>
-                    <span>{data.rating ? data.rating : "No Rating"}</span>
+                    <StarRating
+                        size="small"
+                        rating={data.rating}
+                    />
                 </div>
             </section>
         </article>

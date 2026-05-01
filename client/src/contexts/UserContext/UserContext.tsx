@@ -4,7 +4,7 @@ import { type UserType } from "../../../../packages/types";
 
 // TODO: Remove demoUser and set user state to null, this is just to avoid having to signin all the time
 const demoUser: UserType = {
-    _id: "12345",
+    _id: "1",
     first_name: "Emmanuel",
     last_name: "Lopez",
     email: "elopez1@gmail.com",
@@ -13,20 +13,26 @@ const demoUser: UserType = {
     deleted_at: null,
 };
 
+export interface UserContextType {
+    currentUser: UserType | null;
+    setUser: (user: UserType | null) => void;
+    isUserAuthenticated: boolean;
+}
+
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-    const [userState, setUserState] = useState<UserType | null>(demoUser);
+    const [currentUser, setCurrentUser] = useState<UserType | null>(demoUser);
 
     const setUser = useCallback((user: UserType | null) => {
-        setUserState(user);
+        setCurrentUser(user);
     }, []);
 
     const contextValue = useMemo(
         () => ({
-            userState,
+            currentUser,
             setUser,
-            isUserAuthenticated: !!userState,
+            isUserAuthenticated: !!currentUser,
         }),
-        [userState, setUser],
+        [currentUser, setUser],
     );
 
     return <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>;

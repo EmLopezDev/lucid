@@ -88,7 +88,7 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
         async (d: UserRegisterType) => {
             setIsSubmitting(true);
             try {
-                const response = await fetch(`${API_URL}/api/v1/auth/register`, {
+                const response = await fetch(`${API_URL}/auth/register`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

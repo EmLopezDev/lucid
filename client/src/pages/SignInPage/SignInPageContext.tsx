@@ -66,7 +66,7 @@ export const SignInPageProvider = ({ children }: { children: ReactNode }) => {
         async (d: UserSigninType) => {
             setIsSubmitting(true);
             try {
-                const response = await fetch(`${API_URL}/api/v1/auth/signin`, {
+                const response = await fetch(`${API_URL}/auth/signin`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

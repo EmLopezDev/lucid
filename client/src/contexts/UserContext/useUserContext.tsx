@@ -1,11 +1,5 @@
 import { createContext, useContext } from "react";
-import type { UserType } from "../../../../packages/types";
-
-interface UserContextType {
-    userState: UserType | null;
-    setUser: (user: UserType | null) => void;
-    isUserAuthenticated: boolean;
-}
+import { type UserContextType } from "./UserContext";
 
 export const UserContext = createContext<UserContextType | null>(null);
 
