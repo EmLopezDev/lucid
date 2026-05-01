@@ -39,6 +39,8 @@ const CardDetailEditContent = ({ data, onSubmit, onCancel }: CardDetailEditConte
         label: data.platform,
     });
 
+    const datePurchased = data.date_purchased ? data.date_purchased : "";
+
     const onStatusSelect = useCallback((option: StatusOptionType) => {
         setStatus(option);
         setFormData((prevState) => ({ ...prevState, status: option }));
@@ -94,7 +96,7 @@ const CardDetailEditContent = ({ data, onSubmit, onCancel }: CardDetailEditConte
                     <Input
                         label="Purchase Date"
                         type="date"
-                        value={data.date_purchased?.toISOString().split("T")[0] ?? ""}
+                        value={datePurchased}
                         onChange={() => {}}
                         inputSize="small"
                         hasErrorText={false}

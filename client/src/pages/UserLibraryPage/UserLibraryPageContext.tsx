@@ -1,5 +1,6 @@
 import {
     useCallback,
+    useEffect,
     useMemo,
     useState,
     type ChangeEvent,
@@ -13,40 +14,11 @@ import {
     type StatusFilterOptionType,
     type StatusOptionType,
     type SortOptionType,
-    type SortValueType,
 } from "../../../../packages/types/SelectOptionsTypes.ts";
-import { type StatusType } from "../../../../packages/types/UserLibrary";
-import UserLibraryMockData from "../../data/UserLibraryMockData";
 import { sortOptions, statusFilterOptions, statusOptions } from "../../lib/form.ts";
-
-const filterByTitle = (data: UserLibraryDataType[], title: string) => {
-    if (!title) return data;
-    return data.filter((d) => {
-        return d.title.toLowerCase().startsWith(title.toLowerCase());
-    });
-};
-
-const filterByStatus = (data: UserLibraryDataType[], status: StatusType | string) => {
-    if (status === "all") {
-        return [...data];
-    } else {
-        return data.filter((d) => d.status === status);
-    }
-};
-
-const filterBySort = (data: UserLibraryDataType[], sort: SortValueType | string) => {
-    if (sort === "recently") {
-        return [...data].sort(
-            (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
-        );
-    } else if (sort === "alphabetical") {
-        return [...data].sort((a, b) => a.title.localeCompare(b.title));
-    } else if (sort === "rated") {
-        return [...data].sort((a, b) => Number(b.rating ?? 0) - Number(a.rating ?? 0));
-    } else {
-        return [...data].sort((a, b) => Number(b.price ?? 0) - Number(a.price ?? 0));
-    }
-};
+import { filterBySort, filterByStatus, filterByTitle } from "../../lib/filter.ts";
+import { useUserContext } from "../../contexts/UserContext/useUserContext.tsx";
+import { API_URL } from "../../config/api.ts";
 
 export type FilterType = {
     searchTitle: string;
@@ -71,15 +43,15 @@ export interface UserLibraryPageContextType {
 }
 
 export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) => {
-    const [libraryData, setLibraryData] = useState<UserLibraryDataType[]>(() => [
-        ...UserLibraryMockData,
-    ]);
+    const [libraryData, setLibraryData] = useState<UserLibraryDataType[]>([]);
     const [selectedCard, setSelectedCard] = useState<UserLibraryDataType | null>(null);
     const [filters, setFilters] = useState<FilterType>({
         searchTitle: "",
         statusValue: { value: "all", label: "all" },
         sortValue: { value: "recently", label: "recently added" },
     });
+
+    const { currentUser } = useUserContext();
 
     const filteredData = useMemo(() => {
         const { searchTitle, statusValue, sortValue } = filters;
@@ -120,6 +92,19 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
         setSelectedCard(null);
     }, []);
 
+    useEffect(() => {
+        const fetchUserLibraryGames = async () => {
+            try {
+                const response = await fetch(`${API_URL}/user/${currentUser?._id}/library`);
+                const data = await response.json();
+                setLibraryData(data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchUserLibraryGames();
+    }, [currentUser]);
+
     const contextValue = useMemo(
         () => ({
             filters,
@@ -145,6 +130,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
             onSortSelect,
             onCardSelect,
             onDeleteGameById,
+            onCloseCardDetail,
         ],
     );
     return (

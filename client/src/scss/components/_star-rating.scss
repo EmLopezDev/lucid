@@ -1,0 +1,53 @@
+@use "../utils/" as u;
+
+.star-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: u.em(6);
+
+    &__stars {
+        display: flex;
+        align-items: center;
+        gap: u.em(2);
+    }
+
+    &__star {
+        display: block;
+        flex-shrink: 0;
+    }
+
+    &__value {
+        color: var(--color-text-secondary);
+        font-weight: 600;
+    }
+
+    &--small {
+        .star-rating__star {
+            width: u.rem(12);
+            height: u.rem(12);
+        }
+        .star-rating__value {
+            font-size: u.rem(11);
+        }
+    }
+
+    &--medium {
+        .star-rating__star {
+            width: u.rem(16);
+            height: u.rem(16);
+        }
+        .star-rating__value {
+            font-size: u.rem(13);
+        }
+    }
+
+    &--large {
+        .star-rating__star {
+            width: u.rem(20);
+            height: u.rem(20);
+        }
+        .star-rating__value {
+            font-size: u.rem(16);
+        }
+    }
+}
