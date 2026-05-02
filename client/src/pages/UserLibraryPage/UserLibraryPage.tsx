@@ -10,9 +10,12 @@ import {
     type SortValueType,
     type SortLabelType,
 } from "../../../../packages/types";
+import { SkeletonLoader, SkeletonCard, SkeletonCardDetail } from "../../components/Skeleton";
 
 const UserLibraryPageContent = () => {
     const {
+        isLoading,
+        isCardDetailLoading,
         filters,
         filteredData,
         selectedCard,
@@ -55,31 +58,45 @@ const UserLibraryPageContent = () => {
                 </div>
             </div>
             <div className="user-library-page__content">
-                {!filteredData.length ? (
+                {isLoading ? (
+                    <div className="user-library-page__content--main-col">
+                        <SkeletonLoader label="Loading your library">
+                            <div className="user-library-page__games">
+                                {Array.from({ length: 8 }).map((_, i) => (
+                                    <SkeletonCard key={i} />
+                                ))}
+                            </div>
+                        </SkeletonLoader>
+                    </div>
+                ) : filteredData.length === 0 ? (
                     <div className="user-library-page__content--none">No Games Found</div>
                 ) : (
                     <>
                         <div className="user-library-page__content--main-col">
                             <div className="user-library-page__games">
-                                {filteredData.map((data) => {
-                                    return (
-                                        <Card
-                                            key={data._id}
-                                            data={data}
-                                            selectedId={selectedCard?._id || ""}
-                                            handleCardSelect={onCardSelect}
-                                        />
-                                    );
-                                })}
+                                {filteredData.map((data) => (
+                                    <Card
+                                        key={data._id}
+                                        data={data}
+                                        selectedId={selectedCard?._id || ""}
+                                        handleCardSelect={onCardSelect}
+                                    />
+                                ))}
                             </div>
                         </div>
                         {selectedCard && (
-                            <CardDetail
-                                key={selectedCard._id}
-                                data={selectedCard}
-                                handleOnDeleteById={onDeleteGameById}
-                                onClose={onCloseCardDetail}
-                            />
+                            isCardDetailLoading ? (
+                                <SkeletonLoader label="Loading game details">
+                                    <SkeletonCardDetail />
+                                </SkeletonLoader>
+                            ) : (
+                                <CardDetail
+                                    key={selectedCard._id}
+                                    data={selectedCard}
+                                    handleOnDeleteById={onDeleteGameById}
+                                    onClose={onCloseCardDetail}
+                                />
+                            )
                         )}
                     </>
                 )}

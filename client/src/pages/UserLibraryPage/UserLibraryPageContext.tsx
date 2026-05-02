@@ -27,6 +27,8 @@ export type FilterType = {
 };
 
 export interface UserLibraryPageContextType {
+    isLoading: boolean;
+    isCardDetailLoading: boolean;
     filters: FilterType;
     filteredData: UserLibraryDataType[];
     statusFilterOptions: StatusFilterOptionType[];
@@ -43,6 +45,8 @@ export interface UserLibraryPageContextType {
 }
 
 export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) => {
+    const [isLoading, setIsLoading] = useState(true);
+    const [isCardDetailLoading, setIsCardDetailLoading] = useState(false);
     const [libraryData, setLibraryData] = useState<UserLibraryDataType[]>([]);
     const [selectedCard, setSelectedCard] = useState<UserLibraryDataType | null>(null);
     const [filters, setFilters] = useState<FilterType>({
@@ -61,11 +65,19 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
     }, [filters, libraryData]);
 
     const onCardSelect = useCallback(
-        (id: string) => {
+        async (id: string) => {
             const card = libraryData.find((d) => d._id === id) ?? null;
-            setSelectedCard((prev) => (prev?._id === id ? null : card));
+            const isDeselecting = card && selectedCard?._id === id;
+            if (isDeselecting) {
+                setSelectedCard(null);
+                return;
+            }
+            setIsCardDetailLoading(true);
+            setSelectedCard(card);
+            // Fetch additional card details here when the endpoint is ready
+            setIsCardDetailLoading(false);
         },
-        [libraryData],
+        [libraryData, selectedCard],
     );
 
     const onSearchTitle = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -94,12 +106,15 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
 
     useEffect(() => {
         const fetchUserLibraryGames = async () => {
+            setIsLoading(true);
             try {
                 const response = await fetch(`${API_URL}/user/${currentUser?._id}/library`);
                 const data = await response.json();
                 setLibraryData(data);
             } catch (error) {
                 console.error(error);
+            } finally {
+                setIsLoading(false);
             }
         };
         fetchUserLibraryGames();
@@ -107,6 +122,8 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
 
     const contextValue = useMemo(
         () => ({
+            isLoading,
+            isCardDetailLoading,
             filters,
             filteredData,
             statusOptions,
@@ -122,6 +139,8 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
             onCloseCardDetail,
         }),
         [
+            isLoading,
+            isCardDetailLoading,
             filters,
             filteredData,
             selectedCard,
