@@ -3,12 +3,12 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import api from "./routes/api";
+import config from "./config";
 
 const app = express();
 
 app.use(helmet());
-// TODO: Change wildcard to actual URLs
-app.use(cors({ origin: ["*"], credentials: true }));
+app.use(cors({ origin: config.ALLOWED_ORIGINS, credentials: true }));
 
 app.use(
     morgan(`
