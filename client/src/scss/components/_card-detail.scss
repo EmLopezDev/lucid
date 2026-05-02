@@ -2,18 +2,18 @@
 
 .card-detail__container {
     background-color: var(--color-bg-surface);
-    height: calc(100svh - 184px);
+    height: 100%;
     border-left: u.em(1) solid rgba(var(--color-brand-rgb), 0.18);
     overflow-x: clip;
     overflow-y: auto;
 
     // Small screens: overlay the card grid instead of sitting beside it
     @include u.breakpoint-max("small") {
-        height: calc(100svh - 234px);
         position: absolute;
         top: 0;
         right: 0;
         width: 100%;
+        height: 100%;
         z-index: 1;
         border-left: none;
         border-top: u.em(1) solid rgba(var(--color-brand-rgb), 0.18);

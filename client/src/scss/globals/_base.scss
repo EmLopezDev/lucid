@@ -12,15 +12,19 @@ ul {
     list-style: none;
 }
 
-// TODO: Change bg to var color
+html {
+    height: 100%;
+}
+
 body {
-    min-height: 100svh;
+    height: 100%;
     width: 100%;
+    overflow: hidden;
     background-color: var(--color-bg-app);
 }
 
 #root {
-    min-height: 100dvh;
+    height: 100%;
     width: 100%;
     max-width: 1800px;
     margin: 0 auto;
