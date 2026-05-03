@@ -3,6 +3,7 @@ import Badge from "../Badge/Badge";
 import Button from "../Button/Button";
 import StarRating from "../StarRating/StarRating";
 import { formatDate } from "../../lib/date";
+import { capitalizeString } from "../../lib/string";
 
 type CardDetailContentType = {
     data: UserLibraryDataType;
@@ -16,16 +17,19 @@ const CardDetailContent = ({ data, setEditMode, handleOnDeleteById }: CardDetail
         <>
             <span className="card-detail__content__title">{data.title}</span>
             <div className="card-detail__content__genre">
-                <span>{data.genre}</span> &#8226; <span>{data.platform}</span>
+                <span>{data.genre}</span> &#8226; <span>{capitalizeString(data.platform)}</span>
             </div>
             <div className="card-detail__content__status">
-                <Badge status={data.status} />
+                <Badge
+                    status={data.status}
+                    size="medium"
+                />
             </div>
             <div className="card-detail__grid">
                 <div className="card-detail__grid__stat">
                     <span className="card-detail__grid__stat--title">Price</span>
                     <span className="card-detail__grid__stat--price">
-                        {data.price === "Free" ? "Free" : `$${data.price}`}
+                        {data.price === "0.00" ? "Free" : `$${data.price}`}
                     </span>
                 </div>
                 <div className="card-detail__grid__stat">

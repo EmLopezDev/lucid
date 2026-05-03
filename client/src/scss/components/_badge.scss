@@ -1,36 +1,53 @@
 @use "../utils/" as u;
 
 .badge {
-    font-size: u.em(9);
-    font-weight: 500;
-    padding: u.em(2) u.em(7);
+    display: inline-flex;
+    align-items: center;
     border-radius: u.em(99);
+    font-weight: 500;
     letter-spacing: u.em(0.3);
     position: relative;
     z-index: 1;
 
+    // Sizes
+    &--small {
+        font-size: u.em(9);
+        padding: u.em(2) u.em(7);
+    }
+
+    &--medium {
+        font-size: u.em(11);
+        padding: u.em(3) u.em(9);
+    }
+
+    &--large {
+        font-size: u.em(13);
+        padding: u.em(4) u.em(11);
+    }
+
+    // Status variants
     &__wishlist {
-        background: rgba(239, 159, 39, 0.3);
-        color: #ef9f27;
+        background: rgba(var(--color-badge-wishlist-rgb), 0.3);
+        color: var(--color-badge-wishlist);
     }
 
     &__completed {
-        background: rgba(29, 158, 117, 0.3);
-        color: #5dcaa5;
+        background: rgba(var(--color-badge-completed-rgb), 0.3);
+        color: var(--color-badge-completed);
     }
 
     &__playing {
-        background: rgba(var(--color-brand-rgb), 0.3);
-        color: #afa9ec;
+        background: rgba(var(--color-badge-playing-rgb), 0.3);
+        color: var(--color-badge-playing);
     }
 
     &__paused {
-        background: rgba(152, 150, 184, 0.3);
+        background: rgba(var(--color-badge-paused-rgb), 0.3);
         color: var(--color-text-secondary);
     }
 
     &__dropped {
-        background-color: rgba(216, 90, 48, 0.18);
+        background: rgba(var(--color-badge-dropped-rgb), 0.18);
         color: var(--color-danger);
     }
 }
