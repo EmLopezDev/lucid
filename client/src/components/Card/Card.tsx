@@ -2,6 +2,7 @@ import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary
 import Badge from "../Badge/Badge";
 import { cx } from "css-variants";
 import StarRating from "../StarRating/StarRating";
+import { capitalizeString } from "../../lib/string";
 
 type CardType = {
     data: UserLibraryDataType;
@@ -24,7 +25,7 @@ const Card = ({ data, selectedId, handleCardSelect }: CardType) => {
             <section className="card__content">
                 <h4 className="card__title">{data.title}</h4>
                 <div className="card__genre">
-                    <span>{data.genre}</span> &#8226; <span>{data.platform}</span>
+                    <span>{data.genre}</span> &#8226; <span>{capitalizeString(data.platform)}</span>
                 </div>
                 <div className="card__meta">
                     <span className="card__meta--price">
