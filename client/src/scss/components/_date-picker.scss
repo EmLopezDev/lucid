@@ -53,24 +53,9 @@
     }
 
     &__popup {
-        position: absolute;
-        top: calc(100% + u.em(4));
-        bottom: auto;
-        left: 0;
-        right: auto;
+        // position:fixed and top/left/right/bottom are set via inline styles in JS.
+        // z-index only needs to beat other fixed/sticky elements — 200 is safe.
         z-index: 200;
-
-        // Flip horizontally when the popup would overflow the right edge
-        &--align-right {
-            left: auto;
-            right: 0;
-        }
-
-        // Flip vertically when the popup would overflow the bottom edge
-        &--open-up {
-            top: auto;
-            bottom: calc(100% + u.em(4));
-        }
         background: var(--color-bg-card);
         border: u.em(0.5) solid var(--color-brand);
         border-radius: u.em(8);
@@ -114,12 +99,42 @@
             font-size: u.rem(12);
         }
 
+        // Month/year dropdown triggers in the caption
+        // The library renders an invisible native <select> on top of a styled label.
+        // We style the wrapper to look like a small clickable chip.
+        .rdp-dropdown_root {
+            background: rgba(var(--color-brand-rgb), 0.08);
+            border: u.em(0.5) solid rgba(var(--color-brand-rgb), 0.25);
+            border-radius: u.em(4);
+            padding: u.em(2) u.em(6);
+            cursor: pointer;
+            transition: background 0.15s ease;
+
+            &:hover {
+                background: rgba(var(--color-brand-rgb), 0.18);
+            }
+        }
+
+        .rdp-caption_label {
+            font-size: u.rem(12);
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        .rdp-chevron {
+            fill: var(--color-text-secondary);
+            width: u.em(12);
+            height: u.em(12);
+        }
+
         // Nav prev/next buttons
         .rdp-button_previous,
         .rdp-button_next {
             color: var(--color-text-secondary);
             border-radius: u.em(6);
-            transition: color 0.15s ease, background 0.15s ease;
+            transition:
+                color 0.15s ease,
+                background 0.15s ease;
 
             &:hover:not(:disabled) {
                 color: var(--color-brand);
@@ -147,7 +162,9 @@
         // Individual day buttons
         .rdp-day_button {
             color: var(--color-text-primary);
-            transition: background 0.1s ease, color 0.1s ease;
+            transition:
+                background 0.1s ease,
+                color 0.1s ease;
 
             &:hover:not(:disabled) {
                 background: rgba(var(--color-brand-rgb), 0.15);
@@ -167,5 +184,14 @@
             color: var(--color-brand);
             font-weight: 700;
         }
+    }
+
+    &__footer {
+        border-top: u.em(0.5) solid rgba(var(--color-brand-rgb), 0.18);
+        margin-top: u.em(4);
+        padding-top: u.em(8);
+        display: flex;
+        justify-content: center;
+        gap: u.em(8);
     }
 }

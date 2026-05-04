@@ -1,7 +1,7 @@
 import { cx } from "css-variants";
 import { type IconName, iconRegistry } from "./IconMap";
 
-type IconSize = "small" | "medium" | "large";
+type IconSize = "x-small" | "small" | "medium" | "large";
 type IconColor = "default" | "primary" | "danger" | "muted" | "inherit";
 
 type IconProps = {
@@ -12,6 +12,7 @@ type IconProps = {
 };
 
 const sizeMap: Record<IconSize, number> = {
+    "x-small": 10,
     small: 14,
     medium: 18,
     large: 22,

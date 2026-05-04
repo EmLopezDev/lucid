@@ -6,7 +6,7 @@ import { type IconName } from "../Icon/IconMap";
 type ButtonBase = {
     type?: "submit" | "button" | "reset";
     variant?: "primary" | "secondary" | "danger" | "transparent";
-    buttonSize?: "small" | "medium" | "large";
+    buttonSize?: "x-small" | "small" | "medium" | "large";
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 type ButtonIconOnly = ButtonBase & {
