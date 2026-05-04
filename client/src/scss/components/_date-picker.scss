@@ -1,0 +1,171 @@
+@use "../utils/" as u;
+
+.date-picker {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: u.rem(6);
+
+    &__trigger {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: u.em(8);
+        background: var(--color-bg-card);
+        border: u.em(0.5) solid var(--color-border);
+        border-radius: u.em(8);
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        width: 100%;
+        font-family: inherit;
+        text-align: left;
+        white-space: nowrap;
+        outline: none;
+
+        &:focus {
+            border-color: var(--color-brand);
+        }
+
+        &--open {
+            border-color: var(--color-brand);
+        }
+
+        &--small {
+            padding: u.em(10) u.em(12);
+            font-size: u.rem(12);
+        }
+        &--medium {
+            padding: u.em(14) u.em(16);
+            font-size: u.rem(14);
+        }
+        &--large {
+            padding: u.em(16) u.em(20);
+            font-size: u.rem(16);
+        }
+
+        &-label {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    &__popup {
+        position: absolute;
+        top: calc(100% + u.em(4));
+        bottom: auto;
+        left: 0;
+        right: auto;
+        z-index: 200;
+
+        // Flip horizontally when the popup would overflow the right edge
+        &--align-right {
+            left: auto;
+            right: 0;
+        }
+
+        // Flip vertically when the popup would overflow the bottom edge
+        &--open-up {
+            top: auto;
+            bottom: calc(100% + u.em(4));
+        }
+        background: var(--color-bg-card);
+        border: u.em(0.5) solid var(--color-brand);
+        border-radius: u.em(8);
+        padding: u.em(8);
+        box-shadow: 0 u.em(8) u.em(24) rgba(0, 0, 0, 0.4);
+
+        // Override react-day-picker CSS variables to match design tokens
+        .rdp-root {
+            --rdp-accent-color: var(--color-brand);
+            --rdp-accent-background-color: rgba(var(--color-brand-rgb), 0.15);
+            --rdp-today-color: var(--color-brand);
+
+            // Day cell size scales up with viewport width
+            --rdp-day-height: 30px;
+            --rdp-day-width: 30px;
+            --rdp-day_button-height: 26px;
+            --rdp-day_button-width: 26px;
+
+            @include u.breakpoint-min("medium") {
+                --rdp-day-height: 36px;
+                --rdp-day-width: 36px;
+                --rdp-day_button-height: 32px;
+                --rdp-day_button-width: 32px;
+            }
+
+            @include u.breakpoint-min("large") {
+                --rdp-day-height: 42px;
+                --rdp-day-width: 42px;
+                --rdp-day_button-height: 38px;
+                --rdp-day_button-width: 38px;
+            }
+
+            --rdp-day_button-border-radius: u.em(6);
+            --rdp-selected-border: u.em(1.5) solid var(--color-brand);
+            --rdp-outside-opacity: 0.35;
+            --rdp-nav_button-height: 1.75rem;
+            --rdp-nav_button-width: 1.75rem;
+
+            color: var(--color-text-primary);
+            font-family: inherit;
+            font-size: u.rem(12);
+        }
+
+        // Nav prev/next buttons
+        .rdp-button_previous,
+        .rdp-button_next {
+            color: var(--color-text-secondary);
+            border-radius: u.em(6);
+            transition: color 0.15s ease, background 0.15s ease;
+
+            &:hover:not(:disabled) {
+                color: var(--color-brand);
+                background: rgba(var(--color-brand-rgb), 0.1);
+            }
+        }
+
+        .rdp-chevron {
+            fill: currentColor;
+        }
+
+        // Month/year header
+        .rdp-month_caption {
+            font-weight: 600;
+            font-size: u.rem(13);
+            color: var(--color-text-primary);
+        }
+
+        // Weekday column headers (Mon, Tue…)
+        .rdp-weekday {
+            color: var(--color-text-tertiary);
+            font-size: u.rem(11);
+        }
+
+        // Individual day buttons
+        .rdp-day_button {
+            color: var(--color-text-primary);
+            transition: background 0.1s ease, color 0.1s ease;
+
+            &:hover:not(:disabled) {
+                background: rgba(var(--color-brand-rgb), 0.15);
+                color: var(--color-brand);
+            }
+        }
+
+        // Selected day
+        .rdp-selected .rdp-day_button {
+            background: var(--color-brand);
+            color: #fff;
+            border-color: var(--color-brand);
+        }
+
+        // Today (not selected)
+        .rdp-today:not(.rdp-selected) .rdp-day_button {
+            color: var(--color-brand);
+            font-weight: 700;
+        }
+    }
+}

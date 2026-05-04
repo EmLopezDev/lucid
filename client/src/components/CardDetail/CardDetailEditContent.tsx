@@ -2,6 +2,7 @@ import { useCallback, useState, type SubmitEvent } from "react";
 import Form from "../Form/Form";
 import Input from "../Input/Input";
 import Select from "../Select/Select";
+import DatePicker from "../DatePicker/DatePicker";
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 import {
     type PlatformType,
@@ -93,13 +94,13 @@ const CardDetailEditContent = ({ data, onSubmit, onCancel }: CardDetailEditConte
                         min="0"
                         step="0.01"
                     />
-                    <Input
+                    <DatePicker
                         label="Purchase Date"
-                        type="date"
                         value={datePurchased}
-                        onChange={() => {}}
+                        onChange={(date) =>
+                            setFormData((prev) => ({ ...prev, date_purchased: date }))
+                        }
                         inputSize="small"
-                        hasErrorText={false}
                     />
                     <Input
                         label="Hours"
