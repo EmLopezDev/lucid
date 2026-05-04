@@ -1,3 +1,4 @@
+import { type SetStateAction } from "react";
 import type { UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 import Badge from "../Badge/Badge";
 import Button from "../Button/Button";
@@ -7,7 +8,7 @@ import { capitalizeString } from "../../lib/string";
 
 type CardDetailContentType = {
     data: UserLibraryDataType;
-    setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
+    setEditMode: React.Dispatch<SetStateAction<boolean>>;
     handleOnDeleteById: (id: string) => void;
 };
 

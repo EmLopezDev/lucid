@@ -57,11 +57,6 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-
-        &-icon {
-            font-size: u.em(10);
-            color: var(--color-brand);
-        }
     }
 
     &__listbox {

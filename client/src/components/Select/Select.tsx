@@ -2,6 +2,7 @@ import { cx } from "css-variants";
 import { useState, useRef, useCallback, useId, useEffect, type KeyboardEvent } from "react";
 import { capitalizeString } from "../../lib/string";
 import { type SelectOptionType } from "../../../../packages/types";
+import Icon from "../Icon/Icon";
 
 interface SelectType<V = string, L extends string = string> {
     id: string;
@@ -155,12 +156,11 @@ function Select<V = string, L extends string = string>({
                             : capitalizeString(selectedOption.label)
                         : "Select an option"}
                 </span>
-                <span
-                    className="select__trigger-icon"
-                    aria-hidden="true"
-                >
-                    {isOpen ? "▲" : "▼"}
-                </span>
+                <Icon
+                    name={isOpen ? "chevron-up" : "chevron-down"}
+                    size="small"
+                    color="primary"
+                />
             </div>
 
             {/* Dropdown listbox */}
