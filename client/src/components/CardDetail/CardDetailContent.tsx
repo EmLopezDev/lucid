@@ -18,7 +18,8 @@ const CardDetailContent = ({ data, setEditMode, handleOnDeleteById }: CardDetail
         <>
             <span className="card-detail__content__title">{data.title}</span>
             <div className="card-detail__content__genre">
-                <span>{data.genre}</span> &#8226; <span>{capitalizeString(data.platform)}</span>
+                <span>{capitalizeString(data.genre)}</span> &#8226;{" "}
+                <span>{capitalizeString(data.platform)}</span>
             </div>
             <div className="card-detail__content__status">
                 <Badge

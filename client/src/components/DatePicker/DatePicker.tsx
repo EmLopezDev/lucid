@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useLayoutEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useLayoutEffect, useCallback, useId } from "react";
 import { createPortal } from "react-dom";
 import { DayPicker } from "react-day-picker";
 import { cx } from "css-variants";
@@ -7,6 +7,7 @@ import Icon from "../Icon/Icon";
 import "react-day-picker/style.css";
 
 type DatePickerProps = {
+    id?: string;
     label?: string;
     value?: string;
     onChange: (value: string) => void;
@@ -46,7 +47,7 @@ function displayDate(date: Date): string {
 const POPUP_OFFSET = 4; // px gap between trigger and popup
 const EDGE_MARGIN = 8; // minimum px gap between popup and viewport edge
 
-const DatePicker = ({ label, value, onChange, inputSize = "small" }: DatePickerProps) => {
+const DatePicker = ({ id, label, value, onChange, inputSize = "small" }: DatePickerProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState<Date | undefined>(parseDate(value));
 
@@ -54,6 +55,8 @@ const DatePicker = ({ label, value, onChange, inputSize = "small" }: DatePickerP
     // We start with an empty object and populate it as soon as the trigger is measured.
     const [position, setPosition] = useState<PopupPosition>({});
 
+    const datePickerId = useId();
+    const finalId = id ?? datePickerId;
     // triggerRef lets us read the trigger button's screen coordinates at open time.
     // containerRef covers the trigger + label so we can detect outside clicks.
     // popupRef lets us measure the rendered popup to check for viewport overflow.
@@ -179,6 +182,7 @@ const DatePicker = ({ label, value, onChange, inputSize = "small" }: DatePickerP
 
     const popup = (
         <div
+            id={finalId}
             ref={popupRef}
             className="date-picker__popup"
             style={{

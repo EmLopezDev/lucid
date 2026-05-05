@@ -75,35 +75,48 @@ const CardDetailEditContent = ({ data, onSubmit, onCancel }: CardDetailEditConte
     );
     return (
         <>
-            <span className="card-detail__content__title">{data.title}</span>
             <Form
                 buttonSize="small"
                 onSubmit={handleOnSubmit}
                 onCancel={onCancel}
             >
                 <div className="card-detail__content__edit">
-                    <Select<GenreType, GenreType>
-                        id="genre-select"
-                        options={genreOptions}
-                        value={genre.value}
-                        onChange={onGenreSelect}
-                        selectSize="small"
-                    />
+                    <div className="card-detail__content__edit--full">
+                        <Input
+                            id="title-input"
+                            value={data.title}
+                            onChange={() => {}}
+                            label="Title"
+                            inputSize="small"
+                            hasErrorText={false}
+                            placeholder="eg. Mario Party"
+                        />
+                    </div>
+                    <div className="card-detail__content__edit--full">
+                        <Select<GenreType, GenreType>
+                            id="genre-select"
+                            options={genreOptions}
+                            value={genre.value}
+                            onChange={onGenreSelect}
+                            selectSize="small"
+                        />
+                    </div>
                     <Select<PlatformType, PlatformType>
-                        id="1"
+                        id="platform-select"
                         options={platformOptions}
                         value={platform.value}
                         onChange={onPlatformSelect}
                         selectSize="small"
                     />
                     <Select<StatusType, StatusType>
-                        id="2"
+                        id="status-select"
                         options={statusOptions}
                         value={status.value}
                         onChange={onStatusSelect}
                         selectSize="small"
                     />
                     <Input
+                        id="price-input"
                         label="Price"
                         type="number"
                         onChange={() => {}}
@@ -122,6 +135,7 @@ const CardDetailEditContent = ({ data, onSubmit, onCancel }: CardDetailEditConte
                         inputSize="small"
                     />
                     <Input
+                        id="hours-input"
                         label="Hours"
                         type="number"
                         value={data.hours_played ?? 0}
@@ -132,6 +146,7 @@ const CardDetailEditContent = ({ data, onSubmit, onCancel }: CardDetailEditConte
                         step="1"
                     />
                     <Input
+                        id="rating-input"
                         label="Rating"
                         type="number"
                         onChange={() => {}}
@@ -144,6 +159,7 @@ const CardDetailEditContent = ({ data, onSubmit, onCancel }: CardDetailEditConte
                     />
                 </div>
                 <Textarea
+                    id="comment-input"
                     label="Comment"
                     onChange={() => {}}
                 />
