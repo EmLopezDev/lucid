@@ -1,4 +1,4 @@
-import { type StatusType, type PlatformType } from "./UserLibrary";
+import { type StatusType, type PlatformType, type GenreType } from "./UserLibrary";
 
 export interface SelectOptionType<V = string, L extends string = string> {
     value: V;
@@ -14,3 +14,4 @@ export type StatusOptionType = SelectOptionType<StatusType, StatusType>;
 export type StatusFilterOptionType = SelectOptionType<StatusFilterType, StatusFilterType>;
 export type SortOptionType = SelectOptionType<SortValueType, SortLabelType>;
 export type PlatformOptionType = SelectOptionType<PlatformType, PlatformType>;
+export type GenreOptionType = SelectOptionType<GenreType, GenreType>;

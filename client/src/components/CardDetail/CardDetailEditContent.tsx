@@ -7,10 +7,12 @@ import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary
 import {
     type PlatformType,
     type StatusType,
+    type GenreType,
     type PlatformOptionType,
     type StatusOptionType,
+    type GenreOptionType,
 } from "../../../../packages/types";
-import { platformOptions, statusOptions } from "../../lib/form";
+import { platformOptions, statusOptions, genreOptions } from "../../lib/form";
 import Textarea from "../Textarea/Textarea";
 
 type CardDetailEditContent = {
@@ -20,7 +22,9 @@ type CardDetailEditContent = {
 };
 
 type EditFormDataType = {
+    title?: string;
     platform?: PlatformOptionType;
+    genre?: GenreOptionType;
     status?: StatusOptionType;
     price?: string;
     date_purchased?: string;
@@ -39,6 +43,10 @@ const CardDetailEditContent = ({ data, onSubmit, onCancel }: CardDetailEditConte
         value: data.platform,
         label: data.platform,
     });
+    const [genre, setGenre] = useState<GenreOptionType>({
+        value: data.genre,
+        label: data.genre,
+    });
 
     const datePurchased = data.date_purchased ? data.date_purchased : "";
 
@@ -52,6 +60,11 @@ const CardDetailEditContent = ({ data, onSubmit, onCancel }: CardDetailEditConte
         setFormData((prevState) => ({ ...prevState, platform: option }));
     }, []);
 
+    const onGenreSelect = useCallback((option: GenreOptionType) => {
+        setGenre(option);
+        setFormData((prevState) => ({ ...prevState, genre: option }));
+    }, []);
+
     const handleOnSubmit = useCallback(
         (e: SubmitEvent<HTMLFormElement>) => {
             e.preventDefault();
@@ -63,13 +76,19 @@ const CardDetailEditContent = ({ data, onSubmit, onCancel }: CardDetailEditConte
     return (
         <>
             <span className="card-detail__content__title">{data.title}</span>
-            <span className="card-detail__content__genre">{data.genre}</span>
             <Form
                 buttonSize="small"
                 onSubmit={handleOnSubmit}
                 onCancel={onCancel}
             >
                 <div className="card-detail__content__edit">
+                    <Select<GenreType, GenreType>
+                        id="genre-select"
+                        options={genreOptions}
+                        value={genre.value}
+                        onChange={onGenreSelect}
+                        selectSize="small"
+                    />
                     <Select<PlatformType, PlatformType>
                         id="1"
                         options={platformOptions}

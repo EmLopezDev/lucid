@@ -82,6 +82,10 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: u.em(8);
+
+            & #genre-select {
+                grid-column: 1/-1;
+            }
         }
     }
 
@@ -168,8 +172,4 @@
         gap: u.em(8);
         width: 100%;
     }
-}
-
-textarea {
-    width: 100%;
 }

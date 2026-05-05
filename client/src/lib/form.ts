@@ -1,9 +1,11 @@
 import { objectCopy } from "./generic";
 import {
+    type SelectOptionType,
     type StatusFilterOptionType,
     type StatusOptionType,
     type SortOptionType,
     type PlatformOptionType,
+    type GenreOptionType,
 } from "../../../packages/types";
 
 export type FormRules<T> = Record<keyof T, [(v: string) => boolean, string][]>;
@@ -26,33 +28,60 @@ export const isFormDataValid = <T extends Record<string, string>>(
 export const hasErrors = <T extends Record<string, string>>(errors: T) =>
     Object.values(errors).some(Boolean);
 
-export const statusOptions: StatusOptionType[] = [
-    { value: "playing", label: "playing" },
-    { value: "completed", label: "completed" },
-    { value: "paused", label: "paused" },
-    { value: "dropped", label: "dropped" },
-    { value: "wishlist", label: "wishlist" },
-];
+function toOptions<V extends string>(values: V[]): SelectOptionType<V, V>[];
+function toOptions<V extends string, L extends string>(pairs: [V, L][]): SelectOptionType<V, L>[];
+function toOptions<V extends string, L extends string>(
+    entries: V[] | [V, L][],
+): SelectOptionType<V, V | L>[] {
+    return (entries as Array<V | [V, L]>).map((entry) =>
+        Array.isArray(entry)
+            ? { value: entry[0], label: entry[1] }
+            : { value: entry, label: entry },
+    );
+}
 
-export const statusFilterOptions: StatusFilterOptionType[] = [
-    { value: "all", label: "all" },
-    { value: "playing", label: "playing" },
-    { value: "completed", label: "completed" },
-    { value: "paused", label: "paused" },
-    { value: "dropped", label: "dropped" },
-    { value: "wishlist", label: "wishlist" },
-];
+export const statusOptions: StatusOptionType[] = toOptions([
+    "playing",
+    "completed",
+    "paused",
+    "dropped",
+    "wishlist",
+]);
 
-export const sortOptions: SortOptionType[] = [
-    { value: "recently", label: "recently added" },
-    { value: "alphabetical", label: "Title A-Z" },
-    { value: "rated", label: "Highest Rated" },
-    { value: "price", label: "Highest Price" },
-];
+export const statusFilterOptions: StatusFilterOptionType[] = toOptions([
+    "all",
+    "playing",
+    "completed",
+    "paused",
+    "dropped",
+    "wishlist",
+]);
 
-export const platformOptions: PlatformOptionType[] = [
-    { value: "playstation", label: "playstation" },
-    { value: "xbox", label: "xbox" },
-    { value: "nintendo", label: "nintendo" },
-    { value: "PC", label: "PC" },
-];
+export const sortOptions: SortOptionType[] = toOptions([
+    ["recently", "recently added"],
+    ["alphabetical", "Title A-Z"],
+    ["rated", "Highest Rated"],
+    ["price", "Highest Price"],
+]);
+
+export const platformOptions: PlatformOptionType[] = toOptions([
+    "playstation",
+    "xbox",
+    "nintendo",
+    "PC",
+]);
+
+export const genreOptions: GenreOptionType[] = toOptions([
+    "role-playing",
+    "action adventure",
+    "survival",
+    "shooter",
+    "strategy",
+    "simulation",
+    "battle royal",
+    "sport",
+    "racing",
+    "platform",
+    "puzzle",
+    "other",
+]);

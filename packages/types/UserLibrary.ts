@@ -8,12 +8,28 @@ export const Platform = z.literal(["playstation", "xbox", "nintendo", "PC"]);
 
 export type PlatformType = z.infer<typeof Platform>;
 
+export const Genre = z.literal([
+    "role-playing",
+    "action adventure",
+    "survival",
+    "shooter",
+    "strategy",
+    "simulation",
+    "battle royal",
+    "sport",
+    "racing",
+    "platform",
+    "puzzle",
+    "other",
+]);
+
+export type GenreType = z.infer<typeof Genre>;
+
 export const UserLibraryData = z.object({
     _id: z.uuid(),
     user_id: z.uuid(),
-    game_id: z.string(),
     title: z.string(),
-    genre: z.string(),
+    genre: Genre,
     platform: Platform,
     favorite: z.boolean().default(false),
     date_played: z.string().pipe(z.iso.date()).nullable().default(null),

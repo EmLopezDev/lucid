@@ -1,12 +1,6 @@
 import { type UserLibraryDataType } from "../../../packages/types/UserLibrary";
 import { randomBytes } from "node:crypto";
 
-const generateRandomBigInt64 = (): string => {
-    const buf = randomBytes(8);
-    const bigint = BigInt(`0x${buf.toString("hex")}`);
-    return bigint.toString();
-};
-
 const userOneId = "1";
 const userTwoId = "2";
 
@@ -14,10 +8,9 @@ const UserLibraryMockData: UserLibraryDataType[] = [
     {
         _id: crypto.randomUUID(),
         user_id: userOneId,
-        game_id: generateRandomBigInt64(),
         title: "The Last of Us",
         platform: "playstation",
-        genre: "Action",
+        genre: "action adventure",
         favorite: true,
         date_played: null,
         date_purchased: null,
@@ -33,10 +26,9 @@ const UserLibraryMockData: UserLibraryDataType[] = [
     {
         _id: crypto.randomUUID(),
         user_id: userOneId,
-        game_id: generateRandomBigInt64(),
         title: "Overwatch",
         platform: "PC",
-        genre: "Shooter",
+        genre: "shooter",
         favorite: false,
         hours_played: 45,
         date_played: "2021-05-15",
@@ -52,10 +44,9 @@ const UserLibraryMockData: UserLibraryDataType[] = [
     {
         _id: crypto.randomUUID(),
         user_id: userOneId,
-        game_id: generateRandomBigInt64(),
         title: "Dead Space",
         platform: "xbox",
-        genre: "Action",
+        genre: "action adventure",
         favorite: false,
         hours_played: 30,
         date_played: "2021-05-15",
@@ -71,10 +62,9 @@ const UserLibraryMockData: UserLibraryDataType[] = [
     {
         _id: crypto.randomUUID(),
         user_id: userOneId,
-        game_id: generateRandomBigInt64(),
         title: "Mario Kart",
         platform: "nintendo",
-        genre: "Racing",
+        genre: "racing",
         favorite: true,
         hours_played: null,
         date_played: "2021-05-15",
@@ -90,10 +80,9 @@ const UserLibraryMockData: UserLibraryDataType[] = [
     {
         _id: crypto.randomUUID(),
         user_id: userTwoId,
-        game_id: generateRandomBigInt64(),
         title: "Dead Space 2",
         platform: "xbox",
-        genre: "Action",
+        genre: "action adventure",
         favorite: false,
         hours_played: 25,
         date_played: "2021-05-15",
@@ -109,10 +98,9 @@ const UserLibraryMockData: UserLibraryDataType[] = [
     {
         _id: crypto.randomUUID(),
         user_id: userTwoId,
-        game_id: generateRandomBigInt64(),
         title: "The Last of Us",
         platform: "playstation",
-        genre: "Action",
+        genre: "action adventure",
         favorite: true,
         hours_played: null,
         date_played: null,
@@ -128,10 +116,9 @@ const UserLibraryMockData: UserLibraryDataType[] = [
     {
         _id: crypto.randomUUID(),
         user_id: userTwoId,
-        game_id: generateRandomBigInt64(),
         title: "Overwatch",
         platform: "PC",
-        genre: "Shooter",
+        genre: "shooter",
         favorite: false,
         hours_played: 200,
         date_played: "2021-05-15",
@@ -147,10 +134,9 @@ const UserLibraryMockData: UserLibraryDataType[] = [
     {
         _id: crypto.randomUUID(),
         user_id: userTwoId,
-        game_id: generateRandomBigInt64(),
         title: "Dead Space",
         platform: "xbox",
-        genre: "Action",
+        genre: "action adventure",
         favorite: false,
         hours_played: null,
         date_played: "2021-05-15",
@@ -166,10 +152,9 @@ const UserLibraryMockData: UserLibraryDataType[] = [
     {
         _id: crypto.randomUUID(),
         user_id: userTwoId,
-        game_id: generateRandomBigInt64(),
         title: "Mario Kart",
         platform: "nintendo",
-        genre: "Racing",
+        genre: "racing",
         favorite: true,
         hours_played: 148,
         date_played: "2021-05-15",
@@ -185,10 +170,9 @@ const UserLibraryMockData: UserLibraryDataType[] = [
     {
         _id: crypto.randomUUID(),
         user_id: userOneId,
-        game_id: generateRandomBigInt64(),
         title: "Dead Space 2",
         platform: "xbox",
-        genre: "Action",
+        genre: "action adventure",
         favorite: false,
         hours_played: null,
         date_played: null,
@@ -204,10 +188,9 @@ const UserLibraryMockData: UserLibraryDataType[] = [
     {
         _id: crypto.randomUUID(),
         user_id: userOneId,
-        game_id: generateRandomBigInt64(),
         title: "The Last of Us",
         platform: "playstation",
-        genre: "Action",
+        genre: "action adventure",
         favorite: true,
         hours_played: 33,
         date_played: null,
