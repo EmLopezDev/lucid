@@ -9,7 +9,10 @@ import {
     type SetStateAction,
 } from "react";
 import { UserLibraryPageContext } from "./useUserLibraryPageContext";
-import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
+import {
+    type UserLibraryDataType,
+    type PostUserLibraryGameBodyType,
+} from "../../../../packages/types/UserLibrary";
 import {
     type StatusFilterOptionType,
     type StatusOptionType,
@@ -42,6 +45,10 @@ export interface UserLibraryPageContextType {
     onCardSelect: (id: string) => void;
     onDeleteGameById: (id: string) => void;
     onCloseCardDetail: () => void;
+    isAddGameModalOpen: boolean;
+    onOpenAddGameModal: () => void;
+    onCloseAddGameModal: () => void;
+    onAddGame: (data: PostUserLibraryGameBodyType) => Promise<void>;
 }
 
 export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) => {
@@ -49,6 +56,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
     const [isCardDetailLoading, setIsCardDetailLoading] = useState(false);
     const [libraryData, setLibraryData] = useState<UserLibraryDataType[]>([]);
     const [selectedCard, setSelectedCard] = useState<UserLibraryDataType | null>(null);
+    const [isAddGameModalOpen, setIsAddGameModalOpen] = useState(false);
     const [filters, setFilters] = useState<FilterType>({
         searchTitle: "",
         statusValue: { value: "all", label: "all" },
@@ -104,6 +112,28 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
         setSelectedCard(null);
     }, []);
 
+    const onOpenAddGameModal = useCallback(() => setIsAddGameModalOpen(true), []);
+    const onCloseAddGameModal = useCallback(() => setIsAddGameModalOpen(false), []);
+
+    const onAddGame = useCallback(
+        async (data: PostUserLibraryGameBodyType) => {
+            try {
+                const response = await fetch(`${API_URL}/user/${currentUser?._id}/library`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data),
+                });
+                if (!response.ok) throw new Error("Failed to add game");
+                const newGame: UserLibraryDataType = await response.json();
+                setLibraryData((prev) => [newGame, ...prev]);
+                setIsAddGameModalOpen(false);
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        [currentUser?._id],
+    );
+
     useEffect(() => {
         const fetchUserLibraryGames = async () => {
             setIsLoading(true);
@@ -137,6 +167,10 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
             onCardSelect,
             onDeleteGameById,
             onCloseCardDetail,
+            isAddGameModalOpen,
+            onOpenAddGameModal,
+            onCloseAddGameModal,
+            onAddGame,
         }),
         [
             isLoading,
@@ -150,6 +184,10 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
             onCardSelect,
             onDeleteGameById,
             onCloseCardDetail,
+            isAddGameModalOpen,
+            onOpenAddGameModal,
+            onCloseAddGameModal,
+            onAddGame,
         ],
     );
     return (

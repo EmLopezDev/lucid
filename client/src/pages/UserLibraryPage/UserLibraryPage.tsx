@@ -3,6 +3,8 @@ import CardDetail from "../../components/CardDetail/CardDetail";
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
 import Select from "../../components/Select/Select";
+import Modal from "../../components/Modal/Modal";
+import AddGameForm from "../../components/AddGameForm/AddGameForm";
 import { UserLibraryPageProvider } from "./UserLibraryPageContext";
 import { useUserLibraryPageContext } from "./useUserLibraryPageContext";
 import {
@@ -27,6 +29,10 @@ const UserLibraryPageContent = () => {
         onSearchTitle,
         onDeleteGameById,
         onCloseCardDetail,
+        isAddGameModalOpen,
+        onOpenAddGameModal,
+        onCloseAddGameModal,
+        onAddGame,
     } = useUserLibraryPageContext();
     return (
         <div className="user-library-page">
@@ -54,7 +60,7 @@ const UserLibraryPageContent = () => {
                     </div>
                 </div>
                 <div className="user-library-page__add__button">
-                    <Button>Add game</Button>
+                    <Button icon="plus" iconPosition="left" onClick={onOpenAddGameModal}>Add game</Button>
                 </div>
             </div>
             <div className="user-library-page__content">
@@ -101,6 +107,9 @@ const UserLibraryPageContent = () => {
                     </>
                 )}
             </div>
+            <Modal isOpen={isAddGameModalOpen} title="Add Game" onClose={onCloseAddGameModal}>
+                <AddGameForm onSubmit={onAddGame} onCancel={onCloseAddGameModal} />
+            </Modal>
         </div>
     );
 };
