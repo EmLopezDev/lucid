@@ -78,3 +78,19 @@ export const PatchUserLibraryGameBody = z.object({
 }).partial();
 
 export type PatchUserLibraryGameBodyType = z.infer<typeof PatchUserLibraryGameBody>;
+
+export const PostUserLibraryGameBody = z.object({
+    title: z.string(),
+    genre: Genre,
+    platform: Platform,
+    status: Status,
+    favorite: z.boolean().default(false),
+    date_played: z.string().nullable().default(null),
+    date_purchased: z.string().nullable().default(null),
+    hours_played: z.number().min(0).nullable().default(null),
+    rating: z.number().min(0).max(5).nullable().default(null),
+    comment: z.string().nullable().default(null),
+    price: z.string().nullable().default(null),
+});
+
+export type PostUserLibraryGameBodyType = z.infer<typeof PostUserLibraryGameBody>;

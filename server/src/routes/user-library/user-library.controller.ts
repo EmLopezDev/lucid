@@ -4,6 +4,7 @@ import UserLibraryMockData from "../../data/UserLibraryMockData";
 import {
     GetUserLibraryParams,
     PatchUserLibraryGameBody,
+    PostUserLibraryGameBody,
     UserLibraryGameIdParams,
     type UserLibraryDataType,
 } from "../../../../packages/types/UserLibrary";
@@ -87,4 +88,32 @@ export const patchUserLibraryGame = async (req: Request, res: Response, next: Ne
     }
 };
 
-export const postUserLibrary = async (req: Request, res: Response) => {};
+export const postUserLibraryGame = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const parsedParams = GetUserLibraryParams.safeParse(req.params);
+        if (!parsedParams.success) {
+            res.status(400).json({ message: "Invalid params", errors: z.flattenError(parsedParams.error) });
+            return;
+        }
+
+        const parsedBody = PostUserLibraryGameBody.safeParse(req.body);
+        if (!parsedBody.success) {
+            res.status(400).json({ message: "Invalid fields", errors: z.flattenError(parsedBody.error) });
+            return;
+        }
+
+        const newGame: UserLibraryDataType = {
+            _id: crypto.randomUUID(),
+            user_id: parsedParams.data.userId,
+            ...parsedBody.data,
+            created_at: new Date().toISOString().split("T")[0] as UserLibraryDataType["created_at"],
+            updated_at: null,
+            deleted_at: null,
+        };
+
+        UserLibraryMockData.push(newGame);
+        res.status(201).json(newGame);
+    } catch (error) {
+        next(error);
+    }
+};
