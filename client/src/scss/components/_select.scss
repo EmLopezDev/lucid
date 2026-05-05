@@ -2,9 +2,11 @@
 
 .select {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: u.rem(6);
     outline: none;
     cursor: pointer;
-    height: 100%;
     width: 100%;
     min-width: 0;
 

@@ -95,6 +95,7 @@ const CardDetailEditContent = ({ data, onSubmit, onCancel }: CardDetailEditConte
                     <div className="card-detail__content__edit--full">
                         <Select<GenreType, GenreType>
                             id="genre-select"
+                            label="Genre"
                             options={genreOptions}
                             value={genre.value}
                             onChange={onGenreSelect}
@@ -103,6 +104,7 @@ const CardDetailEditContent = ({ data, onSubmit, onCancel }: CardDetailEditConte
                     </div>
                     <Select<PlatformType, PlatformType>
                         id="platform-select"
+                        label="Platform"
                         options={platformOptions}
                         value={platform.value}
                         onChange={onPlatformSelect}
@@ -110,6 +112,7 @@ const CardDetailEditContent = ({ data, onSubmit, onCancel }: CardDetailEditConte
                     />
                     <Select<StatusType, StatusType>
                         id="status-select"
+                        label="Status"
                         options={statusOptions}
                         value={status.value}
                         onChange={onStatusSelect}
