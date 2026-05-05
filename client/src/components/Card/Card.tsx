@@ -28,7 +28,8 @@ const Card = ({ data, selectedId, handleCardSelect }: CardType) => {
             <section className="card__content">
                 <h4 className="card__title">{data.title}</h4>
                 <div className="card__genre">
-                    <span>{data.genre}</span> &#8226; <span>{capitalizeString(data.platform)}</span>
+                    <span>{capitalizeString(data.genre)}</span> &#8226;{" "}
+                    <span>{capitalizeString(data.platform)}</span>
                 </div>
                 <div className="card__meta">
                     <span className="card__meta--price">
