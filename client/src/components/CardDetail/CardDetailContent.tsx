@@ -2,6 +2,7 @@ import { type SetStateAction } from "react";
 import type { UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 import Badge from "../Badge/Badge";
 import Button from "../Button/Button";
+import HoursBar from "../HoursBar/HoursBar";
 import StarRating from "../StarRating/StarRating";
 import { formatDate } from "../../lib/date";
 import { capitalizeString } from "../../lib/string";
@@ -54,6 +55,10 @@ const CardDetailContent = ({ data, setEditMode, handleOnDeleteById }: CardDetail
                     </span>
                 </div>
             </div>
+            <HoursBar
+                hours={data.hours_played}
+                status={data.status}
+            />
             <div className="card-detail__comment">
                 <span className="card-detail__comment--title">Comments</span>
                 <div className="card-detail__comment--text">

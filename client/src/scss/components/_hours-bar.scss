@@ -1,0 +1,83 @@
+@use "../utils/" as u;
+
+.hours-bar {
+    display: flex;
+    flex-direction: column;
+    gap: u.em(4);
+    width: 100%;
+
+    &__info {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+
+    &__label {
+        color: var(--color-text-tertiary);
+        font-weight: 500;
+    }
+
+    &__percent {
+        color: var(--color-brand);
+        font-weight: 600;
+    }
+
+    &__track {
+        width: 100%;
+        background: rgba(var(--color-brand-rgb), 0.12);
+        border-radius: u.em(99);
+        overflow: hidden;
+    }
+
+    &__fill {
+        background: var(--color-brand);
+        border-radius: u.em(99);
+        transition: width 0.4s ease;
+    }
+
+    // Completed state — full green bar using the same token as the completed badge
+    &--completed {
+        .hours-bar__percent {
+            color: var(--color-badge-completed);
+        }
+
+        .hours-bar__track {
+            background: rgba(var(--color-badge-completed-rgb), 0.15);
+        }
+
+        .hours-bar__fill {
+            background: var(--color-badge-completed);
+        }
+    }
+
+    // Sizes
+    &--small {
+        .hours-bar__label,
+        .hours-bar__percent {
+            font-size: u.rem(10);
+        }
+
+        .hours-bar__track {
+            height: u.em(3);
+        }
+
+        .hours-bar__fill {
+            height: u.em(3);
+        }
+    }
+
+    &--medium {
+        .hours-bar__label,
+        .hours-bar__percent {
+            font-size: u.rem(12);
+        }
+
+        .hours-bar__track {
+            height: u.em(5);
+        }
+
+        .hours-bar__fill {
+            height: u.em(5);
+        }
+    }
+}

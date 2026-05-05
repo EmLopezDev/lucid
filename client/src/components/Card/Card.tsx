@@ -1,5 +1,6 @@
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 import Badge from "../Badge/Badge";
+import HoursBar from "../HoursBar/HoursBar";
 import { cx } from "css-variants";
 import StarRating from "../StarRating/StarRating";
 import { capitalizeString } from "../../lib/string";
@@ -37,6 +38,13 @@ const Card = ({ data, selectedId, handleCardSelect }: CardType) => {
                     />
                 </div>
             </section>
+            <div className="card__hours">
+                <HoursBar
+                    hours={data.hours_played}
+                    status={data.status}
+                    size="small"
+                />
+            </div>
         </article>
     );
 };

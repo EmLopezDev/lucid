@@ -57,4 +57,13 @@
             color: var(--color-success);
         }
     }
+
+    &__hours {
+        padding: u.em(8) u.rem(12) u.em(10);
+
+        // Hide the bar entirely if it renders nothing (hours_played is null)
+        &:empty {
+            display: none;
+        }
+    }
 }
