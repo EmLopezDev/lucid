@@ -26,4 +26,19 @@ export const getUserLibrary = async (req: Request, res: Response) => {
     res.status(200).json(userLibraryData);
 };
 
+export const deleteUserLibraryGame = async (req: Request, res: Response) => {
+    const { userId, gameId } = req.params;
+    const index = UserLibraryMockData.findIndex(
+        (data) => data._id === gameId && data.user_id === userId,
+    );
+
+    if (index === -1) {
+        res.status(404).json({ message: "Game not found" });
+        return;
+    }
+
+    UserLibraryMockData.splice(index, 1);
+    res.status(200).json({ _id: gameId });
+};
+
 export const postUserLibrary = async (req: Request, res: Response) => {};

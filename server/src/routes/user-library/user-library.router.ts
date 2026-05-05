@@ -1,11 +1,11 @@
 import express from "express";
-import { getUserLibrary } from "./user-library.controller";
+import { getUserLibrary, deleteUserLibraryGame } from "./user-library.controller";
 
 const UserLibraryRouter = express.Router({ mergeParams: true });
 
 UserLibraryRouter.get("/library", getUserLibrary);
-// UserLibraryRouter.post("/");
-// UserLibraryRouter.patch("/");
-// UserLibraryRouter.delete("/");
+UserLibraryRouter.delete("/library/:gameId", deleteUserLibraryGame);
+// UserLibraryRouter.post("/library");
+// UserLibraryRouter.patch("/library/:gameId");
 
 export default UserLibraryRouter;
