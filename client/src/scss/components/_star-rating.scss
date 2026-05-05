@@ -27,7 +27,7 @@
             height: u.rem(12);
         }
         .star-rating__value {
-            font-size: u.rem(11);
+            font-size: u.$font-size-sm;
         }
     }
 
@@ -37,7 +37,7 @@
             height: u.rem(16);
         }
         .star-rating__value {
-            font-size: u.rem(13);
+            font-size: u.$font-size-md;
         }
     }
 
@@ -47,7 +47,7 @@
             height: u.rem(20);
         }
         .star-rating__value {
-            font-size: u.rem(16);
+            font-size: u.$font-size-xl;
         }
     }
 }

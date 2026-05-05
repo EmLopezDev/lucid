@@ -11,17 +11,17 @@
 
     // Sizes
     &--small {
-        font-size: u.em(9);
+        font-size: u.$font-size-2xs;
         padding: u.em(2) u.em(7);
     }
 
     &--medium {
-        font-size: u.em(11);
+        font-size: u.$font-size-sm;
         padding: u.em(3) u.em(9);
     }
 
     &--large {
-        font-size: u.em(13);
+        font-size: u.$font-size-md;
         padding: u.em(4) u.em(11);
     }
 

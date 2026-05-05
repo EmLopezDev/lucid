@@ -34,15 +34,15 @@
 
         &--small {
             padding: u.em(10) u.em(12);
-            font-size: u.rem(12);
+            font-size: u.$font-size-base;
         }
         &--medium {
             padding: u.em(14) u.em(16);
-            font-size: u.rem(14);
+            font-size: u.$font-size-lg;
         }
         &--large {
             padding: u.em(16) u.em(20);
-            font-size: u.rem(16);
+            font-size: u.$font-size-xl;
         }
 
         &-label {
@@ -96,7 +96,7 @@
 
             color: var(--color-text-primary);
             font-family: inherit;
-            font-size: u.rem(12);
+            font-size: u.$font-size-base;
         }
 
         // Month/year dropdown triggers in the caption
@@ -126,7 +126,7 @@
         }
 
         .rdp-caption_label {
-            font-size: u.rem(13);
+            font-size: u.$font-size-md;
             font-weight: 500;
             color: var(--color-text-secondary);
             transition: color 0.15s ease;
@@ -166,14 +166,14 @@
         // Month/year header
         .rdp-month_caption {
             font-weight: 600;
-            font-size: u.rem(13);
+            font-size: u.$font-size-md;
             color: var(--color-text-primary);
         }
 
         // Weekday column headers (Mon, Tue…)
         .rdp-weekday {
             color: var(--color-text-tertiary);
-            font-size: u.rem(11);
+            font-size: u.$font-size-sm;
         }
 
         // Individual day buttons

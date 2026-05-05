@@ -1,0 +1,14 @@
+@use "functions" as f;
+
+// Type scale. Values are defined against a 16px base.
+// The html root is set to 112.5% (18px effective), so all rem values
+// render ~12.5% larger than the numbers below suggest.
+$font-size-2xs:  f.rem(9);   // micro labels — badge small
+$font-size-xs:   f.rem(10);  // tertiary labels, captions
+$font-size-sm:   f.rem(11);  // small emphasis, date picker weekday headers
+$font-size-base: f.rem(12);  // card text, small form controls
+$font-size-md:   f.rem(13);  // date picker captions, star rating medium
+$font-size-lg:   f.rem(14);  // body text, medium form controls
+$font-size-xl:   f.rem(16);  // large form controls
+$font-size-2xl:  f.rem(18);  // section titles
+$font-size-3xl:  f.rem(24);  // page-level headings

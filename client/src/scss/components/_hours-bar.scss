@@ -54,7 +54,7 @@
     &--small {
         .hours-bar__label,
         .hours-bar__percent {
-            font-size: u.rem(10);
+            font-size: u.$font-size-xs;
         }
 
         .hours-bar__track {
@@ -69,7 +69,7 @@
     &--medium {
         .hours-bar__label,
         .hours-bar__percent {
-            font-size: u.rem(12);
+            font-size: u.$font-size-base;
         }
 
         .hours-bar__track {

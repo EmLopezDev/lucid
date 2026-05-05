@@ -65,24 +65,24 @@
     // Sizes
     &--x-small {
         padding: u.em(10) u.em(12);
-        font-size: u.rem(11);
+        font-size: u.$font-size-sm;
         font-weight: 500;
     }
 
     &--small {
         padding: u.em(10);
-        font-size: u.rem(12);
+        font-size: u.$font-size-base;
         font-weight: 600;
     }
 
     &--medium {
         padding: u.rem(12);
-        font-size: u.rem(14);
+        font-size: u.$font-size-lg;
     }
 
     &--large {
         padding: u.rem(14);
-        font-size: u.rem(16);
+        font-size: u.$font-size-xl;
     }
 
     // Icon-only: equal padding keeps it square

@@ -40,16 +40,16 @@
 
         &--small {
             padding: u.em(10) u.em(12);
-            font-size: u.rem(12);
+            font-size: u.$font-size-base;
         }
         &--medium {
             padding: u.em(14) u.em(16);
-            font-size: u.rem(14);
+            font-size: u.$font-size-lg;
             min-width: u.em(160);
         }
         &--large {
             padding: u.em(16) u.em(20);
-            font-size: u.rem(16);
+            font-size: u.$font-size-xl;
             min-width: u.em(200);
         }
 
@@ -109,15 +109,15 @@
 
         &--small {
             padding: u.em(8) u.em(12);
-            font-size: u.rem(12);
+            font-size: u.$font-size-base;
         }
         &--medium {
             padding: u.em(10) u.em(16);
-            font-size: u.rem(14);
+            font-size: u.$font-size-lg;
         }
         &--large {
             padding: u.em(12) u.em(20);
-            font-size: u.rem(16);
+            font-size: u.$font-size-xl;
         }
 
         &--focused {

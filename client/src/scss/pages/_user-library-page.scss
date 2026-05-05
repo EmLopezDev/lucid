@@ -54,7 +54,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: u.rem(24);
+            font-size: u.$font-size-3xl;
         }
 
         &--main-col {
@@ -67,7 +67,7 @@
 
     &__games {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
         gap: u.em(12);
     }
 }

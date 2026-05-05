@@ -33,14 +33,14 @@
 
     &__title {
         font-weight: 600;
-        font-size: u.rem(12);
+        font-size: u.$font-size-xl;
         line-height: 1.3;
         letter-spacing: 0;
     }
 
     &__genre {
         font-weight: 400;
-        font-size: u.rem(10);
+        font-size: u.$font-size-xs;
         line-height: 1.4;
         color: var(--color-text-tertiary);
         margin-block-end: u.em(16);
@@ -50,7 +50,7 @@
         display: flex;
         justify-content: space-between;
         font-weight: 600;
-        font-size: u.rem(12);
+        font-size: u.$font-size-base;
         line-height: 1.2;
 
         &--price {

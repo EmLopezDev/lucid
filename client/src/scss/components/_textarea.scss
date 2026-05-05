@@ -23,15 +23,15 @@
 
     &--small {
         padding: u.em(10) u.em(12);
-        font-size: u.rem(12);
+        font-size: u.$font-size-base;
     }
     &--medium {
         padding: u.em(14) u.em(12);
-        font-size: u.rem(14);
+        font-size: u.$font-size-lg;
     }
     &--large {
         padding: u.em(16) u.em(12);
-        font-size: u.rem(16);
+        font-size: u.$font-size-xl;
     }
 
     &__container {
@@ -46,13 +46,13 @@
         font-weight: 500;
 
         &--small {
-            font-size: u.rem(12);
+            font-size: u.$font-size-base;
         }
         &--medium {
-            font-size: u.rem(14);
+            font-size: u.$font-size-lg;
         }
         &--large {
-            font-size: u.rem(16);
+            font-size: u.$font-size-xl;
         }
     }
 
@@ -70,11 +70,11 @@
 
     &__error {
         color: var(--color-error);
-        font-size: u.rem(12);
+        font-size: u.$font-size-base;
     }
 
     &__counter {
-        font-size: u.rem(12);
+        font-size: u.$font-size-base;
         color: var(--color-text-secondary);
         margin-left: auto; // pushes counter right even when no error
 
