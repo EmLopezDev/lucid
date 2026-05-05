@@ -41,7 +41,7 @@ const CardDetail = ({ data, handleOnDeleteById, onClose }: CardDetailType) => {
                         onClick={handleCloseCardDetail}
                     />
                 </span>
-                <div className="card-detail__image">IMAGE GOES HERE</div>
+                <div className={`card-detail__image card-detail__image--${gameData.status}`}>IMAGE GOES HERE</div>
                 <div className="card-detail__content">
                     {editMode ? (
                         <CardDetailEditContent

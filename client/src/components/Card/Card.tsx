@@ -22,7 +22,9 @@ const Card = ({ data, selectedId, handleCardSelect }: CardType) => {
             key={data._id}
             onClick={() => handleCardSelect(data._id)}
         >
-            <div className="card__banner">{data.status && <Badge status={data.status} />}</div>
+            <div className={cx({ card__banner: true, [`card__banner--${data.status}`]: true })}>
+                {data.status && <Badge status={data.status} />}
+            </div>
             <section className="card__content">
                 <h4 className="card__title">{data.title}</h4>
                 <div className="card__genre">
