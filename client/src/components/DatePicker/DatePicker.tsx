@@ -203,6 +203,7 @@ const DatePicker = ({ label, value, onChange, inputSize = "small" }: DatePickerP
                 startMonth={new Date(1980, 0)}
                 endMonth={new Date()}
                 captionLayout="dropdown"
+                fixedWeeks
             />
             <div className="date-picker__footer">
                 <Button

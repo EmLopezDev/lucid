@@ -101,30 +101,47 @@
 
         // Month/year dropdown triggers in the caption
         // The library renders an invisible native <select> on top of a styled label.
-        // We style the wrapper to look like a small clickable chip.
+        // We style the wrapper to match the app's Select/Input trigger pattern.
         .rdp-dropdown_root {
-            background: rgba(var(--color-brand-rgb), 0.08);
-            border: u.em(0.5) solid rgba(var(--color-brand-rgb), 0.25);
-            border-radius: u.em(4);
-            padding: u.em(2) u.em(6);
+            background: var(--color-bg-card);
+            border: u.em(0.5) solid var(--color-border);
+            border-radius: u.em(6);
+            padding: u.em(6) u.em(10);
             cursor: pointer;
-            transition: background 0.15s ease;
+            transition:
+                border-color 0.15s ease,
+                color 0.15s ease;
 
             &:hover {
-                background: rgba(var(--color-brand-rgb), 0.18);
+                border-color: rgba(var(--color-brand-rgb), 0.6);
+
+                .rdp-caption_label {
+                    color: var(--color-text-primary);
+                }
+
+                .rdp-chevron {
+                    fill: var(--color-brand);
+                }
             }
         }
 
         .rdp-caption_label {
-            font-size: u.rem(12);
-            font-weight: 600;
-            color: var(--color-text-primary);
+            font-size: u.rem(13);
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            transition: color 0.15s ease;
         }
 
         .rdp-chevron {
             fill: var(--color-text-secondary);
-            width: u.em(12);
-            height: u.em(12);
+            width: u.em(11);
+            height: u.em(11);
+            transition: fill 0.15s ease;
+        }
+
+        // Center the calendar grid inside the popup (visible when popup is wider than grid)
+        .rdp-months {
+            justify-content: center;
         }
 
         // Nav prev/next buttons
