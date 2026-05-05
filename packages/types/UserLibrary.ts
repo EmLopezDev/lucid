@@ -53,3 +53,28 @@ export const UserLibraryData = z.object({
 });
 
 export type UserLibraryDataType = z.infer<typeof UserLibraryData>;
+
+export const GetUserLibraryParams = z.object({
+    userId: z.string(),
+});
+
+export const UserLibraryGameIdParams = z.object({
+    userId: z.string(),
+    gameId: z.string(),
+});
+
+export const PatchUserLibraryGameBody = z.object({
+    title: z.string(),
+    genre: Genre,
+    platform: Platform,
+    favorite: z.boolean(),
+    date_played: z.string().nullable(),
+    date_purchased: z.string().nullable(),
+    hours_played: z.number().min(0).nullable(),
+    rating: z.number().min(0).max(5).nullable(),
+    comment: z.string().nullable(),
+    status: Status,
+    price: z.string().nullable(),
+}).partial();
+
+export type PatchUserLibraryGameBodyType = z.infer<typeof PatchUserLibraryGameBody>;

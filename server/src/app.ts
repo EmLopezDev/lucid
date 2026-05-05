@@ -4,6 +4,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import api from "./routes/api";
 import config from "./config";
+import { errorHandler } from "./middleware/errorHandler";
 
 const app = express();
 
@@ -27,5 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use("/api/v1", api);
+
+app.use(errorHandler);
 
 export default app;
