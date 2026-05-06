@@ -6,6 +6,11 @@
     border-left: u.em(1) solid rgba(var(--color-brand-rgb), 0.18);
     overflow-x: clip;
     overflow-y: auto;
+    animation: slide-in-right 0.25s ease;
+
+    &--closing {
+        animation: slide-out-right 0.2s ease forwards;
+    }
 
     // Small screens: fixed overlay below the nav bar
     @include u.breakpoint-max("small") {
@@ -16,6 +21,11 @@
         height: calc(100% - u.rem(60));
         z-index: 100;
         border-left: none;
+        animation: slide-in-up 0.25s ease;
+
+        &--closing {
+            animation: slide-out-down 0.2s ease forwards;
+        }
     }
 
     // Medium screens and up: side panel

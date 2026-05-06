@@ -24,6 +24,7 @@ const UserLibraryPageContent = () => {
         filteredData,
         statusCounts,
         selectedCard,
+        isDetailClosing,
         statusFilterOptions,
         sortOptions,
         onStatusSelect,
@@ -81,9 +82,6 @@ const UserLibraryPageContent = () => {
     return (
         <div className="user-library-page">
             <div className="user-library-page__controls">
-                <div className="user-library-page__controls-left">
-                    <h1 className="user-library-page__title">Library</h1>
-                </div>
                 <div className="user-library-page__controls-right">
                     <Input
                         type="search"
@@ -148,11 +146,11 @@ const UserLibraryPageContent = () => {
                                 </SkeletonLoader>
                             ) : (
                                 <CardDetail
-                                    key={selectedCard._id}
                                     data={selectedCard}
                                     handleOnDeleteById={onDeleteGameById}
                                     onPatchGame={onPatchGame}
                                     onClose={onCloseCardDetail}
+                                    isExternallyClosing={isDetailClosing}
                                 />
                             ))}
                     </>

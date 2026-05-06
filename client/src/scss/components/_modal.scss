@@ -9,6 +9,11 @@
     max-height: 90vh;
     overflow-y: auto;
     color: var(--color-text-primary);
+    animation: modal-enter 0.22s ease;
+
+    &--closing {
+        animation: modal-exit 0.18s ease forwards;
+    }
 
     &__overlay {
         position: fixed;
@@ -19,6 +24,11 @@
         align-items: center;
         justify-content: center;
         padding: u.rem(16);
+        animation: fade-in 0.22s ease;
+
+        &--closing {
+            animation: fade-out 0.18s ease forwards;
+        }
     }
 
     &__header {

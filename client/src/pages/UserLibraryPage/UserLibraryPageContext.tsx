@@ -41,6 +41,7 @@ export interface UserLibraryPageContextType {
     sortOptions: SortOptionType[];
     selectedCard: UserLibraryDataType | null;
     setSelectedCard: Dispatch<SetStateAction<UserLibraryDataType | null>>;
+    isDetailClosing: boolean;
     onSearchTitle: (e: ChangeEvent<HTMLInputElement>) => void;
     onStatusSelect: (option: StatusFilterOptionType) => void;
     onSortSelect: (option: SortOptionType) => void;
@@ -59,6 +60,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
     const [isCardDetailLoading, setIsCardDetailLoading] = useState(false);
     const [libraryData, setLibraryData] = useState<UserLibraryDataType[]>([]);
     const [selectedCard, setSelectedCard] = useState<UserLibraryDataType | null>(null);
+    const [isDetailClosing, setIsDetailClosing] = useState(false);
     const [isAddGameModalOpen, setIsAddGameModalOpen] = useState(false);
     const [filters, setFilters] = useState<FilterType>({
         searchTitle: "",
@@ -88,9 +90,10 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
             const card = libraryData.find((d) => d._id === id) ?? null;
             const isDeselecting = card && selectedCard?._id === id;
             if (isDeselecting) {
-                setSelectedCard(null);
+                setIsDetailClosing(true);
                 return;
             }
+            setIsDetailClosing(false);
             setIsCardDetailLoading(true);
             setSelectedCard(card);
             // Fetch additional card details here when the endpoint is ready
@@ -101,16 +104,19 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
 
     const onSearchTitle = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setSelectedCard(null);
+        setIsDetailClosing(false);
         setFilters((prevState) => ({ ...prevState, searchTitle: event.target.value }));
     }, []);
 
     const onStatusSelect = useCallback((option: StatusFilterOptionType) => {
         setSelectedCard(null);
+        setIsDetailClosing(false);
         setFilters((prevState) => ({ ...prevState, statusValue: option }));
     }, []);
 
     const onSortSelect = useCallback((option: SortOptionType) => {
         setSelectedCard(null);
+        setIsDetailClosing(false);
         setFilters((prevState) => ({ ...prevState, sortValue: option }));
     }, []);
 
@@ -124,6 +130,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
                 if (!response.ok) throw new Error("Failed to delete game");
                 setLibraryData((prev) => prev.filter((d) => d._id !== id));
                 setSelectedCard(null);
+                setIsDetailClosing(false);
             } catch (error) {
                 console.error(error);
             }
@@ -133,6 +140,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
 
     const onCloseCardDetail = useCallback(() => {
         setSelectedCard(null);
+        setIsDetailClosing(false);
     }, []);
 
     const onPatchGame = useCallback(
@@ -206,6 +214,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
             sortOptions,
             selectedCard,
             setSelectedCard,
+            isDetailClosing,
             onSearchTitle,
             onStatusSelect,
             onSortSelect,
@@ -225,6 +234,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
             filteredData,
             statusCounts,
             selectedCard,
+            isDetailClosing,
             onSearchTitle,
             onStatusSelect,
             onSortSelect,

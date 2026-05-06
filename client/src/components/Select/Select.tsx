@@ -26,6 +26,7 @@ function Select<V = string, L extends string = string>({
     renderTriggerLabel,
 }: SelectType<V, L>) {
     const [isOpen, setIsOpen] = useState(false);
+    const [isClosing, setIsClosing] = useState(false);
     const [focusedIndex, setFocusedIndex] = useState<number>(-1);
 
     const containerRef = useRef<HTMLDivElement>(null);
@@ -37,18 +38,28 @@ function Select<V = string, L extends string = string>({
     const triggerId = `${selectId}-trigger`;
 
     const selectedOption = options.find((o) => o.value === value);
+    const isEffectivelyOpen = isOpen && !isClosing;
+
+    const startClose = useCallback(() => {
+        setIsClosing(true);
+        setFocusedIndex(-1);
+    }, []);
+
+    const finalizeClose = useCallback(() => {
+        setIsOpen(false);
+        setIsClosing(false);
+    }, []);
 
     // Close on outside click
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-                setIsOpen(false);
-                setFocusedIndex(-1);
+                if (isOpen && !isClosing) startClose();
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
+    }, [isOpen, isClosing, startClose]);
 
     // Scroll focused option into view
     useEffect(() => {
@@ -59,25 +70,22 @@ function Select<V = string, L extends string = string>({
     }, [focusedIndex]);
 
     const handleToggle = useCallback(() => {
-        setIsOpen((prev) => {
-            if (!prev) {
-                // When opening, focus the selected option or the first
-                const selectedIndex = options.findIndex((o) => o.value === value);
-                setFocusedIndex(selectedIndex >= 0 ? selectedIndex : 0);
-            } else {
-                setFocusedIndex(-1);
-            }
-            return !prev;
-        });
-    }, [options, value]);
+        if (isEffectivelyOpen) {
+            startClose();
+        } else if (!isOpen) {
+            setIsOpen(true);
+            setIsClosing(false);
+            const selectedIndex = options.findIndex((o) => o.value === value);
+            setFocusedIndex(selectedIndex >= 0 ? selectedIndex : 0);
+        }
+    }, [isEffectivelyOpen, isOpen, options, value, startClose]);
 
     const handleSelect = useCallback(
         (option: SelectOptionType<V, L>) => {
             onChange(option);
-            setIsOpen(false);
-            setFocusedIndex(-1);
+            startClose();
         },
-        [onChange],
+        [onChange, startClose],
     );
 
     const handleKeyDown = useCallback(
@@ -86,15 +94,15 @@ function Select<V = string, L extends string = string>({
                 case "Enter":
                 case " ":
                     e.preventDefault();
-                    if (isOpen && focusedIndex >= 0) {
+                    if (isEffectivelyOpen && focusedIndex >= 0) {
                         handleSelect(options[focusedIndex]);
-                    } else {
+                    } else if (!isOpen) {
                         handleToggle();
                     }
                     break;
                 case "ArrowDown":
                     e.preventDefault();
-                    if (!isOpen) {
+                    if (!isEffectivelyOpen) {
                         handleToggle();
                     } else {
                         setFocusedIndex((prev) => Math.min(prev + 1, options.length - 1));
@@ -102,7 +110,7 @@ function Select<V = string, L extends string = string>({
                     break;
                 case "ArrowUp":
                     e.preventDefault();
-                    if (!isOpen) {
+                    if (!isEffectivelyOpen) {
                         handleToggle();
                     } else {
                         setFocusedIndex((prev) => Math.max(prev - 1, 0));
@@ -118,16 +126,14 @@ function Select<V = string, L extends string = string>({
                     break;
                 case "Escape":
                     e.preventDefault();
-                    setIsOpen(false);
-                    setFocusedIndex(-1);
+                    if (isOpen) startClose();
                     break;
                 case "Tab":
-                    setIsOpen(false);
-                    setFocusedIndex(-1);
+                    if (isOpen) startClose();
                     break;
             }
         },
-        [isOpen, focusedIndex, options, handleSelect, handleToggle],
+        [isEffectivelyOpen, isOpen, focusedIndex, options, handleSelect, handleToggle, startClose],
     );
 
     return (
@@ -152,7 +158,7 @@ function Select<V = string, L extends string = string>({
                 id={triggerId}
                 role="combobox"
                 aria-haspopup="listbox"
-                aria-expanded={isOpen}
+                aria-expanded={isEffectivelyOpen}
                 aria-controls={listboxId}
                 aria-activedescendant={
                     focusedIndex >= 0 ? `${listboxId}-option-${focusedIndex}` : undefined
@@ -161,7 +167,7 @@ function Select<V = string, L extends string = string>({
                 className={cx({
                     select__trigger: true,
                     [`select__trigger--${selectSize}`]: selectSize,
-                    "select__trigger--open": isOpen,
+                    "select__trigger--open": isEffectivelyOpen,
                 })}
                 onClick={handleToggle}
             >
@@ -175,7 +181,7 @@ function Select<V = string, L extends string = string>({
                         : "Select an option"}
                 </span>
                 <Icon
-                    name={isOpen ? "chevron-up" : "chevron-down"}
+                    name={isEffectivelyOpen ? "chevron-up" : "chevron-down"}
                     size="small"
                     color="primary"
                 />
@@ -188,7 +194,13 @@ function Select<V = string, L extends string = string>({
                     id={listboxId}
                     role="listbox"
                     aria-labelledby={triggerId}
-                    className="select__listbox"
+                    className={cx({
+                        select__listbox: true,
+                        "select__listbox--closing": isClosing,
+                    })}
+                    onAnimationEnd={(e) => {
+                        if (e.target === e.currentTarget && isClosing) finalizeClose();
+                    }}
                 >
                     {options.map((option, index) => (
                         <li

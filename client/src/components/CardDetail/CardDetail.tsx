@@ -11,6 +11,7 @@ type CardDetailType = {
     handleOnDeleteById: (id: string) => void;
     onPatchGame: (id: string, data: PatchUserLibraryGameBodyType) => Promise<UserLibraryDataType | null>;
     onClose: () => void;
+    isExternallyClosing?: boolean;
 };
 
 const toPatchBody = (formData: GameFormData): PatchUserLibraryGameBodyType => ({
@@ -25,9 +26,24 @@ const toPatchBody = (formData: GameFormData): PatchUserLibraryGameBodyType => ({
     comment: formData.comment || null,
 });
 
-const CardDetail = ({ data, handleOnDeleteById, onPatchGame, onClose }: CardDetailType) => {
+const CardDetail = ({ data, handleOnDeleteById, onPatchGame, onClose, isExternallyClosing }: CardDetailType) => {
     const [gameData, setGameData] = useState(objectCopy(data));
     const [editMode, setEditMode] = useState(false);
+    const [isClosing, setIsClosing] = useState(false);
+    const [prevCardData, setPrevCardData] = useState(data);
+    const [prevExternallyClosing, setPrevExternallyClosing] = useState(!!isExternallyClosing);
+
+    if (data !== prevCardData) {
+        setPrevCardData(data);
+        setGameData(objectCopy(data));
+        setEditMode(false);
+        setIsClosing(false);
+    }
+
+    if (!!isExternallyClosing !== prevExternallyClosing) {
+        setPrevExternallyClosing(!!isExternallyClosing);
+        if (isExternallyClosing) setIsClosing(true);
+    }
 
     const onSubmitEditForm = useCallback(
         async (formData: GameFormData) => {
@@ -46,12 +62,22 @@ const CardDetail = ({ data, handleOnDeleteById, onPatchGame, onClose }: CardDeta
     }, [data]);
 
     const handleCloseCardDetail = useCallback(() => {
-        onClose();
-        setEditMode(false);
-    }, [onClose]);
+        setIsClosing(true);
+    }, []);
+
+    const handleAnimationEnd = useCallback(
+        (e: React.AnimationEvent<HTMLElement>) => {
+            if (e.target !== e.currentTarget || !isClosing) return;
+            onClose();
+        },
+        [isClosing, onClose],
+    );
 
     return (
-        <aside className="card-detail__container">
+        <aside
+            className={`card-detail__container${isClosing ? " card-detail__container--closing" : ""}`}
+            onAnimationEnd={handleAnimationEnd}
+        >
             <div className="card-detail">
                 <span className="card-detail__button--close">
                     <Button

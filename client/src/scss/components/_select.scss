@@ -27,6 +27,7 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        transition: border-color 0.15s ease, border-radius 0.15s ease;
 
         &:focus {
             border-color: var(--color-brand);
@@ -80,6 +81,11 @@
         max-width: 90vw;
         max-height: u.em(200);
         overflow-y: auto;
+        animation: slide-down 0.15s ease;
+
+        &--closing {
+            animation: slide-up-out 0.12s ease forwards;
+        }
 
         &::-webkit-scrollbar {
             width: u.em(4);

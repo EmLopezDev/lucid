@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router";
 import { useUserContext } from "../../contexts/UserContext/useUserContext";
 import Icon from "../Icon/Icon";
@@ -9,28 +9,39 @@ function AppNav({ isUserAuthenticated }: { isUserAuthenticated: boolean }) {
     const navigate = useNavigate();
     const location = useLocation();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isMenuClosing, setIsMenuClosing] = useState(false);
     const [prevPathname, setPrevPathname] = useState(location.pathname);
 
-    // Close on route change — done at render time to avoid cascading effect renders
     if (location.pathname !== prevPathname) {
         setPrevPathname(location.pathname);
-        setIsMenuOpen(false);
+        if (isMenuOpen && !isMenuClosing) {
+            setIsMenuClosing(true);
+        }
     }
 
-    // Close on Escape key
+    const startClose = useCallback(() => {
+        if (isMenuOpen && !isMenuClosing) setIsMenuClosing(true);
+    }, [isMenuOpen, isMenuClosing]);
+
+    const finishClose = useCallback(() => {
+        setIsMenuOpen(false);
+        setIsMenuClosing(false);
+    }, []);
+
     useEffect(() => {
-        if (!isMenuOpen) return;
+        if (!isMenuOpen || isMenuClosing) return;
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === "Escape") setIsMenuOpen(false);
+            if (e.key === "Escape") startClose();
         };
         document.addEventListener("keydown", handleKeyDown);
         return () => document.removeEventListener("keydown", handleKeyDown);
-    }, [isMenuOpen]);
+    }, [isMenuOpen, isMenuClosing, startClose]);
 
-    // Lock body scroll while menu is open
     useEffect(() => {
         document.body.style.overflow = isMenuOpen ? "hidden" : "";
-        return () => { document.body.style.overflow = ""; };
+        return () => {
+            document.body.style.overflow = "";
+        };
     }, [isMenuOpen]);
 
     const handleSignOut = async () => {
@@ -38,18 +49,25 @@ function AppNav({ isUserAuthenticated }: { isUserAuthenticated: boolean }) {
         navigate("/signin");
     };
 
-    const close = () => setIsMenuOpen(false);
+    const navLinksClass = [
+        "app-layout__nav-links",
+        isMenuOpen && !isMenuClosing && "app-layout__nav-links--open",
+        isMenuClosing && "app-layout__nav-links--closing",
+    ]
+        .filter(Boolean)
+        .join(" ");
 
     return (
         <>
             {isMenuOpen && (
                 <div
-                    className="app-layout__nav-overlay"
-                    onClick={close}
+                    className={`app-layout__nav-overlay${isMenuClosing ? " app-layout__nav-overlay--closing" : ""}`}
+                    onClick={startClose}
                     aria-hidden="true"
                 />
             )}
             <nav className="app-layout__nav">
+                {/* Brand — always left */}
                 <NavLink
                     className="app-layout__brand"
                     to="/"
@@ -58,7 +76,80 @@ function AppNav({ isUserAuthenticated }: { isUserAuthenticated: boolean }) {
                     LUCID
                 </NavLink>
 
-                <div className={`app-layout__nav-links${isMenuOpen ? " app-layout__nav-links--open" : ""}`}>
+                {/* Page nav links — centered on desktop, hidden on mobile */}
+                <div className="app-layout__nav-center">
+                    {isUserAuthenticated && (
+                        <>
+                            <NavLink
+                                className="app-layout__nav-link"
+                                to="/user/library"
+                            >
+                                Library
+                            </NavLink>
+                            <NavLink
+                                className="app-layout__nav-link"
+                                to="/user/dashboard"
+                            >
+                                Dashboard
+                            </NavLink>
+                        </>
+                    )}
+                </div>
+
+                {/* Right — account actions on desktop + hamburger on mobile */}
+                <div className="app-layout__nav-right">
+                    <div className="app-layout__nav-actions">
+                        {!isUserAuthenticated ? (
+                            <>
+                                <NavLink
+                                    className="app-layout__nav-link"
+                                    to="/signin"
+                                >
+                                    Sign In
+                                </NavLink>
+                                <NavLink
+                                    className="app-layout__nav-link app-layout__nav-link--register"
+                                    to="/register"
+                                >
+                                    Register
+                                </NavLink>
+                            </>
+                        ) : (
+                            <button
+                                className="app-layout__nav-link app-layout__nav-link--signout"
+                                onClick={handleSignOut}
+                            >
+                                Sign Out
+                            </button>
+                        )}
+                    </div>
+
+                    <button
+                        className="app-layout__hamburger"
+                        onClick={() => {
+                            if (isMenuOpen) {
+                                startClose();
+                            } else {
+                                setIsMenuOpen(true);
+                            }
+                        }}
+                        aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+                        aria-expanded={isMenuOpen && !isMenuClosing}
+                    >
+                        <Icon
+                            name={isMenuOpen && !isMenuClosing ? "close" : "menu"}
+                            size="medium"
+                        />
+                    </button>
+                </div>
+
+                {/* Mobile dropdown — all links */}
+                <div
+                    className={navLinksClass}
+                    onAnimationEnd={(e) => {
+                        if (e.target === e.currentTarget && isMenuClosing) finishClose();
+                    }}
+                >
                     {!isUserAuthenticated ? (
                         <>
                             <NavLink
@@ -82,6 +173,13 @@ function AppNav({ isUserAuthenticated }: { isUserAuthenticated: boolean }) {
                             >
                                 Library
                             </NavLink>
+                            <NavLink
+                                className="app-layout__nav-link"
+                                to="/user/dashboard"
+                            >
+                                Dashboard
+                            </NavLink>
+
                             <button
                                 className="app-layout__nav-link app-layout__nav-link--signout"
                                 onClick={handleSignOut}
@@ -91,15 +189,6 @@ function AppNav({ isUserAuthenticated }: { isUserAuthenticated: boolean }) {
                         </>
                     )}
                 </div>
-
-                <button
-                    className="app-layout__hamburger"
-                    onClick={() => setIsMenuOpen((prev) => !prev)}
-                    aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-                    aria-expanded={isMenuOpen}
-                >
-                    <Icon name={isMenuOpen ? "close" : "menu"} size="medium" />
-                </button>
             </nav>
         </>
     );
