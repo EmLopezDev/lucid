@@ -13,14 +13,121 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: u.rem(10) u.rem(24);
+        padding: 0 u.rem(24);
         border-bottom: 1px solid rgba(var(--color-brand-rgb), 0.18);
         background-color: var(--color-bg-surface);
-        z-index: 99;
+        z-index: 100;
+        position: relative;
+    }
 
-        &-auth {
+    &__brand {
+        display: flex;
+        align-items: center;
+        gap: u.rem(8);
+        font-size: u.rem(18);
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        color: var(--color-brand);
+        text-decoration: none;
+        transition: color 0.15s;
+
+        &:hover {
+            color: var(--color-brand-hover);
+        }
+    }
+
+    &__nav-links {
+        display: flex;
+        align-items: center;
+        gap: u.rem(4);
+
+        @include u.breakpoint-max("small") {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            flex-direction: column;
+            align-items: stretch;
+            background-color: var(--color-bg-surface);
+            border-bottom: 1px solid rgba(var(--color-brand-rgb), 0.18);
+            padding: u.rem(8);
+            gap: u.rem(2);
+
+            &--open {
+                display: flex;
+            }
+        }
+    }
+
+    &__nav-link {
+        display: inline-flex;
+        align-items: center;
+        padding: u.rem(6) u.rem(12);
+        border-radius: u.rem(8);
+        font-size: u.rem(14);
+        color: var(--color-text-secondary);
+        text-decoration: none;
+        transition: color 0.15s, background-color 0.15s;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-family: inherit;
+
+        &:hover {
+            color: var(--color-text-primary);
+            background-color: var(--color-bg-card);
+        }
+
+        &.active {
+            color: var(--color-brand);
+            background-color: var(--color-brand-bg);
+        }
+
+        &--register {
+            color: var(--color-brand);
+            border: 1px solid rgba(var(--color-brand-rgb), 0.35);
+
+            &:hover {
+                color: var(--color-brand-hover);
+                background-color: var(--color-brand-bg);
+            }
+        }
+
+        &--signout {
+            color: var(--color-text-tertiary);
+
+            &:hover {
+                color: var(--color-text-secondary);
+                background-color: var(--color-bg-card);
+            }
+        }
+
+        @include u.breakpoint-max("small") {
+            padding: u.rem(12) u.rem(14);
+            border-radius: u.rem(6);
+            font-size: u.rem(15);
+        }
+    }
+
+    &__hamburger {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--color-text-primary);
+        padding: u.rem(6);
+        border-radius: u.rem(8);
+        transition: background-color 0.15s;
+
+        &:hover {
+            background-color: var(--color-bg-card);
+        }
+
+        @include u.breakpoint-max("small") {
             display: flex;
-            gap: u.rem(20);
         }
     }
 
