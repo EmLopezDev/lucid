@@ -47,7 +47,7 @@ const StarIcon = ({ fillPercentage, gradientId }: StarIconProps) => (
 const StarRating = ({ rating, size = "medium", showValue = false }: StarRatingProps) => {
     const baseId = useId();
 
-    if (!rating) return "No Rating";
+    if (!rating) return null;
 
     const clamped = Math.min(Math.max(rating, 0), 5);
 

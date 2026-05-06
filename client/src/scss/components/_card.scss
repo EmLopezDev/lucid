@@ -84,6 +84,8 @@
     &__meta {
         display: flex;
         justify-content: space-between;
+        align-items: center;
+        min-height: u.em(20);
         font-weight: 600;
         font-size: u.$font-size-md;
         line-height: 1.2;

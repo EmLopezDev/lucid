@@ -32,9 +32,11 @@ const Card = ({ data, selectedId, handleCardSelect }: CardType) => {
                     <span>{capitalizeString(data.platform)}</span>
                 </div>
                 <div className="card__meta">
-                    <span className="card__meta--price">
-                        {data.price === "0.00" ? "Free" : `$${data.price}`}
-                    </span>
+                    {data.price !== null && (
+                        <span className="card__meta--price">
+                            {data.price === "0.00" ? "Free" : `$${data.price}`}
+                        </span>
+                    )}
                     <StarRating
                         size="small"
                         rating={data.rating}
