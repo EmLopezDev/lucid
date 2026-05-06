@@ -35,6 +35,7 @@ export interface UserLibraryPageContextType {
     isCardDetailLoading: boolean;
     filters: FilterType;
     filteredData: UserLibraryDataType[];
+    statusCounts: Record<string, number>;
     statusFilterOptions: StatusFilterOptionType[];
     statusOptions: StatusOptionType[];
     sortOptions: SortOptionType[];
@@ -73,6 +74,14 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
         const byStatus = filterByStatus(byTitle, statusValue.value);
         return filterBySort(byStatus, sortValue.value);
     }, [filters, libraryData]);
+
+    const statusCounts = useMemo(() => {
+        const counts: Record<string, number> = { all: libraryData.length };
+        for (const game of libraryData) {
+            counts[game.status] = (counts[game.status] ?? 0) + 1;
+        }
+        return counts;
+    }, [libraryData]);
 
     const onCardSelect = useCallback(
         async (id: string) => {
@@ -191,6 +200,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
             isCardDetailLoading,
             filters,
             filteredData,
+            statusCounts,
             statusOptions,
             statusFilterOptions,
             sortOptions,
@@ -213,6 +223,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
             isCardDetailLoading,
             filters,
             filteredData,
+            statusCounts,
             selectedCard,
             onSearchTitle,
             onStatusSelect,

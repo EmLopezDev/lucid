@@ -8,37 +8,71 @@
     flex-direction: column;
 
     &__controls {
-        min-height: u.em(125);
         width: 100%;
         flex-shrink: 0;
         display: flex;
-        flex-direction: column;
-        gap: u.em(10);
+        align-items: center;
+        justify-content: space-between;
+        gap: u.em(12);
         border-bottom: u.rem(1) solid rgba(var(--color-brand-rgb), 0.18);
         position: sticky;
         top: 0;
         background-color: var(--color-bg-app);
-        padding: u.em(14) u.em(16);
+        padding: u.em(12) u.em(16);
         z-index: 99;
-    }
-
-    &__filters {
-        display: flex;
-        gap: u.em(10);
 
         @include u.breakpoint-max("small") {
-            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: stretch;
+            gap: u.em(10);
         }
 
-        &--select {
-            width: 100%;
+        &-left {
             display: flex;
+            align-items: baseline;
             gap: u.em(10);
+            flex-shrink: 0;
+        }
+
+        &-right {
+            display: flex;
+            align-items: center;
+            gap: u.em(8);
+
+            .input__container {
+                flex: 1;
+                min-width: u.rem(260);
+            }
+
+            .select {
+                min-width: u.rem(200);
+            }
+
+            .button {
+                flex: none;
+                white-space: nowrap;
+            }
+
+            @include u.breakpoint-max("small") {
+                flex-wrap: wrap;
+
+                .input__container {
+                    width: 100%;
+                    min-width: 0;
+                }
+
+                .button {
+                    align-self: flex-start;
+                }
+            }
         }
     }
 
-    &__add__button {
-        align-self: flex-end;
+    &__title {
+        font-size: u.rem(18);
+        font-weight: 600;
+        color: var(--color-text-primary);
+        letter-spacing: 0.01em;
     }
 
     &__content {
@@ -69,5 +103,18 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
         gap: u.em(12);
+    }
+}
+
+.status-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: u.em(8);
+    width: 100%;
+
+    &__label {
+        font-size: u.$font-size-md;
+        color: var(--color-text-secondary);
     }
 }

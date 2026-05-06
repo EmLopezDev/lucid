@@ -26,6 +26,11 @@
     }
 
     // Status variants
+    &__all {
+        background: rgba(var(--color-brand-rgb), 0.2);
+        color: var(--color-brand);
+    }
+
     &__wishlist {
         background: rgba(var(--color-badge-wishlist-rgb), 0.3);
         color: var(--color-badge-wishlist);

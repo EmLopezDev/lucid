@@ -1,8 +1,10 @@
+import { cx } from "css-variants";
 import Card from "../../components/Card/Card";
 import CardDetail from "../../components/CardDetail/CardDetail";
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
 import Select from "../../components/Select/Select";
+import Badge from "../../components/Badge/Badge";
 import Modal from "../../components/Modal/Modal";
 import AddGameForm from "../../components/AddGameForm/AddGameForm";
 import { UserLibraryPageProvider } from "./UserLibraryPageContext";
@@ -20,6 +22,7 @@ const UserLibraryPageContent = () => {
         isCardDetailLoading,
         filters,
         filteredData,
+        statusCounts,
         selectedCard,
         statusFilterOptions,
         sortOptions,
@@ -35,33 +38,62 @@ const UserLibraryPageContent = () => {
         onAddGame,
         onPatchGame,
     } = useUserLibraryPageContext();
+
+    const renderStatusOption = (label: StatusFilterType) => (
+        <div className="status-option">
+            {label === "all" ? (
+                <span className="status-option__label">All</span>
+            ) : (
+                <Badge
+                    size="large"
+                    status={label}
+                />
+            )}
+            <span
+                className={cx({
+                    badge: true,
+                    "badge--large": true,
+                    [`badge__${label}`]: true,
+                })}
+            >
+                {statusCounts[label] ?? 0}
+            </span>
+        </div>
+    );
+
     return (
         <div className="user-library-page">
             <div className="user-library-page__controls">
-                <div className="user-library-page__filters">
+                <div className="user-library-page__controls-left">
+                    <h1 className="user-library-page__title">Library</h1>
+                </div>
+                <div className="user-library-page__controls-right">
                     <Input
                         type="search"
-                        placeholder="Search library..."
+                        placeholder="Search..."
                         onChange={onSearchTitle}
                         hasErrorText={false}
                     />
-                    <div className="user-library-page__filters--select">
-                        <Select<StatusFilterType, StatusFilterType>
-                            id="status-options"
-                            value={filters.statusValue.value}
-                            options={statusFilterOptions}
-                            onChange={onStatusSelect}
-                        />
-                        <Select<SortValueType, SortLabelType>
-                            id="sort-options"
-                            value={filters.sortValue.value}
-                            options={sortOptions}
-                            onChange={onSortSelect}
-                        />
-                    </div>
-                </div>
-                <div className="user-library-page__add__button">
-                    <Button icon="plus" iconPosition="left" onClick={onOpenAddGameModal}>Add game</Button>
+                    <Select<StatusFilterType, StatusFilterType>
+                        id="status-options"
+                        value={filters.statusValue.value}
+                        options={statusFilterOptions}
+                        onChange={onStatusSelect}
+                        renderOptionsLabel={renderStatusOption}
+                    />
+                    <Select<SortValueType, SortLabelType>
+                        id="sort-options"
+                        value={filters.sortValue.value}
+                        options={sortOptions}
+                        onChange={onSortSelect}
+                    />
+                    <Button
+                        icon="plus"
+                        iconPosition="left"
+                        onClick={onOpenAddGameModal}
+                    >
+                        Add game
+                    </Button>
                 </div>
             </div>
             <div className="user-library-page__content">
@@ -91,8 +123,8 @@ const UserLibraryPageContent = () => {
                                 ))}
                             </div>
                         </div>
-                        {selectedCard && (
-                            isCardDetailLoading ? (
+                        {selectedCard &&
+                            (isCardDetailLoading ? (
                                 <SkeletonLoader label="Loading game details">
                                     <SkeletonCardDetail />
                                 </SkeletonLoader>
@@ -104,13 +136,19 @@ const UserLibraryPageContent = () => {
                                     onPatchGame={onPatchGame}
                                     onClose={onCloseCardDetail}
                                 />
-                            )
-                        )}
+                            ))}
                     </>
                 )}
             </div>
-            <Modal isOpen={isAddGameModalOpen} title="Add Game" onClose={onCloseAddGameModal}>
-                <AddGameForm onSubmit={onAddGame} onCancel={onCloseAddGameModal} />
+            <Modal
+                isOpen={isAddGameModalOpen}
+                title="Add Game"
+                onClose={onCloseAddGameModal}
+            >
+                <AddGameForm
+                    onSubmit={onAddGame}
+                    onCancel={onCloseAddGameModal}
+                />
             </Modal>
         </div>
     );
