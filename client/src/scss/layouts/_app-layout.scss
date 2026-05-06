@@ -7,6 +7,17 @@
     flex-direction: column;
     overflow: hidden;
 
+    &__nav-overlay {
+        position: fixed;
+        top: u.rem(60);
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 100;
+        cursor: pointer;
+    }
+
     &__nav {
         height: u.rem(60);
         flex-shrink: 0;
@@ -16,7 +27,7 @@
         padding: 0 u.rem(24);
         border-bottom: 1px solid rgba(var(--color-brand-rgb), 0.18);
         background-color: var(--color-bg-surface);
-        z-index: 100;
+        z-index: 101;
         position: relative;
     }
 
