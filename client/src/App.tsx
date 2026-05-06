@@ -7,16 +7,13 @@ import AppAuthLayout from "./layouts/AppAuthLayout";
 import UserLibraryPage from "./pages/UserLibraryPage/UserLibraryPage";
 import AuthorizedRoutes from "./routes/AuthorizedRoutes";
 import { useUserContext } from "./contexts/UserContext/useUserContext";
+import AppSkeleton from "./components/Skeleton/AppSkeleton";
 
 function App() {
     const { isUserAuthenticated, isSessionLoading } = useUserContext();
 
     if (isSessionLoading) {
-        return (
-            <div className="app-loading">
-                <span className="app-loading__text">Loading...</span>
-            </div>
-        );
+        return <AppSkeleton />;
     }
 
     return (

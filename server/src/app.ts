@@ -7,8 +7,11 @@ import MongoStore from "connect-mongo";
 import api from "./routes/api";
 import config from "./config";
 import { errorHandler } from "./middleware/errorHandler";
+import { mongoClientPromise } from "./services/mongo";
 
 const app = express();
+
+app.set("trust proxy", 1);
 
 const corsOptions = {
     origin: config.ALLOWED_ORIGINS,
@@ -42,7 +45,7 @@ app.use(
         secret: config.SESSION_SECRET,
         resave: false,
         saveUninitialized: false,
-        store: MongoStore.create({ mongoUrl: config.MONGO_URL }),
+        store: MongoStore.create({ clientPromise: mongoClientPromise }),
         cookie: {
             httpOnly: true,
             secure: config.NODE_ENV === "production",

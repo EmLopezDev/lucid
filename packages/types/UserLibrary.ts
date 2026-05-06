@@ -39,7 +39,7 @@ export const UserLibraryData = z.object({
         .number()
         .min(0)
         .max(5)
-        .refine((n) => n.toString().split(".")[1]?.length <= 2, {
+        .refine((n) => (n.toString().split(".")[1]?.length ?? 0) <= 2, {
             message: "Max 2 decimal places allowed",
         })
         .nullable()
