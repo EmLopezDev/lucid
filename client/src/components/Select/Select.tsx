@@ -12,6 +12,7 @@ interface SelectType<V = string, L extends string = string> {
     value: V;
     onChange: (option: SelectOptionType<V, L>) => void;
     renderOptionsLabel?: (label: L) => React.ReactNode;
+    renderTriggerLabel?: (label: L) => React.ReactNode;
 }
 
 function Select<V = string, L extends string = string>({
@@ -22,6 +23,7 @@ function Select<V = string, L extends string = string>({
     value,
     onChange,
     renderOptionsLabel,
+    renderTriggerLabel,
 }: SelectType<V, L>) {
     const [isOpen, setIsOpen] = useState(false);
     const [focusedIndex, setFocusedIndex] = useState<number>(-1);
@@ -165,9 +167,11 @@ function Select<V = string, L extends string = string>({
             >
                 <span className="select__trigger-label">
                     {selectedOption
-                        ? renderOptionsLabel
-                            ? renderOptionsLabel(selectedOption.label)
-                            : capitalizeString(selectedOption.label)
+                        ? renderTriggerLabel
+                            ? renderTriggerLabel(selectedOption.label)
+                            : renderOptionsLabel
+                                ? renderOptionsLabel(selectedOption.label)
+                                : capitalizeString(selectedOption.label)
                         : "Select an option"}
                 </span>
                 <Icon

@@ -39,6 +39,23 @@ const UserLibraryPageContent = () => {
         onPatchGame,
     } = useUserLibraryPageContext();
 
+    const renderStatusTrigger = (label: StatusFilterType) => (
+        <div className="status-option">
+            {label === "all" ? (
+                <span className="status-option__label">All</span>
+            ) : (
+                <Badge status={label} size="medium" />
+            )}
+            <span className={cx({
+                badge: true,
+                "badge--medium": true,
+                [`badge__${label}`]: true,
+            })}>
+                {statusCounts[label] ?? 0}
+            </span>
+        </div>
+    );
+
     const renderStatusOption = (label: StatusFilterType) => (
         <div className="status-option">
             {label === "all" ? (
@@ -80,6 +97,7 @@ const UserLibraryPageContent = () => {
                         options={statusFilterOptions}
                         onChange={onStatusSelect}
                         renderOptionsLabel={renderStatusOption}
+                        renderTriggerLabel={renderStatusTrigger}
                     />
                     <Select<SortValueType, SortLabelType>
                         id="sort-options"
