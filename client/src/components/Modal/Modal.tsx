@@ -27,17 +27,25 @@ const Modal = ({ isOpen, title, onClose, children }: ModalProps) => {
     if (!isOpen) return null;
 
     return createPortal(
-        <div className="modal__overlay" onClick={onClose}>
-            <div className="modal" onClick={(e) => e.stopPropagation()}>
+        <div
+            className="modal__overlay"
+            onClick={onClose}
+        >
+            <div
+                className="modal"
+                onClick={(e) => e.stopPropagation()}
+            >
                 <div className="modal__header">
                     <span className="modal__title">{title}</span>
-                    <Button
-                        icon="close"
-                        variant="transparent"
-                        buttonSize="small"
-                        aria-label="close modal"
-                        onClick={onClose}
-                    />
+                    <span className="modal__button">
+                        <Button
+                            icon="close"
+                            variant="transparent"
+                            buttonSize="small"
+                            aria-label="close modal"
+                            onClick={onClose}
+                        />
+                    </span>
                 </div>
                 <div className="modal__body">{children}</div>
             </div>

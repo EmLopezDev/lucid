@@ -5,9 +5,10 @@
     border: u.em(1) solid rgba(var(--color-brand-rgb), 0.18);
     border-radius: u.em(12);
     width: 100%;
-    max-width: u.rem(520);
+    max-width: u.rem(680);
     max-height: 90vh;
     overflow-y: auto;
+    color: var(--color-text-primary);
 
     &__overlay {
         position: fixed;
