@@ -68,6 +68,7 @@ export const SignInPageProvider = ({ children }: { children: ReactNode }) => {
             try {
                 const response = await fetch(`${API_URL}/auth/signin`, {
                     method: "POST",
+                    credentials: "include",
                     headers: {
                         "Content-Type": "application/json",
                     },

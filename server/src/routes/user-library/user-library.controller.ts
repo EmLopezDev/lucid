@@ -13,8 +13,7 @@ export const getUserLibrary = async (req: Request, res: Response, next: NextFunc
     try {
         const parsed = GetUserLibraryParams.safeParse(req.params);
         if (!parsed.success) {
-            res.status(400).json({ message: "Invalid params", errors: z.flattenError(parsed.error) });
-            return;
+            return res.status(400).json({ message: "Invalid params", errors: z.flattenError(parsed.error) });
         }
 
         const userLibraryData = UserLibraryMockData.filter(
@@ -30,8 +29,7 @@ export const deleteUserLibraryGame = async (req: Request, res: Response, next: N
     try {
         const parsed = UserLibraryGameIdParams.safeParse(req.params);
         if (!parsed.success) {
-            res.status(400).json({ message: "Invalid params", errors: z.flattenError(parsed.error) });
-            return;
+            return res.status(400).json({ message: "Invalid params", errors: z.flattenError(parsed.error) });
         }
 
         const { userId, gameId } = parsed.data;
@@ -40,8 +38,7 @@ export const deleteUserLibraryGame = async (req: Request, res: Response, next: N
         );
 
         if (index === -1) {
-            res.status(404).json({ message: "Game not found" });
-            return;
+            return res.status(404).json({ message: "Game not found" });
         }
 
         UserLibraryMockData.splice(index, 1);
@@ -55,8 +52,7 @@ export const patchUserLibraryGame = async (req: Request, res: Response, next: Ne
     try {
         const parsedParams = UserLibraryGameIdParams.safeParse(req.params);
         if (!parsedParams.success) {
-            res.status(400).json({ message: "Invalid params", errors: parsedParams.error.flatten() });
-            return;
+            return res.status(400).json({ message: "Invalid params", errors: z.flattenError(parsedParams.error) });
         }
 
         const { userId, gameId } = parsedParams.data;
@@ -65,14 +61,12 @@ export const patchUserLibraryGame = async (req: Request, res: Response, next: Ne
         );
 
         if (index === -1) {
-            res.status(404).json({ message: "Game not found" });
-            return;
+            return res.status(404).json({ message: "Game not found" });
         }
 
         const parsedBody = PatchUserLibraryGameBody.safeParse(req.body);
         if (!parsedBody.success) {
-            res.status(400).json({ message: "Invalid fields", errors: z.flattenError(parsedBody.error) });
-            return;
+            return res.status(400).json({ message: "Invalid fields", errors: z.flattenError(parsedBody.error) });
         }
 
         const existing = UserLibraryMockData[index]!;
@@ -92,14 +86,12 @@ export const postUserLibraryGame = async (req: Request, res: Response, next: Nex
     try {
         const parsedParams = GetUserLibraryParams.safeParse(req.params);
         if (!parsedParams.success) {
-            res.status(400).json({ message: "Invalid params", errors: z.flattenError(parsedParams.error) });
-            return;
+            return res.status(400).json({ message: "Invalid params", errors: z.flattenError(parsedParams.error) });
         }
 
         const parsedBody = PostUserLibraryGameBody.safeParse(req.body);
         if (!parsedBody.success) {
-            res.status(400).json({ message: "Invalid fields", errors: z.flattenError(parsedBody.error) });
-            return;
+            return res.status(400).json({ message: "Invalid fields", errors: z.flattenError(parsedBody.error) });
         }
 
         const newGame: UserLibraryDataType = {

@@ -90,6 +90,7 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
             try {
                 const response = await fetch(`${API_URL}/auth/register`, {
                     method: "POST",
+                    credentials: "include",
                     headers: {
                         "Content-Type": "application/json",
                     },

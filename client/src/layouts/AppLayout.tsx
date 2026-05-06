@@ -1,11 +1,20 @@
-import { Outlet } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 import { Link } from "react-router";
+import { useUserContext } from "../contexts/UserContext/useUserContext";
 
 type AppLayoutType = {
     isUserAuthenticated: boolean;
 };
 
 function AppLayout({ isUserAuthenticated }: AppLayoutType) {
+    const { signOut } = useUserContext();
+    const navigate = useNavigate();
+
+    const handleSignOut = async () => {
+        await signOut();
+        navigate("/signin");
+    };
+
     return (
         <div className="app-layout">
             <nav className="app-layout__nav">
@@ -38,13 +47,12 @@ function AppLayout({ isUserAuthenticated }: AppLayoutType) {
                         >
                             Library
                         </Link>
-                        {/* TODO: Change Sign out to actually sign a user out */}
-                        <Link
+                        <button
                             className="app-layout__nav-auth-item"
-                            to="/"
+                            onClick={handleSignOut}
                         >
                             Sign Out
-                        </Link>
+                        </button>
                     </div>
                 )}
             </nav>

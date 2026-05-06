@@ -13,6 +13,10 @@ export const findUserByEmail = async (email: string) => {
     return await UserModel.findOne({ email: email });
 };
 
+export const findUserById = async (id: string) => {
+    return await UserModel.findById(id);
+};
+
 export const registerUser = async (user: UserRegisterType) => {
     const userExists = await findUserByEmail(user.email);
 

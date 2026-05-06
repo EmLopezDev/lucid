@@ -11,6 +11,14 @@ export default defineConfig({
             "@lucid/types": path.resolve(__dirname, "../packages/types/index.ts"),
         },
     },
+    server: {
+        proxy: {
+            "/api": {
+                target: "http://localhost:8000",
+                changeOrigin: true,
+            },
+        },
+    },
     build: {
         outDir: "dist",
         emptyOutDir: true,

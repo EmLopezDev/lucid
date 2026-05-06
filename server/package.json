@@ -13,8 +13,10 @@
     "license": "ISC",
     "dependencies": {
         "argon2": "^0.44.0",
+        "connect-mongo": "^6.0.0",
         "cors": "^2.8.6",
         "express": "^5.2.1",
+        "express-session": "^1.19.0",
         "helmet": "^8.1.0",
         "mongoose": "^9.4.1",
         "morgan": "^1.10.1"
@@ -22,6 +24,7 @@
     "devDependencies": {
         "@types/cors": "^2.8.19",
         "@types/express": "^5.0.6",
+        "@types/express-session": "^1.19.0",
         "@types/morgan": "^1.9.10",
         "nodemon": "^3.1.14",
         "tsc-alias": "^1.8.16",
