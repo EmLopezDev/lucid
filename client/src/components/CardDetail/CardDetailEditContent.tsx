@@ -2,6 +2,7 @@ import { useState, useCallback, type SubmitEvent } from "react";
 import Form from "../Form/Form";
 import GameFormFields, { type GameFormData } from "../GameFormFields/GameFormFields";
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
+import { toInputDate } from "../../lib/date";
 
 type CardDetailEditContentProps = {
     data: UserLibraryDataType;
@@ -15,7 +16,7 @@ const toFormData = (data: UserLibraryDataType): GameFormData => ({
     platform: { value: data.platform, label: data.platform },
     status: { value: data.status, label: data.status },
     price: data.price ?? "",
-    datePurchased: data.date_purchased ?? "",
+    datePurchased: data.date_purchased ? toInputDate(data.date_purchased) : "",
     hoursPlayed: String(data.hours_played ?? ""),
     rating: String(data.rating ?? ""),
     comment: data.comment ?? "",

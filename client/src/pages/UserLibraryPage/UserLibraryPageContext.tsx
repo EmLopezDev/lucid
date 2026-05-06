@@ -44,7 +44,7 @@ export interface UserLibraryPageContextType {
     onStatusSelect: (option: StatusFilterOptionType) => void;
     onSortSelect: (option: SortOptionType) => void;
     onCardSelect: (id: string) => void;
-    onDeleteGameById: (id: string) => void;
+    onDeleteGameById: (id: string) => Promise<void>;
     onCloseCardDetail: () => void;
     isAddGameModalOpen: boolean;
     onOpenAddGameModal: () => void;
@@ -105,10 +105,22 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
         setFilters((prevState) => ({ ...prevState, sortValue: option }));
     }, []);
 
-    const onDeleteGameById = useCallback((id: string) => {
-        setLibraryData((prev) => prev.filter((d) => d._id !== id));
-        setSelectedCard(null);
-    }, []);
+    const onDeleteGameById = useCallback(
+        async (id: string) => {
+            try {
+                const response = await fetch(
+                    `${API_URL}/user/${currentUser?._id}/library/${id}`,
+                    { method: "DELETE" },
+                );
+                if (!response.ok) throw new Error("Failed to delete game");
+                setLibraryData((prev) => prev.filter((d) => d._id !== id));
+                setSelectedCard(null);
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        [currentUser?._id],
+    );
 
     const onCloseCardDetail = useCallback(() => {
         setSelectedCard(null);

@@ -1,4 +1,7 @@
-import { type PostUserLibraryGameBodyType, type PatchUserLibraryGameBodyType } from "../../../../packages/types/UserLibrary";
+import {
+    type PostUserLibraryGameBodyType,
+    type PatchUserLibraryGameBodyType,
+} from "../../../../packages/types/UserLibrary";
 import { UserLibraryModel } from "./user-library.mongo";
 
 export const getUserLibrary = async (userId: string) => {
@@ -9,7 +12,7 @@ export const createUserLibraryGame = async (userId: string, data: PostUserLibrar
     return await UserLibraryModel.create({
         user_id: userId,
         ...data,
-        created_at: new Date().toISOString().split("T")[0],
+        created_at: new Date(),
     });
 };
 
@@ -20,7 +23,7 @@ export const updateUserLibraryGame = async (
 ) => {
     return await UserLibraryModel.findOneAndUpdate(
         { _id: gameId, user_id: userId },
-        { ...data, updated_at: new Date().toISOString().split("T")[0] },
+        { ...data, updated_at: new Date() },
         { new: true },
     );
 };

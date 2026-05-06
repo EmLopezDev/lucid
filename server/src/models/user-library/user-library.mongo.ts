@@ -1,7 +1,18 @@
 import { Schema, model } from "mongoose";
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 
-const UserLibrarySchema = new Schema<UserLibraryDataType>(
+type UserLibraryDocument = Omit<
+    UserLibraryDataType,
+    "date_played" | "date_purchased" | "created_at" | "updated_at" | "deleted_at"
+> & {
+    date_played: Date | null;
+    date_purchased: Date | null;
+    created_at: Date;
+    updated_at: Date | null;
+    deleted_at: Date | null;
+};
+
+const UserLibrarySchema = new Schema<UserLibraryDocument>(
     {
         user_id: { type: String, required: true },
         title: { type: String, required: true },
@@ -9,17 +20,17 @@ const UserLibrarySchema = new Schema<UserLibraryDataType>(
         platform: { type: String, required: true },
         status: { type: String, required: true },
         favorite: { type: Boolean, required: true, default: false },
-        date_played: { type: String, default: null },
-        date_purchased: { type: String, default: null },
+        date_played: { type: Date, default: null },
+        date_purchased: { type: Date, default: null },
         hours_played: { type: Number, default: null },
         rating: { type: Number, default: null },
         comment: { type: String, default: null },
         price: { type: String, default: null },
-        created_at: { type: String, required: true },
-        updated_at: { type: String, default: null },
-        deleted_at: { type: String, default: null },
+        created_at: { type: Date, required: true },
+        updated_at: { type: Date, default: null },
+        deleted_at: { type: Date, default: null },
     },
     { versionKey: false },
 );
 
-export const UserLibraryModel = model<UserLibraryDataType>("UserLibrary", UserLibrarySchema);
+export const UserLibraryModel = model<UserLibraryDocument>("UserLibrary", UserLibrarySchema);

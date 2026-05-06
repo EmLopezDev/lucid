@@ -32,8 +32,8 @@ export const UserLibraryData = z.object({
     genre: Genre,
     platform: Platform,
     favorite: z.boolean().default(false),
-    date_played: z.string().pipe(z.iso.date()).nullable().default(null),
-    date_purchased: z.string().pipe(z.iso.date()).nullable().default(null),
+    date_played: z.string().nullable().default(null),
+    date_purchased: z.string().nullable().default(null),
     hours_played: z.number().min(0).nullable().default(null),
     rating: z.coerce
         .number()
@@ -47,9 +47,9 @@ export const UserLibraryData = z.object({
     comment: z.string().nullable().default(null),
     status: Status,
     price: z.string().nullable().default(null),
-    created_at: z.string().pipe(z.iso.date()),
-    updated_at: z.string().pipe(z.iso.date()).nullable().default(null),
-    deleted_at: z.string().pipe(z.iso.date()).nullable().default(null),
+    created_at: z.string(),
+    updated_at: z.string().nullable().default(null),
+    deleted_at: z.string().nullable().default(null),
 });
 
 export type UserLibraryDataType = z.infer<typeof UserLibraryData>;

@@ -17,7 +17,9 @@ export const getUserLibraryController = async (req: Request, res: Response, next
     try {
         const parsed = GetUserLibraryParams.safeParse(req.params);
         if (!parsed.success) {
-            return res.status(400).json({ message: "Invalid params", errors: z.flattenError(parsed.error) });
+            return res
+                .status(400)
+                .json({ message: "Invalid params", errors: z.flattenError(parsed.error) });
         }
 
         const games = await getUserLibrary(parsed.data.userId);
@@ -27,36 +29,51 @@ export const getUserLibraryController = async (req: Request, res: Response, next
     }
 };
 
-export const deleteUserLibraryGameController = async (req: Request, res: Response, next: NextFunction) => {
+export const postUserLibraryGameController = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
     try {
-        const parsed = UserLibraryGameIdParams.safeParse(req.params);
-        if (!parsed.success) {
-            return res.status(400).json({ message: "Invalid params", errors: z.flattenError(parsed.error) });
+        const parsedParams = GetUserLibraryParams.safeParse(req.params);
+        if (!parsedParams.success) {
+            return res
+                .status(400)
+                .json({ message: "Invalid params", errors: z.flattenError(parsedParams.error) });
         }
 
-        const { userId, gameId } = parsed.data;
-        const deleted = await deleteUserLibraryGame(userId, gameId);
-
-        if (!deleted) {
-            return res.status(404).json({ message: "Game not found" });
+        const parsedBody = PostUserLibraryGameBody.safeParse(req.body);
+        if (!parsedBody.success) {
+            return res
+                .status(400)
+                .json({ message: "Invalid fields", errors: z.flattenError(parsedBody.error) });
         }
 
-        res.status(200).json({ _id: gameId });
+        const game = await createUserLibraryGame(parsedParams.data.userId, parsedBody.data);
+        res.status(201).json(game);
     } catch (error) {
         next(error);
     }
 };
 
-export const patchUserLibraryGameController = async (req: Request, res: Response, next: NextFunction) => {
+export const patchUserLibraryGameController = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
     try {
         const parsedParams = UserLibraryGameIdParams.safeParse(req.params);
         if (!parsedParams.success) {
-            return res.status(400).json({ message: "Invalid params", errors: z.flattenError(parsedParams.error) });
+            return res
+                .status(400)
+                .json({ message: "Invalid params", errors: z.flattenError(parsedParams.error) });
         }
 
         const parsedBody = PatchUserLibraryGameBody.safeParse(req.body);
         if (!parsedBody.success) {
-            return res.status(400).json({ message: "Invalid fields", errors: z.flattenError(parsedBody.error) });
+            return res
+                .status(400)
+                .json({ message: "Invalid fields", errors: z.flattenError(parsedBody.error) });
         }
 
         const { userId, gameId } = parsedParams.data;
@@ -72,20 +89,27 @@ export const patchUserLibraryGameController = async (req: Request, res: Response
     }
 };
 
-export const postUserLibraryGameController = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteUserLibraryGameController = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) => {
     try {
-        const parsedParams = GetUserLibraryParams.safeParse(req.params);
-        if (!parsedParams.success) {
-            return res.status(400).json({ message: "Invalid params", errors: z.flattenError(parsedParams.error) });
+        const parsed = UserLibraryGameIdParams.safeParse(req.params);
+        if (!parsed.success) {
+            return res
+                .status(400)
+                .json({ message: "Invalid params", errors: z.flattenError(parsed.error) });
         }
 
-        const parsedBody = PostUserLibraryGameBody.safeParse(req.body);
-        if (!parsedBody.success) {
-            return res.status(400).json({ message: "Invalid fields", errors: z.flattenError(parsedBody.error) });
+        const { userId, gameId } = parsed.data;
+        const deleted = await deleteUserLibraryGame(userId, gameId);
+
+        if (!deleted) {
+            return res.status(404).json({ message: "Game not found" });
         }
 
-        const game = await createUserLibraryGame(parsedParams.data.userId, parsedBody.data);
-        res.status(201).json(game);
+        res.status(200).json({ _id: gameId });
     } catch (error) {
         next(error);
     }
