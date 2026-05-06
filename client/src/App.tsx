@@ -12,7 +12,11 @@ function App() {
     const { isUserAuthenticated, isSessionLoading } = useUserContext();
 
     if (isSessionLoading) {
-        return null;
+        return (
+            <div className="app-loading">
+                <span className="app-loading__text">Loading...</span>
+            </div>
+        );
     }
 
     return (

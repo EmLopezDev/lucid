@@ -16,18 +16,30 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [isSessionLoading, setIsSessionLoading] = useState(true);
 
     useEffect(() => {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 5000);
+
         const checkSession = async () => {
             try {
-                const res = await fetch(`${API_URL}/auth/session`, { credentials: "include" });
+                const res = await fetch(`${API_URL}/auth/session`, {
+                    credentials: "include",
+                    signal: controller.signal,
+                });
                 const user: UserType | null = res.ok ? await res.json() : null;
                 setCurrentUser(user);
             } catch {
                 setCurrentUser(null);
             } finally {
+                clearTimeout(timeout);
                 setIsSessionLoading(false);
             }
         };
         checkSession();
+
+        return () => {
+            controller.abort();
+            clearTimeout(timeout);
+        };
     }, []);
 
     const setUser = useCallback((user: UserType | null) => {

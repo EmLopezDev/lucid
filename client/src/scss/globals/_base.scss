@@ -1,3 +1,4 @@
+@use "../utils/" as u;
 @use "variables" as v;
 
 *,
@@ -30,6 +31,18 @@ body {
     margin: 0 auto;
     color: var(--color-text-primary);
     font-family: v.$font-family;
+}
+
+.app-loading {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__text {
+        font-size: u.$font-size-md;
+        color: var(--color-text-tertiary);
+    }
 }
 
 // TODO: Used to for debugging, remove when done with app
