@@ -5,7 +5,7 @@ import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary
 
 type CardDetailEditContentProps = {
     data: UserLibraryDataType;
-    onSubmit: (e: SubmitEvent<HTMLFormElement>) => void;
+    onSubmit: (data: GameFormData) => void;
     onCancel: () => void;
 };
 
@@ -27,14 +27,22 @@ const CardDetailEditContent = ({ data, onSubmit, onCancel }: CardDetailEditConte
     const handleSubmit = useCallback(
         (e: SubmitEvent<HTMLFormElement>) => {
             e.preventDefault();
-            onSubmit(e);
+            onSubmit(formData);
         },
-        [onSubmit],
+        [formData, onSubmit],
     );
 
     return (
-        <Form buttonSize="small" onSubmit={handleSubmit} onCancel={onCancel}>
-            <GameFormFields value={formData} onChange={setFormData} />
+        <Form
+            buttonSize="small"
+            onSubmit={handleSubmit}
+            onCancel={onCancel}
+        >
+            <GameFormFields
+                inputSize="small"
+                value={formData}
+                onChange={setFormData}
+            />
         </Form>
     );
 };

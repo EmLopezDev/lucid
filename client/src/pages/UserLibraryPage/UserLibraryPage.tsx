@@ -33,6 +33,7 @@ const UserLibraryPageContent = () => {
         onOpenAddGameModal,
         onCloseAddGameModal,
         onAddGame,
+        onPatchGame,
     } = useUserLibraryPageContext();
     return (
         <div className="user-library-page">
@@ -100,6 +101,7 @@ const UserLibraryPageContent = () => {
                                     key={selectedCard._id}
                                     data={selectedCard}
                                     handleOnDeleteById={onDeleteGameById}
+                                    onPatchGame={onPatchGame}
                                     onClose={onCloseCardDetail}
                                 />
                             )

@@ -26,10 +26,11 @@ export type GameFormData = {
 
 type GameFormFieldsProps = {
     value: GameFormData;
+    inputSize?: "small" | "medium" | "large";
     onChange: (data: GameFormData) => void;
 };
 
-const GameFormFields = ({ value, onChange }: GameFormFieldsProps) => {
+const GameFormFields = ({ value, inputSize = "medium", onChange }: GameFormFieldsProps) => {
     const update = (patch: Partial<GameFormData>) => onChange({ ...value, ...patch });
 
     return (
@@ -41,7 +42,7 @@ const GameFormFields = ({ value, onChange }: GameFormFieldsProps) => {
                         label="Title"
                         value={value.title}
                         onChange={(e) => update({ title: e.target.value })}
-                        inputSize="small"
+                        inputSize={inputSize}
                         hasErrorText={false}
                         placeholder="eg. Mario Party"
                     />
@@ -53,7 +54,7 @@ const GameFormFields = ({ value, onChange }: GameFormFieldsProps) => {
                         options={genreOptions}
                         value={value.genre.value}
                         onChange={(option) => update({ genre: option })}
-                        selectSize="small"
+                        selectSize={inputSize}
                     />
                 </div>
                 <Select<PlatformType, PlatformType>
@@ -62,7 +63,7 @@ const GameFormFields = ({ value, onChange }: GameFormFieldsProps) => {
                     options={platformOptions}
                     value={value.platform.value}
                     onChange={(option) => update({ platform: option })}
-                    selectSize="small"
+                    selectSize={inputSize}
                 />
                 <Select<StatusType, StatusType>
                     id="status-select"
@@ -70,7 +71,7 @@ const GameFormFields = ({ value, onChange }: GameFormFieldsProps) => {
                     options={statusOptions}
                     value={value.status.value}
                     onChange={(option) => update({ status: option })}
-                    selectSize="small"
+                    selectSize={inputSize}
                 />
                 <Input
                     id="price-input"
@@ -78,7 +79,7 @@ const GameFormFields = ({ value, onChange }: GameFormFieldsProps) => {
                     type="number"
                     value={value.price}
                     onChange={(e) => update({ price: e.target.value })}
-                    inputSize="small"
+                    inputSize={inputSize}
                     hasErrorText={false}
                     placeholder="0.00"
                     min="0"
@@ -88,7 +89,7 @@ const GameFormFields = ({ value, onChange }: GameFormFieldsProps) => {
                     label="Purchase Date"
                     value={value.datePurchased}
                     onChange={(date) => update({ datePurchased: date })}
-                    inputSize="small"
+                    inputSize={inputSize}
                 />
                 <Input
                     id="hours-input"
@@ -96,7 +97,7 @@ const GameFormFields = ({ value, onChange }: GameFormFieldsProps) => {
                     type="number"
                     value={value.hoursPlayed}
                     onChange={(e) => update({ hoursPlayed: e.target.value })}
-                    inputSize="small"
+                    inputSize={inputSize}
                     hasErrorText={false}
                     min="0"
                     step="1"
@@ -108,7 +109,7 @@ const GameFormFields = ({ value, onChange }: GameFormFieldsProps) => {
                     type="number"
                     value={value.rating}
                     onChange={(e) => update({ rating: e.target.value })}
-                    inputSize="small"
+                    inputSize={inputSize}
                     hasErrorText={false}
                     min="0"
                     max="5"

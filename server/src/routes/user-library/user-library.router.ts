@@ -3,9 +3,9 @@ import { getUserLibrary, postUserLibraryGame, deleteUserLibraryGame, patchUserLi
 
 const UserLibraryRouter = express.Router({ mergeParams: true });
 
-UserLibraryRouter.get("/library", getUserLibrary);
-UserLibraryRouter.post("/library", postUserLibraryGame);
-UserLibraryRouter.patch("/library/:gameId", patchUserLibraryGame);
-UserLibraryRouter.delete("/library/:gameId", deleteUserLibraryGame);
+UserLibraryRouter.get("/:userId/library", getUserLibrary);
+UserLibraryRouter.post("/:userId/library", postUserLibraryGame);
+UserLibraryRouter.patch("/:userId/library/:gameId", patchUserLibraryGame);
+UserLibraryRouter.delete("/:userId/library/:gameId", deleteUserLibraryGame);
 
 export default UserLibraryRouter;

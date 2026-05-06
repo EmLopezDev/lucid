@@ -8,8 +8,16 @@ import { errorHandler } from "./middleware/errorHandler";
 
 const app = express();
 
+const corsOptions = {
+    origin: config.ALLOWED_ORIGINS,
+    credentials: true,
+    methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.options(/^\/api\/v1\//, cors(corsOptions));
+app.use("/api/v1", cors(corsOptions));
 app.use(helmet());
-app.use(cors({ origin: config.ALLOWED_ORIGINS, credentials: true }));
 
 app.use(
     morgan(`

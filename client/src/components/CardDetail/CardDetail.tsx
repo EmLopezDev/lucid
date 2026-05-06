@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
-import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
+import { type UserLibraryDataType, type PatchUserLibraryGameBodyType } from "../../../../packages/types/UserLibrary";
 import { objectCopy } from "../../lib/generic";
+import { type GameFormData } from "../GameFormFields/GameFormFields";
 import CardDetailContent from "./CardDetailContent";
 import CardDetailEditContent from "./CardDetailEditContent";
 import Button from "../Button/Button";
@@ -8,16 +9,36 @@ import Button from "../Button/Button";
 type CardDetailType = {
     data: UserLibraryDataType;
     handleOnDeleteById: (id: string) => void;
+    onPatchGame: (id: string, data: PatchUserLibraryGameBodyType) => Promise<UserLibraryDataType | null>;
     onClose: () => void;
 };
 
-const CardDetail = ({ data, handleOnDeleteById, onClose }: CardDetailType) => {
+const toPatchBody = (formData: GameFormData): PatchUserLibraryGameBodyType => ({
+    title: formData.title,
+    genre: formData.genre.value,
+    platform: formData.platform.value,
+    status: formData.status.value,
+    price: formData.price || null,
+    date_purchased: formData.datePurchased || null,
+    hours_played: formData.hoursPlayed ? Number(formData.hoursPlayed) : null,
+    rating: formData.rating ? Number(formData.rating) : null,
+    comment: formData.comment || null,
+});
+
+const CardDetail = ({ data, handleOnDeleteById, onPatchGame, onClose }: CardDetailType) => {
     const [gameData, setGameData] = useState(objectCopy(data));
     const [editMode, setEditMode] = useState(false);
 
-    const onSubmitEditForm = useCallback(() => {
-        setEditMode(false);
-    }, []);
+    const onSubmitEditForm = useCallback(
+        async (formData: GameFormData) => {
+            const updated = await onPatchGame(gameData._id, toPatchBody(formData));
+            if (updated) {
+                setGameData(updated);
+                setEditMode(false);
+            }
+        },
+        [gameData._id, onPatchGame],
+    );
 
     const onCancelEditMode = useCallback(() => {
         setEditMode(false);

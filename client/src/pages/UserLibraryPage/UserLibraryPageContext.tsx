@@ -12,6 +12,7 @@ import { UserLibraryPageContext } from "./useUserLibraryPageContext";
 import {
     type UserLibraryDataType,
     type PostUserLibraryGameBodyType,
+    type PatchUserLibraryGameBodyType,
 } from "../../../../packages/types/UserLibrary";
 import {
     type StatusFilterOptionType,
@@ -49,6 +50,7 @@ export interface UserLibraryPageContextType {
     onOpenAddGameModal: () => void;
     onCloseAddGameModal: () => void;
     onAddGame: (data: PostUserLibraryGameBodyType) => Promise<void>;
+    onPatchGame: (id: string, data: PatchUserLibraryGameBodyType) => Promise<UserLibraryDataType | null>;
 }
 
 export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) => {
@@ -112,6 +114,27 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
         setSelectedCard(null);
     }, []);
 
+    const onPatchGame = useCallback(
+        async (id: string, data: PatchUserLibraryGameBodyType): Promise<UserLibraryDataType | null> => {
+            try {
+                const response = await fetch(`${API_URL}/user/${currentUser?._id}/library/${id}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data),
+                });
+                if (!response.ok) throw new Error("Failed to update game");
+                const updatedGame: UserLibraryDataType = await response.json();
+                setLibraryData((prev) => prev.map((d) => (d._id === id ? updatedGame : d)));
+                setSelectedCard(updatedGame);
+                return updatedGame;
+            } catch (error) {
+                console.error(error);
+                return null;
+            }
+        },
+        [currentUser?._id],
+    );
+
     const onOpenAddGameModal = useCallback(() => setIsAddGameModalOpen(true), []);
     const onCloseAddGameModal = useCallback(() => setIsAddGameModalOpen(false), []);
 
@@ -171,6 +194,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
             onOpenAddGameModal,
             onCloseAddGameModal,
             onAddGame,
+            onPatchGame,
         }),
         [
             isLoading,
@@ -188,6 +212,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
             onOpenAddGameModal,
             onCloseAddGameModal,
             onAddGame,
+            onPatchGame,
         ],
     );
     return (
