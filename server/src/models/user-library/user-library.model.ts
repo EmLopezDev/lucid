@@ -24,7 +24,7 @@ export const updateUserLibraryGame = async (
     return await UserLibraryModel.findOneAndUpdate(
         { _id: gameId, user_id: userId },
         { ...data, updated_at: new Date() },
-        { new: true },
+        { returnDocument: "after" },
     );
 };
 
