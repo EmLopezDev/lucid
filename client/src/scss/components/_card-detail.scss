@@ -30,12 +30,12 @@
 
     // Medium screens and up: side panel
     @include u.breakpoint-min("medium") {
-        width: u.em(320);
+        width: u.em(400);
     }
 
     // Large screens: wider panel gives the date picker room to render
     @include u.breakpoint-min("large") {
-        width: u.em(380);
+        width: u.em(480);
     }
 }
 .card-detail {

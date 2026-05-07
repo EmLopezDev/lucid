@@ -1,3 +1,4 @@
+import { useState, useCallback } from "react";
 import { cx } from "css-variants";
 import Card from "../../components/Card/Card";
 import CardDetail from "../../components/CardDetail/CardDetail";
@@ -5,6 +6,7 @@ import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
 import Select from "../../components/Select/Select";
 import Badge from "../../components/Badge/Badge";
+import Icon from "../../components/Icon/Icon";
 import Modal from "../../components/Modal/Modal";
 import AddGameForm from "../../components/AddGameForm/AddGameForm";
 import { UserLibraryPageProvider } from "./UserLibraryPageContext";
@@ -79,6 +81,30 @@ const UserLibraryPageContent = () => {
         </div>
     );
 
+    const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+    const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+
+    const onRequestDelete = useCallback((id: string) => {
+        setPendingDeleteId(id);
+    }, []);
+
+    const onConfirmDelete = useCallback(async () => {
+        if (!pendingDeleteId) return;
+        await onDeleteGameById(pendingDeleteId);
+        setPendingDeleteId(null);
+    }, [pendingDeleteId, onDeleteGameById]);
+
+    const onCancelDelete = useCallback(() => {
+        setPendingDeleteId(null);
+    }, []);
+
+    const pendingDeleteGame = filteredData.find((g) => g._id === pendingDeleteId)
+        ?? (selectedCard?._id === pendingDeleteId ? selectedCard : null);
+
+    const activeFilterCount =
+        (filters.statusValue.value !== "all" ? 1 : 0) +
+        (filters.sortValue.value !== "recently" ? 1 : 0);
+
     return (
         <div className="user-library-page">
             <div className="user-library-page__controls">
@@ -89,20 +115,40 @@ const UserLibraryPageContent = () => {
                         onChange={onSearchTitle}
                         hasErrorText={false}
                     />
-                    <Select<StatusFilterType, StatusFilterType>
-                        id="status-options"
-                        value={filters.statusValue.value}
-                        options={statusFilterOptions}
-                        onChange={onStatusSelect}
-                        renderOptionsLabel={renderStatusOption}
-                        renderTriggerLabel={renderStatusTrigger}
-                    />
-                    <Select<SortValueType, SortLabelType>
-                        id="sort-options"
-                        value={filters.sortValue.value}
-                        options={sortOptions}
-                        onChange={onSortSelect}
-                    />
+                    {/* Filter toggle — visible on mobile only */}
+                    <div className="user-library-page__filter-toggle">
+                        <Button
+                            icon="sliders"
+                            iconPosition="left"
+                            variant={activeFilterCount > 0 ? "primary" : "secondary"}
+                            onClick={() => setIsFiltersOpen((prev) => !prev)}
+                            aria-expanded={isFiltersOpen}
+                        >
+                            {activeFilterCount > 0 ? `Filters (${activeFilterCount})` : "Filters"}
+                        </Button>
+                    </div>
+                    {/* Filter panel — inline row on desktop, collapsible on mobile */}
+                    <div
+                        className={cx({
+                            "user-library-page__filter-panel": true,
+                            "user-library-page__filter-panel--open": isFiltersOpen,
+                        })}
+                    >
+                        <Select<StatusFilterType, StatusFilterType>
+                            id="status-options"
+                            value={filters.statusValue.value}
+                            options={statusFilterOptions}
+                            onChange={onStatusSelect}
+                            renderOptionsLabel={renderStatusOption}
+                            renderTriggerLabel={renderStatusTrigger}
+                        />
+                        <Select<SortValueType, SortLabelType>
+                            id="sort-options"
+                            value={filters.sortValue.value}
+                            options={sortOptions}
+                            onChange={onSortSelect}
+                        />
+                    </div>
                     <Button
                         icon="plus"
                         iconPosition="left"
@@ -135,6 +181,7 @@ const UserLibraryPageContent = () => {
                                         data={data}
                                         selectedId={selectedCard?._id || ""}
                                         handleCardSelect={onCardSelect}
+                                        handleDelete={onRequestDelete}
                                     />
                                 ))}
                             </div>
@@ -147,7 +194,7 @@ const UserLibraryPageContent = () => {
                             ) : (
                                 <CardDetail
                                     data={selectedCard}
-                                    handleOnDeleteById={onDeleteGameById}
+                                    handleOnDeleteById={onRequestDelete}
                                     onPatchGame={onPatchGame}
                                     onClose={onCloseCardDetail}
                                     isExternallyClosing={isDetailClosing}
@@ -156,6 +203,13 @@ const UserLibraryPageContent = () => {
                     </>
                 )}
             </div>
+            <button
+                className="user-library-page__fab"
+                onClick={onOpenAddGameModal}
+                aria-label="Add game"
+            >
+                <Icon name="plus" size="large" />
+            </button>
             <Modal
                 isOpen={isAddGameModalOpen}
                 title="Add Game"
@@ -165,6 +219,27 @@ const UserLibraryPageContent = () => {
                     onSubmit={onAddGame}
                     onCancel={onCloseAddGameModal}
                 />
+            </Modal>
+            <Modal
+                isOpen={pendingDeleteId !== null}
+                title="Remove Game"
+                onClose={onCancelDelete}
+            >
+                <div className="user-library-page__delete-warning">
+                    <p>
+                        Are you sure you want to remove{" "}
+                        <strong>{pendingDeleteGame?.title ?? "this game"}</strong> from your
+                        library? This cannot be undone.
+                    </p>
+                    <div className="user-library-page__delete-actions">
+                        <Button variant="secondary" onClick={onCancelDelete}>
+                            Cancel
+                        </Button>
+                        <Button variant="danger" onClick={onConfirmDelete}>
+                            Remove
+                        </Button>
+                    </div>
+                </div>
             </Modal>
         </div>
     );

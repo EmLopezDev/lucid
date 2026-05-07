@@ -1,21 +1,14 @@
 @use "../utils/" as u;
 
 .card {
-    min-height: u.em(110);
+    min-height: u.em(200);
     border: u.em(1) solid rgba(var(--color-brand-rgb), 0.2);
     border-radius: u.em(12);
     overflow: hidden;
     background-color: var(--color-bg-card);
     color: var(--color-text-primary);
-    cursor: pointer;
     width: 100%;
-    text-align: left;
-    font-family: inherit;
-
-    &:focus-visible {
-        outline: u.rem(2) solid var(--color-brand);
-        outline-offset: u.rem(2);
-    }
+    position: relative;
 
     &__selected {
         background-color: var(--color-bg-card-hover);
@@ -27,8 +20,55 @@
         border: u.em(1) solid rgba(var(--color-brand-rgb), 0.5);
     }
 
+    &__select {
+        display: block;
+        width: 100%;
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-align: left;
+        font-family: inherit;
+        color: inherit;
+
+        &:focus-visible {
+            outline: u.rem(2) solid var(--color-brand);
+            outline-offset: u.rem(-2);
+        }
+    }
+
+    &__delete {
+        position: absolute;
+        top: u.rem(8);
+        right: u.rem(8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: u.rem(30);
+        height: u.rem(30);
+        border-radius: u.rem(6);
+        background-color: rgba(0, 0, 0, 0.35);
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.15s, opacity 0.15s;
+
+        &:hover {
+            background-color: var(--color-danger);
+        }
+
+        @media (hover: hover) {
+            opacity: 0;
+        }
+    }
+
+    @media (hover: hover) {
+        &:hover &__delete {
+            opacity: 1;
+        }
+    }
+
     &__banner {
-        height: u.em(110);
+        height: u.em(200);
         display: flex;
         align-items: flex-end;
         padding: u.em(12) u.em(12) u.em(10);

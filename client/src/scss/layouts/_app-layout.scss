@@ -205,13 +205,15 @@
         background: none;
         border: none;
         cursor: pointer;
-        color: var(--color-text-primary);
-        padding: u.rem(6);
-        border-radius: u.rem(8);
-        transition: background-color 0.15s;
+        color: var(--color-text-secondary);
+        padding: 0 u.rem(14);
+        border-radius: 0;
+        align-self: stretch;
+        transition: background-color 0.15s, color 0.15s;
 
         &:hover {
             background-color: var(--color-bg-card);
+            color: var(--color-text-primary);
         }
 
         @include u.breakpoint-max("small") {

@@ -19,6 +19,8 @@ const Modal = ({ isOpen, title, onClose, children }: ModalProps) => {
         if (isOpen) {
             setShouldRender(true);
             setIsClosing(false);
+        } else {
+            setIsClosing(true);
         }
     }
 

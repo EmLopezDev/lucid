@@ -13,6 +13,7 @@ import {
     ChevronUp,
     CalendarDays,
     Menu,
+    SlidersHorizontal,
 } from "lucide-react";
 
 export const iconRegistry = {
@@ -29,6 +30,7 @@ export const iconRegistry = {
     "chevron-up": ChevronUp,
     calendar: CalendarDays,
     menu: Menu,
+    sliders: SlidersHorizontal,
 } satisfies Record<string, LucideIcon>;
 
 export type IconName = keyof typeof iconRegistry;
