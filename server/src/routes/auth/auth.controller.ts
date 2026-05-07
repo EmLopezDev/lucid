@@ -6,7 +6,7 @@ import { findUserById, registerUser, signinUser } from "../../models/user/user.m
 export const authRegisterUser = async (req: Request, res: Response, next: NextFunction) => {
     const result = UserRegister.safeParse(req.body);
     if (!result.success) {
-        return res.status(404).send(flattenError(result.error).fieldErrors);
+        return res.status(400).send(flattenError(result.error).fieldErrors);
     }
     try {
         const user = await registerUser(result.data);

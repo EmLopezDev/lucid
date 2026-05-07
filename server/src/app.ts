@@ -8,10 +8,9 @@ import api from "./routes/api";
 import config from "./config";
 import { errorHandler } from "./middleware/errorHandler";
 import { mongoClientPromise } from "./services/mongo";
+import rateLimit from "express-rate-limit";
 
 const app = express();
-
-app.set("trust proxy", 1);
 
 const corsOptions = {
     origin: config.ALLOWED_ORIGINS,
@@ -20,6 +19,10 @@ const corsOptions = {
     allowedHeaders: ["Content-Type", "Authorization"],
 };
 
+const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 10 });
+
+app.set("trust proxy", 1);
+app.use("/api/v1/auth", authLimiter);
 app.options(/^\/api\/v1\//, cors(corsOptions));
 app.use("/api/v1", cors(corsOptions));
 app.use(helmet());
@@ -42,6 +45,7 @@ app.use(express.json());
 
 app.use(
     session({
+        name: "sid",
         secret: config.SESSION_SECRET,
         resave: false,
         saveUninitialized: false,
