@@ -46,6 +46,22 @@ describe("DELETE /api/v1/user/:userId/library/:gameId", () => {
         expect(library.body).toHaveLength(0);
     });
 
+    it("does not delete games belonging to another user", async () => {
+        const otherUserId = "other-user-id";
+
+        const created = await request(app)
+            .post(`/api/v1/user/${otherUserId}/library`)
+            .send(testGame);
+
+        const res = await request(app)
+            .delete(`/api/v1/user/${userId}/library/${created.body._id}`);
+
+        expect(res.status).toBe(404);
+
+        const library = await request(app).get(`/api/v1/user/${otherUserId}/library`);
+        expect(library.body).toHaveLength(1);
+    });
+
     it("returns 404 when the game does not exist", async () => {
         const res = await request(app)
             .delete(`/api/v1/user/${userId}/library/000000000000000000000001`);

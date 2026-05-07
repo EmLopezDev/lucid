@@ -46,6 +46,22 @@ describe("PATCH /api/v1/user/:userId/library/:gameId", () => {
         expect(res.body.message).toBe("Game not found");
     });
 
+    it("preserves untouched fields when only partial data is sent", async () => {
+        const created = await request(app)
+            .post(`/api/v1/user/${userId}/library`)
+            .send(testGame);
+
+        const res = await request(app)
+            .patch(`/api/v1/user/${userId}/library/${created.body._id}`)
+            .send({ title: "The Last of Us Part II" });
+
+        expect(res.status).toBe(200);
+        expect(res.body.title).toBe("The Last of Us Part II");
+        expect(res.body.genre).toBe(testGame.genre);
+        expect(res.body.platform).toBe(testGame.platform);
+        expect(res.body.status).toBe(testGame.status);
+    });
+
     it("returns 400 when fields are invalid", async () => {
         const created = await request(app)
             .post(`/api/v1/user/${userId}/library`)
