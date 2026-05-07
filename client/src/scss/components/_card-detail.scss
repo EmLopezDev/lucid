@@ -12,14 +12,14 @@
         animation: slide-out-right 0.2s ease forwards;
     }
 
-    // Small screens: fixed overlay below the nav bar
+    // Small screens: full-screen fixed overlay
     @include u.breakpoint-max("small") {
         position: fixed;
-        top: u.rem(60);
+        top: 0;
         right: 0;
         width: 100%;
-        height: calc(100% - u.rem(60));
-        z-index: 100;
+        height: 100%;
+        z-index: 102;
         border-left: none;
         animation: slide-in-up 0.25s ease;
 

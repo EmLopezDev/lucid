@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { type UserLibraryDataType, type PatchUserLibraryGameBodyType } from "../../../../packages/types/UserLibrary";
 import { objectCopy } from "../../lib/generic";
 import { type GameFormData } from "../GameFormFields/GameFormFields";
@@ -61,6 +61,51 @@ const CardDetail = ({ data, handleOnDeleteById, onPatchGame, onClose, isExternal
         setGameData(data);
     }, [data]);
 
+    const containerRef = useRef<HTMLElement>(null);
+
+    useEffect(() => {
+        const mq = window.matchMedia("(max-width: 43.7485em)");
+        if (!mq.matches || isClosing) return;
+
+        const container = containerRef.current;
+        if (!container) return;
+
+        const focusableSelectors = [
+            "button:not([disabled])",
+            "[href]",
+            "input:not([disabled])",
+            "select:not([disabled])",
+            "textarea:not([disabled])",
+            '[tabindex]:not([tabindex="-1"])',
+        ].join(", ");
+
+        const getFocusable = () =>
+            Array.from(container.querySelectorAll<HTMLElement>(focusableSelectors));
+
+        getFocusable()[0]?.focus();
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key !== "Tab") return;
+            const focusable = getFocusable();
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (e.shiftKey) {
+                if (document.activeElement === first) {
+                    e.preventDefault();
+                    last?.focus();
+                }
+            } else {
+                if (document.activeElement === last) {
+                    e.preventDefault();
+                    first?.focus();
+                }
+            }
+        };
+
+        container.addEventListener("keydown", handleKeyDown);
+        return () => container.removeEventListener("keydown", handleKeyDown);
+    }, [isClosing]);
+
     const handleCloseCardDetail = useCallback(() => {
         setIsClosing(true);
     }, []);
@@ -75,6 +120,7 @@ const CardDetail = ({ data, handleOnDeleteById, onPatchGame, onClose, isExternal
 
     return (
         <aside
+            ref={containerRef}
             className={`card-detail__container${isClosing ? " card-detail__container--closing" : ""}`}
             onAnimationEnd={handleAnimationEnd}
         >

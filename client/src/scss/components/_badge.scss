@@ -4,8 +4,9 @@
     display: inline-flex;
     align-items: center;
     border-radius: u.em(99);
-    font-weight: 500;
+    font-weight: 600;
     letter-spacing: u.em(0.3);
+    text-shadow: 0 u.em(1) u.em(2) rgba(0, 0, 0, 0.25);
     position: relative;
     z-index: 1;
 
@@ -25,34 +26,43 @@
         padding: u.em(4) u.em(11);
     }
 
+    // Shared 3D shadow — dark neutral edge + top highlight
+    $shadow-3d: 0 u.em(3) 0 rgba(0, 0, 0, 0.3), inset 0 u.em(1) 0 rgba(255, 255, 255, 0.2);
+
     // Status variants
     &__all {
-        background: rgba(var(--color-brand-rgb), 0.2);
+        background: rgba(var(--color-brand-rgb), 0.35);
         color: var(--color-brand);
+        box-shadow: $shadow-3d;
     }
 
     &__wishlist {
-        background: rgba(var(--color-badge-wishlist-rgb), 0.3);
+        background: rgba(var(--color-badge-wishlist-rgb), 0.35);
         color: var(--color-badge-wishlist);
+        box-shadow: $shadow-3d;
     }
 
     &__completed {
-        background: rgba(var(--color-badge-completed-rgb), 0.3);
+        background: rgba(var(--color-badge-completed-rgb), 0.35);
         color: var(--color-badge-completed);
+        box-shadow: $shadow-3d;
     }
 
     &__playing {
-        background: rgba(var(--color-badge-playing-rgb), 0.3);
+        background: rgba(var(--color-badge-playing-rgb), 0.35);
         color: var(--color-badge-playing);
+        box-shadow: $shadow-3d;
     }
 
     &__paused {
-        background: rgba(var(--color-badge-paused-rgb), 0.3);
+        background: rgba(var(--color-badge-paused-rgb), 0.35);
         color: var(--color-badge-paused);
+        box-shadow: $shadow-3d;
     }
 
     &__dropped {
-        background: rgba(var(--color-badge-dropped-rgb), 0.18);
+        background: rgba(var(--color-badge-dropped-rgb), 0.35);
         color: var(--color-danger);
+        box-shadow: $shadow-3d;
     }
 }

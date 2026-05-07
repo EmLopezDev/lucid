@@ -52,12 +52,18 @@
         cursor: pointer;
         transition: background-color 0.15s, opacity 0.15s;
 
-        &:hover {
+        &:hover,
+        &:focus-visible {
             background-color: var(--color-danger);
+            outline: none;
         }
 
         @media (hover: hover) {
             opacity: 0;
+
+            &:focus-visible {
+                opacity: 1;
+            }
         }
     }
 

@@ -25,14 +25,18 @@ const CardDetailContent = ({ data, setEditMode, handleOnDeleteById }: CardDetail
             <div className="card-detail__content__status">
                 <Badge
                     status={data.status}
-                    size="medium"
+                    size="large"
                 />
             </div>
             <div className="card-detail__grid">
                 <div className="card-detail__grid__stat">
                     <span className="card-detail__grid__stat--title">Price</span>
                     <span className="card-detail__grid__stat--price">
-                        {data.price === null ? "-" : data.price === "0.00" ? "Free" : `$${data.price}`}
+                        {data.price === null
+                            ? "-"
+                            : data.price === "0.00"
+                              ? "Free"
+                              : `$${data.price}`}
                     </span>
                 </div>
                 <div className="card-detail__grid__stat">
@@ -48,7 +52,14 @@ const CardDetailContent = ({ data, setEditMode, handleOnDeleteById }: CardDetail
                 <div className="card-detail__grid__stat">
                     <span className="card-detail__grid__stat--title">Rating</span>
                     <span className="card-detail__grid__stat--rating">
-                        {data.rating === null ? "-" : <StarRating rating={data.rating} showValue />}
+                        {data.rating === null ? (
+                            "-"
+                        ) : (
+                            <StarRating
+                                rating={data.rating}
+                                showValue
+                            />
+                        )}
                     </span>
                 </div>
             </div>

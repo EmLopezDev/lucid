@@ -25,7 +25,12 @@ const Card = ({ data, selectedId, handleCardSelect, handleDelete }: CardType) =>
                 aria-label={`${data.title}, ${capitalizeString(data.status)}, ${capitalizeString(data.genre)}, ${capitalizeString(data.platform)}`}
             >
                 <div className={cx({ card__banner: true, [`card__banner--${data.status}`]: true })}>
-                    {data.status && <Badge status={data.status} />}
+                    {data.status && (
+                        <Badge
+                            size="medium"
+                            status={data.status}
+                        />
+                    )}
                 </div>
                 <div className="card__content">
                     <h4 className="card__title">{data.title}</h4>
@@ -59,7 +64,10 @@ const Card = ({ data, selectedId, handleCardSelect, handleDelete }: CardType) =>
                 onClick={() => handleDelete(data._id)}
                 aria-label={`Delete ${data.title}`}
             >
-                <Icon name="trash" size="small" />
+                <Icon
+                    name="trash"
+                    size="small"
+                />
             </button>
         </div>
     );
