@@ -1,9 +1,9 @@
-import { type Request, type Response } from "express";
+import { type Request, type Response, type NextFunction } from "express";
 import { flattenError } from "zod";
 import { UserRegister, UserSignin } from "../../../../packages/types/UserTypes";
 import { findUserById, registerUser, signinUser } from "../../models/user/user.model";
 
-export const authRegisterUser = async (req: Request, res: Response) => {
+export const authRegisterUser = async (req: Request, res: Response, next: NextFunction) => {
     const result = UserRegister.safeParse(req.body);
     if (!result.success) {
         return res.status(404).send(flattenError(result.error).fieldErrors);
@@ -12,13 +12,11 @@ export const authRegisterUser = async (req: Request, res: Response) => {
         const user = await registerUser(result.data);
         res.status(200).json(user);
     } catch (error) {
-        if (error instanceof Error) {
-            res.status(400).send({ message: error.message });
-        }
+        next(error);
     }
 };
 
-export const authSignInUser = async (req: Request, res: Response) => {
+export const authSignInUser = async (req: Request, res: Response, next: NextFunction) => {
     const result = UserSignin.safeParse(req.body);
     if (!result.success) {
         return res.status(404).send(flattenError(result.error).fieldErrors);
@@ -34,9 +32,7 @@ export const authSignInUser = async (req: Request, res: Response) => {
             res.status(200).json(user);
         });
     } catch (error) {
-        if (error instanceof Error) {
-            res.status(400).send({ message: error.message });
-        }
+        next(error);
     }
 };
 

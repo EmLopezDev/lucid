@@ -1,13 +1,7 @@
 import mongoose from "mongoose";
-import {
-    type UserRegisterType,
-    type UserSigninType,
-} from "../../../../packages/types/UserTypes";
+import { type UserRegisterType, type UserSigninType } from "../../../../packages/types/UserTypes";
 import { UserModel } from "./user.mongo";
-import {
-    registerAuthCredential,
-    signInAuthCredentials,
-} from "../auth/auth.model";
+import { registerAuthCredential, signInAuthCredentials } from "../auth/auth.model";
 
 export const findUserByEmail = async (email: string) => {
     return await UserModel.findOne({ email: email });
@@ -48,7 +42,7 @@ export const signinUser = async (user: UserSigninType) => {
     const userExists = await findUserByEmail(user.email);
 
     if (!userExists) {
-        throw new Error("User doesn't exist");
+        throw new Error("One or more credentials is incorrect");
     }
 
     await signInAuthCredentials({
