@@ -33,6 +33,7 @@ describe("POST /api/v1/auth/register", () => {
         expect(res.body.first_name).toBe(testUser.first_name);
         expect(res.body.last_name).toBe(testUser.last_name);
         expect(res.body.password).toBeUndefined();
+        expect(res.body.hash).toBeUndefined();
     });
 
     it("returns 400 when the email is already registered", async () => {

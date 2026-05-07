@@ -35,6 +35,7 @@ describe("POST /api/v1/auth/signin", () => {
         expect(res.status).toBe(200);
         expect(res.body.email).toBe(testUser.email);
         expect(res.body.password).toBeUndefined();
+        expect(res.body.hash).toBeUndefined();
     });
 
     it("returns 400 when the password is incorrect", async () => {
