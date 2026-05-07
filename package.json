@@ -6,7 +6,8 @@
         "server": "npm run dev --prefix server",
         "client": "npm run dev --prefix client",
         "watch": "npm run server & npm run client",
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test:server": "npm test --prefix server",
+        "test:server:watch": "npm run test:watch --prefix server",
         "install:server": "npm install --prefix server",
         "install:client": "npm install --prefix client",
         "install": "npm run install:server && npm run install:client"
