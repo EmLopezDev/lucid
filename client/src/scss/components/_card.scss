@@ -8,6 +8,14 @@
     background-color: var(--color-bg-card);
     color: var(--color-text-primary);
     cursor: pointer;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+
+    &:focus-visible {
+        outline: u.rem(2) solid var(--color-brand);
+        outline-offset: u.rem(2);
+    }
 
     &__selected {
         background-color: var(--color-bg-card-hover);

@@ -17,15 +17,17 @@ const Card = ({ data, selectedId, handleCardSelect }: CardType) => {
         card__selected: selectedId === data._id,
     });
     return (
-        <article
+        <button
+            type="button"
             className={className}
-            key={data._id}
             onClick={() => handleCardSelect(data._id)}
+            aria-pressed={selectedId === data._id}
+            aria-label={`${data.title}, ${capitalizeString(data.status)}, ${capitalizeString(data.genre)}, ${capitalizeString(data.platform)}`}
         >
             <div className={cx({ card__banner: true, [`card__banner--${data.status}`]: true })}>
                 {data.status && <Badge status={data.status} />}
             </div>
-            <section className="card__content">
+            <div className="card__content">
                 <h4 className="card__title">{data.title}</h4>
                 <div className="card__genre">
                     <span>{capitalizeString(data.genre)}</span> &#8226;{" "}
@@ -42,7 +44,7 @@ const Card = ({ data, selectedId, handleCardSelect }: CardType) => {
                         rating={data.rating}
                     />
                 </div>
-            </section>
+            </div>
             <div className="card__hours">
                 <HoursBar
                     hours={data.hours_played}
@@ -50,7 +52,7 @@ const Card = ({ data, selectedId, handleCardSelect }: CardType) => {
                     size="small"
                 />
             </div>
-        </article>
+        </button>
     );
 };
 

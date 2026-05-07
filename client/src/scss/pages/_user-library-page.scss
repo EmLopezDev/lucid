@@ -34,12 +34,13 @@
             width: 100%;
 
             .input__container {
-                flex: 1;
+                flex: 2;
                 min-width: u.rem(260);
             }
 
             .select {
-                min-width: u.rem(200);
+                flex: 1;
+                min-width: u.rem(180);
             }
 
             .button {

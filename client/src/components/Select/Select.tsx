@@ -189,40 +189,44 @@ function Select<V = string, L extends string = string>({
 
             {/* Dropdown listbox */}
             {isOpen && (
-                <ul
-                    ref={listboxRef}
-                    id={listboxId}
-                    role="listbox"
-                    aria-labelledby={triggerId}
+                <div
                     className={cx({
-                        select__listbox: true,
-                        "select__listbox--closing": isClosing,
+                        "select__listbox-wrapper": true,
+                        "select__listbox-wrapper--closing": isClosing,
                     })}
                     onAnimationEnd={(e) => {
                         if (e.target === e.currentTarget && isClosing) finalizeClose();
                     }}
                 >
-                    {options.map((option, index) => (
-                        <li
-                            key={String(option.value)}
-                            id={`${listboxId}-option-${index}`}
-                            role="option"
-                            aria-selected={option.value === value}
-                            className={cx({
-                                select__option: true,
-                                [`select__option--${selectSize}`]: selectSize,
-                                "select__option--selected": option.value === value,
-                                "select__option--focused": index === focusedIndex,
-                            })}
-                            onClick={() => handleSelect(option)}
-                            onMouseEnter={() => setFocusedIndex(index)}
-                        >
-                            {renderOptionsLabel
-                                ? renderOptionsLabel(option.label)
-                                : capitalizeString(option.label)}
-                        </li>
-                    ))}
-                </ul>
+                    <ul
+                        ref={listboxRef}
+                        id={listboxId}
+                        role="listbox"
+                        aria-labelledby={triggerId}
+                        className="select__listbox"
+                    >
+                        {options.map((option, index) => (
+                            <li
+                                key={String(option.value)}
+                                id={`${listboxId}-option-${index}`}
+                                role="option"
+                                aria-selected={option.value === value}
+                                className={cx({
+                                    select__option: true,
+                                    [`select__option--${selectSize}`]: selectSize,
+                                    "select__option--selected": option.value === value,
+                                    "select__option--focused": index === focusedIndex,
+                                })}
+                                onClick={() => handleSelect(option)}
+                                onMouseEnter={() => setFocusedIndex(index)}
+                            >
+                                {renderOptionsLabel
+                                    ? renderOptionsLabel(option.label)
+                                    : capitalizeString(option.label)}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             )}
         </div>
     );

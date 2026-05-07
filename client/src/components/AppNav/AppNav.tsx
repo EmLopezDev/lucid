@@ -108,7 +108,7 @@ function AppNav({ isUserAuthenticated }: { isUserAuthenticated: boolean }) {
                                     Sign In
                                 </NavLink>
                                 <NavLink
-                                    className="app-layout__nav-link app-layout__nav-link--register"
+                                    className="app-layout__nav-link"
                                     to="/register"
                                 >
                                     Register
@@ -159,7 +159,7 @@ function AppNav({ isUserAuthenticated }: { isUserAuthenticated: boolean }) {
                                 Sign In
                             </NavLink>
                             <NavLink
-                                className="app-layout__nav-link app-layout__nav-link--register"
+                                className="app-layout__nav-link"
                                 to="/register"
                             >
                                 Register

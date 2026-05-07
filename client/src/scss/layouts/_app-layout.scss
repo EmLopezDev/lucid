@@ -47,16 +47,22 @@
         align-items: center;
         justify-content: center;
         gap: u.rem(4);
+        align-self: stretch;
 
         .app-layout__nav-link {
+            align-self: stretch;
+            border-radius: 0;
+            padding-block: 0;
+            min-width: u.rem(104);
+            justify-content: center;
             position: relative;
 
             &.active::after {
                 content: "";
                 position: absolute;
-                bottom: u.rem(-14);
-                left: u.rem(10);
-                right: u.rem(10);
+                bottom: 0;
+                left: 0;
+                right: 0;
                 height: u.rem(2);
                 background-color: var(--color-brand);
                 border-radius: u.rem(2) u.rem(2) 0 0;
@@ -70,15 +76,36 @@
 
     &__nav-right {
         display: flex;
-        align-items: center;
+        align-items: stretch;
         justify-content: flex-end;
         gap: u.rem(4);
+        align-self: stretch;
     }
 
     &__nav-actions {
         display: flex;
-        align-items: center;
+        align-items: stretch;
         gap: u.rem(4);
+
+        .app-layout__nav-link {
+            align-self: stretch;
+            border-radius: 0;
+            padding-block: 0;
+            min-width: u.rem(104);
+            justify-content: center;
+            position: relative;
+
+            &.active::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: u.rem(2);
+                background-color: var(--color-brand);
+                border-radius: u.rem(2) u.rem(2) 0 0;
+            }
+        }
 
         @include u.breakpoint-max("small") {
             display: none;
@@ -154,22 +181,12 @@
             font-weight: 700;
         }
 
-        &--register {
-            color: var(--color-brand);
-            border: 1px solid rgba(var(--color-brand-rgb), 0.35);
-
-            &:hover {
-                color: var(--color-brand-hover);
-                background-color: var(--color-brand-bg);
-            }
-        }
-
-        &--signout {
+&--signout {
             color: var(--color-text-tertiary);
             font-weight: 400;
 
             &:hover {
-                color: var(--color-text-secondary);
+                color: var(--color-text-primary);
                 background-color: var(--color-bg-card);
             }
         }
