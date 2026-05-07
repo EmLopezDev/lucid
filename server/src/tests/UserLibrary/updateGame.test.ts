@@ -5,11 +5,8 @@ vi.mock("connect-mongo", async () => {
     return { default: { create: () => new session.default.MemoryStore() } };
 });
 
-import request from "supertest";
-import app from "../../app";
 import { clearDatabase } from "../helpers/db";
-
-const userId = "test-user-id";
+import { createAuthenticatedAgent } from "../helpers/auth";
 
 const testGame = {
     title: "The Last of Us",
@@ -18,17 +15,19 @@ const testGame = {
     status: "playing",
 };
 
+let agent: Awaited<ReturnType<typeof createAuthenticatedAgent>>["agent"];
+let userId: string;
+
 beforeEach(async () => {
     await clearDatabase();
+    ({ agent, userId } = await createAuthenticatedAgent());
 });
 
 describe("PATCH /api/v1/user/:userId/library/:gameId", () => {
     it("returns 200 and the updated game on valid data", async () => {
-        const created = await request(app)
-            .post(`/api/v1/user/${userId}/library`)
-            .send(testGame);
+        const created = await agent.post(`/api/v1/user/${userId}/library`).send(testGame);
 
-        const res = await request(app)
+        const res = await agent
             .patch(`/api/v1/user/${userId}/library/${created.body._id}`)
             .send({ title: "The Last of Us Part II", status: "completed" });
 
@@ -37,21 +36,10 @@ describe("PATCH /api/v1/user/:userId/library/:gameId", () => {
         expect(res.body.status).toBe("completed");
     });
 
-    it("returns 404 when the game does not exist", async () => {
-        const res = await request(app)
-            .patch(`/api/v1/user/${userId}/library/000000000000000000000001`)
-            .send({ title: "Ghost Game" });
-
-        expect(res.status).toBe(404);
-        expect(res.body.message).toBe("Game not found");
-    });
-
     it("preserves untouched fields when only partial data is sent", async () => {
-        const created = await request(app)
-            .post(`/api/v1/user/${userId}/library`)
-            .send(testGame);
+        const created = await agent.post(`/api/v1/user/${userId}/library`).send(testGame);
 
-        const res = await request(app)
+        const res = await agent
             .patch(`/api/v1/user/${userId}/library/${created.body._id}`)
             .send({ title: "The Last of Us Part II" });
 
@@ -62,16 +50,40 @@ describe("PATCH /api/v1/user/:userId/library/:gameId", () => {
         expect(res.body.status).toBe(testGame.status);
     });
 
-    it("returns 400 when fields are invalid", async () => {
-        const created = await request(app)
-            .post(`/api/v1/user/${userId}/library`)
-            .send(testGame);
+    it("returns 404 when the game does not exist", async () => {
+        const res = await agent
+            .patch(`/api/v1/user/${userId}/library/000000000000000000000001`)
+            .send({ title: "Ghost Game" });
 
-        const res = await request(app)
+        expect(res.status).toBe(404);
+        expect(res.body.message).toBe("Game not found");
+    });
+
+    it("returns 400 when fields are invalid", async () => {
+        const created = await agent.post(`/api/v1/user/${userId}/library`).send(testGame);
+
+        const res = await agent
             .patch(`/api/v1/user/${userId}/library/${created.body._id}`)
             .send({ status: "invalid-status" });
 
         expect(res.status).toBe(400);
         expect(res.body.message).toBe("Invalid fields");
+    });
+
+    it("returns 403 when updating another user's game", async () => {
+        const { agent: otherAgent, userId: otherUserId } = await createAuthenticatedAgent({
+            email: "other@example.com",
+        });
+
+        const created = await otherAgent
+            .post(`/api/v1/user/${otherUserId}/library`)
+            .send(testGame);
+
+        const res = await agent
+            .patch(`/api/v1/user/${otherUserId}/library/${created.body._id}`)
+            .send({ title: "Hacked Title" });
+
+        expect(res.status).toBe(403);
+        expect(res.body.message).toBe("Forbidden");
     });
 });

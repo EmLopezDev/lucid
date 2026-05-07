@@ -5,6 +5,6 @@ import UserLibraryRouter from "./user-library/user-library.router";
 const api = express.Router();
 
 api.use("/auth", AuthRouter);
-api.use("/user", UserLibraryRouter);
+api.use("/user/:userId", UserLibraryRouter);
 
 export default api;

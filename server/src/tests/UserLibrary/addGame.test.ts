@@ -1,14 +1,11 @@
 import { vi, describe, it, expect, beforeEach } from "vitest";
-import request from "supertest";
-import app from "../../app";
 import { clearDatabase } from "../helpers/db";
+import { createAuthenticatedAgent } from "../helpers/auth";
 
 vi.mock("connect-mongo", async () => {
     const session = await import("express-session");
     return { default: { create: () => new session.default.MemoryStore() } };
 });
-
-const userId = "test-user-id";
 
 const testGame = {
     title: "The Last of Us",
@@ -17,13 +14,17 @@ const testGame = {
     status: "playing",
 };
 
+let agent: Awaited<ReturnType<typeof createAuthenticatedAgent>>["agent"];
+let userId: string;
+
 beforeEach(async () => {
     await clearDatabase();
+    ({ agent, userId } = await createAuthenticatedAgent());
 });
 
 describe("POST /api/v1/user/:userId/library", () => {
     it("returns 201 and the created game on valid data", async () => {
-        const res = await request(app).post(`/api/v1/user/${userId}/library`).send(testGame);
+        const res = await agent.post(`/api/v1/user/${userId}/library`).send(testGame);
 
         expect(res.status).toBe(201);
         expect(res.body.title).toBe(testGame.title);
@@ -35,7 +36,7 @@ describe("POST /api/v1/user/:userId/library", () => {
     });
 
     it("returns 400 when required fields are missing", async () => {
-        const res = await request(app)
+        const res = await agent
             .post(`/api/v1/user/${userId}/library`)
             .send({ title: "Incomplete Game" });
 
@@ -44,7 +45,7 @@ describe("POST /api/v1/user/:userId/library", () => {
     });
 
     it("returns 400 when status is invalid", async () => {
-        const res = await request(app)
+        const res = await agent
             .post(`/api/v1/user/${userId}/library`)
             .send({ ...testGame, status: "unknown" });
 
@@ -53,7 +54,7 @@ describe("POST /api/v1/user/:userId/library", () => {
     });
 
     it("returns 400 when genre is invalid", async () => {
-        const res = await request(app)
+        const res = await agent
             .post(`/api/v1/user/${userId}/library`)
             .send({ ...testGame, genre: "unknown" });
 
@@ -62,11 +63,22 @@ describe("POST /api/v1/user/:userId/library", () => {
     });
 
     it("returns 400 when platform is invalid", async () => {
-        const res = await request(app)
+        const res = await agent
             .post(`/api/v1/user/${userId}/library`)
             .send({ ...testGame, platform: "unknown" });
 
         expect(res.status).toBe(400);
         expect(res.body.message).toBe("Invalid fields");
+    });
+
+    it("returns 403 when posting to another user's library", async () => {
+        const { userId: otherUserId } = await createAuthenticatedAgent({
+            email: "other@example.com",
+        });
+
+        const res = await agent.post(`/api/v1/user/${otherUserId}/library`).send(testGame);
+
+        expect(res.status).toBe(403);
+        expect(res.body.message).toBe("Forbidden");
     });
 });

@@ -5,12 +5,17 @@ import {
     deleteUserLibraryGameController,
     patchUserLibraryGameController,
 } from "./user-library.controller";
+import { requireAuth } from "../../middleware/requireAuth";
+import { requireOwner } from "../../middleware/requireOwner";
 
 const UserLibraryRouter = express.Router({ mergeParams: true });
 
-UserLibraryRouter.get("/:userId/library", getUserLibraryController);
-UserLibraryRouter.post("/:userId/library", postUserLibraryGameController);
-UserLibraryRouter.patch("/:userId/library/:gameId", patchUserLibraryGameController);
-UserLibraryRouter.delete("/:userId/library/:gameId", deleteUserLibraryGameController);
+UserLibraryRouter.use(requireAuth);
+UserLibraryRouter.use(requireOwner);
+
+UserLibraryRouter.get("/library", getUserLibraryController);
+UserLibraryRouter.post("/library", postUserLibraryGameController);
+UserLibraryRouter.patch("/library/:gameId", patchUserLibraryGameController);
+UserLibraryRouter.delete("/library/:gameId", deleteUserLibraryGameController);
 
 export default UserLibraryRouter;
