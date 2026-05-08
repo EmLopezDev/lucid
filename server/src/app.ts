@@ -1,4 +1,6 @@
+import * as Sentry from "@sentry/node";
 import express from "express";
+
 import helmet from "helmet";
 import api from "./routes/api";
 import { corsMiddleware } from "./middleware/cors";
@@ -7,6 +9,7 @@ import { httpLogger } from "./middleware/httpLogger";
 import { sanitizeBody } from "./middleware/sanitize";
 import { sessionMiddleware } from "./middleware/session";
 import { errorHandler } from "./middleware/errorHandler";
+import { sentryUser } from "./middleware/sentryUser";
 
 const app = express();
 
@@ -28,9 +31,11 @@ app.use(express.json({ limit: "10kb" }));
 app.use(sanitizeBody);
 
 app.use(sessionMiddleware);
+app.use(sentryUser);
 
 app.use("/api/v1", api);
 
+Sentry.setupExpressErrorHandler(app);
 app.use(errorHandler);
 
 export default app;

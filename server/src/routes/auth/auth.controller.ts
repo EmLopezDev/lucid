@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/node";
 import { type Request, type Response, type NextFunction } from "express";
 import { flattenError } from "zod";
 import { UserRegister, UserSignin } from "../../../../packages/types/UserTypes";
@@ -41,6 +42,7 @@ export const authSignInUser = async (req: Request, res: Response, next: NextFunc
 
 export const authSignOutUser = (req: Request, res: Response) => {
     req.session.destroy((err) => {
+        Sentry.setUser(null);
         if (err) {
             return res.status(500).json({ message: "Failed to sign out" });
         }
@@ -49,7 +51,7 @@ export const authSignOutUser = (req: Request, res: Response) => {
     });
 };
 
-export const authGetSession = async (req: Request, res: Response) => {
+export const authGetSession = async (req: Request, res: Response, next: NextFunction) => {
     if (!req.session.userId) {
         return res.status(401).json({ message: "Not authenticated" });
     }
@@ -61,7 +63,6 @@ export const authGetSession = async (req: Request, res: Response) => {
         }
         res.status(200).json(user);
     } catch (error) {
-        req.log.error(error);
-        res.status(500).json({ message: "Internal server error" });
+        next(error);
     }
 };

@@ -24,6 +24,7 @@ const config = {
     ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS?.split(",") ?? ["http://localhost:5173"],
     SESSION_SECRET: process.env.SESSION_SECRET,
     NODE_ENV: process.env.NODE_ENV || "development",
+    SENTRY_DSN: process.env.SENTRY_DSN,
 };
 
 export default config;
