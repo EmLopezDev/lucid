@@ -60,7 +60,8 @@ export const authGetSession = async (req: Request, res: Response) => {
             return res.status(401).json({ message: "Not authenticated" });
         }
         res.status(200).json(user);
-    } catch {
+    } catch (error) {
+        req.log.error(error);
         res.status(500).json({ message: "Internal server error" });
     }
 };

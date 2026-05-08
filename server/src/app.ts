@@ -1,13 +1,14 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
-import morgan from "morgan";
+import { pinoHttp } from "pino-http";
+import logger from "./services/logger";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import api from "./routes/api";
 import config from "./config";
 import rateLimit from "express-rate-limit";
-import mongoSanitize from "express-mongo-sanitize";
+import { sanitizeBody } from "./middleware/sanitize";
 import { errorHandler } from "./middleware/errorHandler";
 import { mongoClientPromise } from "./services/mongo";
 
@@ -30,28 +31,11 @@ app.options(/^\/api\/v1\//, cors(corsOptions));
 app.use("/api/v1", cors(corsOptions));
 app.use(helmet());
 
-app.use(
-    morgan(`
-        {
-            METHOD => :method
-            URL => :url
-            STATUS => :status
-            RES-TYPE => :res[content-type]
-            RES-TIME => :response-time ms
-            USER AGENT => :user-agent
-        }
-        `),
-);
+app.use(pinoHttp({ logger }));
 
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 app.use(express.json({ limit: "10kb" }));
-app.use(
-    mongoSanitize({
-        onSanitize: ({ req, key }) => {
-            console.warn(`Sanitized key: ${key} from ${req.path}`);
-        },
-    }),
-);
+app.use(sanitizeBody);
 
 app.use(
     session({

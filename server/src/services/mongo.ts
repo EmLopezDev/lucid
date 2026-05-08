@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
 import config from "../config";
+import logger from "./logger";
 
 mongoose.connection.once("open", () => {
-    console.log("MongoDB connection ready!!");
+    logger.info("MongoDB connection ready!!");
 });
 
 mongoose.connection.on("error", (err) => {
-    console.error(err);
+    logger.error(err);
 });
 
 export const mongoClientPromise = mongoose
@@ -14,7 +15,7 @@ export const mongoClientPromise = mongoose
     .then((m) => m.connection.getClient());
 
 mongoClientPromise.catch((err) => {
-    console.error("MongoDB connection failed:", err);
+    logger.error("MongoDB connection failed:", err);
 });
 
 export async function mongoDisconnect() {
