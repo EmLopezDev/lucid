@@ -1,4 +1,5 @@
 import { defineConfig } from "vitest/config";
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 import react from "@vitejs/plugin-react";
 import path from "path";
 
@@ -12,7 +13,7 @@ function cspPlugin() {
                 "script-src 'self'",
                 "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
                 "font-src 'self' https://fonts.gstatic.com",
-                "connect-src 'self'",
+                "connect-src 'self' https://sentry.io https://*.sentry.io",
                 "img-src 'self' data:",
                 "object-src 'none'",
                 "base-uri 'self'",
@@ -20,7 +21,7 @@ function cspPlugin() {
             ].join("; ");
             return html.replace(
                 "<head>",
-                `<head>\n    <meta http-equiv="Content-Security-Policy" content="${csp}" />`
+                `<head>\n    <meta http-equiv="Content-Security-Policy" content="${csp}" />`,
             );
         },
     };
@@ -28,7 +29,15 @@ function cspPlugin() {
 
 // https://vite.dev/config/
 export default defineConfig({
-    plugins: [react(), cspPlugin()],
+    plugins: [
+        react(),
+        cspPlugin(),
+        sentryVitePlugin({
+            org: process.env.SENTRY_ORG,
+            project: process.env.SENTRY_PROJECT,
+            authToken: process.env.SENTRY_AUTH_TOKEN,
+        }),
+    ],
     base: "/",
     resolve: {
         alias: {
@@ -46,6 +55,7 @@ export default defineConfig({
     build: {
         outDir: "dist",
         emptyOutDir: true,
+        sourcemap: true,
     },
     test: {
         globals: true,
