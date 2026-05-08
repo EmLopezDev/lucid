@@ -6,9 +6,10 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import api from "./routes/api";
 import config from "./config";
+import rateLimit from "express-rate-limit";
+import mongoSanitize from "express-mongo-sanitize";
 import { errorHandler } from "./middleware/errorHandler";
 import { mongoClientPromise } from "./services/mongo";
-import rateLimit from "express-rate-limit";
 
 const app = express();
 
@@ -42,6 +43,13 @@ app.use(
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(
+    mongoSanitize({
+        onSanitize: ({ req, key }) => {
+            console.warn(`Sanitized key: ${key} from ${req.path}`);
+        },
+    }),
+);
 
 app.use(
     session({
