@@ -1,9 +1,9 @@
 import bcrypt from "bcryptjs";
-import "../config";
-import { mongoClientPromise, mongoDisconnect } from "../services/mongo";
-import { UserModel } from "../models/user/user.mongo";
-import { AuthModel } from "../models/auth/auth.mongo";
-import { UserLibraryModel } from "../models/user-library/user-library.mongo";
+import "../src/config";
+import { mongoClientPromise, mongoDisconnect } from "../src/services/mongo";
+import { UserModel } from "../src/models/user/user.mongo";
+import { AuthModel } from "../src/models/auth/auth.mongo";
+import { UserLibraryModel } from "../src/models/user-library/user-library.mongo";
 
 const SEED_EMAIL = "dev@lucid.com";
 const SEED_PASSWORD = "password123";

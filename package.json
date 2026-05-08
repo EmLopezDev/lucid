@@ -13,7 +13,8 @@
         "test:server:watch": "npm run test:watch --prefix server",
         "install:server": "npm install --prefix server",
         "install:client": "npm install --prefix client",
-        "install": "npm run install:server && npm run install:client"
+        "install": "npm run install:server && npm run install:client",
+        "rotate:mongo": "bash server/scripts/rotate-mongo-password.sh"
     },
     "keywords": [],
     "author": "",

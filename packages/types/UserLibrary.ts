@@ -55,32 +55,34 @@ export const UserLibraryData = z.object({
 export type UserLibraryDataType = z.infer<typeof UserLibraryData>;
 
 export const GetUserLibraryParams = z.object({
-    userId: z.string(),
+    userId: z.string().regex(/^[a-f0-9]{24}$/),
 });
 
 export const UserLibraryGameIdParams = z.object({
-    userId: z.string(),
-    gameId: z.string(),
+    userId: z.string().regex(/^[a-f0-9]{24}$/),
+    gameId: z.string().regex(/^[a-f0-9]{24}$/),
 });
 
-export const PatchUserLibraryGameBody = z.object({
-    title: z.string(),
-    genre: Genre,
-    platform: Platform,
-    favorite: z.boolean(),
-    date_played: z.string().nullable(),
-    date_purchased: z.string().nullable(),
-    hours_played: z.number().min(0).nullable(),
-    rating: z.number().min(0).max(5).nullable(),
-    comment: z.string().nullable(),
-    status: Status,
-    price: z.string().nullable(),
-}).partial();
+export const PatchUserLibraryGameBody = z
+    .object({
+        title: z.string().max(200),
+        genre: Genre,
+        platform: Platform,
+        favorite: z.boolean(),
+        date_played: z.string().nullable(),
+        date_purchased: z.string().nullable(),
+        hours_played: z.number().min(0).nullable(),
+        rating: z.number().min(0).max(5).nullable(),
+        comment: z.string().max(200).nullable(),
+        status: Status,
+        price: z.string().max(200).nullable(),
+    })
+    .partial();
 
 export type PatchUserLibraryGameBodyType = z.infer<typeof PatchUserLibraryGameBody>;
 
 export const PostUserLibraryGameBody = z.object({
-    title: z.string(),
+    title: z.string().max(200),
     genre: Genre,
     platform: Platform,
     status: Status,
@@ -89,8 +91,8 @@ export const PostUserLibraryGameBody = z.object({
     date_purchased: z.string().nullable().default(null),
     hours_played: z.number().min(0).nullable().default(null),
     rating: z.number().min(0).max(5).nullable().default(null),
-    comment: z.string().nullable().default(null),
-    price: z.string().nullable().default(null),
+    comment: z.string().max(200).nullable().default(null),
+    price: z.string().max(200).nullable().default(null),
 });
 
 export type PostUserLibraryGameBodyType = z.infer<typeof PostUserLibraryGameBody>;
