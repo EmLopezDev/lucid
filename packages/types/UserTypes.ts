@@ -9,7 +9,10 @@ export const BaseUser = z.object({
         error: "Missing or Invalid field",
     }),
     email: z.email(),
-    password: z.string().min(8, { error: "Must be a minimum of 8 characters" }),
+    password: z
+        .string()
+        .min(8, { error: "Must be a minimum of 8 characters" })
+        .max(72, { error: "Exceeded maximum characters" }),
     created_at: z.date(),
     updated_at: z.date().nullable().default(null),
     deleted_at: z.date().nullable().default(null),

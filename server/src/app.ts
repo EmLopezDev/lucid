@@ -16,14 +16,14 @@ const app = express();
 const corsOptions = {
     origin: config.ALLOWED_ORIGINS,
     credentials: true,
-    methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
 };
 
-const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 10 });
+const generalLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100 });
 
 app.set("trust proxy", 1);
-app.use("/api/v1/auth", authLimiter);
+app.use("/api/v1", generalLimiter);
 app.options(/^\/api\/v1\//, cors(corsOptions));
 app.use("/api/v1", cors(corsOptions));
 app.use(helmet());

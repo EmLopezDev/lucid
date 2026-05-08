@@ -8,7 +8,7 @@ export const findUserByEmail = async (email: string) => {
 };
 
 export const findUserById = async (id: string) => {
-    return await UserModel.findById(id);
+    return await UserModel.findById(id).select("_id first_name last_name email created_at");
 };
 
 export const registerUser = async (user: UserRegisterType) => {
@@ -31,7 +31,7 @@ export const registerUser = async (user: UserRegisterType) => {
     } catch (error) {
         if (error instanceof Error) {
             await session.abortTransaction();
-            throw new Error(error.name);
+            throw new Error("Unable to register");
         }
     } finally {
         session.endSession();
