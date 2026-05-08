@@ -65,7 +65,7 @@ export const UserLibraryGameIdParams = z.object({
 
 export const PatchUserLibraryGameBody = z
     .object({
-        title: z.string().max(200),
+        title: z.string().min(1).max(200),
         genre: Genre,
         platform: Platform,
         favorite: z.boolean(),
@@ -82,7 +82,7 @@ export const PatchUserLibraryGameBody = z
 export type PatchUserLibraryGameBodyType = z.infer<typeof PatchUserLibraryGameBody>;
 
 export const PostUserLibraryGameBody = z.object({
-    title: z.string().max(200),
+    title: z.string().min(1).max(200),
     genre: Genre,
     platform: Platform,
     status: Status,

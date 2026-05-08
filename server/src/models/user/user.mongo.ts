@@ -10,7 +10,7 @@ const UserSchema = new Schema<UserType>(
             required: true,
             unique: [true, "Account with that email already exists"],
         },
-        created_at: { type: Date, required: true, default: new Date() },
+        created_at: { type: Date, required: true, default: () => new Date() },
         updated_at: { type: Date, default: null },
         deleted_at: { type: Date, default: null },
     },

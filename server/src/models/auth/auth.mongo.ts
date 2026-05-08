@@ -5,7 +5,7 @@ const AuthSchema = new Schema<AuthType>(
     {
         user_id: { type: String, required: true },
         hash: { type: String, required: true },
-        created_at: { type: Date, required: true, default: new Date() },
+        created_at: { type: Date, required: true, default: () => new Date() },
         updated_at: { type: Date, default: null },
         deleted_at: { type: Date, default: null },
     },

@@ -52,7 +52,10 @@ export interface UserLibraryPageContextType {
     onOpenAddGameModal: () => void;
     onCloseAddGameModal: () => void;
     onAddGame: (data: PostUserLibraryGameBodyType) => Promise<void>;
-    onPatchGame: (id: string, data: PatchUserLibraryGameBodyType) => Promise<UserLibraryDataType | null>;
+    onPatchGame: (
+        id: string,
+        data: PatchUserLibraryGameBodyType,
+    ) => Promise<UserLibraryDataType | null>;
 }
 
 export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) => {
@@ -123,10 +126,9 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
     const onDeleteGameById = useCallback(
         async (id: string) => {
             try {
-                const response = await fetch(
-                    `${API_URL}/user/${currentUser?._id}/library/${id}`,
-                    { method: "DELETE" },
-                );
+                const response = await fetch(`${API_URL}/user/${currentUser?._id}/library/${id}`, {
+                    method: "DELETE",
+                });
                 if (!response.ok) throw new Error("Failed to delete game");
                 setLibraryData((prev) => prev.filter((d) => d._id !== id));
                 setSelectedCard(null);
@@ -144,7 +146,10 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
     }, []);
 
     const onPatchGame = useCallback(
-        async (id: string, data: PatchUserLibraryGameBodyType): Promise<UserLibraryDataType | null> => {
+        async (
+            id: string,
+            data: PatchUserLibraryGameBodyType,
+        ): Promise<UserLibraryDataType | null> => {
             try {
                 const response = await fetch(`${API_URL}/user/${currentUser?._id}/library/${id}`, {
                     method: "PATCH",
@@ -190,7 +195,9 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
         const fetchUserLibraryGames = async () => {
             setIsLoading(true);
             try {
-                const response = await fetch(`${API_URL}/user/${currentUser?._id}/library`);
+                const response = await fetch(`${API_URL}/user/${currentUser?._id}/library`, {
+                    credentials: "include",
+                });
                 const data = await response.json();
                 setLibraryData(data);
             } catch (error) {
