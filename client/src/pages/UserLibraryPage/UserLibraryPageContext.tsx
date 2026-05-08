@@ -128,13 +128,14 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
             try {
                 const response = await fetch(`${API_URL}/user/${currentUser?._id}/library/${id}`, {
                     method: "DELETE",
+                    credentials: "include",
                 });
                 if (!response.ok) throw new Error("Failed to delete game");
                 setLibraryData((prev) => prev.filter((d) => d._id !== id));
                 setSelectedCard(null);
                 setIsDetailClosing(false);
             } catch (error) {
-                console.error(error);
+                if (import.meta.env.DEV) console.error(error instanceof Error ? error.message : error);
             }
         },
         [currentUser?._id],
@@ -153,6 +154,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
             try {
                 const response = await fetch(`${API_URL}/user/${currentUser?._id}/library/${id}`, {
                     method: "PATCH",
+                    credentials: "include",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(data),
                 });
@@ -162,7 +164,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
                 setSelectedCard(updatedGame);
                 return updatedGame;
             } catch (error) {
-                console.error(error);
+                if (import.meta.env.DEV) console.error(error instanceof Error ? error.message : error);
                 return null;
             }
         },
@@ -177,6 +179,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
             try {
                 const response = await fetch(`${API_URL}/user/${currentUser?._id}/library`, {
                     method: "POST",
+                    credentials: "include",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(data),
                 });
@@ -185,7 +188,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
                 setLibraryData((prev) => [newGame, ...prev]);
                 setIsAddGameModalOpen(false);
             } catch (error) {
-                console.error(error);
+                if (import.meta.env.DEV) console.error(error instanceof Error ? error.message : error);
             }
         },
         [currentUser?._id],
@@ -201,7 +204,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
                 const data = await response.json();
                 setLibraryData(data);
             } catch (error) {
-                console.error(error);
+                if (import.meta.env.DEV) console.error(error instanceof Error ? error.message : error);
             } finally {
                 setIsLoading(false);
             }
