@@ -97,10 +97,7 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
                     body: JSON.stringify(d),
                 });
                 if (response.ok) {
-                    const data = await response.json();
-                    if (data) {
-                        navigate("/signin");
-                    }
+                    navigate("/signin");
                 } else {
                     const error = await response.json();
                     setFormDataError(error.message);

@@ -10,7 +10,7 @@ export const authRegisterUser = async (req: Request, res: Response, next: NextFu
     }
     try {
         await registerUser(result.data);
-        res.status(200);
+        res.status(201).end();
     } catch (error) {
         next(error);
     }

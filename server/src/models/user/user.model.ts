@@ -30,11 +30,9 @@ export const registerUser = async (user: UserRegisterType) => {
         await session.commitTransaction();
 
         return registeredUser;
-    } catch (error) {
-        if (error instanceof Error) {
-            await session.abortTransaction();
-            throw new Error("Unable to register");
-        }
+    } catch {
+        await session.abortTransaction();
+        throw new Error("Unable to register");
     } finally {
         session.endSession();
     }

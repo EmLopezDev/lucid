@@ -3,7 +3,7 @@ export const nameCheck = (str: string) => {
 };
 
 export const emailCheck = (str: string) => {
-    return /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(str);
+    return /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(str);
 };
 
 export const capitalizeString = (str: string) => {
