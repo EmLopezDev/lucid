@@ -2,10 +2,10 @@ import * as z from "zod";
 
 export const BaseUser = z.object({
     _id: z.uuid(),
-    first_name: z.string().regex(/^[a-zA-Z\s]+$/, {
+    first_name: z.string().max(50).regex(/^[a-zA-Z\s]+$/, {
         error: "Missing or Invalid field",
     }),
-    last_name: z.string().regex(/^[a-zA-Z\s]+$/, {
+    last_name: z.string().max(50).regex(/^[a-zA-Z\s]+$/, {
         error: "Missing or Invalid field",
     }),
     email: z.email(),

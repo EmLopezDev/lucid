@@ -69,15 +69,18 @@ export const PatchUserLibraryGameBody = z
         genre: Genre,
         platform: Platform,
         favorite: z.boolean(),
-        date_played: z.string().nullable(),
-        date_purchased: z.string().nullable(),
-        hours_played: z.number().min(0).nullable(),
+        date_played: z.iso.date().nullable(),
+        date_purchased: z.iso.date().nullable(),
+        hours_played: z.number().min(0).max(99999).nullable(),
         rating: z.number().min(0).max(5).nullable(),
         comment: z.string().max(200).nullable(),
         status: Status,
         price: z.string().max(200).nullable(),
     })
-    .partial();
+    .partial()
+    .refine((data) => Object.keys(data).length > 0, {
+        error: "At least one field must be provided",
+    });
 
 export type PatchUserLibraryGameBodyType = z.infer<typeof PatchUserLibraryGameBody>;
 
@@ -87,9 +90,9 @@ export const PostUserLibraryGameBody = z.object({
     platform: Platform,
     status: Status,
     favorite: z.boolean().default(false),
-    date_played: z.string().nullable().default(null),
-    date_purchased: z.string().nullable().default(null),
-    hours_played: z.number().min(0).nullable().default(null),
+    date_played: z.iso.date().nullable().default(null),
+    date_purchased: z.iso.date().nullable().default(null),
+    hours_played: z.number().min(0).max(99999).nullable().default(null),
     rating: z.number().min(0).max(5).nullable().default(null),
     comment: z.string().max(200).nullable().default(null),
     price: z.string().max(200).nullable().default(null),

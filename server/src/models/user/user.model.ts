@@ -4,7 +4,9 @@ import { UserModel } from "./user.mongo";
 import { registerAuthCredential, signInAuthCredentials } from "../auth/auth.model";
 
 export const findUserByEmail = async (email: string) => {
-    return await UserModel.findOne({ email: email });
+    return await UserModel.findOne({ email: email }).select(
+        "_id first_name last_name email created_at",
+    );
 };
 
 export const findUserById = async (id: string) => {

@@ -9,8 +9,8 @@ export const authRegisterUser = async (req: Request, res: Response, next: NextFu
         return res.status(400).send(flattenError(result.error).fieldErrors);
     }
     try {
-        const user = await registerUser(result.data);
-        res.status(200).json(user);
+        await registerUser(result.data);
+        res.status(200);
     } catch (error) {
         next(error);
     }
