@@ -23,13 +23,16 @@ export const authSignInUser = async (req: Request, res: Response, next: NextFunc
     }
     try {
         const user = await signinUser(result.data);
-        req.session.userId = String(user._id);
-        req.session.save((err) => {
-            if (err) {
-                res.status(500).json({ message: "Failed to create session" });
-                return;
-            }
-            res.status(200).json(user);
+        req.session.regenerate((err) => {
+            if (err) return next(err);
+            req.session.userId = String(user._id);
+            req.session.save((err) => {
+                if (err) {
+                    res.status(500).json({ message: "Failed to create session" });
+                    return;
+                }
+                res.status(200).json(user);
+            });
         });
     } catch (error) {
         next(error);
@@ -41,7 +44,7 @@ export const authSignOutUser = (req: Request, res: Response) => {
         if (err) {
             return res.status(500).json({ message: "Failed to sign out" });
         }
-        res.clearCookie("connect.sid");
+        res.clearCookie("sid");
         res.json({ message: "Signed out successfully" });
     });
 };
