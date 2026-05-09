@@ -6,7 +6,7 @@ import Form from "../../components/Form/Form";
 import Input from "../../components/Input/Input";
 
 const SignInPageContent = () => {
-    const { errors, formDataError, onEmailChange, onPasswordChange, onSubmitForm, onResetForm } =
+    const { errors, formDataError, email, password, onEmailChange, onPasswordChange, onSubmitForm, onResetForm } =
         useSignInPageContext();
 
     const showFormDataError = useCallback(() => {
@@ -35,6 +35,7 @@ const SignInPageContent = () => {
                 label="Email"
                 type="email"
                 inputSize="large"
+                value={email}
                 onChange={onEmailChange}
                 errorText={errors.email}
             />
@@ -42,6 +43,7 @@ const SignInPageContent = () => {
                 label="Password"
                 type="password"
                 inputSize="large"
+                value={password}
                 onChange={onPasswordChange}
                 errorText={errors.password}
             />

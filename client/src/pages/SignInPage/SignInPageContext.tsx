@@ -2,11 +2,12 @@ import {
     useState,
     useCallback,
     useMemo,
+    useEffect,
     type ReactNode,
     type ChangeEvent,
     type SubmitEvent,
 } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { type UserSigninType } from "../../../../packages/types";
 import { SignInPageContext } from "./useSignInPageContext";
 import { emailCheck } from "../../lib/string";
@@ -35,6 +36,8 @@ export interface SignInPageContextType {
     isSubmitting: boolean;
     formDataError: string;
     errors: UserSigninType;
+    email: string;
+    password: string;
     onEmailChange: (e: ChangeEvent<HTMLInputElement>) => void;
     onPasswordChange: (e: ChangeEvent<HTMLInputElement>) => void;
     onSubmitForm: (e: SubmitEvent<HTMLFormElement>) => void;
@@ -49,6 +52,13 @@ export const SignInPageProvider = ({ children }: { children: ReactNode }) => {
 
     const { setUser } = useUserContext();
     const navigation = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        if (location.state?.demo) {
+            setFormData({ email: "demo@lucid.com", password: "lucid-demo" });
+        }
+    }, [location.state]);
 
     const onEmailChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setFormData((prevState: UserSigninType) => {
@@ -120,6 +130,8 @@ export const SignInPageProvider = ({ children }: { children: ReactNode }) => {
             isSubmitting,
             formDataError,
             errors,
+            email: formData.email,
+            password: formData.password,
             onEmailChange,
             onPasswordChange,
             onSubmitForm,
