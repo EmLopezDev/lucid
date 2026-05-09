@@ -6,8 +6,8 @@ import path from "path";
 function cspPlugin() {
     return {
         name: "csp",
-        transformIndexHtml(html: string, ctx: { command: string }) {
-            if (ctx.command !== "build") return html;
+        transformIndexHtml(html: string, ctx: { bundle?: object }) {
+            if (!ctx.bundle) return html;
             const csp = [
                 "default-src 'self'",
                 "script-src 'self'",
