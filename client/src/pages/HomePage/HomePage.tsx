@@ -10,7 +10,7 @@ function GameCover({ title, id }: { title: string; id: number }) {
             className="home-page__cover"
             src={`${STEAM_CDN}/${id}/header.jpg`}
             alt={title}
-            loading="lazy"
+            loading="eager"
             draggable={false}
         />
     );
