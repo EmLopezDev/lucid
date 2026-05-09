@@ -4,8 +4,8 @@ import { UserModel } from "../src/models/user/user.mongo";
 import { AuthModel } from "../src/models/auth/auth.mongo";
 import { UserLibraryModel } from "../src/models/user-library/user-library.mongo";
 
-const SEED_EMAIL = "dev@lucid.com";
-const SEED_PASSWORD = "password123";
+const DEMO_EMAIL = "demo@lucid.com";
+const DEMO_PASSWORD = "lucid-demo";
 
 const libraryGames = (userId: string) => [
     // --- Completed ---
@@ -474,40 +474,44 @@ const libraryGames = (userId: string) => [
     },
 ];
 
-const seed = async () => {
+const seedDemo = async () => {
     await mongoClientPromise;
     console.log("Connected to MongoDB");
 
-    await Promise.all([
-        UserModel.deleteMany({}),
-        AuthModel.deleteMany({}),
-        UserLibraryModel.deleteMany({}),
-    ]);
-    console.log("Cleared existing data");
+    const existing = await UserModel.findOne({ email: DEMO_EMAIL });
+
+    if (existing) {
+        await Promise.all([
+            AuthModel.deleteMany({ user_id: String(existing._id) }),
+            UserLibraryModel.deleteMany({ user_id: String(existing._id) }),
+        ]);
+        await UserModel.deleteOne({ _id: existing._id });
+        console.log("Removed existing demo user");
+    }
 
     const user = await UserModel.create({
-        first_name: "Dev",
+        first_name: "Demo",
         last_name: "User",
-        email: SEED_EMAIL,
+        email: DEMO_EMAIL,
         created_at: new Date(),
         updated_at: null,
         deleted_at: null,
     });
 
-    const hash = await bcrypt.hash(SEED_PASSWORD, 12);
+    const hash = await bcrypt.hash(DEMO_PASSWORD, 12);
     await AuthModel.create({ user_id: String(user._id), hash });
 
     await UserLibraryModel.insertMany(libraryGames(String(user._id)));
 
-    console.log(`\nSeed complete`);
-    console.log(`  Email:    ${SEED_EMAIL}`);
-    console.log(`  Password: ${SEED_PASSWORD}`);
+    console.log(`\nDemo seed complete`);
+    console.log(`  Email:    ${DEMO_EMAIL}`);
+    console.log(`  Password: ${DEMO_PASSWORD}`);
     console.log(`  Games:    ${libraryGames("").length} entries\n`);
 
     await mongoDisconnect();
 };
 
-seed().catch((err) => {
-    console.error("Seed failed:", err);
+seedDemo().catch((err) => {
+    console.error("Demo seed failed:", err);
     process.exit(1);
 });

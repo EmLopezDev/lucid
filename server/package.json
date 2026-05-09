@@ -6,7 +6,8 @@
     "scripts": {
         "start": "node dist/server.js",
         "dev": "nodemon --exec tsx src/server.ts",
-        "seed": "tsx scripts/seed.ts",
+        "seed": "node --env-file=.env --import tsx scripts/seed.ts",
+        "seed:demo": "node --env-file=.env --import tsx scripts/seed-demo.ts",
         "test": "vitest run",
         "test:watch": "vitest"
     },
