@@ -86,12 +86,12 @@ function AppNav({ isUserAuthenticated }: { isUserAuthenticated: boolean }) {
                             >
                                 Library
                             </NavLink>
-                            <NavLink
+                            {/* <NavLink
                                 className="app-layout__nav-link"
                                 to="/user/dashboard"
                             >
                                 Dashboard
-                            </NavLink>
+                            </NavLink> */}
                         </>
                     )}
                 </div>

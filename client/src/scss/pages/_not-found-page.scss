@@ -1,0 +1,58 @@
+@use "../utils/" as u;
+
+.not-found-page {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+
+    &__glow {
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: u.rem(600);
+        height: u.rem(600);
+        background: radial-gradient(circle, rgba(var(--color-brand-rgb), 0.11) 0%, transparent 65%);
+        pointer-events: none;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: u.rem(16);
+        padding: u.rem(24);
+        position: relative;
+        z-index: 1;
+        animation: slide-in-up 0.4s ease both;
+    }
+
+    &__code {
+        font-size: u.rem(96);
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: -2px;
+        background: linear-gradient(135deg, var(--color-brand) 0%, hsl(270, 70%, 78%) 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    &__heading {
+        font-size: u.rem(24);
+        font-weight: 700;
+        color: var(--color-text-primary);
+    }
+
+    &__message {
+        font-size: u.rem(14);
+        color: var(--color-text-secondary);
+        max-width: u.rem(340);
+        line-height: 1.65;
+        margin-bottom: u.rem(8);
+    }
+}
