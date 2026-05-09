@@ -18,7 +18,7 @@ const RegisterPageContent = () => {
     } = useRegisterPageContext();
 
     const showFormDataError = useCallback(() => {
-        if (formDataError === "User already exist") {
+        if (formDataError === "User already exists") {
             return (
                 <>
                     <span className="register-page__form-error">

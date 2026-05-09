@@ -41,14 +41,13 @@
 // --- Card skeleton ---
 
 .skeleton-card {
-    min-height: u.em(110);
     border: u.em(1) solid rgba(var(--color-brand-rgb), 0.1);
     border-radius: u.em(12);
     overflow: hidden;
     background-color: var(--color-bg-card);
 
     &__banner {
-        height: u.em(110);
+        height: u.em(200);
         background: linear-gradient(
             90deg,
             var(--color-bg-card) 25%,
@@ -84,7 +83,9 @@
     color: var(--color-text-primary);
 
     &__image {
-        height: u.em(180);
+        aspect-ratio: 460 / 215;
+        width: 100%;
+        min-height: u.rem(160);
         background: linear-gradient(
             90deg,
             var(--color-bg-card) 25%,
@@ -93,10 +94,6 @@
         );
         background-size: 200% 100%;
         animation: skeleton-shimmer 1.5s ease-in-out infinite;
-
-        @include u.breakpoint-max("small") {
-            height: u.em(220);
-        }
 
         @media (prefers-reduced-motion: reduce) {
             animation: none;

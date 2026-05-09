@@ -43,14 +43,31 @@
     position: relative;
     height: 100%;
 
+    &__image-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
     &__image {
-        height: u.em(180);
+        aspect-ratio: 460 / 215;
+        width: 100%;
+        min-height: u.rem(160);
         display: flex;
         align-items: center;
         justify-content: center;
+        position: relative;
+        overflow: hidden;
 
-        @include u.breakpoint-max("small") {
-            height: u.em(220);
+        &--has-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 30%, rgba(0, 0, 0, 0.55) 100%);
+            pointer-events: none;
         }
 
         &--playing {
@@ -92,8 +109,12 @@
 
     &__button--close {
         position: absolute;
-        top: 0;
-        right: 0;
+        top: u.rem(8);
+        right: u.rem(8);
+        z-index: 1;
+        background: rgba(0, 0, 0, 0.45);
+        border-radius: u.rem(8);
+        backdrop-filter: blur(6px);
     }
 
     &__content {

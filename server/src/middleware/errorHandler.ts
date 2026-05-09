@@ -1,11 +1,10 @@
 import * as Sentry from "@sentry/node";
 import { type NextFunction, type Request, type Response } from "express";
 import logger from "../services/logger";
+import { HttpError } from "./HttpError";
 
-type HttpError = Error & { status?: number; statusCode?: number };
-
-export const errorHandler = (err: HttpError, _req: Request, res: Response, _next: NextFunction) => {
-    const status = err.status ?? err.statusCode ?? 500;
+export const errorHandler = (err: Error, _req: Request, res: Response, _next: NextFunction) => {
+    const status = err instanceof HttpError ? err.status : 500;
     const message = status < 500 ? err.message : "Internal server error";
 
     if (status >= 500) Sentry.captureException(err);

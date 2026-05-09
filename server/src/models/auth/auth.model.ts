@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import { AuthModel } from "./auth.mongo";
+import { HttpError } from "../../middleware/HttpError";
 
 type AuthCredentialsType = {
     id: string;
@@ -16,11 +17,11 @@ export const signInAuthCredentials = async (credentials: AuthCredentialsType) =>
     const { id, password } = credentials;
     const userCredentials = await AuthModel.findOne({ user_id: id });
     if (!userCredentials) {
-        throw new Error("Unable to sign in, please try again");
+        throw new HttpError("One or more credentials is incorrect", 401);
     }
 
     const validatePassword = await bcrypt.compare(password, userCredentials.hash);
     if (!validatePassword) {
-        throw new Error("One or more credentials is incorrect");
+        throw new HttpError("One or more credentials is incorrect", 401);
     }
 };

@@ -73,11 +73,36 @@
         }
     }
 
+    &__banner-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
     &__banner {
         height: u.em(200);
         display: flex;
         align-items: flex-end;
         padding: u.em(12) u.em(12) u.em(10);
+        position: relative;
+
+        &--has-image {
+            &::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 30%, rgba(0, 0, 0, 0.62) 100%);
+                pointer-events: none;
+            }
+
+            .badge {
+                position: relative;
+                z-index: 1;
+            }
+        }
 
         &--playing {
             background: linear-gradient(

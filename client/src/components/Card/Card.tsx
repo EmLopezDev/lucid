@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 import Badge from "../Badge/Badge";
 import HoursBar from "../HoursBar/HoursBar";
@@ -14,7 +15,9 @@ type CardType = {
 };
 
 const Card = ({ data, selectedId, handleCardSelect, handleDelete }: CardType) => {
+    const [imgFailed, setImgFailed] = useState(false);
     const isSelected = selectedId === data._id;
+    const hasImage = !!data.cover_url && !imgFailed;
     return (
         <div className={cx({ card: true, card__selected: isSelected })}>
             <button
@@ -24,7 +27,10 @@ const Card = ({ data, selectedId, handleCardSelect, handleDelete }: CardType) =>
                 aria-pressed={isSelected}
                 aria-label={`${data.title}, ${capitalizeString(data.status)}, ${capitalizeString(data.genre)}, ${capitalizeString(data.platform)}`}
             >
-                <div className={cx({ card__banner: true, [`card__banner--${data.status}`]: true })}>
+                <div className={cx({ card__banner: true, [`card__banner--${data.status}`]: true, "card__banner--has-image": hasImage })}>
+                    {hasImage && (
+                        <img className="card__banner-img" src={data.cover_url!} alt="" aria-hidden="true" onError={() => setImgFailed(true)} />
+                    )}
                     {data.status && (
                         <Badge
                             size="medium"

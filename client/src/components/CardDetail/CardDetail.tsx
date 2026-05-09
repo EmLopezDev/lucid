@@ -30,6 +30,7 @@ const CardDetail = ({ data, handleOnDeleteById, onPatchGame, onClose, isExternal
     const [gameData, setGameData] = useState(objectCopy(data));
     const [editMode, setEditMode] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
+    const [imgFailed, setImgFailed] = useState(false);
     const [prevCardData, setPrevCardData] = useState(data);
     const [prevExternallyClosing, setPrevExternallyClosing] = useState(!!isExternallyClosing);
 
@@ -38,6 +39,7 @@ const CardDetail = ({ data, handleOnDeleteById, onPatchGame, onClose, isExternal
         setGameData(objectCopy(data));
         setEditMode(false);
         setIsClosing(false);
+        setImgFailed(false);
     }
 
     if (!!isExternallyClosing !== prevExternallyClosing) {
@@ -134,7 +136,11 @@ const CardDetail = ({ data, handleOnDeleteById, onPatchGame, onClose, isExternal
                         onClick={handleCloseCardDetail}
                     />
                 </span>
-                <div className={`card-detail__image card-detail__image--${gameData.status}`}>IMAGE GOES HERE</div>
+                <div className={`card-detail__image card-detail__image--${gameData.status}${gameData.cover_url && !imgFailed ? " card-detail__image--has-image" : ""}`}>
+                    {gameData.cover_url && !imgFailed && (
+                        <img className="card-detail__image-img" src={gameData.cover_url} alt={gameData.title} onError={() => setImgFailed(true)} />
+                    )}
+                </div>
                 <div className="card-detail__content">
                     {editMode ? (
                         <CardDetailEditContent

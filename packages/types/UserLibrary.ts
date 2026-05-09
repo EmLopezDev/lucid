@@ -47,6 +47,7 @@ export const UserLibraryData = z.object({
     comment: z.string().nullable().default(null),
     status: Status,
     price: z.string().nullable().default(null),
+    cover_url: z.string().nullable().default(null),
     created_at: z.string(),
     updated_at: z.string().nullable().default(null),
     deleted_at: z.string().nullable().default(null),
@@ -76,6 +77,7 @@ export const PatchUserLibraryGameBody = z
         comment: z.string().max(200).nullable(),
         status: Status,
         price: z.string().max(200).nullable(),
+        cover_url: z.string().nullable(),
     })
     .partial()
     .refine((data) => Object.keys(data).length > 0, {
@@ -96,6 +98,7 @@ export const PostUserLibraryGameBody = z.object({
     rating: z.number().min(0).max(5).nullable().default(null),
     comment: z.string().max(200).nullable().default(null),
     price: z.string().max(200).nullable().default(null),
+    cover_url: z.string().nullable().default(null),
 });
 
 export type PostUserLibraryGameBodyType = z.infer<typeof PostUserLibraryGameBody>;

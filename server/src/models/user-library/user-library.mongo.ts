@@ -26,6 +26,7 @@ const UserLibrarySchema = new Schema<UserLibraryDocument>(
         rating: { type: Number, default: null },
         comment: { type: String, default: null },
         price: { type: String, default: null },
+        cover_url: { type: String, default: null },
         created_at: { type: Date, required: true },
         updated_at: { type: Date, default: null },
         deleted_at: { type: Date, default: null },

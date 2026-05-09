@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { type UserRegisterType, type UserSigninType } from "../../../../packages/types/UserTypes";
 import { UserModel } from "./user.mongo";
 import { registerAuthCredential, signInAuthCredentials } from "../auth/auth.model";
+import { HttpError } from "../../middleware/HttpError";
 
 export const findUserByEmail = async (email: string) => {
     return await UserModel.findOne({ email: email }).select(
@@ -17,7 +18,7 @@ export const registerUser = async (user: UserRegisterType) => {
     const userExists = await findUserByEmail(user.email);
 
     if (userExists) {
-        throw new Error("User already exist");
+        throw new HttpError("User already exists", 409);
     }
 
     const session = await mongoose.startSession();
@@ -42,7 +43,7 @@ export const signinUser = async (user: UserSigninType) => {
     const userExists = await findUserByEmail(user.email);
 
     if (!userExists) {
-        throw new Error("One or more credentials is incorrect");
+        throw new HttpError("One or more credentials is incorrect", 401);
     }
 
     await signInAuthCredentials({
