@@ -21,6 +21,7 @@ const mockGame: UserLibraryDataType = {
     created_at: "2024-01-15T00:00:00.000Z",
     updated_at: null,
     deleted_at: null,
+    cover_url: null,
 };
 
 const renderCardDetail = (overrides: Partial<Parameters<typeof CardDetail>[0]> = {}) =>

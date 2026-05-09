@@ -20,6 +20,7 @@ const mockGame = {
     created_at: "2024-01-15T00:00:00.000Z",
     updated_at: null,
     deleted_at: null,
+    cover_url: null,
 };
 
 describe("CardDetailEditContent", () => {

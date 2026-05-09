@@ -12,6 +12,7 @@ const base = {
     price: null,
     updated_at: null,
     deleted_at: null,
+    cover_url: null,
 };
 
 const games: UserLibraryDataType[] = [

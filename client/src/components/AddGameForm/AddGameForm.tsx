@@ -41,6 +41,7 @@ const AddGameForm = ({ onSubmit, onCancel }: AddGameFormProps) => {
                 hours_played: formData.hoursPlayed ? Number(formData.hoursPlayed) : null,
                 rating: formData.rating ? Number(formData.rating) : null,
                 comment: formData.comment || null,
+                cover_url: null,
             });
         },
         [formData, onSubmit],

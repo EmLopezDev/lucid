@@ -33,6 +33,7 @@ function makeGame(overrides: Partial<UserLibraryDataType> = {}): UserLibraryData
         created_at: "2024-01-01T00:00:00.000Z",
         updated_at: null,
         deleted_at: null,
+        cover_url: null,
         ...overrides,
     };
 }
@@ -248,6 +249,7 @@ describe("UserLibraryPageContext", () => {
                     rating: null,
                     comment: null,
                     price: null,
+                    cover_url: null,
                 }),
             );
             expect(result.current.filteredData[0]._id).toBe("99");
@@ -276,6 +278,7 @@ describe("UserLibraryPageContext", () => {
                     rating: null,
                     comment: null,
                     price: null,
+                    cover_url: null,
                 }),
             );
             expect(result.current.isAddGameModalOpen).toBe(false);
