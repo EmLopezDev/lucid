@@ -6,7 +6,7 @@ import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import AppLayout from "./layouts/AppLayout";
 import AppAuthLayout from "./layouts/AppAuthLayout";
 import UserLibraryPage from "./pages/UserLibraryPage/UserLibraryPage";
-// import DashboardPage from "./pages/DashboardPage/DashboardPage";
+import DashboardPage from "./pages/DashboardPage/DashboardPage";
 import AuthorizedRoutes from "./routes/AuthorizedRoutes";
 import { useUserContext } from "./contexts/UserContext/useUserContext";
 import AppSkeleton from "./components/Skeleton/AppSkeleton";
@@ -41,12 +41,15 @@ function App() {
                         path="/user/library"
                         element={<UserLibraryPage />}
                     />
-                    {/* <Route
+                    <Route
                         path="/user/dashboard"
                         element={<DashboardPage />}
-                    /> */}
+                    />
                 </Route>
-                <Route path="*" element={<NotFoundPage />} />
+                <Route
+                    path="*"
+                    element={<NotFoundPage />}
+                />
             </Route>
         </Routes>
     );
