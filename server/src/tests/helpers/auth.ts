@@ -11,10 +11,10 @@ const testUser = {
 export async function createAuthenticatedAgent(overrides: Partial<typeof testUser> = {}) {
     const user = { ...testUser, ...overrides };
     const agent = request.agent(app);
-    const registered = await agent.post("/api/v1/auth/register").send(user);
-    await agent.post("/api/v1/auth/signin").send({
+    await agent.post("/api/v1/auth/register").send(user);
+    const signInRes = await agent.post("/api/v1/auth/signin").send({
         email: user.email,
         password: user.password,
     });
-    return { agent, userId: registered.body._id as string };
+    return { agent, userId: signInRes.body._id as string };
 }

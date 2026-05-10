@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { type UserLibraryDataType, type PatchUserLibraryGameBodyType } from "../../../../packages/types/UserLibrary";
+import {
+    type UserLibraryDataType,
+    type PatchUserLibraryGameBodyType,
+} from "../../../../packages/types/UserLibrary";
 import { objectCopy } from "../../lib/generic";
 import { type GameFormData } from "../GameFormFields/GameFormFields";
 import CardDetailContent from "./CardDetailContent";
@@ -9,7 +12,10 @@ import Button from "../Button/Button";
 type CardDetailType = {
     data: UserLibraryDataType;
     handleOnDeleteById: (id: string) => void;
-    onPatchGame: (id: string, data: PatchUserLibraryGameBodyType) => Promise<UserLibraryDataType | null>;
+    onPatchGame: (
+        id: string,
+        data: PatchUserLibraryGameBodyType,
+    ) => Promise<UserLibraryDataType | null>;
     onClose: () => void;
     isExternallyClosing?: boolean;
 };
@@ -26,7 +32,13 @@ const toPatchBody = (formData: GameFormData): PatchUserLibraryGameBodyType => ({
     comment: formData.comment || null,
 });
 
-const CardDetail = ({ data, handleOnDeleteById, onPatchGame, onClose, isExternallyClosing }: CardDetailType) => {
+const CardDetail = ({
+    data,
+    handleOnDeleteById,
+    onPatchGame,
+    onClose,
+    isExternallyClosing,
+}: CardDetailType) => {
     const [gameData, setGameData] = useState(objectCopy(data));
     const [editMode, setEditMode] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
@@ -136,9 +148,16 @@ const CardDetail = ({ data, handleOnDeleteById, onPatchGame, onClose, isExternal
                         onClick={handleCloseCardDetail}
                     />
                 </span>
-                <div className={`card-detail__image card-detail__image--${gameData.status}${gameData.cover_url && !imgFailed ? " card-detail__image--has-image" : ""}`}>
+                <div
+                    className={`card-detail__image card-detail__image--${gameData.status}${gameData.cover_url && !imgFailed ? " card-detail__image--has-image" : ""}`}
+                >
                     {gameData.cover_url && !imgFailed && (
-                        <img className="card-detail__image-img" src={gameData.cover_url} alt={gameData.title} onError={() => setImgFailed(true)} />
+                        <img
+                            className="card-detail__image-img"
+                            src={gameData.cover_url}
+                            alt={gameData.title}
+                            onError={() => setImgFailed(true)}
+                        />
                     )}
                 </div>
                 <div className="card-detail__content">

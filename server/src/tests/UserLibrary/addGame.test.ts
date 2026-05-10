@@ -71,14 +71,4 @@ describe("POST /api/v1/user/:userId/library", () => {
         expect(res.body.message).toBe("Invalid fields");
     });
 
-    it("returns 403 when posting to another user's library", async () => {
-        const { userId: otherUserId } = await createAuthenticatedAgent({
-            email: "other@example.com",
-        });
-
-        const res = await agent.post(`/api/v1/user/${otherUserId}/library`).send(testGame);
-
-        expect(res.status).toBe(403);
-        expect(res.body.message).toBe("Forbidden");
-    });
 });

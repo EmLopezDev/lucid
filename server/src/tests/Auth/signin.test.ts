@@ -38,32 +38,32 @@ describe("POST /api/v1/auth/signin", () => {
         expect(res.body.hash).toBeUndefined();
     });
 
-    it("returns 400 when the password is incorrect", async () => {
+    it("returns 401 when the password is incorrect", async () => {
         await request(app).post("/api/v1/auth/register").send(testUser);
         const res = await request(app).post("/api/v1/auth/signin").send({
             email: testUser.email,
             password: "wrongpassword",
         });
 
-        expect(res.status).toBe(400);
+        expect(res.status).toBe(401);
         expect(res.body.message).toBeDefined();
     });
 
-    it("returns 400 when the user does not exist", async () => {
+    it("returns 401 when the user does not exist", async () => {
         const res = await request(app).post("/api/v1/auth/signin").send({
             email: "nobody@example.com",
             password: "password123",
         });
 
-        expect(res.status).toBe(400);
+        expect(res.status).toBe(401);
         expect(res.body.message).toBeDefined();
     });
 
-    it("returns 404 when required fields are missing", async () => {
+    it("returns 400 when required fields are missing", async () => {
         const res = await request(app).post("/api/v1/auth/signin").send({
             email: "test@example.com",
         });
 
-        expect(res.status).toBe(404);
+        expect(res.status).toBe(400);
     });
 });

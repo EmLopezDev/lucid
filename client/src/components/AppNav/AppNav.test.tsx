@@ -52,11 +52,6 @@ describe("AppNav", () => {
             expect(screen.getAllByRole("link", { name: "Library" }).length).toBeGreaterThan(0);
         });
 
-        it("shows Dashboard link", () => {
-            renderNav(true);
-            expect(screen.getAllByRole("link", { name: "Dashboard" }).length).toBeGreaterThan(0);
-        });
-
         it("shows Sign Out button", () => {
             renderNav(true);
             expect(screen.getAllByRole("button", { name: "Sign Out" }).length).toBeGreaterThan(0);

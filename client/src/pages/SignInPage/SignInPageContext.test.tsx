@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook, act, waitFor } from "@testing-library/react";
 import { type ReactNode } from "react";
+import { MemoryRouter } from "react-router";
 import { SignInPageProvider } from "./SignInPageContext";
 import { useSignInPageContext } from "./useSignInPageContext";
 
@@ -17,7 +18,9 @@ vi.mock("../../contexts/UserContext/useUserContext", () => ({
 }));
 
 const wrapper = ({ children }: { children: ReactNode }) => (
-    <SignInPageProvider>{children}</SignInPageProvider>
+    <MemoryRouter>
+        <SignInPageProvider>{children}</SignInPageProvider>
+    </MemoryRouter>
 );
 
 function inputEvent(value: string) {

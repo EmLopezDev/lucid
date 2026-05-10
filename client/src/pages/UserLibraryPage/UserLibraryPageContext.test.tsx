@@ -3,6 +3,7 @@ import { renderHook, act, waitFor } from "@testing-library/react";
 import { type ReactNode } from "react";
 import { UserLibraryPageProvider } from "./UserLibraryPageContext";
 import { useUserLibraryPageContext } from "./useUserLibraryPageContext";
+import { UserLibraryProvider } from "../../contexts/UserLibraryContext/UserLibraryContext";
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 
 const mockCurrentUser = { _id: "user-1", first_name: "John", last_name: "Doe" };
@@ -12,7 +13,9 @@ vi.mock("../../contexts/UserContext/useUserContext", () => ({
 }));
 
 const wrapper = ({ children }: { children: ReactNode }) => (
-    <UserLibraryPageProvider>{children}</UserLibraryPageProvider>
+    <UserLibraryProvider>
+        <UserLibraryPageProvider>{children}</UserLibraryPageProvider>
+    </UserLibraryProvider>
 );
 
 function makeGame(overrides: Partial<UserLibraryDataType> = {}): UserLibraryDataType {
@@ -88,6 +91,7 @@ describe("UserLibraryPageContext", () => {
             await waitFor(() =>
                 expect(globalThis.fetch).toHaveBeenCalledWith(
                     expect.stringContaining(`/user/${mockCurrentUser._id}/library`),
+                    expect.objectContaining({ credentials: "include" }),
                 ),
             );
         });
@@ -194,7 +198,7 @@ describe("UserLibraryPageContext", () => {
                 ok: true,
                 json: async () => ({}),
             });
-            await act(async () => result.current.onDeleteGameById("1"));
+            await act(async () => result.current.handleOnDeleteGameById("1"));
             expect(result.current.filteredData.find((g) => g._id === "1")).toBeUndefined();
             expect(result.current.filteredData).toHaveLength(2);
         });
@@ -206,7 +210,7 @@ describe("UserLibraryPageContext", () => {
                 json: async () => ({}),
             });
             await act(async () => result.current.onCardSelect("1"));
-            await act(async () => result.current.onDeleteGameById("1"));
+            await act(async () => result.current.handleOnDeleteGameById("1"));
             expect(result.current.selectedCard).toBeNull();
         });
 
@@ -216,7 +220,7 @@ describe("UserLibraryPageContext", () => {
                 ok: true,
                 json: async () => ({}),
             });
-            await act(async () => result.current.onDeleteGameById("1"));
+            await act(async () => result.current.handleOnDeleteGameById("1"));
             expect(globalThis.fetch).toHaveBeenCalledWith(
                 expect.stringContaining(`/user/${mockCurrentUser._id}/library/1`),
                 expect.objectContaining({ method: "DELETE" }),
@@ -237,7 +241,7 @@ describe("UserLibraryPageContext", () => {
                 json: async () => newGame,
             });
             await act(async () =>
-                result.current.onAddGame({
+                result.current.handleOnAddGame({
                     title: "New Game",
                     status: "playing",
                     genre: "other",
@@ -266,7 +270,7 @@ describe("UserLibraryPageContext", () => {
             act(() => result.current.onOpenAddGameModal());
             expect(result.current.isAddGameModalOpen).toBe(true);
             await act(async () =>
-                result.current.onAddGame({
+                result.current.handleOnAddGame({
                     title: "New Game",
                     status: "playing",
                     genre: "other",
@@ -294,7 +298,9 @@ describe("UserLibraryPageContext", () => {
                 json: async () => updatedGame,
             });
             await act(async () => result.current.onCardSelect("1"));
-            await act(async () => result.current.onPatchGame("1", { title: "Zelda Updated" }));
+            await act(async () =>
+                result.current.handleOnPatchGame("1", { title: "Zelda Updated" }),
+            );
             const patched = result.current.filteredData.find((g) => g._id === "1");
             expect(patched?.title).toBe("Zelda Updated");
             expect(result.current.selectedCard?.title).toBe("Zelda Updated");
@@ -309,7 +315,9 @@ describe("UserLibraryPageContext", () => {
             });
             let returnValue: unknown;
             await act(async () => {
-                returnValue = await result.current.onPatchGame("1", { title: "Zelda Updated" });
+                returnValue = await result.current.handleOnPatchGame("1", {
+                    title: "Zelda Updated",
+                });
             });
             expect(returnValue).toEqual(updatedGame);
         });
@@ -319,7 +327,7 @@ describe("UserLibraryPageContext", () => {
             (globalThis.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({ ok: false });
             let returnValue: unknown;
             await act(async () => {
-                returnValue = await result.current.onPatchGame("1", { title: "Bad" });
+                returnValue = await result.current.handleOnPatchGame("1", { title: "Bad" });
             });
             expect(returnValue).toBeNull();
         });

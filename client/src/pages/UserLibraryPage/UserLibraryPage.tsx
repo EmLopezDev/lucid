@@ -33,13 +33,13 @@ const UserLibraryPageContent = () => {
         onSortSelect,
         onCardSelect,
         onSearchTitle,
-        onDeleteGameById,
+        handleOnDeleteGameById,
         onCloseCardDetail,
         isAddGameModalOpen,
         onOpenAddGameModal,
         onCloseAddGameModal,
-        onAddGame,
-        onPatchGame,
+        handleOnAddGame,
+        handleOnPatchGame,
     } = useUserLibraryPageContext();
 
     const renderStatusTrigger = (label: StatusFilterType) => (
@@ -47,13 +47,18 @@ const UserLibraryPageContent = () => {
             {label === "all" ? (
                 <span className="status-option__label">All</span>
             ) : (
-                <Badge status={label} size="medium" />
+                <Badge
+                    status={label}
+                    size="medium"
+                />
             )}
-            <span className={cx({
-                badge: true,
-                "badge--medium": true,
-                [`badge__${label}`]: true,
-            })}>
+            <span
+                className={cx({
+                    badge: true,
+                    "badge--medium": true,
+                    [`badge__${label}`]: true,
+                })}
+            >
                 {statusCounts[label] ?? 0}
             </span>
         </div>
@@ -90,16 +95,17 @@ const UserLibraryPageContent = () => {
 
     const onConfirmDelete = useCallback(async () => {
         if (!pendingDeleteId) return;
-        await onDeleteGameById(pendingDeleteId);
+        await handleOnDeleteGameById(pendingDeleteId);
         setPendingDeleteId(null);
-    }, [pendingDeleteId, onDeleteGameById]);
+    }, [pendingDeleteId, handleOnDeleteGameById]);
 
     const onCancelDelete = useCallback(() => {
         setPendingDeleteId(null);
     }, []);
 
-    const pendingDeleteGame = filteredData.find((g) => g._id === pendingDeleteId)
-        ?? (selectedCard?._id === pendingDeleteId ? selectedCard : null);
+    const pendingDeleteGame =
+        filteredData.find((g) => g._id === pendingDeleteId) ??
+        (selectedCard?._id === pendingDeleteId ? selectedCard : null);
 
     const activeFilterCount =
         (filters.statusValue.value !== "all" ? 1 : 0) +
@@ -195,7 +201,7 @@ const UserLibraryPageContent = () => {
                                 <CardDetail
                                     data={selectedCard}
                                     handleOnDeleteById={onRequestDelete}
-                                    onPatchGame={onPatchGame}
+                                    onPatchGame={handleOnPatchGame}
                                     onClose={onCloseCardDetail}
                                     isExternallyClosing={isDetailClosing}
                                 />
@@ -208,7 +214,10 @@ const UserLibraryPageContent = () => {
                 onClick={onOpenAddGameModal}
                 aria-label="Add game"
             >
-                <Icon name="plus" size="large" />
+                <Icon
+                    name="plus"
+                    size="large"
+                />
             </button>
             <Modal
                 isOpen={isAddGameModalOpen}
@@ -216,7 +225,7 @@ const UserLibraryPageContent = () => {
                 onClose={onCloseAddGameModal}
             >
                 <AddGameForm
-                    onSubmit={onAddGame}
+                    onSubmit={handleOnAddGame}
                     onCancel={onCloseAddGameModal}
                 />
             </Modal>
@@ -232,10 +241,16 @@ const UserLibraryPageContent = () => {
                         library? This cannot be undone.
                     </p>
                     <div className="user-library-page__delete-actions">
-                        <Button variant="secondary" onClick={onCancelDelete}>
+                        <Button
+                            variant="secondary"
+                            onClick={onCancelDelete}
+                        >
                             Cancel
                         </Button>
-                        <Button variant="danger" onClick={onConfirmDelete}>
+                        <Button
+                            variant="danger"
+                            onClick={onConfirmDelete}
+                        >
                             Remove
                         </Button>
                     </div>

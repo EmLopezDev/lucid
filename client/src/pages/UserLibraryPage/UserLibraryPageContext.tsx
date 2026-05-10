@@ -1,6 +1,5 @@
 import {
     useCallback,
-    useEffect,
     useMemo,
     useState,
     type ChangeEvent,
@@ -21,8 +20,7 @@ import {
 } from "../../../../packages/types/SelectOptionsTypes.ts";
 import { sortOptions, statusFilterOptions, statusOptions } from "../../lib/form.ts";
 import { filterBySort, filterByStatus, filterByTitle } from "../../lib/filter.ts";
-import { useUserContext } from "../../contexts/UserContext/useUserContext.tsx";
-import { API_URL } from "../../config/api.ts";
+import { useUserLibraryContext } from "../../contexts/UserLibraryContext/useUserLibraryContext.ts";
 
 export type FilterType = {
     searchTitle: string;
@@ -40,28 +38,26 @@ export interface UserLibraryPageContextType {
     statusOptions: StatusOptionType[];
     sortOptions: SortOptionType[];
     selectedCard: UserLibraryDataType | null;
-    setSelectedCard: Dispatch<SetStateAction<UserLibraryDataType | null>>;
+    isAddGameModalOpen: boolean;
     isDetailClosing: boolean;
+    setSelectedCard: Dispatch<SetStateAction<UserLibraryDataType | null>>;
     onSearchTitle: (e: ChangeEvent<HTMLInputElement>) => void;
     onStatusSelect: (option: StatusFilterOptionType) => void;
     onSortSelect: (option: SortOptionType) => void;
     onCardSelect: (id: string) => void;
-    onDeleteGameById: (id: string) => Promise<void>;
     onCloseCardDetail: () => void;
-    isAddGameModalOpen: boolean;
     onOpenAddGameModal: () => void;
     onCloseAddGameModal: () => void;
-    onAddGame: (data: PostUserLibraryGameBodyType) => Promise<void>;
-    onPatchGame: (
+    handleOnAddGame: (data: PostUserLibraryGameBodyType) => void;
+    handleOnPatchGame: (
         id: string,
         data: PatchUserLibraryGameBodyType,
     ) => Promise<UserLibraryDataType | null>;
+    handleOnDeleteGameById: (id: string) => Promise<void>;
 }
 
 export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) => {
-    const [isLoading, setIsLoading] = useState(true);
     const [isCardDetailLoading, setIsCardDetailLoading] = useState(false);
-    const [libraryData, setLibraryData] = useState<UserLibraryDataType[]>([]);
     const [selectedCard, setSelectedCard] = useState<UserLibraryDataType | null>(null);
     const [isDetailClosing, setIsDetailClosing] = useState(false);
     const [isAddGameModalOpen, setIsAddGameModalOpen] = useState(false);
@@ -71,7 +67,8 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
         sortValue: { value: "recently", label: "recently added" },
     });
 
-    const { currentUser } = useUserContext();
+    const { isLoading, libraryData, onAddGame, onPatchGame, onDeleteGameById } =
+        useUserLibraryContext();
 
     const filteredData = useMemo(() => {
         const { searchTitle, statusValue, sortValue } = filters;
@@ -123,22 +120,13 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
         setFilters((prevState) => ({ ...prevState, sortValue: option }));
     }, []);
 
-    const onDeleteGameById = useCallback(
+    const handleOnDeleteGameById = useCallback(
         async (id: string) => {
-            try {
-                const response = await fetch(`${API_URL}/user/${currentUser?._id}/library/${id}`, {
-                    method: "DELETE",
-                    credentials: "include",
-                });
-                if (!response.ok) throw new Error("Failed to delete game");
-                setLibraryData((prev) => prev.filter((d) => d._id !== id));
-                setSelectedCard(null);
-                setIsDetailClosing(false);
-            } catch (error) {
-                if (import.meta.env.DEV) console.error(error instanceof Error ? error.message : error);
-            }
+            await onDeleteGameById(id);
+            setSelectedCard(null);
+            setIsDetailClosing(false);
         },
-        [currentUser?._id],
+        [onDeleteGameById],
     );
 
     const onCloseCardDetail = useCallback(() => {
@@ -146,71 +134,28 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
         setIsDetailClosing(false);
     }, []);
 
-    const onPatchGame = useCallback(
+    const handleOnPatchGame = useCallback(
         async (
             id: string,
             data: PatchUserLibraryGameBodyType,
         ): Promise<UserLibraryDataType | null> => {
-            try {
-                const response = await fetch(`${API_URL}/user/${currentUser?._id}/library/${id}`, {
-                    method: "PATCH",
-                    credentials: "include",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(data),
-                });
-                if (!response.ok) throw new Error("Failed to update game");
-                const updatedGame: UserLibraryDataType = await response.json();
-                setLibraryData((prev) => prev.map((d) => (d._id === id ? updatedGame : d)));
-                setSelectedCard(updatedGame);
-                return updatedGame;
-            } catch (error) {
-                if (import.meta.env.DEV) console.error(error instanceof Error ? error.message : error);
-                return null;
-            }
+            const updatedGame = await onPatchGame(id, data);
+            setSelectedCard(updatedGame);
+            return updatedGame;
         },
-        [currentUser?._id],
+        [onPatchGame],
     );
 
     const onOpenAddGameModal = useCallback(() => setIsAddGameModalOpen(true), []);
     const onCloseAddGameModal = useCallback(() => setIsAddGameModalOpen(false), []);
 
-    const onAddGame = useCallback(
+    const handleOnAddGame = useCallback(
         async (data: PostUserLibraryGameBodyType) => {
-            try {
-                const response = await fetch(`${API_URL}/user/${currentUser?._id}/library`, {
-                    method: "POST",
-                    credentials: "include",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(data),
-                });
-                if (!response.ok) throw new Error("Failed to add game");
-                const newGame: UserLibraryDataType = await response.json();
-                setLibraryData((prev) => [newGame, ...prev]);
-                setIsAddGameModalOpen(false);
-            } catch (error) {
-                if (import.meta.env.DEV) console.error(error instanceof Error ? error.message : error);
-            }
+            await onAddGame(data);
+            setIsAddGameModalOpen(false);
         },
-        [currentUser?._id],
+        [onAddGame],
     );
-
-    useEffect(() => {
-        const fetchUserLibraryGames = async () => {
-            setIsLoading(true);
-            try {
-                const response = await fetch(`${API_URL}/user/${currentUser?._id}/library`, {
-                    credentials: "include",
-                });
-                const data = await response.json();
-                setLibraryData(data);
-            } catch (error) {
-                if (import.meta.env.DEV) console.error(error instanceof Error ? error.message : error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchUserLibraryGames();
-    }, [currentUser]);
 
     const contextValue = useMemo(
         () => ({
@@ -229,13 +174,13 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
             onStatusSelect,
             onSortSelect,
             onCardSelect,
-            onDeleteGameById,
             onCloseCardDetail,
             isAddGameModalOpen,
             onOpenAddGameModal,
             onCloseAddGameModal,
-            onAddGame,
-            onPatchGame,
+            handleOnAddGame,
+            handleOnPatchGame,
+            handleOnDeleteGameById,
         }),
         [
             isLoading,
@@ -249,13 +194,13 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
             onStatusSelect,
             onSortSelect,
             onCardSelect,
-            onDeleteGameById,
             onCloseCardDetail,
             isAddGameModalOpen,
             onOpenAddGameModal,
             onCloseAddGameModal,
-            onAddGame,
-            onPatchGame,
+            handleOnAddGame,
+            handleOnPatchGame,
+            handleOnDeleteGameById,
         ],
     );
     return (
