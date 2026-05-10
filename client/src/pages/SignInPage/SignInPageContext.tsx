@@ -141,6 +141,8 @@ export const SignInPageProvider = ({ children }: { children: ReactNode }) => {
             isSubmitting,
             errors,
             formDataError,
+            formData.email,
+            formData.password,
             onEmailChange,
             onPasswordChange,
             onSubmitForm,
