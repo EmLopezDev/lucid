@@ -18,6 +18,7 @@ const DashboardPage = () => {
                 />
                 <HeroStats
                     iconName="dollar"
+                    prefix="$"
                     statValue={totalSpent}
                     text="Total Spent"
                 />

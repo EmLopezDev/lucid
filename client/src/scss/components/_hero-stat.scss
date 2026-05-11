@@ -1,16 +1,45 @@
 @use "../utils/" as u;
 
 .hero-stat {
-    min-height: u.em(200);
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    padding: u.em(12);
+    gap: u.em(16);
+    padding: u.em(16);
     border: u.em(1) solid rgba(var(--color-brand-rgb), 0.2);
     border-radius: u.em(12);
     background-color: var(--color-bg-card);
     color: var(--color-text-primary);
+    transition:
+        border-color 0.2s,
+        background-color 0.2s,
+        box-shadow 0.2s;
+
+    &:hover {
+        background-color: var(--color-bg-card-hover);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    &--gamepad {
+        border-top: 2px solid var(--color-brand);
+    }
+
+    &--clock {
+        border-top: 2px solid var(--color-blue);
+    }
+
+    &--dollar {
+        border-top: 2px solid var(--color-teal);
+    }
+
+    &--star {
+        border-top: 2px solid var(--color-gold);
+    }
+
+    @include u.breakpoint-min("large") {
+        flex-direction: row;
+        align-items: center;
+    }
 
     &__icon {
         display: flex;
@@ -21,19 +50,23 @@
         border-radius: 50%;
 
         &--gamepad {
-            background-color: var(--color-brand);
+            color: var(--color-brand);
+            background-color: var(--color-brand-bg);
         }
 
         &--clock {
-            background-color: var(--color-badge-paused);
+            color: var(--color-blue);
+            background-color: rgba(var(--color-blue-rgb), 0.15);
         }
 
         &--dollar {
-            background-color: var(--color-badge-completed);
+            color: var(--color-teal);
+            background-color: rgba(var(--color-teal-rgb), 0.15);
         }
 
         &--star {
-            background-color: var(--color-star);
+            color: var(--color-gold);
+            background-color: rgba(var(--color-gold-rgb), 0.15);
         }
     }
 
@@ -41,31 +74,31 @@
         display: flex;
         flex-direction: column;
         gap: u.em(8);
+    }
 
-        &__value {
-            font-size: u.$font-size-3xl;
-            font-weight: 700;
+    &__value {
+        font-size: u.$font-size-3xl;
+        font-weight: 700;
 
-            &--gamepad {
-                color: var(--color-brand);
-            }
-
-            &--clock {
-                color: var(--color-badge-paused);
-            }
-
-            &--dollar {
-                color: var(--color-badge-completed);
-            }
-
-            &--star {
-                color: var(--color-star);
-            }
+        &--gamepad {
+            color: var(--color-brand);
         }
 
-        &__text {
-            font-size: u.$font-size-base;
-            color: var(--color-text-secondary);
+        &--clock {
+            color: var(--color-blue);
         }
+
+        &--dollar {
+            color: var(--color-teal);
+        }
+
+        &--star {
+            color: var(--color-gold);
+        }
+    }
+
+    &__label {
+        font-size: u.$font-size-base;
+        color: var(--color-text-secondary);
     }
 }

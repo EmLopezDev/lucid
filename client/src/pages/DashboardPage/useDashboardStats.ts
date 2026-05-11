@@ -15,12 +15,11 @@ export const useDashboardStats = () => {
         return +(acc + price).toFixed(2);
     }, 0);
 
-    const averageRating = +(
-        libraryData.reduce((acc, val) => {
-            const rating = val.rating ?? 0;
-            return acc + rating;
-        }, 0) / libraryData.length
-    ).toFixed(2);
+    const ratedGames = libraryData.filter((val) => val.rating !== null);
+    const averageRating =
+        ratedGames.length === 0
+            ? 0
+            : +(ratedGames.reduce((acc, val) => acc + val.rating!, 0) / ratedGames.length).toFixed(2);
 
     return {
         totalGames,

@@ -1,37 +1,32 @@
 import Icon from "../Icon/Icon";
-import { cx } from "css-variants";
 import { type IconName } from "../../components/Icon/IconMap.ts";
+import { useCountUp } from "../../hooks/useCountUp.ts";
 
 type HeroStatsType = {
     iconName: IconName;
     statValue: number;
+    prefix?: string;
     text: string;
 };
 
-const HeroStats = ({ iconName, statValue, text }: HeroStatsType) => {
+const HeroStats = ({ iconName, statValue, prefix = "", text }: HeroStatsType) => {
+    const animated = useCountUp(statValue);
+    const display = Number.isInteger(statValue) ? Math.round(animated) : animated.toFixed(2);
+
     return (
-        <div className="hero-stat">
-            <span
-                className={cx({
-                    "hero-stat__icon": true,
-                    [`hero-stat__icon--${iconName}`]: iconName,
-                })}
-            >
+        <div className={`hero-stat hero-stat--${iconName}`}>
+            <span className={`hero-stat__icon hero-stat__icon--${iconName}`}>
                 <Icon
                     size="large"
                     name={iconName}
                 />
             </span>
             <div className="hero-stat__data">
-                <span
-                    className={cx({
-                        "hero-stat__data__value": true,
-                        [`hero-stat__data__value--${iconName}`]: iconName,
-                    })}
-                >
-                    {statValue}
+                <span className={`hero-stat__value hero-stat__value--${iconName}`}>
+                    {prefix}
+                    {display}
                 </span>
-                <span className="hero-stat__data__text">{text}</span>
+                <span className="hero-stat__label">{text}</span>
             </div>
         </div>
     );
