@@ -14,6 +14,10 @@ import {
     CalendarDays,
     Menu,
     SlidersHorizontal,
+    Gamepad2,
+    Clock,
+    DollarSign,
+    Star,
 } from "lucide-react";
 
 export const iconRegistry = {
@@ -31,6 +35,10 @@ export const iconRegistry = {
     calendar: CalendarDays,
     menu: Menu,
     sliders: SlidersHorizontal,
+    gamepad: Gamepad2,
+    clock: Clock,
+    dollar: DollarSign,
+    star: Star,
 } satisfies Record<string, LucideIcon>;
 
 export type IconName = keyof typeof iconRegistry;

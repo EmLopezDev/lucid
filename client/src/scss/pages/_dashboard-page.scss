@@ -1,0 +1,17 @@
+@use "../utils/" as u;
+
+.dashboard-page {
+    display: flex;
+    flex-direction: column;
+    padding: u.em(20);
+
+    .dashboard-page__hero-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: u.em(20);
+
+        @include u.breakpoint-min("large") {
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+        }
+    }
+}

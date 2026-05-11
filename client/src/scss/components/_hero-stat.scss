@@ -1,0 +1,71 @@
+@use "../utils/" as u;
+
+.hero-stat {
+    min-height: u.em(200);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: u.em(12);
+    border: u.em(1) solid rgba(var(--color-brand-rgb), 0.2);
+    border-radius: u.em(12);
+    background-color: var(--color-bg-card);
+    color: var(--color-text-primary);
+
+    &__icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: u.em(32);
+        width: u.em(32);
+        border-radius: 50%;
+
+        &--gamepad {
+            background-color: var(--color-brand);
+        }
+
+        &--clock {
+            background-color: var(--color-badge-paused);
+        }
+
+        &--dollar {
+            background-color: var(--color-badge-completed);
+        }
+
+        &--star {
+            background-color: var(--color-star);
+        }
+    }
+
+    &__data {
+        display: flex;
+        flex-direction: column;
+        gap: u.em(8);
+
+        &__value {
+            font-size: u.$font-size-3xl;
+            font-weight: 700;
+
+            &--gamepad {
+                color: var(--color-brand);
+            }
+
+            &--clock {
+                color: var(--color-badge-paused);
+            }
+
+            &--dollar {
+                color: var(--color-badge-completed);
+            }
+
+            &--star {
+                color: var(--color-star);
+            }
+        }
+
+        &__text {
+            font-size: u.$font-size-base;
+            color: var(--color-text-secondary);
+        }
+    }
+}

@@ -17,7 +17,7 @@ export const useDashboardStats = () => {
 
     const averageRating = +(
         libraryData.reduce((acc, val) => {
-            const rating = Number(val.rating);
+            const rating = val.rating ?? 0;
             return acc + rating;
         }, 0) / libraryData.length
     ).toFixed(2);
