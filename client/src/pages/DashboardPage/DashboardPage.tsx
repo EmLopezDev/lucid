@@ -2,15 +2,18 @@ import { NavLink } from "react-router";
 import { useDashboardStats } from "./useDashboardStats";
 import { useSpendingChart } from "./useSpendingChart";
 import { useUserLibraryContext } from "../../contexts/UserLibraryContext/useUserLibraryContext";
+import { useStatusBreakdown } from "./useStatusBreakdown";
 import { SkeletonLoader, Skeleton } from "../../components/Skeleton";
 import HeroStats from "../../components/HeroStats/HeroStats";
 import SpendingChart from "../../components/SpendingChart/SpendingChart";
 import Icon from "../../components/Icon/Icon";
+import StatusBreakdownChart from "../../components/StatusBreakdownChart/StatusBreakdownChart";
 
 const DashboardPage = () => {
     const { isLoading, libraryData } = useUserLibraryContext();
     const { totalGames, totalHoursPlayed, totalSpent, averageRating } = useDashboardStats();
     const { data, period, setPeriod } = useSpendingChart();
+    const { data: statusData } = useStatusBreakdown();
     return (
         <div className="dashboard-page">
             {isLoading ? (
@@ -81,13 +84,12 @@ const DashboardPage = () => {
                             text="Average Rating"
                         />
                     </div>
-                    <div className="dashboard-page__spending-chart">
-                        <SpendingChart
-                            data={data}
-                            period={period}
-                            onPeriodChange={setPeriod}
-                        />
-                    </div>
+                    <SpendingChart
+                        data={data}
+                        period={period}
+                        onPeriodChange={setPeriod}
+                    />
+                    <StatusBreakdownChart data={statusData} />
                 </>
             )}
         </div>

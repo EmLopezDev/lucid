@@ -1,0 +1,80 @@
+@use "../utils/" as u;
+
+.status-breakdown-chart {
+    background-color: var(--color-bg-card);
+    border: u.em(1) solid rgba(var(--color-brand-rgb), 0.2);
+    border-radius: u.em(12);
+    padding: u.em(16);
+
+    &__title {
+        font-size: u.$font-size-2xl;
+        font-weight: 600;
+        color: var(--color-text-primary);
+        margin-block-end: u.em(16);
+    }
+
+    &__body {
+        display: flex;
+        align-items: center;
+        gap: u.em(16);
+
+        @include u.breakpoint-max("small") {
+            flex-direction: column;
+        }
+    }
+
+    &__legend {
+        display: flex;
+        flex-direction: column;
+        gap: u.em(10);
+        list-style: none;
+        flex-shrink: 0;
+    }
+
+    &__legend-item {
+        display: flex;
+        align-items: center;
+        gap: u.em(8);
+        font-size: u.$font-size-2xl;
+    }
+
+    &__legend-dot {
+        width: u.em(8);
+        height: u.em(8);
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+
+    &__legend-label {
+        color: var(--color-text-secondary);
+        flex: 1;
+    }
+
+    &__legend-count {
+        font-weight: 600;
+        color: var(--color-text-primary);
+    }
+
+    &__tooltip {
+        display: flex;
+        align-items: center;
+        gap: u.em(8);
+        padding: u.em(8) u.em(12);
+        background-color: var(--color-bg-surface);
+        border: u.em(1) solid var(--color-border);
+        border-radius: u.em(8);
+        font-size: u.$font-size-lg;
+    }
+
+    &__tooltip-dot {
+        width: u.em(8);
+        height: u.em(8);
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+
+    &__tooltip-count {
+        font-weight: 600;
+        color: var(--color-text-secondary);
+    }
+}
