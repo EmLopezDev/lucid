@@ -1,8 +1,15 @@
 import mongoose from "mongoose";
-import { type UserRegisterType, type UserSigninType } from "../../../../packages/types/UserTypes";
+import {
+    type UserRegisterType,
+    type UserSigninType,
+    type UserUpdatePasswordType,
+    type UserUpdateProfileType,
+} from "../../../../packages/types/UserTypes";
 import { UserModel } from "./user.mongo";
 import { registerAuthCredential, signInAuthCredentials } from "../auth/auth.model";
 import { HttpError } from "../../middleware/HttpError";
+import bcrypt from "bcryptjs";
+import { AuthModel } from "../auth/auth.mongo";
 
 export const findUserByEmail = async (email: string) => {
     return await UserModel.findOne({ email: email }).select(
@@ -52,4 +59,24 @@ export const signinUser = async (user: UserSigninType) => {
     });
 
     return userExists;
+};
+
+export const updateUser = async (id: string, updates: UserUpdateProfileType) => {
+    const user = await UserModel.findByIdAndUpdate(
+        id,
+        { ...updates, updated_at: new Date() },
+        { new: true },
+    ).select("_id first_name last_name email created_at updated_at");
+
+    if (!user) {
+        throw new HttpError("User not found", 404);
+    }
+    return user;
+};
+
+export const updatePassword = async (id: string, credentials: UserUpdatePasswordType) => {
+    await signInAuthCredentials({ id, password: credentials.current_password });
+
+    const hash = await bcrypt.hash(credentials.new_password, 12);
+    await AuthModel.findOneAndUpdate({ user_id: id }, { hash });
 };

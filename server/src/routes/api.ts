@@ -1,10 +1,12 @@
 import express from "express";
 import AuthRouter from "./auth/auth.router";
 import UserLibraryRouter from "./user-library/user-library.router";
+import UserRouter from "./user/user.router";
 
 const api = express.Router();
 
 api.use("/auth", AuthRouter);
 api.use("/user/:userId", UserLibraryRouter);
+api.use("/user/:userId", UserRouter);
 
 export default api;

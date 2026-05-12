@@ -2,12 +2,18 @@ import * as z from "zod";
 
 export const BaseUser = z.object({
     _id: z.uuid(),
-    first_name: z.string().max(50).regex(/^[a-zA-Z\s]+$/, {
-        error: "Missing or Invalid field",
-    }),
-    last_name: z.string().max(50).regex(/^[a-zA-Z\s]+$/, {
-        error: "Missing or Invalid field",
-    }),
+    first_name: z
+        .string()
+        .max(50)
+        .regex(/^[a-zA-Z\s]+$/, {
+            error: "Missing or Invalid field",
+        }),
+    last_name: z
+        .string()
+        .max(50)
+        .regex(/^[a-zA-Z\s]+$/, {
+            error: "Missing or Invalid field",
+        }),
     email: z.email(),
     password: z
         .string()
@@ -46,7 +52,17 @@ export const UserSignin = BaseUser.pick({
 
 export type UserSigninType = z.infer<typeof UserSignin>;
 
-// TODO: Remove UserSelect if not needed
-export const UserSelect = BaseUser.pick({
-    _id: true,
+export const UserUpdateProfile = BaseUser.pick({
+    first_name: true,
+    last_name: true,
+    email: true,
+}).partial();
+
+export type UserUpdateProfileType = z.infer<typeof UserUpdateProfile>;
+
+export const UserUpdatePassword = z.object({
+    current_password: z.string().min(1),
+    new_password: BaseUser.shape.password,
 });
+
+export type UserUpdatePasswordType = z.infer<typeof UserUpdatePassword>;
