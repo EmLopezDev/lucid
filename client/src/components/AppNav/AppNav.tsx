@@ -86,12 +86,12 @@ function AppNav({ isUserAuthenticated }: { isUserAuthenticated: boolean }) {
                             >
                                 Library
                             </NavLink>
-                            {/* <NavLink
+                            <NavLink
                                 className="app-layout__nav-link"
                                 to="/user/dashboard"
                             >
                                 Dashboard
-                            </NavLink> */}
+                            </NavLink>
                         </>
                     )}
                 </div>
@@ -173,12 +173,12 @@ function AppNav({ isUserAuthenticated }: { isUserAuthenticated: boolean }) {
                             >
                                 Library
                             </NavLink>
-                            {/* <NavLink
+                            <NavLink
                                 className="app-layout__nav-link"
                                 to="/user/dashboard"
                             >
                                 Dashboard
-                            </NavLink> */}
+                            </NavLink>
 
                             <button
                                 className="app-layout__nav-link app-layout__nav-link--signout"

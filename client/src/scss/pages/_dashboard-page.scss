@@ -3,7 +3,10 @@
 .dashboard-page {
     display: flex;
     flex-direction: column;
+    gap: u.em(20);
     padding: u.em(20);
+    max-width: u.em(960);
+    margin: 0 auto;
 
     &__hero-stats {
         display: grid;
@@ -12,7 +15,6 @@
 
         @include u.breakpoint-min("large") {
             grid-template-columns: repeat(4, 1fr);
-            margin-inline: auto;
         }
     }
 }

@@ -1,0 +1,78 @@
+@use "../utils/" as u;
+
+.spending-chart {
+    background-color: var(--color-bg-card);
+    border: u.em(1) solid rgba(var(--color-brand-rgb), 0.2);
+    border-radius: u.em(12);
+    padding: u.em(16);
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-block-end: u.em(16);
+        flex-wrap: wrap;
+        gap: u.em(12);
+    }
+
+    &__title {
+        font-size: u.$font-size-2xl;
+        font-weight: 600;
+    }
+
+    &__filters {
+        display: flex;
+        gap: u.em(4);
+    }
+
+    &__filter {
+        padding: u.em(4) u.em(10);
+        border-radius: u.em(6);
+        font-size: u.$font-size-base;
+        font-family: inherit;
+        border: u.em(1) solid transparent;
+        background: none;
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        transition:
+            color 0.15s,
+            background-color 0.15s,
+            border-color 0.15s;
+
+        &:hover {
+            color: var(--color-text-primary);
+            background-color: var(--color-bg-card-hover);
+        }
+
+        &--active {
+            color: var(--color-brand);
+            background-color: var(--color-brand-bg);
+            border-color: rgba(var(--color-brand-rgb), 0.3);
+        }
+    }
+
+    &__tooltip {
+        display: flex;
+        flex-direction: column;
+        gap: u.em(4);
+        padding: u.em(10) u.em(12);
+        background-color: var(--color-bg-surface);
+        border: u.em(1) solid var(--color-border);
+        border-radius: u.em(8);
+        font-size: u.$font-size-base;
+    }
+
+    &__tooltip-month {
+        font-weight: 600;
+        color: var(--color-text-primary);
+        margin-block-end: u.em(2);
+    }
+
+    &__tooltip-spent {
+        color: var(--color-teal);
+    }
+
+    &__tooltip-cumulative {
+        color: var(--color-brand);
+    }
+}

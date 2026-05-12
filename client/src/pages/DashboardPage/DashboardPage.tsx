@@ -1,8 +1,11 @@
 import { useDashboardStats } from "./useDashboardStats";
+import { useSpendingChart } from "./useSpendingChart";
 import HeroStats from "../../components/HeroStats/HeroStats";
+import SpendingChart from "../../components/SpendingChart/SpendingChart";
 
 const DashboardPage = () => {
     const { totalGames, totalHoursPlayed, totalSpent, averageRating } = useDashboardStats();
+    const { data, period, setPeriod } = useSpendingChart();
     return (
         <div className="dashboard-page">
             <div className="dashboard-page__hero-stats">
@@ -26,6 +29,13 @@ const DashboardPage = () => {
                     iconName="star"
                     statValue={averageRating}
                     text="Average Rating"
+                />
+            </div>
+            <div className="dashboard-page__spending-chart">
+                <SpendingChart
+                    data={data}
+                    period={period}
+                    onPeriodChange={setPeriod}
                 />
             </div>
         </div>
