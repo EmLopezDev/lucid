@@ -17,4 +17,36 @@
             grid-template-columns: repeat(4, 1fr);
         }
     }
+
+    &__empty {
+        display: flex;
+        flex-direction: column;
+        gap: u.em(16);
+        margin: u.em(50) auto;
+
+        &-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: u.em(48);
+            width: u.em(48);
+            border-radius: 50%;
+            color: var(--color-brand);
+            background-color: var(--color-brand-bg);
+        }
+
+        &-text {
+            color: var(--color-text-primary);
+            font-size: u.$font-size-3xl;
+        }
+
+        &-link {
+            display: flex;
+            align-items: center;
+            gap: u.em(8);
+            text-decoration: none;
+            color: var(--color-brand);
+            font-size: u.$font-size-2xl;
+        }
+    }
 }

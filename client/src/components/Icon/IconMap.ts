@@ -18,6 +18,7 @@ import {
     Clock,
     DollarSign,
     Star,
+    Library,
 } from "lucide-react";
 
 export const iconRegistry = {
@@ -39,6 +40,7 @@ export const iconRegistry = {
     clock: Clock,
     dollar: DollarSign,
     star: Star,
+    library: Library,
 } satisfies Record<string, LucideIcon>;
 
 export type IconName = keyof typeof iconRegistry;

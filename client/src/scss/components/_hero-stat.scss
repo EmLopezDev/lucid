@@ -102,3 +102,10 @@
         color: var(--color-text-secondary);
     }
 }
+
+.hero-stat__skeleton {
+    border: u.em(1) solid rgba(var(--color-brand-rgb), 0.1);
+    border-radius: u.em(12);
+    overflow: hidden;
+    background-color: var(--color-bg-card);
+}

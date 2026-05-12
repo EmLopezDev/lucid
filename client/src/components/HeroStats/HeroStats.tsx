@@ -15,12 +15,12 @@ const HeroStats = ({ iconName, statValue, prefix = "", text }: HeroStatsType) =>
 
     return (
         <div className={`hero-stat hero-stat--${iconName}`}>
-            <span className={`hero-stat__icon hero-stat__icon--${iconName}`}>
+            <div className={`hero-stat__icon hero-stat__icon--${iconName}`}>
                 <Icon
                     size="large"
                     name={iconName}
                 />
-            </span>
+            </div>
             <div className="hero-stat__data">
                 <span className={`hero-stat__value hero-stat__value--${iconName}`}>
                     {prefix}
