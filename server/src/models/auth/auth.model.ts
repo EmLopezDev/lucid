@@ -33,8 +33,8 @@ export const createPasswordResetToken = async (userId: string) => {
     const expires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
     await AuthModel.findOneAndUpdate(
-        { user_id: userId },
-        { reset_token_hash: tokenHash, reset_token_expires: expires },
+        { user_id: String(userId) },
+        { $set: { reset_token_hash: tokenHash, reset_token_expires: expires } },
     );
 
     return token;

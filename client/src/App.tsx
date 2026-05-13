@@ -14,6 +14,7 @@ import AccountSettingsPage from "./pages/AccountSettingsPage/AccountSettingsPage
 import ProfileView from "./pages/AccountSettingsPage/views/ProfileView/ProfileView";
 import PasswordView from "./pages/AccountSettingsPage/views/PasswordView/PasswordView";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
 
 function App() {
     const { isUserAuthenticated, isSessionLoading } = useUserContext();
@@ -42,6 +43,10 @@ function App() {
                     <Route
                         path="/forgot-password"
                         element={<ForgotPasswordPage />}
+                    />
+                    <Route
+                        path="reset-password"
+                        element={<ResetPasswordPage />}
                     />
                 </Route>
                 <Route element={<AuthorizedRoutes isAuthenticated={isUserAuthenticated} />}>
