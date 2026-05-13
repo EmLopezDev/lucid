@@ -1,0 +1,5 @@
+@use "../utils/" as u;
+
+.signin-page__forgot-password {
+    margin-bottom: u.em(12);
+}

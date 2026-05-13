@@ -13,6 +13,7 @@ import AppSkeleton from "./components/Skeleton/AppSkeleton";
 import AccountSettingsPage from "./pages/AccountSettingsPage/AccountSettingsPage";
 import ProfileView from "./pages/AccountSettingsPage/views/ProfileView/ProfileView";
 import PasswordView from "./pages/AccountSettingsPage/views/PasswordView/PasswordView";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage/ForgotPasswordPage";
 
 function App() {
     const { isUserAuthenticated, isSessionLoading } = useUserContext();
@@ -37,6 +38,10 @@ function App() {
                     <Route
                         path="/signin"
                         element={<SignInPage />}
+                    />
+                    <Route
+                        path="/forgot-password"
+                        element={<ForgotPasswordPage />}
                     />
                 </Route>
                 <Route element={<AuthorizedRoutes isAuthenticated={isUserAuthenticated} />}>

@@ -1,13 +1,21 @@
 import { useCallback } from "react";
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 import { SignInPageProvider } from "./SignInPageContext";
 import { useSignInPageContext } from "./useSignInPageContext";
 import Form from "../../components/Form/Form";
 import Input from "../../components/Input/Input";
 
 const SignInPageContent = () => {
-    const { errors, formDataError, email, password, onEmailChange, onPasswordChange, onSubmitForm, onResetForm } =
-        useSignInPageContext();
+    const {
+        errors,
+        formDataError,
+        email,
+        password,
+        onEmailChange,
+        onPasswordChange,
+        onSubmitForm,
+        onResetForm,
+    } = useSignInPageContext();
 
     const showFormDataError = useCallback(() => {
         if (formDataError === "User doesn't exist") {
@@ -47,6 +55,12 @@ const SignInPageContent = () => {
                 onChange={onPasswordChange}
                 errorText={errors.password}
             />
+            <NavLink
+                className="signin-page__forgot-password"
+                to="/forgot-password"
+            >
+                Forgot Password
+            </NavLink>
         </Form>
     );
 };
