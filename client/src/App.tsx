@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router";
+import { Routes, Route, Navigate } from "react-router";
 import HomePage from "./pages/HomePage/HomePage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import SignInPage from "./pages/SignInPage/SignInPage";
@@ -10,6 +10,9 @@ import DashboardPage from "./pages/DashboardPage/DashboardPage";
 import AuthorizedRoutes from "./routes/AuthorizedRoutes";
 import { useUserContext } from "./contexts/UserContext/useUserContext";
 import AppSkeleton from "./components/Skeleton/AppSkeleton";
+import AccountSettingsPage from "./pages/AccountSettingsPage/AccountSettingsPage";
+import ProfileView from "./pages/AccountSettingsPage/views/ProfileView/ProfileView";
+import PasswordView from "./pages/AccountSettingsPage/views/PasswordView/PasswordView";
 
 function App() {
     const { isUserAuthenticated, isSessionLoading } = useUserContext();
@@ -45,6 +48,28 @@ function App() {
                         path="/user/dashboard"
                         element={<DashboardPage />}
                     />
+                    <Route
+                        path="/user/settings"
+                        element={<AccountSettingsPage />}
+                    >
+                        <Route
+                            index
+                            element={
+                                <Navigate
+                                    to="profile"
+                                    replace
+                                />
+                            }
+                        />
+                        <Route
+                            path="profile"
+                            element={<ProfileView />}
+                        />
+                        <Route
+                            path="password"
+                            element={<PasswordView />}
+                        />
+                    </Route>
                 </Route>
                 <Route
                     path="*"

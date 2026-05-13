@@ -1,0 +1,86 @@
+@use "../utils/" as u;
+
+.account-settings-page {
+    display: flex;
+    flex-direction: column;
+    gap: u.em(20);
+    padding: u.em(20);
+    max-width: u.em(960);
+    margin: 0 auto;
+
+    @include u.breakpoint-min("large") {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: u.em(40);
+    }
+
+    &__nav {
+        display: flex;
+        flex-direction: row;
+        gap: u.em(4);
+
+        @include u.breakpoint-min("large") {
+            flex-direction: column;
+            min-width: u.em(160);
+        }
+    }
+
+    &__nav-link {
+        padding: u.em(8) u.em(12);
+        border-radius: u.em(8);
+        text-decoration: none;
+        color: var(--color-text-secondary);
+        font-size: u.$font-size-lg;
+        transition:
+            color 0.15s,
+            background-color 0.15s;
+
+        &:hover {
+            color: var(--color-text-primary);
+            background-color: var(--color-bg-card);
+        }
+
+        &--active {
+            color: var(--color-brand);
+            background-color: var(--color-brand-bg);
+        }
+    }
+
+    &__content {
+        flex: 1;
+    }
+}
+
+.profile-view {
+    display: flex;
+    flex-direction: column;
+    gap: u.em(16);
+
+    &__title {
+        font-size: u.$font-size-2xl;
+        color: var(--color-text-primary);
+        font-weight: 600;
+    }
+
+    &__success {
+        font-size: u.$font-size-lg;
+        color: var(--color-success);
+    }
+}
+
+.password-view {
+    display: flex;
+    flex-direction: column;
+    gap: u.em(16);
+
+    &__title {
+        font-size: u.$font-size-2xl;
+        color: var(--color-text-primary);
+        font-weight: 600;
+    }
+
+    &__success {
+        font-size: u.$font-size-lg;
+        color: var(--color-success);
+    }
+}
