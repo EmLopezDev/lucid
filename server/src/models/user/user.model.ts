@@ -6,10 +6,17 @@ import {
     type UserUpdateProfileType,
 } from "../../../../packages/types/UserTypes";
 import { UserModel } from "./user.mongo";
-import { registerAuthCredential, signInAuthCredentials } from "../auth/auth.model";
+import {
+    createPasswordResetToken,
+    registerAuthCredential,
+    resetPasswordWithToken,
+    signInAuthCredentials,
+} from "../auth/auth.model";
 import { HttpError } from "../../middleware/HttpError";
 import bcrypt from "bcryptjs";
 import { AuthModel } from "../auth/auth.mongo";
+import config from "../../config";
+import { sendPasswordResetEmail } from "../../services/email";
 
 export const findUserByEmail = async (email: string) => {
     return await UserModel.findOne({ email: email }).select(
@@ -79,4 +86,16 @@ export const updatePassword = async (id: string, credentials: UserUpdatePassword
 
     const hash = await bcrypt.hash(credentials.new_password, 12);
     await AuthModel.findOneAndUpdate({ user_id: id }, { hash });
+};
+
+export const requestPasswordReset = async (email: string) => {
+    const userExists = await findUserByEmail(email);
+    if (!userExists) return;
+    const token = await createPasswordResetToken(userExists._id);
+    const resetURL = `${config.CLIENT_URL}/reset-password?token=${token}`;
+    await sendPasswordResetEmail(userExists.email, resetURL);
+};
+
+export const resetUserPassword = async (token: string, newPassword: string) => {
+    await resetPasswordWithToken(token, newPassword);
 };

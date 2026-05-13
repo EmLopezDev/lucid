@@ -1,8 +1,19 @@
 import * as Sentry from "@sentry/node";
 import { type Request, type Response, type NextFunction } from "express";
 import { flattenError } from "zod";
-import { UserRegister, UserSignin } from "../../../../packages/types/UserTypes";
-import { findUserById, registerUser, signinUser } from "../../models/user/user.model";
+import {
+    UserRegister,
+    UserSignin,
+    UserForgotPassword,
+    UserResetPassword,
+} from "../../../../packages/types/UserTypes";
+import {
+    findUserById,
+    registerUser,
+    requestPasswordReset,
+    resetUserPassword,
+    signinUser,
+} from "../../models/user/user.model";
 
 export const authRegisterUser = async (req: Request, res: Response, next: NextFunction) => {
     const result = UserRegister.safeParse(req.body);
@@ -62,6 +73,32 @@ export const authGetSession = async (req: Request, res: Response, next: NextFunc
             return res.status(401).json({ message: "Not authenticated" });
         }
         res.status(200).json(user);
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const authForgotPassword = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const body = UserForgotPassword.safeParse(req.body);
+        if (!body.success) {
+            return res.status(400).send(flattenError(body.error).fieldErrors);
+        }
+        await requestPasswordReset(body.data.email);
+        return res.status(200).end();
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const authResetPassword = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const body = UserResetPassword.safeParse(req.body);
+        if (!body.success) {
+            return res.status(400).send(flattenError(body.error).fieldErrors);
+        }
+        await resetUserPassword(body.data.hash, body.data.new_password);
+        return res.status(200).end();
     } catch (error) {
         next(error);
     }

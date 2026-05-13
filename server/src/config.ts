@@ -22,9 +22,12 @@ const config = {
     PORT: process.env.PORT || 8000,
     MONGO_URL: process.env.MONGO_URL,
     ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS?.split(",") ?? ["http://localhost:5173"],
+    CLIENT_URL: process.env.CLIENT_URL ?? "http://localhost:5173",
     SESSION_SECRET: process.env.SESSION_SECRET,
     NODE_ENV: process.env.NODE_ENV || "development",
     SENTRY_DSN: process.env.SENTRY_DSN,
+    EMAIL_USER: process.env.EMAIL_USER,
+    EMAIL_PASS: process.env.EMAIL_PASS,
 };
 
 export default config;

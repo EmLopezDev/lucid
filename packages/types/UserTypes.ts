@@ -66,3 +66,16 @@ export const UserUpdatePassword = z.object({
 });
 
 export type UserUpdatePasswordType = z.infer<typeof UserUpdatePassword>;
+
+export const UserForgotPassword = z.object({
+    email: BaseUser.shape.email,
+});
+
+export type UserForgotPasswordType = z.infer<typeof UserForgotPassword>;
+
+export const UserResetPassword = z.object({
+    hash: z.string(),
+    new_password: BaseUser.shape.password,
+});
+
+export type UserResetPasswordType = z.infer<typeof UserResetPassword>;

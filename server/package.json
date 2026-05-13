@@ -27,6 +27,7 @@
         "express-session": "^1.19.0",
         "helmet": "^8.1.0",
         "mongoose": "^9.4.1",
+        "nodemailer": "^8.0.7",
         "pino": "^10.3.1",
         "pino-http": "^11.0.0"
     },
@@ -36,6 +37,7 @@
         "@types/cors": "^2.8.19",
         "@types/express": "^5.0.6",
         "@types/express-session": "^1.19.0",
+        "@types/nodemailer": "^8.0.0",
         "@types/supertest": "^7.2.0",
         "eslint": "^10.3.0",
         "mongodb-memory-server": "^11.1.0",
