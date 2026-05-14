@@ -16,6 +16,7 @@ vi.mock("connect-mongo", async () => {
 
 vi.mock("../../services/email", () => ({
     sendPasswordResetEmail: vi.fn().mockResolvedValue(undefined),
+    sendEmailVerificationEmail: vi.fn().mockResolvedValue(undefined),
 }));
 
 const testUser = {

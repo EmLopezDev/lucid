@@ -13,6 +13,7 @@ import {
     requestPasswordReset,
     resetUserPassword,
     signinUser,
+    verifyUserEmail,
 } from "../../models/user/user.model";
 
 export const authRegisterUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -85,6 +86,19 @@ export const authForgotPassword = async (req: Request, res: Response, next: Next
             return res.status(400).send(flattenError(body.error).fieldErrors);
         }
         await requestPasswordReset(body.data.email);
+        return res.status(200).end();
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const authVerifyEmail = async (req: Request, res: Response, next: NextFunction) => {
+    const { token } = req.query;
+    if (!token || typeof token !== "string") {
+        return res.status(400).json({ message: "Verification token is required" });
+    }
+    try {
+        await verifyUserEmail(token);
         return res.status(200).end();
     } catch (error) {
         next(error);

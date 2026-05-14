@@ -7,7 +7,6 @@ import {
     type SubmitEvent,
 } from "react";
 import { nameCheck, emailCheck } from "../../lib/string";
-import { useNavigate } from "react-router";
 import { RegisterPageContext } from "./useRegisterPageContext";
 import { type UserRegisterType } from "../../../../packages/types";
 import { objectCopy } from "../../lib/generic";
@@ -42,6 +41,7 @@ const REGISTER_RULES: FormRules<UserRegisterType> = {
 
 export interface RegisterPageContextType {
     isSubmitting: boolean;
+    isSuccess: boolean;
     formDataError: string;
     errors: UserRegisterType;
     onFirstNameChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -57,8 +57,7 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
     const [errors, setErrors] = useState<UserRegisterType>(objectCopy(REGISTER_EMPTY_FORM));
     const [formDataError, setFormDataError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const navigate = useNavigate();
+    const [isSuccess, setIsSuccess] = useState(false);
 
     const onFirstNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setFormData((prevState: UserRegisterType) => {
@@ -97,7 +96,7 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
                     body: JSON.stringify(d),
                 });
                 if (response.ok) {
-                    navigate("/signin");
+                    setIsSuccess(true);
                 } else {
                     const error = await response.json();
                     setFormDataError(error.message);
@@ -110,7 +109,7 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
                 setIsSubmitting(false);
             }
         },
-        [navigate],
+        [],
     );
 
     const onSubmitForm = useCallback(
@@ -135,6 +134,7 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
     const contextValue = useMemo(
         () => ({
             isSubmitting,
+            isSuccess,
             formDataError,
             errors,
             onFirstNameChange,
@@ -146,6 +146,7 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
         }),
         [
             isSubmitting,
+            isSuccess,
             formDataError,
             errors,
             onFirstNameChange,

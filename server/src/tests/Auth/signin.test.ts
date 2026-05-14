@@ -2,6 +2,7 @@ import { vi, describe, it, expect, beforeEach } from "vitest";
 import request from "supertest";
 import app from "../../app";
 import { clearDatabase } from "../helpers/db";
+import { verifyTestUser } from "../helpers/auth";
 
 vi.mock("connect-mongo", async () => {
     const session = await import("express-session");
@@ -26,6 +27,7 @@ beforeEach(async () => {
 describe("POST /api/v1/auth/signin", () => {
     it("returns 200 and the user on valid credentials", async () => {
         await request(app).post("/api/v1/auth/register").send(testUser);
+        await verifyTestUser(testUser.email);
         const res = await request(app).post("/api/v1/auth/signin").send({
             email: testUser.email,
             password: testUser.password,
@@ -37,8 +39,20 @@ describe("POST /api/v1/auth/signin", () => {
         expect(res.body.hash).toBeUndefined();
     });
 
+    it("returns 403 when the email is not verified", async () => {
+        await request(app).post("/api/v1/auth/register").send(testUser);
+        const res = await request(app).post("/api/v1/auth/signin").send({
+            email: testUser.email,
+            password: testUser.password,
+        });
+
+        expect(res.status).toBe(403);
+        expect(res.body.message).toBeDefined();
+    });
+
     it("returns 401 when the password is incorrect", async () => {
         await request(app).post("/api/v1/auth/register").send(testUser);
+        await verifyTestUser(testUser.email);
         const res = await request(app).post("/api/v1/auth/signin").send({
             email: testUser.email,
             password: "wrongpassword",

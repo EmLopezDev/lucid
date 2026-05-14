@@ -6,6 +6,7 @@ import {
     authGetSession,
     authForgotPassword,
     authResetPassword,
+    authVerifyEmail,
 } from "./auth.controller";
 
 const AuthRouter = express.Router();
@@ -16,5 +17,6 @@ AuthRouter.post("/signin", authSignInUser);
 AuthRouter.post("/signout", authSignOutUser);
 AuthRouter.post("/forgot-password", authForgotPassword);
 AuthRouter.post("/reset-password", authResetPassword);
+AuthRouter.get("/verify-email", authVerifyEmail);
 
 export default AuthRouter;

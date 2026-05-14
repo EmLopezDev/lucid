@@ -40,6 +40,39 @@ export const createPasswordResetToken = async (userId: string) => {
     return token;
 };
 
+export const createEmailVerificationToken = async (userId: string) => {
+    const token = randomBytes(32).toString("hex");
+    const tokenHash = createHash("sha256").update(token).digest("hex");
+    const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+
+    await AuthModel.findOneAndUpdate(
+        { user_id: String(userId) },
+        { $set: { email_verification_token_hash: tokenHash, email_verification_token_expires: expires } },
+    );
+
+    return token;
+};
+
+export const verifyEmailToken = async (rawToken: string) => {
+    const tokenHash = createHash("sha256").update(rawToken).digest("hex");
+
+    const authRecord = await AuthModel.findOne({
+        email_verification_token_hash: tokenHash,
+        email_verification_token_expires: { $gt: new Date() },
+    });
+
+    if (!authRecord) {
+        throw new HttpError("Invalid or expired verification link", 400);
+    }
+
+    await AuthModel.findOneAndUpdate(
+        { _id: authRecord._id },
+        { email_verification_token_hash: null, email_verification_token_expires: null },
+    );
+
+    return authRecord.user_id;
+};
+
 export const resetPasswordWithToken = async (rawToken: string, newPassword: string) => {
     const tokenHash = createHash("sha256").update(rawToken).digest("hex");
 

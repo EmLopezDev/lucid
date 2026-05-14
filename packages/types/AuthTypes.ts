@@ -6,6 +6,8 @@ export const Auth = z.object({
     hash: z.string(),
     reset_token_hash: z.string().nullable().default(null),
     reset_token_expires: z.date().nullable().default(null),
+    email_verification_token_hash: z.string().nullable().default(null),
+    email_verification_token_expires: z.date().nullable().default(null),
     created_at: z.date(),
     updated_at: z.date(),
     deleted_at: z.date(),

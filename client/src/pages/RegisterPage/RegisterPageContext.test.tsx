@@ -4,13 +4,6 @@ import { type ReactNode } from "react";
 import { RegisterPageProvider } from "./RegisterPageContext";
 import { useRegisterPageContext } from "./useRegisterPageContext";
 
-const mockNavigate = vi.hoisted(() => vi.fn());
-
-vi.mock("react-router", async (importOriginal) => {
-    const actual = await importOriginal<typeof import("react-router")>();
-    return { ...actual, useNavigate: () => mockNavigate };
-});
-
 const wrapper = ({ children }: { children: ReactNode }) => (
     <RegisterPageProvider>{children}</RegisterPageProvider>
 );
@@ -32,7 +25,6 @@ const validForm = {
 
 describe("RegisterPageContext", () => {
     beforeEach(() => {
-        mockNavigate.mockReset();
         globalThis.fetch = vi.fn();
     });
 
@@ -125,7 +117,7 @@ describe("RegisterPageContext", () => {
             );
         });
 
-        it("navigates to /signin after success", async () => {
+        it("sets isSuccess to true after success", async () => {
             const { result } = renderHook(() => useRegisterPageContext(), { wrapper });
             act(() => {
                 result.current.onFirstNameChange(inputEvent(validForm.first_name));
@@ -134,8 +126,7 @@ describe("RegisterPageContext", () => {
                 result.current.onPasswordChange(inputEvent(validForm.password));
             });
             act(() => result.current.onSubmitForm(submitEvent()));
-            await waitFor(() => expect(mockNavigate).toHaveBeenCalled());
-            expect(mockNavigate).toHaveBeenCalledWith("/signin");
+            await waitFor(() => expect(result.current.isSuccess).toBe(true));
         });
     });
 

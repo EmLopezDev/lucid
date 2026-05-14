@@ -7,25 +7,29 @@ import {
 } from "../../../../packages/types/UserTypes";
 import { UserModel } from "./user.mongo";
 import {
+    createEmailVerificationToken,
     createPasswordResetToken,
     registerAuthCredential,
     resetPasswordWithToken,
     signInAuthCredentials,
+    verifyEmailToken,
 } from "../auth/auth.model";
 import { HttpError } from "../../middleware/HttpError";
 import bcrypt from "bcryptjs";
 import { AuthModel } from "../auth/auth.mongo";
 import config from "../../config";
-import { sendPasswordResetEmail } from "../../services/email";
+import { sendEmailVerificationEmail, sendPasswordResetEmail } from "../../services/email";
 
 export const findUserByEmail = async (email: string) => {
     return await UserModel.findOne({ email: email }).select(
-        "_id first_name last_name email created_at",
+        "_id first_name last_name email email_verified created_at",
     );
 };
 
 export const findUserById = async (id: string) => {
-    return await UserModel.findById(id).select("_id first_name last_name email created_at");
+    return await UserModel.findById(id).select(
+        "_id first_name last_name email email_verified created_at",
+    );
 };
 
 export const registerUser = async (user: UserRegisterType) => {
@@ -38,19 +42,24 @@ export const registerUser = async (user: UserRegisterType) => {
     const session = await mongoose.startSession();
     session.startTransaction();
 
+    let registeredUser;
     try {
         const { password, ...userWithoutPassword } = user;
-        const registeredUser = await UserModel.create(userWithoutPassword);
+        registeredUser = await UserModel.create(userWithoutPassword);
         await registerAuthCredential({ id: registeredUser._id, password });
         await session.commitTransaction();
-
-        return registeredUser;
     } catch {
         await session.abortTransaction();
         throw new Error("Unable to register");
     } finally {
         session.endSession();
     }
+
+    const token = await createEmailVerificationToken(registeredUser._id);
+    const verifyURL = `${config.CLIENT_URL}/verify-email?token=${token}`;
+    await sendEmailVerificationEmail(user.email, verifyURL);
+
+    return registeredUser;
 };
 
 export const signinUser = async (user: UserSigninType) => {
@@ -58,6 +67,10 @@ export const signinUser = async (user: UserSigninType) => {
 
     if (!userExists) {
         throw new HttpError("One or more credentials is incorrect", 401);
+    }
+
+    if (!userExists.email_verified) {
+        throw new HttpError("Please verify your email before signing in", 403);
     }
 
     await signInAuthCredentials({
@@ -98,4 +111,9 @@ export const requestPasswordReset = async (email: string) => {
 
 export const resetUserPassword = async (token: string, newPassword: string) => {
     await resetPasswordWithToken(token, newPassword);
+};
+
+export const verifyUserEmail = async (token: string) => {
+    const userId = await verifyEmailToken(token);
+    await UserModel.findByIdAndUpdate(userId, { email_verified: true });
 };

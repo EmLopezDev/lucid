@@ -17,3 +17,12 @@ export const sendPasswordResetEmail = async (to: string, resetUrl: string) => {
         html: `<p>Reset your password here: <a href="${resetUrl}">${resetUrl}</a></p>`,
     });
 };
+
+export const sendEmailVerificationEmail = async (to: string, verifyUrl: string) => {
+    await transporter.sendMail({
+        from: config.EMAIL_USER,
+        to,
+        subject: "Verify your email for Lucid",
+        html: `<p>Verify your email here: <a href="${verifyUrl}">${verifyUrl}</a></p>`,
+    });
+};

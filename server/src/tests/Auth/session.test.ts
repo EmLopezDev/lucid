@@ -2,6 +2,7 @@ import { vi, describe, it, expect, beforeEach } from "vitest";
 import request from "supertest";
 import app from "../../app";
 import { clearDatabase } from "../helpers/db";
+import { verifyTestUser } from "../helpers/auth";
 
 vi.mock("connect-mongo", async () => {
     const session = await import("express-session");
@@ -35,6 +36,7 @@ describe("GET /api/v1/auth/session", () => {
         const agent = request.agent(app);
 
         await agent.post("/api/v1/auth/register").send(testUser);
+        await verifyTestUser(testUser.email);
         await agent.post("/api/v1/auth/signin").send({
             email: testUser.email,
             password: testUser.password,
@@ -52,6 +54,7 @@ describe("GET /api/v1/auth/session", () => {
         const agent = request.agent(app);
 
         await agent.post("/api/v1/auth/register").send(testUser);
+        await verifyTestUser(testUser.email);
         await agent.post("/api/v1/auth/signin").send({
             email: testUser.email,
             password: testUser.password,

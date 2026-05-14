@@ -19,6 +19,7 @@ export const BaseUser = z.object({
         .string()
         .min(8, { error: "Must be a minimum of 8 characters" })
         .max(72, { error: "Exceeded maximum characters" }),
+    email_verified: z.boolean().default(false),
     created_at: z.date(),
     updated_at: z.date().nullable().default(null),
     deleted_at: z.date().nullable().default(null),
@@ -29,6 +30,7 @@ export const User = BaseUser.pick({
     first_name: true,
     last_name: true,
     email: true,
+    email_verified: true,
     created_at: true,
     updated_at: true,
     deleted_at: true,

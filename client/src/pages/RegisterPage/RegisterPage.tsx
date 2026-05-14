@@ -8,6 +8,7 @@ import { useCallback } from "react";
 const RegisterPageContent = () => {
     const {
         errors,
+        isSuccess,
         formDataError,
         onFirstNameChange,
         onLastNameChange,
@@ -16,6 +17,7 @@ const RegisterPageContent = () => {
         onSubmitForm,
         onResetForm,
     } = useRegisterPageContext();
+
 
     const showFormDataError = useCallback(() => {
         if (formDataError === "User already exists") {
@@ -31,6 +33,19 @@ const RegisterPageContent = () => {
             return <span className="register-page__form-error center">{formDataError}</span>;
         }
     }, [formDataError]);
+
+    if (isSuccess) {
+        return (
+            <div className="register-page__success">
+                <p className="register-page__success-title">Check your email</p>
+                <p className="register-page__success-message">
+                    We sent a verification link to your email address. Please verify your email to
+                    sign in.
+                </p>
+                <Link to="/signin">Back to sign in</Link>
+            </div>
+        );
+    }
 
     return (
         <Form

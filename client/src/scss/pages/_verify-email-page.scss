@@ -1,0 +1,38 @@
+@use "../utils/" as u;
+
+.verify-email-page {
+    display: flex;
+    flex-direction: column;
+    gap: u.rem(8);
+    padding: u.rem(20) u.rem(24);
+    border-radius: u.rem(8);
+
+    &--success {
+        border: 1px solid var(--color-success);
+        background-color: color-mix(in srgb, var(--color-success) 10%, transparent);
+    }
+
+    &--error {
+        border: 1px solid var(--color-error);
+        background-color: color-mix(in srgb, var(--color-error) 10%, transparent);
+    }
+
+    &__title {
+        font-size: u.rem(16);
+        font-weight: 600;
+
+        .verify-email-page--success & {
+            color: var(--color-success);
+        }
+
+        .verify-email-page--error & {
+            color: var(--color-error);
+        }
+    }
+
+    &__message {
+        font-size: u.rem(14);
+        color: var(--color-text-secondary);
+        line-height: 1.5;
+    }
+}
