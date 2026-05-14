@@ -1,4 +1,7 @@
 import { vi, describe, it, expect, beforeEach } from "vitest";
+import request from "supertest";
+import app from "../../app";
+import { clearDatabase } from "../helpers/db";
 
 vi.mock("connect-mongo", async () => {
     const session = await import("express-session");
@@ -8,10 +11,6 @@ vi.mock("connect-mongo", async () => {
         },
     };
 });
-
-import request from "supertest";
-import app from "../../app";
-import { clearDatabase } from "../helpers/db";
 
 const testUser = {
     first_name: "Test",

@@ -1,4 +1,7 @@
 import { vi, describe, it, expect, beforeEach } from "vitest";
+import request from "supertest";
+import app from "../../app";
+import { clearDatabase } from "../helpers/db";
 
 vi.mock("connect-mongo", async () => {
     const session = await import("express-session");
@@ -8,10 +11,6 @@ vi.mock("connect-mongo", async () => {
         },
     };
 });
-
-import request from "supertest";
-import app from "../../app";
-import { clearDatabase } from "../helpers/db";
 
 const testUser = {
     first_name: "Test",
@@ -48,10 +47,12 @@ describe("POST /api/v1/auth/register", () => {
     });
 
     it("returns 400 when the email format is invalid", async () => {
-        const res = await request(app).post("/api/v1/auth/register").send({
-            ...testUser,
-            email: "not-an-email",
-        });
+        const res = await request(app)
+            .post("/api/v1/auth/register")
+            .send({
+                ...testUser,
+                email: "not-an-email",
+            });
 
         expect(res.status).toBe(400);
     });
