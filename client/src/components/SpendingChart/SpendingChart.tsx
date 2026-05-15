@@ -11,7 +11,7 @@ import {
 import {
     type TimePeriodType,
     type SpendingDataType,
-} from "../../pages/DashboardPage/useSpendingChart";
+} from "@pages/DashboardPage/useSpendingChart";
 
 const PERIODS: { label: string; value: TimePeriodType }[] = [
     { label: "All time", value: "all" },

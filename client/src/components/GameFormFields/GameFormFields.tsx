@@ -1,7 +1,7 @@
-import Input from "../Input/Input";
-import Select from "../Select/Select";
-import DatePicker from "../DatePicker/DatePicker";
-import Textarea from "../Textarea/Textarea";
+import Input from "@components/Input/Input";
+import Select from "@components/Select/Select";
+import DatePicker from "@components/DatePicker/DatePicker";
+import Textarea from "@components/Textarea/Textarea";
 import {
     type GenreType,
     type PlatformType,
@@ -10,7 +10,7 @@ import {
     type PlatformOptionType,
     type StatusOptionType,
 } from "../../../../packages/types";
-import { genreOptions, platformOptions, statusOptions } from "../../lib/form";
+import { genreOptions, platformOptions, statusOptions } from "@lib/form";
 
 export type GameFormData = {
     title: string;

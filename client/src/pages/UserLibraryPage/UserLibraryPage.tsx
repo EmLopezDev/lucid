@@ -1,15 +1,15 @@
 import { useState, useCallback } from "react";
 import { cx } from "css-variants";
-import Card from "../../components/Card/Card";
-import CardDetail from "../../components/CardDetail/CardDetail";
-import Input from "../../components/Input/Input";
-import Button from "../../components/Button/Button";
-import Select from "../../components/Select/Select";
-import Badge from "../../components/Badge/Badge";
-import Icon from "../../components/Icon/Icon";
-import Modal from "../../components/Modal/Modal";
-import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
-import AddGameForm from "../../components/AddGameForm/AddGameForm";
+import Card from "@components/Card/Card";
+import CardDetail from "@components/CardDetail/CardDetail";
+import Input from "@components/Input/Input";
+import Button from "@components/Button/Button";
+import Select from "@components/Select/Select";
+import Badge from "@components/Badge/Badge";
+import Icon from "@components/Icon/Icon";
+import Modal from "@components/Modal/Modal";
+import ConfirmModal from "@components/ConfirmModal/ConfirmModal";
+import AddGameForm from "@components/AddGameForm/AddGameForm";
 import { UserLibraryPageProvider } from "./UserLibraryPageContext";
 import { useUserLibraryPageContext } from "./useUserLibraryPageContext";
 import {
@@ -17,7 +17,7 @@ import {
     type SortValueType,
     type SortLabelType,
 } from "../../../../packages/types";
-import { SkeletonLoader, SkeletonCard, SkeletonCardDetail } from "../../components/Skeleton";
+import { SkeletonLoader, SkeletonCard, SkeletonCardDetail } from "@components/Skeleton";
 
 const UserLibraryPageContent = () => {
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);

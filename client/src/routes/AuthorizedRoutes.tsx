@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router";
-import { UserLibraryProvider } from "../contexts/UserLibraryContext/UserLibraryContext";
+import { UserLibraryProvider } from "@contexts/UserLibraryContext/UserLibraryContext";
 
 type AuthorizedRoutesType = {
     isAuthenticated?: boolean;

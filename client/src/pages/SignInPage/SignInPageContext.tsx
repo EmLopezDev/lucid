@@ -10,11 +10,11 @@ import {
 import { useNavigate, useLocation } from "react-router";
 import { type UserSigninType } from "../../../../packages/types";
 import { SignInPageContext } from "./useSignInPageContext";
-import { emailCheck } from "../../lib/string";
-import { useUserContext } from "../../contexts/UserContext/useUserContext";
-import { objectCopy } from "../../lib/generic";
-import { isFormDataValid, type FormRules, hasErrors } from "../../lib/form";
-import { API_URL } from "../../config/api";
+import { emailCheck } from "@lib/string";
+import { useUserContext } from "@contexts/UserContext/useUserContext";
+import { objectCopy } from "@lib/generic";
+import { isFormDataValid, type FormRules, hasErrors } from "@lib/form";
+import { API_URL } from "@config/api";
 
 const SIGNIN_EMPTY_FORM: UserSigninType = {
     email: "",

@@ -1,5 +1,5 @@
 import { cx } from "css-variants";
-import { capitalizeString } from "../../lib/string";
+import { capitalizeString } from "@lib/string";
 import { type StatusType } from "../../../../packages/types";
 
 type BadgeType = {

@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, useEffect, type ReactNode } from "react";
 import { UserContext } from "./useUserContext";
 import { type UserType } from "../../../../packages/types";
-import { API_URL } from "../../config/api";
+import { API_URL } from "@config/api";
 
 export interface UserContextType {
     currentUser: UserType | null;

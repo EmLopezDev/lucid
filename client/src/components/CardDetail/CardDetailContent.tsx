@@ -1,11 +1,11 @@
 import { type SetStateAction } from "react";
 import type { UserLibraryDataType } from "../../../../packages/types/UserLibrary";
-import Badge from "../Badge/Badge";
-import Button from "../Button/Button";
-import HoursBar from "../HoursBar/HoursBar";
-import StarRating from "../StarRating/StarRating";
-import { formatDate } from "../../lib/date";
-import { capitalizeString } from "../../lib/string";
+import Badge from "@components/Badge/Badge";
+import Button from "@components/Button/Button";
+import HoursBar from "@components/HoursBar/HoursBar";
+import StarRating from "@components/StarRating/StarRating";
+import { formatDate } from "@lib/date";
+import { capitalizeString } from "@lib/string";
 
 type CardDetailContentType = {
     data: UserLibraryDataType;

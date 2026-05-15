@@ -6,9 +6,9 @@ import {
     type ChangeEvent,
     type SubmitEvent,
 } from "react";
-import { objectCopy } from "../../lib/generic";
-import { isFormDataValid, type FormRules, hasErrors } from "../../lib/form";
-import { API_URL } from "../../config/api";
+import { objectCopy } from "@lib/generic";
+import { isFormDataValid, type FormRules, hasErrors } from "@lib/form";
+import { API_URL } from "@config/api";
 import { ResetPasswordPageContext } from "./useResetPasswordContext";
 import { type UserResetPasswordType } from "@lucid/types";
 

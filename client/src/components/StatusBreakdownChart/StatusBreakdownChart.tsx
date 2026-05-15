@@ -1,6 +1,6 @@
 import { PieChart, Pie, Tooltip, ResponsiveContainer } from "recharts";
-import { type StatusDataType } from "../../pages/DashboardPage/useStatusBreakdown";
-import { capitalizeString } from "../../lib/string";
+import { type StatusDataType } from "@pages/DashboardPage/useStatusBreakdown";
+import { capitalizeString } from "@lib/string";
 
 type CustomTooltipType = {
     active?: boolean;

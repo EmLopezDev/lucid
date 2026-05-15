@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo, type ReactNode } from "react";
 import { useSearchParams } from "react-router";
-import { API_URL } from "../../config/api";
+import { API_URL } from "@config/api";
 import { VerifyEmailPageContext } from "./useVerifyEmailPageContext";
 
 export type VerifyStatus = "loading" | "success" | "error" | "no_token";

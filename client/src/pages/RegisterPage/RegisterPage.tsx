@@ -1,8 +1,8 @@
 import { Link } from "react-router";
 import { RegisterPageProvider } from "./RegisterPageContext";
 import { useRegisterPageContext } from "./useRegisterPageContext";
-import Input from "../../components/Input/Input";
-import Form from "../../components/Form/Form";
+import Input from "@components/Input/Input";
+import Form from "@components/Form/Form";
 import { useCallback } from "react";
 
 const RegisterPageContent = () => {

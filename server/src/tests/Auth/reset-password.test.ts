@@ -2,7 +2,7 @@ import { vi, describe, it, expect, beforeEach } from "vitest";
 import request from "supertest";
 import app from "../../app";
 import { clearDatabase } from "../helpers/db";
-import { sendPasswordResetEmail } from "../../services/email";
+import { sendPasswordResetEmail } from "@services/email";
 import { getResetToken } from "../helpers/auth";
 
 vi.mock("connect-mongo", async () => {

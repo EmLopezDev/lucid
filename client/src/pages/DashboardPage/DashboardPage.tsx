@@ -1,13 +1,13 @@
 import { NavLink } from "react-router";
 import { useDashboardStats } from "./useDashboardStats";
 import { useSpendingChart } from "./useSpendingChart";
-import { useUserLibraryContext } from "../../contexts/UserLibraryContext/useUserLibraryContext";
+import { useUserLibraryContext } from "@contexts/UserLibraryContext/useUserLibraryContext";
 import { useStatusBreakdown } from "./useStatusBreakdown";
-import { SkeletonLoader, Skeleton } from "../../components/Skeleton";
-import HeroStats from "../../components/HeroStats/HeroStats";
-import SpendingChart from "../../components/SpendingChart/SpendingChart";
-import Icon from "../../components/Icon/Icon";
-import StatusBreakdownChart from "../../components/StatusBreakdownChart/StatusBreakdownChart";
+import { SkeletonLoader, Skeleton } from "@components/Skeleton";
+import HeroStats from "@components/HeroStats/HeroStats";
+import SpendingChart from "@components/SpendingChart/SpendingChart";
+import Icon from "@components/Icon/Icon";
+import StatusBreakdownChart from "@components/StatusBreakdownChart/StatusBreakdownChart";
 
 const DashboardPage = () => {
     const { isLoading, libraryData } = useUserLibraryContext();

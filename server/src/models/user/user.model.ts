@@ -13,11 +13,11 @@ import {
     resetPasswordWithToken,
     signInAuthCredentials,
     verifyEmailToken,
-} from "../auth/auth.model";
-import { HttpError } from "../../middleware/HttpError";
-import { AuthModel } from "../auth/auth.mongo";
-import { UserLibraryModel } from "../user-library/user-library.mongo";
-import { sendEmailVerificationEmail, sendPasswordResetEmail } from "../../services/email";
+} from "@models/auth/auth.model";
+import { HttpError } from "@middleware/HttpError";
+import { AuthModel } from "@models/auth/auth.mongo";
+import { UserLibraryModel } from "@models/user-library/user-library.mongo";
+import { sendEmailVerificationEmail, sendPasswordResetEmail } from "@services/email";
 import bcrypt from "bcryptjs";
 import config from "../../config";
 

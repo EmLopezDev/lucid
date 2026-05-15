@@ -1,5 +1,5 @@
 import { type ReactNode, type SubmitEvent, type JSX } from "react";
-import Button from "../Button/Button";
+import Button from "@components/Button/Button";
 
 type FormType = {
     errorText?: () => JSX.Element | string;

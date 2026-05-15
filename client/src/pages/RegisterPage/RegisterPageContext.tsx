@@ -6,12 +6,12 @@ import {
     type ChangeEvent,
     type SubmitEvent,
 } from "react";
-import { nameCheck, emailCheck } from "../../lib/string";
+import { nameCheck, emailCheck } from "@lib/string";
 import { RegisterPageContext } from "./useRegisterPageContext";
 import { type UserRegisterType } from "../../../../packages/types";
-import { objectCopy } from "../../lib/generic";
-import { isFormDataValid, type FormRules, hasErrors } from "../../lib/form";
-import { API_URL } from "../../config/api";
+import { objectCopy } from "@lib/generic";
+import { isFormDataValid, type FormRules, hasErrors } from "@lib/form";
+import { API_URL } from "@config/api";
 
 const REGISTER_EMPTY_FORM: UserRegisterType = {
     first_name: "",

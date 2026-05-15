@@ -5,8 +5,8 @@ import type {
     PostUserLibraryGameBodyType,
     UserLibraryDataType,
 } from "@lucid/types";
-import { useUserContext } from "../UserContext/useUserContext";
-import { API_URL } from "../../config/api";
+import { useUserContext } from "@contexts/UserContext/useUserContext";
+import { API_URL } from "@config/api";
 
 export interface UserLibraryContextType {
     libraryData: UserLibraryDataType[];

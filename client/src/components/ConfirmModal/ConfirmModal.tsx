@@ -1,6 +1,6 @@
 import { type ReactNode } from "react";
-import Modal from "../Modal/Modal";
-import Button from "../Button/Button";
+import Modal from "@components/Modal/Modal";
+import Button from "@components/Button/Button";
 
 type ConfirmModalType = {
     isOpen: boolean;

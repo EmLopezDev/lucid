@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useUserLibraryContext } from "../../contexts/UserLibraryContext/useUserLibraryContext";
+import { useUserLibraryContext } from "@contexts/UserLibraryContext/useUserLibraryContext";
 import { type StatusType } from "@lucid/types";
 
 const STATUS_COLORS: Record<StatusType, string> = {

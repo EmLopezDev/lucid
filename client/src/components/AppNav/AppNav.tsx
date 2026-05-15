@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router";
-import { useUserContext } from "../../contexts/UserContext/useUserContext";
-import Icon from "../Icon/Icon";
-import GemIcon from "../GemIcon/GemIcon";
+import { useUserContext } from "@contexts/UserContext/useUserContext";
+import Icon from "@components/Icon/Icon";
+import GemIcon from "@components/GemIcon/GemIcon";
 
 function AppNav({ isUserAuthenticated }: { isUserAuthenticated: boolean }) {
     const { signOut } = useUserContext();

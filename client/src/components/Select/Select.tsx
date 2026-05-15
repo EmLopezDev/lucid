@@ -1,8 +1,8 @@
 import { cx } from "css-variants";
 import { useState, useRef, useCallback, useId, useEffect, type KeyboardEvent } from "react";
-import { capitalizeString } from "../../lib/string";
+import { capitalizeString } from "@lib/string";
 import { type SelectOptionType } from "../../../../packages/types";
-import Icon from "../Icon/Icon";
+import Icon from "@components/Icon/Icon";
 
 interface SelectType<V = string, L extends string = string> {
     id: string;

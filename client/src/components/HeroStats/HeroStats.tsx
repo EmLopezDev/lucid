@@ -1,5 +1,5 @@
-import Icon from "../Icon/Icon";
-import { type IconName } from "../../components/Icon/IconMap.ts";
+import Icon from "@components/Icon/Icon";
+import { type IconName } from "@components/Icon/IconMap.ts";
 import { useCountUp } from "../../hooks/useCountUp.ts";
 
 type HeroStatsType = {

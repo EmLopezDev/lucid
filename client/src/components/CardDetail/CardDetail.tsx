@@ -3,11 +3,11 @@ import {
     type UserLibraryDataType,
     type PatchUserLibraryGameBodyType,
 } from "../../../../packages/types/UserLibrary";
-import { objectCopy } from "../../lib/generic";
-import { type GameFormData } from "../GameFormFields/GameFormFields";
+import { objectCopy } from "@lib/generic";
+import { type GameFormData } from "@components/GameFormFields/GameFormFields";
 import CardDetailContent from "./CardDetailContent";
 import CardDetailEditContent from "./CardDetailEditContent";
-import Button from "../Button/Button";
+import Button from "@components/Button/Button";
 
 type CardDetailType = {
     data: UserLibraryDataType;

@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
-import Badge from "../Badge/Badge";
-import HoursBar from "../HoursBar/HoursBar";
-import Icon from "../Icon/Icon";
+import Badge from "@components/Badge/Badge";
+import HoursBar from "@components/HoursBar/HoursBar";
+import Icon from "@components/Icon/Icon";
 import { cx } from "css-variants";
-import StarRating from "../StarRating/StarRating";
-import { capitalizeString } from "../../lib/string";
+import StarRating from "@components/StarRating/StarRating";
+import { capitalizeString } from "@lib/string";
 
 type CardType = {
     data: UserLibraryDataType;

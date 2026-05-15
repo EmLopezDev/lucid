@@ -3,7 +3,7 @@ import { renderHook, act, waitFor } from "@testing-library/react";
 import { type ReactNode } from "react";
 import { UserLibraryPageProvider } from "./UserLibraryPageContext";
 import { useUserLibraryPageContext } from "./useUserLibraryPageContext";
-import { UserLibraryProvider } from "../../contexts/UserLibraryContext/UserLibraryContext";
+import { UserLibraryProvider } from "@contexts/UserLibraryContext/UserLibraryContext";
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 
 const mockCurrentUser = { _id: "user-1", first_name: "John", last_name: "Doe" };

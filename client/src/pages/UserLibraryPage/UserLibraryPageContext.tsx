@@ -18,9 +18,9 @@ import {
     type StatusOptionType,
     type SortOptionType,
 } from "../../../../packages/types/SelectOptionsTypes.ts";
-import { sortOptions, statusFilterOptions, statusOptions } from "../../lib/form.ts";
-import { filterBySort, filterByStatus, filterByTitle } from "../../lib/filter.ts";
-import { useUserLibraryContext } from "../../contexts/UserLibraryContext/useUserLibraryContext.ts";
+import { sortOptions, statusFilterOptions, statusOptions } from "@lib/form";
+import { filterBySort, filterByStatus, filterByTitle } from "@lib/filter";
+import { useUserLibraryContext } from "@contexts/UserLibraryContext/useUserLibraryContext";
 
 export type FilterType = {
     searchTitle: string;

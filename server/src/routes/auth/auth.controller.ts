@@ -14,7 +14,7 @@ import {
     resetUserPassword,
     signinUser,
     verifyUserEmail,
-} from "../../models/user/user.model";
+} from "@models/user/user.model";
 
 export const authRegisterUser = async (req: Request, res: Response, next: NextFunction) => {
     const result = UserRegister.safeParse(req.body);

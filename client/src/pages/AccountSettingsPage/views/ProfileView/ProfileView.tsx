@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
-import Button from "../../../../components/Button/Button";
-import Form from "../../../../components/Form/Form";
-import Input from "../../../../components/Input/Input";
+import Button from "@components/Button/Button";
+import Form from "@components/Form/Form";
+import Input from "@components/Input/Input";
 import { useProfileView } from "./useProfileView";
-import ConfirmModal from "../../../../components/ConfirmModal/ConfirmModal";
+import ConfirmModal from "@components/ConfirmModal/ConfirmModal";
 
 const ProfileView = () => {
     const [pendingDeleteAccount, setPendingDeleteAccount] = useState(false);

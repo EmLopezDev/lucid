@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import { AuthModel } from "./auth.mongo";
-import { HttpError } from "../../middleware/HttpError";
+import { HttpError } from "@middleware/HttpError";
 import { randomBytes, createHash } from "node:crypto";
 
 type AuthCredentialsType = {

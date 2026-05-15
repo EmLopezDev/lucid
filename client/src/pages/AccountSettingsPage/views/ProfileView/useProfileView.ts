@@ -1,9 +1,9 @@
 import { useState, useCallback, type ChangeEvent, type SubmitEvent } from "react";
-import { useUserContext } from "../../../../contexts/UserContext/useUserContext";
-import { nameCheck, emailCheck } from "../../../../lib/string";
-import { isFormDataValid, hasErrors, type FormRules } from "../../../../lib/form";
-import { objectCopy } from "../../../../lib/generic";
-import { API_URL } from "../../../../config/api";
+import { useUserContext } from "@contexts/UserContext/useUserContext";
+import { nameCheck, emailCheck } from "@lib/string";
+import { isFormDataValid, hasErrors, type FormRules } from "@lib/form";
+import { objectCopy } from "@lib/generic";
+import { API_URL } from "@config/api";
 import { useNavigate } from "react-router";
 
 type ProfileFormType = {

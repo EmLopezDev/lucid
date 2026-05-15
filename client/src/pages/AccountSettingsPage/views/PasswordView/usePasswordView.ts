@@ -1,8 +1,8 @@
 import { useState, useCallback, type ChangeEvent, type SubmitEvent } from "react";
-import { useUserContext } from "../../../../contexts/UserContext/useUserContext";
-import { isFormDataValid, hasErrors, type FormRules } from "../../../../lib/form";
-import { objectCopy } from "../../../../lib/generic";
-import { API_URL } from "../../../../config/api";
+import { useUserContext } from "@contexts/UserContext/useUserContext";
+import { isFormDataValid, hasErrors, type FormRules } from "@lib/form";
+import { objectCopy } from "@lib/generic";
+import { API_URL } from "@config/api";
 
 type PasswordFormType = {
     current_password: string;

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
-import Button from "../Button/Button";
+import Button from "@components/Button/Button";
 
 type ModalProps = {
     isOpen: boolean;

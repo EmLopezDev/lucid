@@ -1,6 +1,6 @@
 import * as Sentry from "@sentry/node";
 import { type NextFunction, type Request, type Response } from "express";
-import logger from "../services/logger";
+import logger from "@services/logger";
 import { HttpError } from "./HttpError";
 
 export const errorHandler = (err: Error, _req: Request, res: Response, _next: NextFunction) => {

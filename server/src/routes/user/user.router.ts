@@ -1,7 +1,7 @@
 import express from "express";
 import { patchUser, patchPassword, deleteUser } from "./user.controller";
-import { requireAuth } from "../../middleware/requireAuth";
-import { requireOwner } from "../../middleware/requireOwner";
+import { requireAuth } from "@middleware/requireAuth";
+import { requireOwner } from "@middleware/requireOwner";
 
 const UserRouter = express.Router({ mergeParams: true });
 

@@ -6,10 +6,10 @@ import {
     type ChangeEvent,
     type SubmitEvent,
 } from "react";
-import { emailCheck } from "../../lib/string";
-import { objectCopy } from "../../lib/generic";
-import { isFormDataValid, type FormRules, hasErrors } from "../../lib/form";
-import { API_URL } from "../../config/api";
+import { emailCheck } from "@lib/string";
+import { objectCopy } from "@lib/generic";
+import { isFormDataValid, type FormRules, hasErrors } from "@lib/form";
+import { API_URL } from "@config/api";
 import { ForgotPasswordPageContext } from "./useForgotPasswordPageContext";
 import { type UserForgotPasswordType } from "@lucid/types";
 
