@@ -142,3 +142,11 @@ export const verifyUserEmail = async (token: string) => {
     const userId = await verifyEmailToken(token);
     await UserModel.findByIdAndUpdate(userId, { email_verified: true });
 };
+
+export const resendEmailVerification = async (email: string) => {
+    const user = await findUserByEmail(email);
+    if (!user || user.email_verified) return;
+    const token = await createEmailVerificationToken(user._id);
+    const verifyURL = `${config.CLIENT_URL}/verify-email?token=${token}`;
+    await sendEmailVerificationEmail(email, verifyURL);
+};

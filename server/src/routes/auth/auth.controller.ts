@@ -11,6 +11,7 @@ import {
     findUserById,
     registerUser,
     requestPasswordReset,
+    resendEmailVerification,
     resetUserPassword,
     signinUser,
     verifyUserEmail,
@@ -112,6 +113,19 @@ export const authResetPassword = async (req: Request, res: Response, next: NextF
             return res.status(400).send(flattenError(body.error).fieldErrors);
         }
         await resetUserPassword(body.data.hash, body.data.new_password);
+        return res.status(200).end();
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const authResendVerification = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const body = UserForgotPassword.safeParse(req.body);
+        if (!body.success) {
+            return res.status(400).send(flattenError(body.error).fieldErrors);
+        }
+        await resendEmailVerification(body.data.email);
         return res.status(200).end();
     } catch (error) {
         next(error);
