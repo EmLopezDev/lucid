@@ -1,5 +1,11 @@
 {
     "compilerOptions": {
+        "paths": {
+            "@models/*": ["./src/models/*"],
+            "@middleware/*": ["./src/middleware/*"],
+            "@services/*": ["./src/services/*"],
+            "@routes/*": ["./src/routes/*"]
+        },
         "rootDir": "/",
         "outDir": "./dist",
         "ignoreDeprecations": "6.0",

@@ -7,7 +7,12 @@
         "types": ["vite/client"],
         "skipLibCheck": true,
         "paths": {
-            "@lucid/types": ["../packages/types/index.ts"]
+            "@lucid/types": ["../packages/types/index.ts"],
+            "@components/*": ["./src/components/*"],
+            "@contexts/*": ["./src/contexts/*"],
+            "@lib/*": ["./src/lib/*"],
+            "@config/*": ["./src/config/*"],
+            "@pages/*": ["./src/pages/*"]
         },
 
         /* Bundler mode */

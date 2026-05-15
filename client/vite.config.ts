@@ -42,6 +42,11 @@ export default defineConfig({
     resolve: {
         alias: {
             "@lucid/types": path.resolve(__dirname, "../packages/types/index.ts"),
+            "@components": path.resolve(__dirname, "src/components"),
+            "@contexts": path.resolve(__dirname, "src/contexts"),
+            "@lib": path.resolve(__dirname, "src/lib"),
+            "@config": path.resolve(__dirname, "src/config"),
+            "@pages": path.resolve(__dirname, "src/pages"),
         },
     },
     server: {
