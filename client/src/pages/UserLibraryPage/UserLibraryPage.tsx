@@ -19,6 +19,8 @@ import {
 import { SkeletonLoader, SkeletonCard, SkeletonCardDetail } from "../../components/Skeleton";
 
 const UserLibraryPageContent = () => {
+    const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+    const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
     const {
         isLoading,
         isCardDetailLoading,
@@ -85,9 +87,6 @@ const UserLibraryPageContent = () => {
             </span>
         </div>
     );
-
-    const [isFiltersOpen, setIsFiltersOpen] = useState(false);
-    const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
     const onRequestDelete = useCallback((id: string) => {
         setPendingDeleteId(id);

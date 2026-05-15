@@ -4,6 +4,7 @@ import { nameCheck, emailCheck } from "../../../../lib/string";
 import { isFormDataValid, hasErrors, type FormRules } from "../../../../lib/form";
 import { objectCopy } from "../../../../lib/generic";
 import { API_URL } from "../../../../config/api";
+import { useNavigate } from "react-router";
 
 type ProfileFormType = {
     first_name: string;
@@ -43,12 +44,14 @@ export const useProfileView = () => {
     const [errors, setErrors] = useState<ProfileFormType>(objectCopy(EMPTY_ERRORS));
     const [formError, setFormError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
+    const [isSuccess, setIsSuccess] = useState("");
+
+    const navigate = useNavigate();
 
     const onChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
-        setIsSuccess(false);
+        setIsSuccess("");
     }, []);
 
     const onSubmit = useCallback(
@@ -62,7 +65,7 @@ export const useProfileView = () => {
             setIsSubmitting(true);
             setFormError("");
             try {
-                const res = await fetch(`${API_URL}/user/${currentUser!._id}`, {
+                const res = await fetch(`${API_URL}/user/${currentUser?._id}`, {
                     method: "PATCH",
                     credentials: "include",
                     headers: { "Content-Type": "application/json" },
@@ -72,7 +75,7 @@ export const useProfileView = () => {
                     const updated = await res.json();
                     setUser({ ...currentUser!, ...updated });
                     setErrors(objectCopy(EMPTY_ERRORS));
-                    setIsSuccess(true);
+                    setIsSuccess("Profile updated successfully.");
                 } else {
                     const error = await res.json();
                     setFormError(error.message ?? "Something went wrong");
@@ -94,8 +97,40 @@ export const useProfileView = () => {
         });
         setErrors(objectCopy(EMPTY_ERRORS));
         setFormError("");
-        setIsSuccess(false);
+        setIsSuccess("");
     }, [currentUser]);
 
-    return { formData, errors, formError, isSubmitting, isSuccess, onChange, onSubmit, onReset };
+    const onDeleteProfile = useCallback(async () => {
+        try {
+            const response = await fetch(`${API_URL}/user/${currentUser?._id}`, {
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                method: "DELETE",
+            });
+            if (response.ok) {
+                setIsSuccess("Profile deleted successfully.");
+                setTimeout(() => {
+                    setUser(null);
+                    navigate("/");
+                }, 2000);
+            } else {
+                const error = await response.json();
+                setFormError(error.message ?? "Something went wrong");
+            }
+        } catch {
+            setFormError("Something went wrong");
+        }
+    }, [currentUser, setUser, navigate]);
+
+    return {
+        formData,
+        errors,
+        formError,
+        isSubmitting,
+        isSuccess,
+        onChange,
+        onSubmit,
+        onReset,
+        onDeleteProfile,
+    };
 };
