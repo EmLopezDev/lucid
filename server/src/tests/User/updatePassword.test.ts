@@ -5,6 +5,8 @@ vi.mock("connect-mongo", async () => {
     return { default: { create: () => new session.default.MemoryStore() } };
 });
 
+import request from "supertest";
+import app from "../../app";
 import { clearDatabase } from "../helpers/db";
 import { createAuthenticatedAgent } from "../helpers/auth";
 
@@ -66,5 +68,29 @@ describe("PATCH /api/v1/user/:userId/password", () => {
         });
 
         expect(res.status).toBe(403);
+    });
+
+    it("user remains authenticated after password change", async () => {
+        await agent.patch(`/api/v1/user/${userId}/password`).send({
+            current_password: "password123",
+            new_password: "newpassword456",
+        });
+
+        const res = await agent.get("/api/v1/auth/session");
+        expect(res.status).toBe(200);
+        expect(res.body._id).toBe(userId);
+    });
+
+    it("old password no longer works for sign-in after change", async () => {
+        await agent.patch(`/api/v1/user/${userId}/password`).send({
+            current_password: "password123",
+            new_password: "newpassword456",
+        });
+
+        const res = await request(app)
+            .post("/api/v1/auth/signin")
+            .send({ email: "test@example.com", password: "password123" });
+
+        expect(res.status).toBe(401);
     });
 });

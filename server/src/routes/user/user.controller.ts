@@ -52,9 +52,19 @@ export const patchPassword = async (
                 .status(400)
                 .json({ message: "Invalid fields", errors: flattenError(body.error) });
         }
-
         await updatePassword(userId, body.data);
-        res.sendStatus(204);
+        req.session.regenerate((err) => {
+            if (err) return next(err);
+            req.session.userId = String(userId);
+            req.session.save((err) => {
+                if (err) {
+                    res.status(500).json({ message: "Failed to create session" });
+                    return;
+                }
+
+                res.sendStatus(204);
+            });
+        });
     } catch (error) {
         next(error);
     }
