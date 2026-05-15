@@ -184,29 +184,6 @@
         }
     }
 
-    &__delete-warning {
-        display: flex;
-        flex-direction: column;
-        gap: u.em(20);
-
-        p {
-            font-size: u.$font-size-md;
-            color: var(--color-text-secondary);
-            line-height: 1.6;
-        }
-
-        strong {
-            color: var(--color-text-primary);
-            font-weight: 600;
-        }
-    }
-
-    &__delete-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: u.em(8);
-    }
-
     &__games {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

@@ -1,0 +1,24 @@
+@use "../utils/" as u;
+
+.confirm-modal__message {
+    display: flex;
+    flex-direction: column;
+    gap: u.em(24);
+
+    p {
+        font-size: u.$font-size-md;
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+    }
+
+    strong {
+        color: var(--color-text-primary);
+        font-weight: 600;
+    }
+}
+
+.confirm-modal__actions {
+    display: flex;
+    gap: u.em(8);
+    justify-content: flex-end;
+}

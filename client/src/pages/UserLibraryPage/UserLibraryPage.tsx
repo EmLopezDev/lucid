@@ -8,6 +8,7 @@ import Select from "../../components/Select/Select";
 import Badge from "../../components/Badge/Badge";
 import Icon from "../../components/Icon/Icon";
 import Modal from "../../components/Modal/Modal";
+import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
 import AddGameForm from "../../components/AddGameForm/AddGameForm";
 import { UserLibraryPageProvider } from "./UserLibraryPageContext";
 import { useUserLibraryPageContext } from "./useUserLibraryPageContext";
@@ -228,33 +229,20 @@ const UserLibraryPageContent = () => {
                     onCancel={onCloseAddGameModal}
                 />
             </Modal>
-            <Modal
+            <ConfirmModal
                 isOpen={pendingDeleteId !== null}
                 title="Remove Game"
-                onClose={onCancelDelete}
-            >
-                <div className="user-library-page__delete-warning">
-                    <p>
+                message={
+                    <>
                         Are you sure you want to remove{" "}
                         <strong>{pendingDeleteGame?.title ?? "this game"}</strong> from your
                         library? This cannot be undone.
-                    </p>
-                    <div className="user-library-page__delete-actions">
-                        <Button
-                            variant="secondary"
-                            onClick={onCancelDelete}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            variant="danger"
-                            onClick={onConfirmDelete}
-                        >
-                            Remove
-                        </Button>
-                    </div>
-                </div>
-            </Modal>
+                    </>
+                }
+                confirmLabel="Remove"
+                onCancel={onCancelDelete}
+                onConfirm={onConfirmDelete}
+            />
         </div>
     );
 };

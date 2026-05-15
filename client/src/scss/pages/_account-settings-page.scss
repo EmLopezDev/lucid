@@ -72,17 +72,6 @@
         align-self: flex-end;
     }
 
-    &__delete-warning {
-        display: flex;
-        flex-direction: column;
-        gap: u.em(16);
-    }
-
-    &__delete-actions {
-        display: flex;
-        gap: u.em(8);
-        justify-content: flex-end;
-    }
 }
 
 .password-view {

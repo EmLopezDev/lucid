@@ -2,8 +2,8 @@ import { useCallback, useState } from "react";
 import Button from "../../../../components/Button/Button";
 import Form from "../../../../components/Form/Form";
 import Input from "../../../../components/Input/Input";
-import Modal from "../../../../components/Modal/Modal";
 import { useProfileView } from "./useProfileView";
+import ConfirmModal from "../../../../components/ConfirmModal/ConfirmModal";
 
 const ProfileView = () => {
     const [pendingDeleteAccount, setPendingDeleteAccount] = useState(false);
@@ -75,29 +75,14 @@ const ProfileView = () => {
                     Delete Account
                 </Button>
             </span>
-            <Modal
+            <ConfirmModal
                 isOpen={pendingDeleteAccount}
                 title="Delete Account"
-                onClose={onCancelDelete}
-            >
-                <div className="profile-view__delete-warning">
-                    <p>Are you sure you want to delete your account?</p>
-                    <div className="profile-view__delete-actions">
-                        <Button
-                            variant="secondary"
-                            onClick={onCancelDelete}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            variant="danger"
-                            onClick={onConfirmDelete}
-                        >
-                            Delete
-                        </Button>
-                    </div>
-                </div>
-            </Modal>
+                message="Are you sure you want to delete your account?"
+                confirmLabel="Delete"
+                onCancel={onCancelDelete}
+                onConfirm={onConfirmDelete}
+            />
         </div>
     );
 };
