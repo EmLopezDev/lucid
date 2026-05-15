@@ -686,6 +686,7 @@ const seedDemo = async () => {
         first_name: "Demo",
         last_name: "User",
         email: DEMO_EMAIL,
+        email_verified: true,
         created_at: new Date(),
         updated_at: null,
         deleted_at: null,

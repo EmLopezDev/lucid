@@ -671,17 +671,22 @@ const seed = async () => {
     await mongoClientPromise;
     console.log("Connected to MongoDB");
 
-    await Promise.all([
-        UserModel.deleteMany({}),
-        AuthModel.deleteMany({}),
-        UserLibraryModel.deleteMany({}),
-    ]);
-    console.log("Cleared existing data");
+    const existing = await UserModel.findOne({ email: SEED_EMAIL });
+
+    if (existing) {
+        await Promise.all([
+            AuthModel.deleteMany({ user_id: String(existing._id) }),
+            UserLibraryModel.deleteMany({ user_id: String(existing._id) }),
+        ]);
+        await UserModel.deleteOne({ _id: existing._id });
+        console.log("Removed existing dev user");
+    }
 
     const user = await UserModel.create({
         first_name: "Dev",
         last_name: "User",
         email: SEED_EMAIL,
+        email_verified: true,
         created_at: new Date(),
         updated_at: null,
         deleted_at: null,

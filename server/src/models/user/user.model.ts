@@ -15,10 +15,11 @@ import {
     verifyEmailToken,
 } from "../auth/auth.model";
 import { HttpError } from "../../middleware/HttpError";
-import bcrypt from "bcryptjs";
 import { AuthModel } from "../auth/auth.mongo";
-import config from "../../config";
+import { UserLibraryModel } from "../user-library/user-library.mongo";
 import { sendEmailVerificationEmail, sendPasswordResetEmail } from "../../services/email";
+import bcrypt from "bcryptjs";
+import config from "../../config";
 
 export const findUserByEmail = async (email: string) => {
     return await UserModel.findOne({ email: email }).select(
@@ -92,6 +93,30 @@ export const updateUser = async (id: string, updates: UserUpdateProfileType) => 
         throw new HttpError("User not found", 404);
     }
     return user;
+};
+
+const PROTECTED_EMAILS = ["demo@lucid.com", "dev@lucid.com"];
+
+export const destroyUser = async (id: string) => {
+    const user = await UserModel.findById(id).select("email");
+    if (!user) throw new HttpError("User not found", 404);
+    if (PROTECTED_EMAILS.includes(user.email)) {
+        throw new HttpError("This account cannot be deleted", 403);
+    }
+
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+        await UserModel.findByIdAndDelete(id, { session });
+        await AuthModel.findOneAndDelete({ user_id: id }, { session });
+        await UserLibraryModel.deleteMany({ user_id: id }, { session });
+        await session.commitTransaction();
+    } catch {
+        await session.abortTransaction();
+        throw new HttpError("Unable to delete user", 500);
+    } finally {
+        session.endSession();
+    }
 };
 
 export const updatePassword = async (id: string, credentials: UserUpdatePasswordType) => {
