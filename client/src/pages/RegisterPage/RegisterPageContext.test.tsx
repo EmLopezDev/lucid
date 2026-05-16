@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, act, waitFor } from "@testing-library/react";
 import { type ReactNode } from "react";
 import { RegisterPageProvider } from "./RegisterPageContext";
@@ -202,6 +202,98 @@ describe("RegisterPageContext", () => {
                 password: "",
             });
             expect(result.current.formDataError).toBe("");
+        });
+    });
+
+    describe("resend verification email", () => {
+        beforeEach(() => {
+            vi.useFakeTimers();
+        });
+
+        afterEach(() => {
+            vi.useRealTimers();
+        });
+
+        async function registerSuccessfully(result: ReturnType<typeof renderHook<ReturnType<typeof useRegisterPageContext>, unknown>>["result"]) {
+            act(() => {
+                result.current.onFirstNameChange(inputEvent(validForm.first_name));
+                result.current.onLastNameChange(inputEvent(validForm.last_name));
+                result.current.onEmailChange(inputEvent(validForm.email));
+                result.current.onPasswordChange(inputEvent(validForm.password));
+            });
+            await act(async () => result.current.onSubmitForm(submitEvent()));
+        }
+
+        it("starts with canResend and resendSuccess as false", () => {
+            const { result } = renderHook(() => useRegisterPageContext(), { wrapper });
+            expect(result.current.canResend).toBe(false);
+            expect(result.current.resendSuccess).toBe(false);
+        });
+
+        it("canResend becomes true after 60 seconds", async () => {
+            (globalThis.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({ ok: true });
+            const { result } = renderHook(() => useRegisterPageContext(), { wrapper });
+            await registerSuccessfully(result);
+            expect(result.current.canResend).toBe(false);
+            act(() => vi.advanceTimersByTime(60_000));
+            expect(result.current.canResend).toBe(true);
+        });
+
+        it("canResend is still false before 60 seconds have passed", async () => {
+            (globalThis.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({ ok: true });
+            const { result } = renderHook(() => useRegisterPageContext(), { wrapper });
+            await registerSuccessfully(result);
+            act(() => vi.advanceTimersByTime(59_999));
+            expect(result.current.canResend).toBe(false);
+        });
+
+        it("onResendVerification calls the resend endpoint with the registered email", async () => {
+            (globalThis.fetch as ReturnType<typeof vi.fn>)
+                .mockResolvedValueOnce({ ok: true })
+                .mockResolvedValueOnce({ ok: true });
+            const { result } = renderHook(() => useRegisterPageContext(), { wrapper });
+            await registerSuccessfully(result);
+            await act(async () => result.current.onResendVerification());
+            expect(globalThis.fetch).toHaveBeenLastCalledWith(
+                expect.stringContaining("/auth/resend-verification"),
+                expect.objectContaining({
+                    method: "POST",
+                    body: JSON.stringify({ email: validForm.email }),
+                }),
+            );
+        });
+
+        it("sets resendSuccess to true on a successful resend", async () => {
+            (globalThis.fetch as ReturnType<typeof vi.fn>)
+                .mockResolvedValueOnce({ ok: true })
+                .mockResolvedValueOnce({ ok: true });
+            const { result } = renderHook(() => useRegisterPageContext(), { wrapper });
+            await registerSuccessfully(result);
+            await act(async () => result.current.onResendVerification());
+            expect(result.current.resendSuccess).toBe(true);
+        });
+
+        it("sets formDataError when the server responds with an error", async () => {
+            (globalThis.fetch as ReturnType<typeof vi.fn>)
+                .mockResolvedValueOnce({ ok: true })
+                .mockResolvedValueOnce({
+                    ok: false,
+                    json: async () => ({ message: "Too many requests" }),
+                });
+            const { result } = renderHook(() => useRegisterPageContext(), { wrapper });
+            await registerSuccessfully(result);
+            await act(async () => result.current.onResendVerification());
+            expect(result.current.formDataError).toBe("Too many requests");
+        });
+
+        it("sets formDataError when fetch throws", async () => {
+            (globalThis.fetch as ReturnType<typeof vi.fn>)
+                .mockResolvedValueOnce({ ok: true })
+                .mockRejectedValueOnce(new Error());
+            const { result } = renderHook(() => useRegisterPageContext(), { wrapper });
+            await registerSuccessfully(result);
+            await act(async () => result.current.onResendVerification());
+            expect(result.current.formDataError).toBe("Something went wrong. Please try again.");
         });
     });
 });

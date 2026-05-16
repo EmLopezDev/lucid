@@ -1,5 +1,6 @@
 import {
     useState,
+    useRef,
     useMemo,
     useCallback,
     type ReactNode,
@@ -42,6 +43,8 @@ const REGISTER_RULES: FormRules<UserRegisterType> = {
 export interface RegisterPageContextType {
     isSubmitting: boolean;
     isSuccess: boolean;
+    canResend: boolean;
+    resendSuccess: boolean;
     formDataError: string;
     errors: UserRegisterType;
     onFirstNameChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -50,6 +53,7 @@ export interface RegisterPageContextType {
     onPasswordChange: (e: ChangeEvent<HTMLInputElement>) => void;
     onSubmitForm: (e: SubmitEvent<HTMLFormElement>) => void;
     onResetForm: () => void;
+    onResendVerification: () => Promise<void>;
 }
 
 export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
@@ -58,6 +62,9 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
     const [formDataError, setFormDataError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+    const [canResend, setCanResend] = useState(false);
+    const [resendSuccess, setResendSuccess] = useState(false);
+    const registeredEmail = useRef("");
 
     const onFirstNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setFormData((prevState: UserRegisterType) => {
@@ -96,7 +103,9 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
                     body: JSON.stringify(d),
                 });
                 if (response.ok) {
+                    registeredEmail.current = d.email;
                     setIsSuccess(true);
+                    setTimeout(() => setCanResend(true), 60_000);
                 } else {
                     const error = await response.json();
                     setFormDataError(error.message);
@@ -125,6 +134,24 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
         [formData, registerUser],
     );
 
+    const onResendVerification = useCallback(async () => {
+        try {
+            const response = await fetch(`${API_URL}/auth/resend-verification`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: registeredEmail.current }),
+            });
+            if (response.ok) {
+                setResendSuccess(true);
+            } else {
+                const error = await response.json();
+                setFormDataError(error.message);
+            }
+        } catch {
+            setFormDataError("Something went wrong. Please try again.");
+        }
+    }, []);
+
     const onResetForm = useCallback(() => {
         setFormData(objectCopy(REGISTER_EMPTY_FORM));
         setErrors(objectCopy(REGISTER_EMPTY_FORM));
@@ -135,6 +162,8 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
         () => ({
             isSubmitting,
             isSuccess,
+            canResend,
+            resendSuccess,
             formDataError,
             errors,
             onFirstNameChange,
@@ -143,10 +172,13 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
             onPasswordChange,
             onSubmitForm,
             onResetForm,
+            onResendVerification,
         }),
         [
             isSubmitting,
             isSuccess,
+            canResend,
+            resendSuccess,
             formDataError,
             errors,
             onFirstNameChange,
@@ -155,6 +187,7 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
             onPasswordChange,
             onSubmitForm,
             onResetForm,
+            onResendVerification,
         ],
     );
 

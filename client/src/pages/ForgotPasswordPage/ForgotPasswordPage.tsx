@@ -5,7 +5,16 @@ import { ForgotPasswordPageProvider } from "./ForgotPasswordPageContext";
 import { useForgotPasswordPageContext } from "./useForgotPasswordPageContext";
 
 const ForgotPasswordPageContent = () => {
-    const { errors, isSuccess, onEmailChange, onResetForm, onSubmitForm } = useForgotPasswordPageContext();
+    const {
+        errors,
+        isSuccess,
+        canResend,
+        resendSuccess,
+        onEmailChange,
+        onResetForm,
+        onSubmitForm,
+        onResend,
+    } = useForgotPasswordPageContext();
 
     if (isSuccess) {
         return (
@@ -15,6 +24,20 @@ const ForgotPasswordPageContent = () => {
                     If an account exists for that email, a reset link has been sent.
                 </p>
                 <Link to="/signin">Back to sign in</Link>
+                {canResend && !resendSuccess && (
+                    <button
+                        type="button"
+                        className="forgot-password-page__resend-button"
+                        onClick={onResend}
+                    >
+                        Didn&apos;t receive it? Resend reset email
+                    </button>
+                )}
+                {resendSuccess && (
+                    <span className="forgot-password-page__resend-success">
+                        Reset email resent. Check your inbox.
+                    </span>
+                )}
             </div>
         );
     }

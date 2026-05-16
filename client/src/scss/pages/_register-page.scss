@@ -22,4 +22,24 @@
         color: var(--color-text-secondary);
         line-height: 1.5;
     }
+
+    &__resend-button {
+        align-self: flex-start;
+        padding: 0;
+        background: none;
+        border: none;
+        font-size: u.rem(14);
+        color: var(--color-success);
+        text-decoration: underline;
+        cursor: pointer;
+
+        &:hover {
+            opacity: 0.75;
+        }
+    }
+
+    &__resend-success {
+        font-size: u.rem(14);
+        color: var(--color-success);
+    }
 }

@@ -1,5 +1,6 @@
 import {
     useState,
+    useRef,
     useCallback,
     useMemo,
     type ReactNode,
@@ -27,12 +28,15 @@ const FORGOT_PASSWORD_RULES: FormRules<UserForgotPasswordType> = {
 export interface ForgotPasswordPageContextType {
     isSubmitting: boolean;
     isSuccess: boolean;
+    canResend: boolean;
+    resendSuccess: boolean;
     formDataError: string;
     errors: UserForgotPasswordType;
     email: string;
     onEmailChange: (e: ChangeEvent<HTMLInputElement>) => void;
     onSubmitForm: (e: SubmitEvent<HTMLFormElement>) => void;
     onResetForm: () => void;
+    onResend: () => Promise<void>;
 }
 
 export const ForgotPasswordPageProvider = ({ children }: { children: ReactNode }) => {
@@ -45,6 +49,9 @@ export const ForgotPasswordPageProvider = ({ children }: { children: ReactNode }
     const [formDataError, setFormDataError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
+    const [canResend, setCanResend] = useState(false);
+    const [resendSuccess, setResendSuccess] = useState(false);
+    const submittedEmail = useRef("");
 
     const onEmailChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setFormData((prevState: UserForgotPasswordType) => {
@@ -65,7 +72,9 @@ export const ForgotPasswordPageProvider = ({ children }: { children: ReactNode }
                     body: JSON.stringify(d),
                 });
                 if (response.ok) {
+                    submittedEmail.current = d.email;
                     setIsSuccess(true);
+                    setTimeout(() => setCanResend(true), 60_000);
                 } else {
                     const error = await response.json();
                     setFormDataError(error.message);
@@ -101,6 +110,22 @@ export const ForgotPasswordPageProvider = ({ children }: { children: ReactNode }
         [formData, postForgotPassword],
     );
 
+    const onResend = useCallback(async () => {
+        try {
+            const response = await fetch(`${API_URL}/auth/forgot-password`, {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: submittedEmail.current }),
+            });
+            if (response.ok) {
+                setResendSuccess(true);
+            }
+        } catch {
+            // silently ignore — the endpoint never exposes whether the email exists
+        }
+    }, []);
+
     const onResetForm = useCallback(() => {
         setFormData(objectCopy(FORGOT_PASSWORD_EMPTY_FORM));
         setErrors(objectCopy(FORGOT_PASSWORD_EMPTY_FORM));
@@ -111,22 +136,28 @@ export const ForgotPasswordPageProvider = ({ children }: { children: ReactNode }
         () => ({
             isSubmitting,
             isSuccess,
+            canResend,
+            resendSuccess,
             formDataError,
             errors,
             email: formData.email,
             onEmailChange,
             onSubmitForm,
             onResetForm,
+            onResend,
         }),
         [
             isSubmitting,
             isSuccess,
+            canResend,
+            resendSuccess,
             errors,
             formDataError,
             formData.email,
             onEmailChange,
             onSubmitForm,
             onResetForm,
+            onResend,
         ],
     );
 

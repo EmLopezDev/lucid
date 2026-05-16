@@ -38,6 +38,9 @@ export interface SignInPageContextType {
     errors: UserSigninType;
     email: string;
     password: string;
+    unverified: boolean;
+    resendSuccess: boolean;
+    onResendVerification: () => Promise<void>;
     onEmailChange: (e: ChangeEvent<HTMLInputElement>) => void;
     onPasswordChange: (e: ChangeEvent<HTMLInputElement>) => void;
     onSubmitForm: (e: SubmitEvent<HTMLFormElement>) => void;
@@ -49,6 +52,8 @@ export const SignInPageProvider = ({ children }: { children: ReactNode }) => {
     const [errors, setErrors] = useState<UserSigninType>(objectCopy(SIGNIN_EMPTY_FORM));
     const [formDataError, setFormDataError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [unverified, setUnverified] = useState(false);
+    const [resendSuccess, setResendSuccess] = useState(false);
 
     const { setUser } = useUserContext();
     const navigation = useNavigate();
@@ -89,6 +94,7 @@ export const SignInPageProvider = ({ children }: { children: ReactNode }) => {
                     setUser(data);
                     navigation("/");
                 } else {
+                    if (response.status === 403) setUnverified(true);
                     const error = await response.json();
                     setFormDataError(error.message);
                 }
@@ -123,30 +129,58 @@ export const SignInPageProvider = ({ children }: { children: ReactNode }) => {
         setFormData(objectCopy(SIGNIN_EMPTY_FORM));
         setErrors(objectCopy(SIGNIN_EMPTY_FORM));
         setFormDataError("");
+        setUnverified(false);
+        setResendSuccess(false);
     }, []);
+
+    const onResendVerification = useCallback(async () => {
+        try {
+            const response = await fetch(`${API_URL}/auth/resend-verification`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email: formData.email }),
+            });
+            if (response.ok) {
+                setResendSuccess(true);
+            } else {
+                const error = await response.json();
+                setFormDataError(error.message);
+            }
+        } catch {
+            setFormDataError("Something went wrong. Please try again.");
+        }
+    }, [formData.email]);
 
     const contextValue = useMemo(
         () => ({
             isSubmitting,
             formDataError,
             errors,
+            unverified,
+            resendSuccess,
             email: formData.email,
             password: formData.password,
             onEmailChange,
             onPasswordChange,
             onSubmitForm,
             onResetForm,
+            onResendVerification,
         }),
         [
             isSubmitting,
             errors,
             formDataError,
+            unverified,
+            resendSuccess,
             formData.email,
             formData.password,
             onEmailChange,
             onPasswordChange,
             onSubmitForm,
             onResetForm,
+            onResendVerification,
         ],
     );
 

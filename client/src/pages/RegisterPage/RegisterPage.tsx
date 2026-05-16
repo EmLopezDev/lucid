@@ -9,6 +9,8 @@ const RegisterPageContent = () => {
     const {
         errors,
         isSuccess,
+        canResend,
+        resendSuccess,
         formDataError,
         onFirstNameChange,
         onLastNameChange,
@@ -16,6 +18,7 @@ const RegisterPageContent = () => {
         onPasswordChange,
         onSubmitForm,
         onResetForm,
+        onResendVerification,
     } = useRegisterPageContext();
 
 
@@ -43,6 +46,20 @@ const RegisterPageContent = () => {
                     sign in.
                 </p>
                 <Link to="/signin">Back to sign in</Link>
+                {canResend && !resendSuccess && (
+                    <button
+                        type="button"
+                        className="register-page__resend-button"
+                        onClick={onResendVerification}
+                    >
+                        Didn&apos;t receive it? Resend verification email
+                    </button>
+                )}
+                {resendSuccess && (
+                    <span className="register-page__resend-success">
+                        Verification email resent. Check your inbox.
+                    </span>
+                )}
             </div>
         );
     }

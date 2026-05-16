@@ -11,10 +11,13 @@ const SignInPageContent = () => {
         formDataError,
         email,
         password,
+        unverified,
+        resendSuccess,
         onEmailChange,
         onPasswordChange,
         onSubmitForm,
         onResetForm,
+        onResendVerification,
     } = useSignInPageContext();
 
     const showFormDataError = useCallback(() => {
@@ -25,10 +28,27 @@ const SignInPageContent = () => {
                     <Link to="/register"> registering</Link>
                 </>
             );
-        } else {
-            return <span className="register-page__error">{formDataError}</span>;
         }
-    }, [formDataError]);
+        return (
+            <>
+                <span>{formDataError}</span>
+                {unverified && !resendSuccess && (
+                    <button
+                        type="button"
+                        className="signin-page__resend-button"
+                        onClick={onResendVerification}
+                    >
+                        Resend verification email
+                    </button>
+                )}
+                {resendSuccess && (
+                    <span className="signin-page__resend-success">
+                        Verification email sent. Check your inbox.
+                    </span>
+                )}
+            </>
+        );
+    }, [formDataError, unverified, resendSuccess, onResendVerification]);
 
     return (
         <Form

@@ -176,4 +176,104 @@ describe("SignInPageContext", () => {
             expect(result.current.formDataError).toBe("");
         });
     });
+
+    describe("unverified email", () => {
+        it("starts with unverified and resendSuccess as false", () => {
+            const { result } = renderHook(() => useSignInPageContext(), { wrapper });
+            expect(result.current.unverified).toBe(false);
+            expect(result.current.resendSuccess).toBe(false);
+        });
+
+        it("sets unverified to true when sign-in returns 403", async () => {
+            (globalThis.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
+                ok: false,
+                status: 403,
+                json: async () => ({ message: "Please verify your email before signing in" }),
+            });
+            const { result } = renderHook(() => useSignInPageContext(), { wrapper });
+            act(() => {
+                result.current.onEmailChange(inputEvent(validForm.email));
+                result.current.onPasswordChange(inputEvent(validForm.password));
+            });
+            await act(async () => result.current.onSubmitForm(submitEvent()));
+            expect(result.current.unverified).toBe(true);
+        });
+
+        it("does not set unverified on a 401", async () => {
+            (globalThis.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
+                ok: false,
+                status: 401,
+                json: async () => ({ message: "One or more credentials is incorrect" }),
+            });
+            const { result } = renderHook(() => useSignInPageContext(), { wrapper });
+            act(() => {
+                result.current.onEmailChange(inputEvent(validForm.email));
+                result.current.onPasswordChange(inputEvent(validForm.password));
+            });
+            await act(async () => result.current.onSubmitForm(submitEvent()));
+            expect(result.current.unverified).toBe(false);
+        });
+
+        describe("onResendVerification", () => {
+            it("calls the resend endpoint with the form email", async () => {
+                (globalThis.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({ ok: true });
+                const { result } = renderHook(() => useSignInPageContext(), { wrapper });
+                act(() => result.current.onEmailChange(inputEvent(validForm.email)));
+                await act(async () => result.current.onResendVerification());
+                expect(globalThis.fetch).toHaveBeenCalledWith(
+                    expect.stringContaining("/auth/resend-verification"),
+                    expect.objectContaining({
+                        method: "POST",
+                        body: JSON.stringify({ email: validForm.email }),
+                    }),
+                );
+            });
+
+            it("sets resendSuccess to true on success", async () => {
+                (globalThis.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({ ok: true });
+                const { result } = renderHook(() => useSignInPageContext(), { wrapper });
+                await act(async () => result.current.onResendVerification());
+                expect(result.current.resendSuccess).toBe(true);
+            });
+
+            it("sets formDataError when the server responds with an error", async () => {
+                (globalThis.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
+                    ok: false,
+                    json: async () => ({ message: "Too many requests" }),
+                });
+                const { result } = renderHook(() => useSignInPageContext(), { wrapper });
+                await act(async () => result.current.onResendVerification());
+                expect(result.current.formDataError).toBe("Too many requests");
+            });
+
+            it("sets formDataError when fetch throws", async () => {
+                (globalThis.fetch as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error());
+                const { result } = renderHook(() => useSignInPageContext(), { wrapper });
+                await act(async () => result.current.onResendVerification());
+                expect(result.current.formDataError).toBe("Something went wrong. Please try again.");
+            });
+        });
+
+        it("onResetForm clears unverified and resendSuccess", async () => {
+            (globalThis.fetch as ReturnType<typeof vi.fn>)
+                .mockResolvedValueOnce({
+                    ok: false,
+                    status: 403,
+                    json: async () => ({ message: "Please verify your email before signing in" }),
+                })
+                .mockResolvedValueOnce({ ok: true });
+            const { result } = renderHook(() => useSignInPageContext(), { wrapper });
+            act(() => {
+                result.current.onEmailChange(inputEvent(validForm.email));
+                result.current.onPasswordChange(inputEvent(validForm.password));
+            });
+            await act(async () => result.current.onSubmitForm(submitEvent()));
+            await act(async () => result.current.onResendVerification());
+            expect(result.current.unverified).toBe(true);
+            expect(result.current.resendSuccess).toBe(true);
+            act(() => result.current.onResetForm());
+            expect(result.current.unverified).toBe(false);
+            expect(result.current.resendSuccess).toBe(false);
+        });
+    });
 });
