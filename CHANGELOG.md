@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.1] - 2026-05-17
+
+### Bug Fixes
+
+- Fixed game dates displaying one day behind due to UTC/local timezone conversion in `formatDate`
+- Fixed production 500 error on sign in — replaced TypeScript path aliases with relative imports (Vercel's Node.js runtime does not support path mappings)
+- Fixed session save errors being silently swallowed — now routed through the error handler so Sentry captures them
+
 ## [1.2.0] - 2026-05-17
 
 ### npm Scripts
