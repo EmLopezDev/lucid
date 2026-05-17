@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.2.0] - 2026-05-17
+
+### npm Scripts
+
+- Added `build`, `start`, `ci`, and `clean` scripts to root
+- Added `build` script to server (`tsc && tsc-alias`)
+- Parallelized `lint` and `test` at root using `concurrently`
+- Renamed `watch` → `dev`; added `dev:server` and `dev:client`
+- Replaced `--prefix` flags with `-w` workspace flags throughout
+- Removed manual `install:server`, `install:client`, and `install` scripts (handled by workspaces)
+
+### Bug Fixes
+
+- Fixed `SignInPageContext` calling `setFormData` during render — moved routing logic to `SignInPage` and replaced with `initialValues` prop
+- Fixed server `tsconfig.json`: corrected `rootDir` from `/` to `..`, fixed packages include from absolute to relative path, fixed test exclude pattern
+- Fixed vitest picking up compiled test files from `dist/` after build — added `exclude: ["dist/**"]` to vitest config
+
+### Documentation
+
+- Renamed ambiguous "Auth" column to "Protected" in API reference table
+- Added "Testing the Production Build Locally" section to README
+
 ## [1.1.0] - 2026-05-17
 
 ### Workspaces

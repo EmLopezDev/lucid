@@ -86,6 +86,20 @@ npm run dev:server   # Express API on http://localhost:8000
 npm run dev:client   # Vite dev server on http://localhost:5173
 ```
 
+### Testing the Production Build Locally
+
+Vercel handles the build on deploy, but you can simulate the production environment locally to debug issues that only appear in compiled output (e.g. path alias resolution, missing env vars, build-time errors).
+
+```bash
+# 1. Compile both packages
+npm run build
+
+# 2. Run the compiled server + client preview together
+npm start
+```
+
+The client preview runs on http://localhost:4173 (instead of the usual 5173). Make sure `server/.env` is present — the compiled server still reads env vars at runtime.
+
 ### Seeding the Database
 
 ```bash
