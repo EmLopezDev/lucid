@@ -7,11 +7,12 @@
         "esModuleInterop": true,
         "strict": true,
         "skipLibCheck": true,
+        "baseUrl": ".",
         "paths": {
-            "@models/*": ["./server/src/models/*"],
-            "@middleware/*": ["./server/src/middleware/*"],
-            "@services/*": ["./server/src/services/*"],
-            "@routes/*": ["./server/src/routes/*"]
+            "@models/*": ["server/src/models/*"],
+            "@middleware/*": ["server/src/middleware/*"],
+            "@services/*": ["server/src/services/*"],
+            "@routes/*": ["server/src/routes/*"]
         }
     }
 }
