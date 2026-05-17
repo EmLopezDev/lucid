@@ -41,10 +41,7 @@ export const authSignInUser = async (req: Request, res: Response, next: NextFunc
             if (err) return next(err);
             req.session.userId = String(user._id);
             req.session.save((err) => {
-                if (err) {
-                    res.status(500).json({ message: "Failed to create session" });
-                    return;
-                }
+                if (err) return next(err);
                 res.status(200).json(user);
             });
         });
@@ -53,12 +50,10 @@ export const authSignInUser = async (req: Request, res: Response, next: NextFunc
     }
 };
 
-export const authSignOutUser = (req: Request, res: Response) => {
+export const authSignOutUser = (req: Request, res: Response, next: NextFunction) => {
     req.session.destroy((err) => {
         Sentry.setUser(null);
-        if (err) {
-            return res.status(500).json({ message: "Failed to sign out" });
-        }
+        if (err) return next(err);
         res.clearCookie("sid");
         res.json({ message: "Signed out successfully" });
     });
