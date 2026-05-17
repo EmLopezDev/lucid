@@ -1,6 +1,6 @@
 import { type Request, type Response, type NextFunction } from "express";
 import { UserUpdateProfile, UserUpdatePassword } from "../../../../packages/types/UserTypes";
-import { updateUser, updatePassword, destroyUser } from "@models/user/user.model";
+import { updateUser, updatePassword, destroyUser } from "../../models/user/user.model";
 import { flattenError } from "zod";
 
 export const patchUser = async (

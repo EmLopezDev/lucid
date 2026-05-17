@@ -5,8 +5,8 @@ import {
     deleteUserLibraryGameController,
     patchUserLibraryGameController,
 } from "./user-library.controller";
-import { requireAuth } from "@middleware/requireAuth";
-import { requireOwner } from "@middleware/requireOwner";
+import { requireAuth } from "../../middleware/requireAuth";
+import { requireOwner } from "../../middleware/requireOwner";
 
 const UserLibraryRouter = express.Router({ mergeParams: true });
 

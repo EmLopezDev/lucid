@@ -9,7 +9,7 @@ import request from "supertest";
 import app from "../../app";
 import { clearDatabase } from "../helpers/db";
 import { getVerificationToken, verifyTestUser } from "../helpers/auth";
-import { sendEmailVerificationEmail } from "@services/email";
+import { sendEmailVerificationEmail } from "../../services/email";
 
 const testUser = {
     first_name: "Test",

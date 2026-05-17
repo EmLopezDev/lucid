@@ -7,9 +7,9 @@ vi.mock("connect-mongo", async () => {
 
 import request from "supertest";
 import app from "../../app";
-import { AuthModel } from "@models/auth/auth.mongo";
-import { UserLibraryModel } from "@models/user-library/user-library.mongo";
-import { UserModel } from "@models/user/user.mongo";
+import { AuthModel } from "../../models/auth/auth.mongo";
+import { UserLibraryModel } from "../../models/user-library/user-library.mongo";
+import { UserModel } from "../../models/user/user.mongo";
 import { clearDatabase } from "../helpers/db";
 import { createAuthenticatedAgent, verifyTestUser } from "../helpers/auth";
 

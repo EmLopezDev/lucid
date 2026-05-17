@@ -11,7 +11,7 @@ import {
     createUserLibraryGame,
     updateUserLibraryGame,
     deleteUserLibraryGame,
-} from "@models/user-library/user-library.model";
+} from "../../models/user-library/user-library.model";
 
 export const getUserLibraryController = async (req: Request, res: Response, next: NextFunction) => {
     try {

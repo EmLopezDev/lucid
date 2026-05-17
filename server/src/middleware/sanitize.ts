@@ -1,6 +1,6 @@
 import { type Request, type Response, type NextFunction } from "express";
 import mongoSanitize from "express-mongo-sanitize";
-import logger from "@services/logger";
+import logger from "../services/logger";
 
 export const sanitizeBody = (req: Request, _res: Response, next: NextFunction) => {
     if (!req.body) return next();

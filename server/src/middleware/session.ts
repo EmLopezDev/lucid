@@ -1,7 +1,7 @@
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import config from "../config";
-import { mongoClientPromise } from "@services/mongo";
+import { mongoClientPromise } from "../services/mongo";
 
 export const sessionMiddleware = session({
     name: "sid",
