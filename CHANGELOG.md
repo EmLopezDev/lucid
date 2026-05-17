@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.0] - 2026-05-17
+
+### Workspaces
+
+- Added workspaces to the project
+- Cleaned up package.json file in each workspace
+- Updated README with new npm scripts
+- minor fixes to UserLibraryContext and SignInPageContext
+
 ## [1.0.0] - 2026-05-16
 
 ### Features

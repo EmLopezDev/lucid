@@ -12,19 +12,19 @@ A personal game library tracker. Log the games you're playing, completed, paused
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Frontend | React 19, React Router 7, TypeScript, Sass |
-| Backend | Node.js, Express 5, TypeScript |
-| Database | MongoDB, Mongoose |
-| Auth | express-session, bcryptjs |
-| Email | Nodemailer |
-| Testing | Vitest, Testing Library |
-| Deployment | Vercel |
+| Layer      | Technology                                 |
+| ---------- | ------------------------------------------ |
+| Frontend   | React 19, React Router 7, TypeScript, Sass |
+| Backend    | Node.js, Express 5, TypeScript             |
+| Database   | MongoDB, Mongoose                          |
+| Auth       | express-session, bcryptjs                  |
+| Email      | Nodemailer                                 |
+| Testing    | Vitest, Testing Library                    |
+| Deployment | Vercel                                     |
 
 ## Project Structure
 
-```
+```text
 lucid/
 ├── client/          # React frontend (Vite)
 ├── server/          # Express API
@@ -46,10 +46,6 @@ lucid/
 ```bash
 # Install all dependencies
 npm run install
-
-# Or install individually
-npm run install:client
-npm run install:server
 ```
 
 ### Environment Variables
@@ -83,21 +79,21 @@ SENTRY_DSN=https://...
 
 ```bash
 # Run both client and server concurrently
-npm run watch
+npm run dev
 
 # Or run separately
-npm run server   # Express API on http://localhost:8000
-npm run client   # Vite dev server on http://localhost:5173
+npm run dev:server   # Express API on http://localhost:8000
+npm run dev:client   # Vite dev server on http://localhost:5173
 ```
 
 ### Seeding the Database
 
 ```bash
 # Seed a dev user (dev@lucid.com / password123) with a full game library
-npm run seed --prefix server
+npm run seed
 
 # Seed a demo user (demo@lucid.com / lucid-demo) with a full game library
-npm run seed:demo --prefix server
+npm run seed:demo
 
 # Run against a specific database
 MONGO_URL=<uri> node --import tsx scripts/seed.ts
@@ -126,36 +122,36 @@ All endpoints are prefixed with `/api/v1`.
 
 ### Auth
 
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `POST` | `/auth/register` | No | Register a new account |
-| `GET` | `/auth/verify-email?token=` | No | Verify email address |
-| `POST` | `/auth/signin` | No | Sign in |
-| `POST` | `/auth/signout` | Yes | Sign out |
-| `GET` | `/auth/session` | No | Get current session user |
-| `POST` | `/auth/forgot-password` | No | Request a password reset email |
-| `POST` | `/auth/reset-password` | No | Reset password using a token |
+| Method | Endpoint                    | Protected | Description                    |
+| ------ | --------------------------- | --------- | ------------------------------ |
+| `POST` | `/auth/register`            | No        | Register a new account         |
+| `GET`  | `/auth/verify-email?token=` | No        | Verify email address           |
+| `POST` | `/auth/signin`              | No        | Sign in                        |
+| `POST` | `/auth/signout`             | Yes       | Sign out                       |
+| `GET`  | `/auth/session`             | No        | Get current session user       |
+| `POST` | `/auth/forgot-password`     | No        | Request a password reset email |
+| `POST` | `/auth/reset-password`      | No        | Reset password using a token   |
 
 ### User
 
 All user endpoints require authentication and ownership (`userId` must match the session user).
 
-| Method | Endpoint | Description |
-|---|---|---|
-| `PATCH` | `/user/:userId` | Update profile (first name, last name, email) |
-| `PATCH` | `/user/:userId/password` | Change password |
-| `DELETE` | `/user/:userId` | Delete account |
+| Method   | Endpoint                 | Description                                   |
+| -------- | ------------------------ | --------------------------------------------- |
+| `PATCH`  | `/user/:userId`          | Update profile (first name, last name, email) |
+| `PATCH`  | `/user/:userId/password` | Change password                               |
+| `DELETE` | `/user/:userId`          | Delete account                                |
 
 ### Library
 
 All library endpoints require authentication and ownership.
 
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/user/:userId/library` | Get all games in the user's library |
-| `POST` | `/user/:userId/library` | Add a game to the library |
-| `PATCH` | `/user/:userId/library/:gameId` | Update a game entry |
-| `DELETE` | `/user/:userId/library/:gameId` | Remove a game from the library |
+| Method   | Endpoint                        | Description                         |
+| -------- | ------------------------------- | ----------------------------------- |
+| `GET`    | `/user/:userId/library`         | Get all games in the user's library |
+| `POST`   | `/user/:userId/library`         | Add a game to the library           |
+| `PATCH`  | `/user/:userId/library/:gameId` | Update a game entry                 |
+| `DELETE` | `/user/:userId/library/:gameId` | Remove a game from the library      |
 
 ## Deployment
 
@@ -166,6 +162,7 @@ vercel deploy
 ```
 
 The `vercel.json` at the repo root configures the build:
+
 - `/api/*` requests are routed to the Express serverless handler
 - All other requests serve the React SPA (`index.html`)
 

@@ -2,12 +2,11 @@ import {
     useState,
     useCallback,
     useMemo,
-    useEffect,
     type ReactNode,
     type ChangeEvent,
     type SubmitEvent,
 } from "react";
-import { useNavigate, useLocation } from "react-router";
+import { useNavigate } from "react-router";
 import { type UserSigninType } from "../../../../packages/types";
 import { SignInPageContext } from "./useSignInPageContext";
 import { emailCheck } from "@lib/string";
@@ -47,23 +46,24 @@ export interface SignInPageContextType {
     onResetForm: () => void;
 }
 
-export const SignInPageProvider = ({ children }: { children: ReactNode }) => {
-    const [formData, setFormData] = useState<UserSigninType>(objectCopy(SIGNIN_EMPTY_FORM));
+export const SignInPageProvider = ({
+    children,
+    initialValues,
+}: {
+    children: ReactNode;
+    initialValues?: UserSigninType;
+}) => {
+    const { setUser } = useUserContext();
+    const navigation = useNavigate();
+
+    const [formData, setFormData] = useState<UserSigninType>(
+        objectCopy(initialValues ?? SIGNIN_EMPTY_FORM),
+    );
     const [errors, setErrors] = useState<UserSigninType>(objectCopy(SIGNIN_EMPTY_FORM));
     const [formDataError, setFormDataError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [unverified, setUnverified] = useState(false);
     const [resendSuccess, setResendSuccess] = useState(false);
-
-    const { setUser } = useUserContext();
-    const navigation = useNavigate();
-    const location = useLocation();
-
-    useEffect(() => {
-        if (location.state?.demo) {
-            setFormData({ email: "demo@lucid.com", password: "lucid-demo" });
-        }
-    }, [location.state]);
 
     const onEmailChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setFormData((prevState: UserSigninType) => {

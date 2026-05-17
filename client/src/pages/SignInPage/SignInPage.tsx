@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useLocation } from "react-router";
 import { SignInPageProvider } from "./SignInPageContext";
 import { useSignInPageContext } from "./useSignInPageContext";
 import Form from "@components/Form/Form";
@@ -86,8 +86,13 @@ const SignInPageContent = () => {
 };
 
 const SignInPage = () => {
+    const location = useLocation();
+    const initialValues = location.state?.demo
+        ? { email: "demo@lucid.com", password: "lucid-demo" }
+        : undefined;
+
     return (
-        <SignInPageProvider>
+        <SignInPageProvider initialValues={initialValues}>
             <SignInPageContent />
         </SignInPageProvider>
     );

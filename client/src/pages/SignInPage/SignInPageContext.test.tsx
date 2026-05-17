@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook, act, waitFor } from "@testing-library/react";
 import { type ReactNode } from "react";
-import { MemoryRouter } from "react-router";
 import { SignInPageProvider } from "./SignInPageContext";
 import { useSignInPageContext } from "./useSignInPageContext";
 
@@ -18,9 +17,7 @@ vi.mock("../../contexts/UserContext/useUserContext", () => ({
 }));
 
 const wrapper = ({ children }: { children: ReactNode }) => (
-    <MemoryRouter>
-        <SignInPageProvider>{children}</SignInPageProvider>
-    </MemoryRouter>
+    <SignInPageProvider>{children}</SignInPageProvider>
 );
 
 function inputEvent(value: string) {
@@ -45,6 +42,17 @@ describe("SignInPageContext", () => {
         expect(result.current.errors).toEqual({ email: "", password: "" });
         expect(result.current.isSubmitting).toBe(false);
         expect(result.current.formDataError).toBe("");
+    });
+
+    it("pre-fills form when initialValues are provided", () => {
+        const initialValues = { email: "demo@lucid.com", password: "lucid-demo" };
+        const { result } = renderHook(() => useSignInPageContext(), {
+            wrapper: ({ children }: { children: ReactNode }) => (
+                <SignInPageProvider initialValues={initialValues}>{children}</SignInPageProvider>
+            ),
+        });
+        expect(result.current.email).toBe("demo@lucid.com");
+        expect(result.current.password).toBe("lucid-demo");
     });
 
     describe("validation", () => {

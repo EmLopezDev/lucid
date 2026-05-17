@@ -1,50 +1,35 @@
 {
-  "name": "lucid",
-  "version": "1.0.0",
-  "description": "",
-  "scripts": {
-    "server": "npm run dev --prefix server",
-    "client": "npm run dev --prefix client",
-    "watch": "npm run server & npm run client",
-    "test:server": "npm test --prefix server",
-    "test": "npm run test:server && npm run test:client",
-    "test:client": "npm test --prefix client",
-    "test:client:watch": "npm run test:watch --prefix client",
-    "test:server:watch": "npm run test:watch --prefix server",
-    "install:server": "npm install --prefix server",
-    "install:client": "npm install --prefix client",
-    "install": "npm run install:server && npm run install:client",
-    "rotate:mongo": "bash server/scripts/rotate-mongo-password.sh",
-    "lint": "npm run lint --prefix client && npm run lint --prefix server",
-    "typecheck": "npm run typecheck --prefix client && npm run typecheck --prefix server",
-    "prepare": "husky"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "dependencies": {
-    "bcryptjs": "^3.0.3",
-    "connect-mongo": "^6.0.0",
-    "cors": "^2.8.6",
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "express-session": "^1.19.0",
-    "helmet": "^8.1.0",
-    "mongoose": "^9.4.1",
-    "morgan": "^1.10.1",
-    "zod": "^4.3.6"
-  },
-  "devDependencies": {
-    "@types/bcryptjs": "^2.4.6",
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.6",
-    "@types/express-session": "^1.19.0",
-    "@types/morgan": "^1.9.10",
-    "@types/node": "^25.6.0",
-    "husky": "^9.1.7",
-    "tsx": "^4.21.0",
-    "typescript": "^6.0.2",
-    "vercel": "^53.4.0"
-  }
+    "name": "lucid",
+    "version": "1.0.0",
+    "description": "",
+    "workspaces": [
+        "client",
+        "server",
+        "packages"
+    ],
+    "scripts": {
+        "dev": "concurrently -n server,client -c blue,green \"npm run dev -w server\" \"npm run dev -w client\"",
+        "dev:server": "npm run dev -w server",
+        "dev:client": "npm run dev -w client",
+        "lint": "npm run lint -w client && npm run lint -w server",
+        "prepare": "husky",
+        "rotate:mongo": "bash server/scripts/rotate-mongo-password.sh",
+        "seed": "npm run seed -w server",
+        "seed:demo": "npm run seed:demo -w server",
+        "test": "npm run test:server && npm run test:client",
+        "test:client": "npm test -w client",
+        "test:server": "npm test -w server",
+        "test:client:watch": "npm run test:watch -w client",
+        "test:server:watch": "npm run test:watch -w server",
+        "typecheck": "npm run typecheck -w client && npm run typecheck -w server"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "commonjs",
+    "devDependencies": {
+        "concurrently": "^9.2.1",
+        "husky": "^9.1.7",
+        "vercel": "^54.1.0"
+    }
 }

@@ -42,7 +42,7 @@ export const UserLibraryProvider = ({ children }: { children: ReactNode }) => {
                     console.error(error instanceof Error ? error.message : error);
             }
         },
-        [currentUser?._id],
+        [currentUser],
     );
 
     const onPatchGame = useCallback(
@@ -67,7 +67,7 @@ export const UserLibraryProvider = ({ children }: { children: ReactNode }) => {
                 return null;
             }
         },
-        [currentUser?._id],
+        [currentUser],
     );
 
     const onDeleteGameById = useCallback(
@@ -84,7 +84,7 @@ export const UserLibraryProvider = ({ children }: { children: ReactNode }) => {
                     console.error(error instanceof Error ? error.message : error);
             }
         },
-        [currentUser?._id],
+        [currentUser],
     );
 
     useEffect(() => {
