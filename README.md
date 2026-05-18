@@ -1,5 +1,7 @@
 # Lucid
 
+**Live:** https://lucid-beta-seven.vercel.app
+
 A personal game library tracker. Log the games you're playing, completed, paused, dropped, or want to play — with ratings, hours, price, and notes for each entry.
 
 ## Features
