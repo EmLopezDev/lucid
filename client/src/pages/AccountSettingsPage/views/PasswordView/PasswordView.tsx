@@ -3,13 +3,11 @@ import Input from "@components/Input/Input";
 import { usePasswordView } from "./usePasswordView";
 
 const PasswordView = () => {
-    const { formData, errors, formError, isSuccess, onChange, onSubmit, onReset } =
-        usePasswordView();
+    const { formData, errors, formError, onChange, onSubmit, onReset } = usePasswordView();
 
     return (
         <div className="password-view">
             <h2 className="password-view__title">Change Password</h2>
-            {isSuccess && <p className="password-view__success">Password updated successfully.</p>}
             <Form
                 onSubmit={onSubmit}
                 onCancel={onReset}

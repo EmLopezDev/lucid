@@ -3,6 +3,7 @@ import { useUserContext } from "@contexts/UserContext/useUserContext";
 import { isFormDataValid, hasErrors, type FormRules } from "@lib/form";
 import { objectCopy } from "@lib/generic";
 import { API_URL } from "@config/api";
+import { toast } from "sonner";
 
 type PasswordFormType = {
     current_password: string;
@@ -29,12 +30,10 @@ export const usePasswordView = () => {
     const [errors, setErrors] = useState<PasswordFormType>(objectCopy(EMPTY_FORM));
     const [formError, setFormError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
 
     const onChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
-        setIsSuccess(false);
     }, []);
 
     const onSubmit = useCallback(
@@ -57,7 +56,7 @@ export const usePasswordView = () => {
                 if (res.ok) {
                     setFormData(objectCopy(EMPTY_FORM));
                     setErrors(objectCopy(EMPTY_FORM));
-                    setIsSuccess(true);
+                    toast.success("Password updated");
                 } else {
                     const error = await res.json();
                     setFormError(error.message ?? "Something went wrong");
@@ -75,8 +74,7 @@ export const usePasswordView = () => {
         setFormData(objectCopy(EMPTY_FORM));
         setErrors(objectCopy(EMPTY_FORM));
         setFormError("");
-        setIsSuccess(false);
     }, []);
 
-    return { formData, errors, formError, isSubmitting, isSuccess, onChange, onSubmit, onReset };
+    return { formData, errors, formError, isSubmitting, onChange, onSubmit, onReset };
 };

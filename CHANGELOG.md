@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.3.0] - 2026-05-18
+
+### Features
+
+- Added toast notifications across the app using `sonner`
+- Sign in: "Welcome back, [first name]" on success
+- Sign out: confirmation toast on sign out
+- Game library: success and error toasts for add, edit, and delete actions
+- Account settings: success toasts for profile update, password change, and account deletion
+- Removed inline `isSuccess` state from profile and password views in favour of toasts
+
 ## [1.2.1] - 2026-05-17
 
 ### Bug Fixes

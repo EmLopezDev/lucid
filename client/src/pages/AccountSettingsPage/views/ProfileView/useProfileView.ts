@@ -5,6 +5,7 @@ import { isFormDataValid, hasErrors, type FormRules } from "@lib/form";
 import { objectCopy } from "@lib/generic";
 import { API_URL } from "@config/api";
 import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 type ProfileFormType = {
     first_name: string;
@@ -44,14 +45,12 @@ export const useProfileView = () => {
     const [errors, setErrors] = useState<ProfileFormType>(objectCopy(EMPTY_ERRORS));
     const [formError, setFormError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isSuccess, setIsSuccess] = useState("");
 
     const navigate = useNavigate();
 
     const onChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
-        setIsSuccess("");
     }, []);
 
     const onSubmit = useCallback(
@@ -75,7 +74,7 @@ export const useProfileView = () => {
                     const updated = await res.json();
                     setUser({ ...currentUser!, ...updated });
                     setErrors(objectCopy(EMPTY_ERRORS));
-                    setIsSuccess("Profile updated successfully.");
+                    toast.success("Profile updated");
                 } else {
                     const error = await res.json();
                     setFormError(error.message ?? "Something went wrong");
@@ -97,7 +96,6 @@ export const useProfileView = () => {
         });
         setErrors(objectCopy(EMPTY_ERRORS));
         setFormError("");
-        setIsSuccess("");
     }, [currentUser]);
 
     const onDeleteProfile = useCallback(async () => {
@@ -108,11 +106,9 @@ export const useProfileView = () => {
                 method: "DELETE",
             });
             if (response.ok) {
-                setIsSuccess("Profile deleted successfully.");
-                setTimeout(() => {
-                    setUser(null);
-                    navigate("/");
-                }, 2000);
+                toast.success("Account deleted");
+                setUser(null);
+                navigate("/");
             } else {
                 const error = await response.json();
                 setFormError(error.message ?? "Something went wrong");
@@ -127,7 +123,6 @@ export const useProfileView = () => {
         errors,
         formError,
         isSubmitting,
-        isSuccess,
         onChange,
         onSubmit,
         onReset,

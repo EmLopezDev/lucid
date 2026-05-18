@@ -1,6 +1,9 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook, act, waitFor } from "@testing-library/react";
 import { useProfileView } from "./useProfileView";
+import { toast } from "sonner";
+
+vi.mock("sonner", () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 const mockSetUser = vi.hoisted(() => vi.fn());
 const mockNavigate = vi.hoisted(() => vi.fn());
@@ -45,10 +48,9 @@ describe("useProfileView", () => {
         expect(result.current.formData.email).toBe("test@example.com");
     });
 
-    it("starts with no errors and no success", () => {
+    it("starts with no errors", () => {
         const { result } = renderHook(() => useProfileView());
         expect(result.current.errors).toEqual({ first_name: "", last_name: "", email: "" });
-        expect(result.current.isSuccess).toBe("");
         expect(result.current.formError).toBe("");
     });
 
@@ -117,12 +119,10 @@ describe("useProfileView", () => {
             );
         });
 
-        it("sets isSuccess message", async () => {
+        it("fires a success toast", async () => {
             const { result } = renderHook(() => useProfileView());
             await act(async () => result.current.onSubmit(submitEvent()));
-            await waitFor(() =>
-                expect(result.current.isSuccess).toBe("Profile updated successfully."),
-            );
+            await waitFor(() => expect(toast.success).toHaveBeenCalledWith("Profile updated"));
         });
     });
 
@@ -160,19 +160,10 @@ describe("useProfileView", () => {
             expect(result.current.formData.first_name).toBe("Test");
             expect(result.current.errors).toEqual({ first_name: "", last_name: "", email: "" });
             expect(result.current.formError).toBe("");
-            expect(result.current.isSuccess).toBe("");
         });
     });
 
     describe("onDeleteProfile", () => {
-        beforeEach(() => {
-            vi.useFakeTimers();
-        });
-
-        afterEach(() => {
-            vi.useRealTimers();
-        });
-
         it("calls the delete endpoint for the current user", async () => {
             (globalThis.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
                 ok: true,
@@ -186,26 +177,14 @@ describe("useProfileView", () => {
             );
         });
 
-        it("sets isSuccess message on success", async () => {
+        it("fires a success toast, clears the user, and navigates home", async () => {
             (globalThis.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
                 ok: true,
                 json: async () => ({}),
             });
             const { result } = renderHook(() => useProfileView());
             await act(async () => result.current.onDeleteProfile());
-            expect(result.current.isSuccess).toBe("Profile deleted successfully.");
-        });
-
-        it("clears the user and navigates home after the delay", async () => {
-            (globalThis.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
-                ok: true,
-                json: async () => ({}),
-            });
-            const { result } = renderHook(() => useProfileView());
-            await act(async () => result.current.onDeleteProfile());
-            expect(mockSetUser).not.toHaveBeenCalled();
-            expect(mockNavigate).not.toHaveBeenCalled();
-            await act(async () => vi.advanceTimersByTime(2000));
+            expect(toast.success).toHaveBeenCalledWith("Account deleted");
             expect(mockSetUser).toHaveBeenCalledWith(null);
             expect(mockNavigate).toHaveBeenCalledWith("/");
         });

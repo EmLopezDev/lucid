@@ -7,6 +7,7 @@ import type {
 } from "@lucid/types";
 import { useUserContext } from "@contexts/UserContext/useUserContext";
 import { API_URL } from "@config/api";
+import { toast } from "sonner";
 
 export interface UserLibraryContextType {
     libraryData: UserLibraryDataType[];
@@ -37,9 +38,13 @@ export const UserLibraryProvider = ({ children }: { children: ReactNode }) => {
                 if (!response.ok) throw new Error("Failed to add game");
                 const newGame: UserLibraryDataType = await response.json();
                 setLibraryData((prev) => [newGame, ...prev]);
+                toast.success(`${newGame.title} added to your library`);
             } catch (error) {
-                if (import.meta.env.DEV)
+                if (import.meta.env.DEV) {
                     console.error(error instanceof Error ? error.message : error);
+                }
+
+                toast.error("Failed to add game. Please try again.");
             }
         },
         [currentUser],
@@ -60,10 +65,14 @@ export const UserLibraryProvider = ({ children }: { children: ReactNode }) => {
                 if (!response.ok) throw new Error("Failed to update game");
                 const updatedGame: UserLibraryDataType = await response.json();
                 setLibraryData((prev) => prev.map((d) => (d._id === id ? updatedGame : d)));
+                toast.success(`Changes to ${updatedGame.title} have been saved`);
                 return updatedGame;
             } catch (error) {
-                if (import.meta.env.DEV)
+                if (import.meta.env.DEV) {
                     console.error(error instanceof Error ? error.message : error);
+                }
+
+                toast.error("Failed to update game. Please try again.");
                 return null;
             }
         },
@@ -73,18 +82,22 @@ export const UserLibraryProvider = ({ children }: { children: ReactNode }) => {
     const onDeleteGameById = useCallback(
         async (id: string) => {
             try {
+                const game = libraryData.find((d) => d._id === id);
                 const response = await fetch(`${API_URL}/user/${currentUser?._id}/library/${id}`, {
                     method: "DELETE",
                     credentials: "include",
                 });
                 if (!response.ok) throw new Error("Failed to delete game");
                 setLibraryData((prev) => prev.filter((d) => d._id !== id));
+                toast.success(`${game?.title ?? "Game"} removed from library`);
             } catch (error) {
-                if (import.meta.env.DEV)
+                if (import.meta.env.DEV) {
                     console.error(error instanceof Error ? error.message : error);
+                }
+                toast.error("Failed to delete game. Please try again.");
             }
         },
-        [currentUser],
+        [currentUser, libraryData],
     );
 
     useEffect(() => {

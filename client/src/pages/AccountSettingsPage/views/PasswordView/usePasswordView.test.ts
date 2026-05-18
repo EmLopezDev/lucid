@@ -1,6 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook, act, waitFor } from "@testing-library/react";
 import { usePasswordView } from "./usePasswordView";
+import { toast } from "sonner";
+
+vi.mock("sonner", () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 const mockCurrentUser = { _id: "user-1" };
 
@@ -30,7 +33,6 @@ describe("usePasswordView", () => {
         const { result } = renderHook(() => usePasswordView());
         expect(result.current.formData).toEqual({ current_password: "", new_password: "" });
         expect(result.current.errors).toEqual({ current_password: "", new_password: "" });
-        expect(result.current.isSuccess).toBe(false);
         expect(result.current.formError).toBe("");
     });
 
@@ -78,14 +80,14 @@ describe("usePasswordView", () => {
             );
         });
 
-        it("clears the form and sets isSuccess to true", async () => {
+        it("clears the form and fires a success toast", async () => {
             const { result } = renderHook(() => usePasswordView());
             act(() => {
                 result.current.onChange(inputEvent("current_password", validForm.current_password));
                 result.current.onChange(inputEvent("new_password", validForm.new_password));
             });
             await act(async () => result.current.onSubmit(submitEvent()));
-            await waitFor(() => expect(result.current.isSuccess).toBe(true));
+            await waitFor(() => expect(toast.success).toHaveBeenCalledWith("Password updated"));
             expect(result.current.formData).toEqual({ current_password: "", new_password: "" });
         });
     });
@@ -128,7 +130,6 @@ describe("usePasswordView", () => {
             expect(result.current.formData).toEqual({ current_password: "", new_password: "" });
             expect(result.current.errors).toEqual({ current_password: "", new_password: "" });
             expect(result.current.formError).toBe("");
-            expect(result.current.isSuccess).toBe(false);
         });
     });
 });

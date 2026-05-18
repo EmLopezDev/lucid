@@ -7,7 +7,7 @@ import ConfirmModal from "@components/ConfirmModal/ConfirmModal";
 
 const ProfileView = () => {
     const [pendingDeleteAccount, setPendingDeleteAccount] = useState(false);
-    const { formData, errors, formError, isSuccess, onChange, onSubmit, onReset, onDeleteProfile } =
+    const { formData, errors, formError, onChange, onSubmit, onReset, onDeleteProfile } =
         useProfileView();
 
     const onRequestDelete = useCallback(() => {
@@ -27,7 +27,6 @@ const ProfileView = () => {
     return (
         <div className="profile-view">
             <h2 className="profile-view__title">Profile</h2>
-            {isSuccess && <p className="profile-view__success">{isSuccess}</p>}
             <Form
                 onSubmit={onSubmit}
                 onCancel={onReset}
