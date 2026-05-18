@@ -90,36 +90,33 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
         });
     }, []);
 
-    const registerUser = useCallback(
-        async (d: UserRegisterType) => {
-            setIsSubmitting(true);
-            try {
-                const response = await fetch(`${API_URL}/auth/register`, {
-                    method: "POST",
-                    credentials: "include",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(d),
-                });
-                if (response.ok) {
-                    registeredEmail.current = d.email;
-                    setIsSuccess(true);
-                    setTimeout(() => setCanResend(true), 60_000);
-                } else {
-                    const error = await response.json();
-                    setFormDataError(error.message);
-                }
-            } catch (error) {
-                if (error instanceof Error) {
-                    setFormDataError(error.message);
-                }
-            } finally {
-                setIsSubmitting(false);
+    const registerUser = useCallback(async (d: UserRegisterType) => {
+        setIsSubmitting(true);
+        try {
+            const response = await fetch(`${API_URL}/auth/register`, {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(d),
+            });
+            if (response.ok) {
+                registeredEmail.current = d.email;
+                setIsSuccess(true);
+                setTimeout(() => setCanResend(true), 60_000);
+            } else {
+                const error = await response.json();
+                setFormDataError(error.message);
             }
-        },
-        [],
-    );
+        } catch (error) {
+            if (error instanceof Error) {
+                setFormDataError(error.message);
+            }
+        } finally {
+            setIsSubmitting(false);
+        }
+    }, []);
 
     const onSubmitForm = useCallback(
         (e: React.SubmitEvent<HTMLFormElement>) => {

@@ -5,6 +5,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router";
 import { UserProvider } from "./contexts/UserContext/UserContext.tsx";
+import { Toaster } from "sonner";
 import App from "./App.tsx";
 import "./scss/style.scss";
 
@@ -17,6 +18,10 @@ createRoot(root!).render(
                 fallback={({ resetError }) => <ErrorFallback resetError={resetError} />}
             >
                 <UserProvider>
+                    <Toaster
+                        richColors
+                        position="top-center"
+                    />
                     <App />
                 </UserProvider>
             </Sentry.ErrorBoundary>

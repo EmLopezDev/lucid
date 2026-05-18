@@ -14,6 +14,7 @@ import { useUserContext } from "@contexts/UserContext/useUserContext";
 import { objectCopy } from "@lib/generic";
 import { isFormDataValid, type FormRules, hasErrors } from "@lib/form";
 import { API_URL } from "@config/api";
+import { toast } from "sonner";
 
 const SIGNIN_EMPTY_FORM: UserSigninType = {
     email: "",
@@ -92,6 +93,7 @@ export const SignInPageProvider = ({
                 if (response.ok) {
                     const data = await response.json();
                     setUser(data);
+                    toast.success(`Welcome back, ${data.first_name}`);
                     navigation("/");
                 } else {
                     if (response.status === 403) setUnverified(true);

@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback, useEffect, type ReactNode } from "react
 import { UserContext } from "./useUserContext";
 import { type UserType } from "../../../../packages/types";
 import { API_URL } from "@config/api";
+import { toast } from "sonner";
 
 export interface UserContextType {
     currentUser: UserType | null;
@@ -48,6 +49,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
     const signOut = useCallback(async () => {
         await fetch(`${API_URL}/auth/signout`, { method: "POST", credentials: "include" });
+        toast.success("Signed out. Your save file is safe.");
         setCurrentUser(null);
     }, []);
 
