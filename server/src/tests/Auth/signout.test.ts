@@ -40,6 +40,7 @@ describe("POST /api/v1/auth/signout", () => {
         expect(signout.body.message).toBe("Signed out successfully");
 
         const session = await agent.get("/api/v1/auth/session");
-        expect(session.status).toBe(401);
+        expect(session.status).toBe(200);
+        expect(session.body).toBeNull();
     });
 });
