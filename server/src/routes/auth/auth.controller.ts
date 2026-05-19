@@ -61,7 +61,7 @@ export const authSignOutUser = (req: Request, res: Response, next: NextFunction)
 
 export const authGetSession = async (req: Request, res: Response, next: NextFunction) => {
     if (!req.session.userId) {
-        return res.status(401).json({ message: "Not authenticated" });
+        return res.status(200).json(null);
     }
     try {
         const user = await findUserById(req.session.userId);

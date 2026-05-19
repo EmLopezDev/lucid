@@ -5,6 +5,8 @@ import UserRouter from "./user/user.router";
 
 const api = express.Router();
 
+api.get("/health", (_req, res) => res.status(200).end());
+
 api.use("/auth", AuthRouter);
 api.use("/user/:userId", UserLibraryRouter);
 api.use("/user/:userId", UserRouter);
