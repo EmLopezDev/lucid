@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.1] - 2026-05-19
+
+### Bug Fixes
+
+- Fixed error at start up due to race condition between Vite and Node
+- Removed 401 response from initial session check
+- Updated test for session
+- Added .markdownlist.json file to override some rules for CHANGELOG.md
+
 ## [1.3.0] - 2026-05-18
 
 ### Features
