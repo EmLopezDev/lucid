@@ -25,11 +25,11 @@ beforeEach(async () => {
 });
 
 describe("GET /api/v1/auth/session", () => {
-    it("returns 401 when there is no active session", async () => {
+    it("returns 200 when there is no active session", async () => {
         const res = await request(app).get("/api/v1/auth/session");
 
-        expect(res.status).toBe(401);
-        expect(res.body.message).toBe("Not authenticated");
+        expect(res.status).toBe(200);
+        expect(res.body).toBeNull();
     });
 
     it("returns 200 and the authenticated user when a valid session exists", async () => {
@@ -50,7 +50,7 @@ describe("GET /api/v1/auth/session", () => {
         expect(res.body.last_name).toBe(testUser.last_name);
     });
 
-    it("returns 401 after signing out", async () => {
+    it("returns 200 after signing out", async () => {
         const agent = request.agent(app);
 
         await agent.post("/api/v1/auth/register").send(testUser);
@@ -63,7 +63,7 @@ describe("GET /api/v1/auth/session", () => {
 
         const res = await agent.get("/api/v1/auth/session");
 
-        expect(res.status).toBe(401);
-        expect(res.body.message).toBe("Not authenticated");
+        expect(res.status).toBe(200);
+        expect(res.body).toBeNull();
     });
 });
