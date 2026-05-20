@@ -11,6 +11,7 @@
         "seed:demo": "node --env-file=.env --import tsx scripts/seed-demo.ts",
         "migrate:email-verified": "node --env-file=.env --import tsx scripts/migrations/migrate-email-verified.ts",
         "migrate:genres": "node --env-file=.env --import tsx scripts/migrations/migrate-genres.ts",
+        "migrate:platforms": "node --env-file=.env --import tsx scripts/migrations/migrate-platforms.ts",
         "test": "vitest run",
         "test:watch": "vitest",
         "lint": "eslint .",

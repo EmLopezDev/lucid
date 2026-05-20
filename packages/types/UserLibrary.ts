@@ -4,7 +4,7 @@ export const Status = z.literal(["playing", "completed", "paused", "dropped", "w
 
 export type StatusType = z.infer<typeof Status>;
 
-export const Platform = z.literal(["playstation", "xbox", "nintendo", "PC"]);
+export const Platform = z.string().min(1).max(100);
 
 export type PlatformType = z.infer<typeof Platform>;
 

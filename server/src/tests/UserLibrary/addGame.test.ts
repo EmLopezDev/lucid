@@ -10,7 +10,7 @@ vi.mock("connect-mongo", async () => {
 const testGame = {
     title: "The Last of Us",
     genre: "action",
-    platform: "playstation",
+    platform: "PlayStation 5",
     status: "playing",
 };
 
@@ -62,12 +62,4 @@ describe("POST /api/v1/user/:userId/library", () => {
         expect(res.body.message).toBe("Invalid fields");
     });
 
-    it("returns 400 when platform is invalid", async () => {
-        const res = await agent
-            .post(`/api/v1/user/${userId}/library`)
-            .send({ ...testGame, platform: "unknown" });
-
-        expect(res.status).toBe(400);
-        expect(res.body.message).toBe("Invalid fields");
-    });
 });

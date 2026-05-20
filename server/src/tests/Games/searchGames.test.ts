@@ -20,7 +20,7 @@ const mockResults = [
         id: 3498,
         title: "Grand Theft Auto V",
         coverUrl: "https://example.com/gta5.jpg",
-        platforms: ["playstation", "xbox", "PC"],
+        platforms: ["PlayStation 5", "Xbox One", "PC"],
         genres: ["action"],
     },
 ];

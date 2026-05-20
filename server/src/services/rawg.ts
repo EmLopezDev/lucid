@@ -1,5 +1,5 @@
 import config from "../config";
-import { Genre, type PlatformType, type GenreType } from "../../../packages";
+import { Genre, type GenreType } from "../../../packages";
 
 type RawgPlatformEntryType = {
     platform: {
@@ -23,33 +23,36 @@ type RawgSearchResponseType = {
     results: RawgGameType[];
 };
 
-const PLATFORM_MAP: Record<string, PlatformType> = {
+const PLATFORM_MAP: Record<string, string> = {
     pc: "PC",
-    macos: "PC",
-    linux: "PC",
-    playstation5: "playstation",
-    playstation4: "playstation",
-    playstation3: "playstation",
-    playstation2: "playstation",
-    playstation: "playstation",
-    "ps-vita": "playstation",
-    psp: "playstation",
-    "xbox-series-x": "xbox",
-    "xbox-one": "xbox",
-    xbox360: "xbox",
-    xbox: "xbox",
-    "nintendo-switch": "nintendo",
-    "wii-u": "nintendo",
-    wii: "nintendo",
-    gamecube: "nintendo",
-    "nintendo-64": "nintendo",
-    snes: "nintendo",
-    nes: "nintendo",
-    "game-boy-advance": "nintendo",
-    "game-boy-color": "nintendo",
-    "game-boy": "nintendo",
-    "nintendo-3ds": "nintendo",
-    "nintendo-ds": "nintendo",
+    macos: "macOS",
+    linux: "Linux",
+    playstation5: "PlayStation 5",
+    playstation4: "PlayStation 4",
+    playstation3: "PlayStation 3",
+    playstation2: "PlayStation 2",
+    playstation: "PlayStation",
+    "ps-vita": "PS Vita",
+    psp: "PSP",
+    "xbox-series-x": "Xbox Series X/S",
+    "xbox-one": "Xbox One",
+    xbox360: "Xbox 360",
+    xbox: "Xbox",
+    "nintendo-switch": "Nintendo Switch",
+    "wii-u": "Wii U",
+    wii: "Wii",
+    gamecube: "GameCube",
+    "nintendo-64": "Nintendo 64",
+    snes: "SNES",
+    nes: "NES",
+    "game-boy-advance": "Game Boy Advance",
+    "game-boy-color": "Game Boy Color",
+    "game-boy": "Game Boy",
+    "nintendo-3ds": "Nintendo 3DS",
+    "nintendo-ds": "Nintendo DS",
+    nintendo: "Nintendo",
+    ios: "iOS",
+    android: "Android",
 };
 
 const GENRE_MAP: Record<string, GenreType> = {
@@ -57,10 +60,10 @@ const GENRE_MAP: Record<string, GenreType> = {
     "massively-multiplayer": "multiplayer",
 };
 
-const mapPlatforms = (entries: RawgPlatformEntryType[]): PlatformType[] => {
+const mapPlatforms = (entries: RawgPlatformEntryType[]): string[] => {
     const mapped = entries
         .map((entry) => PLATFORM_MAP[entry.platform.slug])
-        .filter(Boolean) as PlatformType[];
+        .filter(Boolean) as string[];
     return [...new Set(mapped)];
 };
 
@@ -69,14 +72,6 @@ const mapGenres = (entries: RawgGenreType[]): GenreType[] => {
         .map((entry) => GENRE_MAP[entry.slug] ?? entry.slug)
         .filter((g) => Genre.safeParse(g).success) as GenreType[];
     return [...new Set(mapped)];
-};
-
-export type GameSearchResult = {
-    id: number;
-    title: string;
-    coverUrl: string | null;
-    platforms: PlatformType[];
-    genres: GenreType[];
 };
 
 export const searchGame = async (query: string) => {

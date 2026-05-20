@@ -11,7 +11,7 @@ import { createAuthenticatedAgent } from "../helpers/auth";
 const testGame = {
     title: "The Last of Us",
     genre: "action",
-    platform: "playstation",
+    platform: "PlayStation 5",
     status: "playing",
 };
 
