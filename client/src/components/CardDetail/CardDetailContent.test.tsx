@@ -8,7 +8,7 @@ const mockGame = {
     user_id: "507f1f77bcf86cd799439012",
     title: "The Last of Us",
     genre: "action" as const,
-    platform: "playstation" as const,
+    platform: "PlayStation 5" as const,
     status: "playing" as const,
     favorite: false,
     price: "59.99",
@@ -39,7 +39,7 @@ describe("CardDetailContent", () => {
         it("renders the genre and platform capitalized", () => {
             render(<CardDetailContent {...defaultProps} />);
             expect(screen.getByText("Action")).toBeInTheDocument();
-            expect(screen.getByText("Playstation")).toBeInTheDocument();
+            expect(screen.getByText("PlayStation 5")).toBeInTheDocument();
         });
 
         it("renders the status badge", () => {

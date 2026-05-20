@@ -9,7 +9,7 @@ const mockGame: UserLibraryDataType = {
     user_id: "507f1f77bcf86cd799439012",
     title: "The Last of Us",
     genre: "action",
-    platform: "playstation",
+    platform: "PlayStation 5",
     status: "playing",
     favorite: false,
     price: "59.99",

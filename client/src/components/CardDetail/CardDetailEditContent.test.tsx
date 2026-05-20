@@ -8,7 +8,7 @@ const mockGame = {
     user_id: "507f1f77bcf86cd799439012",
     title: "The Last of Us",
     genre: "action" as const,
-    platform: "playstation" as const,
+    platform: "PlayStation 5" as const,
     status: "playing" as const,
     favorite: false,
     price: "59.99",

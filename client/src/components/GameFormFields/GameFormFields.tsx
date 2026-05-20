@@ -4,7 +4,6 @@ import DatePicker from "@components/DatePicker/DatePicker";
 import Textarea from "@components/Textarea/Textarea";
 import {
     type GenreType,
-    type PlatformType,
     type StatusType,
     type GenreOptionType,
     type PlatformOptionType,
@@ -57,7 +56,7 @@ const GameFormFields = ({ value, inputSize = "medium", onChange }: GameFormField
                         selectSize={inputSize}
                     />
                 </div>
-                <Select<PlatformType, PlatformType>
+                <Select<string, string>
                     id="platform-select"
                     label="Platform"
                     options={platformOptions}
