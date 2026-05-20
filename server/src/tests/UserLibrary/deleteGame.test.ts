@@ -10,7 +10,7 @@ import { createAuthenticatedAgent } from "../helpers/auth";
 
 const testGame = {
     title: "The Last of Us",
-    genre: "action adventure",
+    genre: "action",
     platform: "playstation",
     status: "playing",
 };
@@ -54,9 +54,7 @@ describe("DELETE /api/v1/user/:userId/library/:gameId", () => {
             email: "other@example.com",
         });
 
-        const created = await otherAgent
-            .post(`/api/v1/user/${otherUserId}/library`)
-            .send(testGame);
+        const created = await otherAgent.post(`/api/v1/user/${otherUserId}/library`).send(testGame);
 
         const res = await agent.delete(`/api/v1/user/${otherUserId}/library/${created.body._id}`);
 

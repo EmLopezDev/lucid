@@ -1,5 +1,5 @@
-import { mongoClientPromise, mongoDisconnect } from "../src/services/mongo";
-import { UserModel } from "../src/models/user/user.mongo";
+import { mongoClientPromise, mongoDisconnect } from "../../src/services/mongo";
+import { UserModel } from "../../src/models/user/user.mongo";
 
 const migrate = async () => {
     await mongoClientPromise;

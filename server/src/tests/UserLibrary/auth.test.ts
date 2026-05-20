@@ -13,7 +13,7 @@ const userId = "test-user-id";
 
 const testGame = {
     title: "The Last of Us",
-    genre: "action adventure",
+    genre: "action",
     platform: "playstation",
     status: "playing",
 };
@@ -31,9 +31,7 @@ describe("UserLibrary auth guard", () => {
     });
 
     it("returns 401 on POST when not authenticated", async () => {
-        const res = await request(app)
-            .post(`/api/v1/user/${userId}/library`)
-            .send(testGame);
+        const res = await request(app).post(`/api/v1/user/${userId}/library`).send(testGame);
 
         expect(res.status).toBe(401);
         expect(res.body.message).toBe("Not authenticated");
@@ -49,8 +47,9 @@ describe("UserLibrary auth guard", () => {
     });
 
     it("returns 401 on DELETE when not authenticated", async () => {
-        const res = await request(app)
-            .delete(`/api/v1/user/${userId}/library/000000000000000000000001`);
+        const res = await request(app).delete(
+            `/api/v1/user/${userId}/library/000000000000000000000001`,
+        );
 
         expect(res.status).toBe(401);
         expect(res.body.message).toBe("Not authenticated");

@@ -23,7 +23,7 @@ function makeGame(overrides: Partial<UserLibraryDataType> = {}): UserLibraryData
         _id: "1",
         title: "Test Game",
         status: "playing",
-        genre: "action adventure",
+        genre: "action",
         platform: "PC",
         rating: null,
         user_id: "user-1",

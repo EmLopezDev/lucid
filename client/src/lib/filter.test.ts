@@ -16,10 +16,50 @@ const base = {
 };
 
 const games: UserLibraryDataType[] = [
-    { ...base, _id: "1", title: "Zelda", status: "playing", genre: "action adventure", platform: "nintendo", rating: 5, price: "60.00", created_at: "2024-03-01T00:00:00.000Z" },
-    { ...base, _id: "2", title: "Elden Ring", status: "completed", genre: "role-playing", platform: "PC", rating: 4.5, price: "40.00", created_at: "2024-01-01T00:00:00.000Z" },
-    { ...base, _id: "3", title: "Halo", status: "paused", genre: "shooter", platform: "xbox", rating: null, price: "20.00", created_at: "2024-02-01T00:00:00.000Z" },
-    { ...base, _id: "4", title: "zelda breath", status: "playing", genre: "action adventure", platform: "nintendo", rating: 3, price: null, created_at: "2024-04-01T00:00:00.000Z" },
+    {
+        ...base,
+        _id: "1",
+        title: "Zelda",
+        status: "playing",
+        genre: "action",
+        platform: "nintendo",
+        rating: 5,
+        price: "60.00",
+        created_at: "2024-03-01T00:00:00.000Z",
+    },
+    {
+        ...base,
+        _id: "2",
+        title: "Elden Ring",
+        status: "completed",
+        genre: "role-playing",
+        platform: "PC",
+        rating: 4.5,
+        price: "40.00",
+        created_at: "2024-01-01T00:00:00.000Z",
+    },
+    {
+        ...base,
+        _id: "3",
+        title: "Halo",
+        status: "paused",
+        genre: "shooter",
+        platform: "xbox",
+        rating: null,
+        price: "20.00",
+        created_at: "2024-02-01T00:00:00.000Z",
+    },
+    {
+        ...base,
+        _id: "4",
+        title: "zelda breath",
+        status: "playing",
+        genre: "action",
+        platform: "nintendo",
+        rating: 3,
+        price: null,
+        created_at: "2024-04-01T00:00:00.000Z",
+    },
 ];
 
 describe("filterByTitle", () => {

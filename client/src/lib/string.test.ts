@@ -7,7 +7,7 @@ describe("capitalizeString", () => {
     });
 
     it("leaves the rest of the string unchanged", () => {
-        expect(capitalizeString("action adventure")).toBe("Action adventure");
+        expect(capitalizeString("action game")).toBe("Action game");
     });
 
     it("handles a single character", () => {

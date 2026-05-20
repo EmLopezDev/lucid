@@ -72,16 +72,21 @@ export const platformOptions: PlatformOptionType[] = toOptions([
 ]);
 
 export const genreOptions: GenreOptionType[] = toOptions([
+    "action",
+    "adventure",
     "role-playing",
-    "action adventure",
-    "survival",
-    "shooter",
     "strategy",
+    "shooter",
     "simulation",
-    "battle royal",
-    "sport",
-    "racing",
-    "platform",
     "puzzle",
+    "platformer",
+    "racing",
+    "sports",
+    "fighting",
+    "indie",
+    "casual",
+    "arcade",
+    "multiplayer",
+    "family",
     "other",
 ]);

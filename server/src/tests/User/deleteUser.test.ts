@@ -26,7 +26,7 @@ describe("DELETE /api/v1/user/:userId", () => {
         await UserLibraryModel.create({
             user_id: userId,
             title: "Test Game",
-            genre: "action adventure",
+            genre: "action",
             platform: "PC",
             status: "playing",
             favorite: false,

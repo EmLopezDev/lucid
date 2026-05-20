@@ -28,6 +28,7 @@ const config = {
     SENTRY_DSN: process.env.SENTRY_DSN,
     EMAIL_USER: process.env.EMAIL_USER,
     EMAIL_PASS: process.env.EMAIL_PASS,
+    RAWG_API_KEY: process.env.RAWG_API_KEY,
 };
 
 export default config;

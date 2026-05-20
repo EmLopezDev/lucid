@@ -51,7 +51,7 @@ const libraryGames = (userId: string) => [
     {
         user_id: userId,
         title: "Hades",
-        genre: "action adventure",
+        genre: "action",
         platform: "nintendo",
         status: "completed",
         favorite: true,
@@ -87,7 +87,7 @@ const libraryGames = (userId: string) => [
     {
         user_id: userId,
         title: "God of War",
-        genre: "action adventure",
+        genre: "action",
         platform: "playstation",
         status: "completed",
         favorite: true,
@@ -105,7 +105,7 @@ const libraryGames = (userId: string) => [
     {
         user_id: userId,
         title: "The Last of Us Part I",
-        genre: "action adventure",
+        genre: "action",
         platform: "playstation",
         status: "completed",
         favorite: true,
@@ -141,7 +141,7 @@ const libraryGames = (userId: string) => [
     {
         user_id: userId,
         title: "Red Dead Redemption 2",
-        genre: "action adventure",
+        genre: "action",
         platform: "playstation",
         status: "completed",
         favorite: true,
@@ -232,7 +232,7 @@ const libraryGames = (userId: string) => [
     {
         user_id: userId,
         title: "Hades II",
-        genre: "action adventure",
+        genre: "action",
         platform: "PC",
         status: "playing",
         favorite: false,
@@ -287,7 +287,7 @@ const libraryGames = (userId: string) => [
     {
         user_id: userId,
         title: "Cyberpunk 2077",
-        genre: "action adventure",
+        genre: "action",
         platform: "PC",
         status: "paused",
         favorite: false,
@@ -323,7 +323,7 @@ const libraryGames = (userId: string) => [
     {
         user_id: userId,
         title: "Assassin's Creed Valhalla",
-        genre: "action adventure",
+        genre: "action",
         platform: "xbox",
         status: "paused",
         favorite: false,
@@ -378,7 +378,7 @@ const libraryGames = (userId: string) => [
     {
         user_id: userId,
         title: "Forspoken",
-        genre: "action adventure",
+        genre: "action",
         platform: "playstation",
         status: "dropped",
         favorite: false,
@@ -415,7 +415,7 @@ const libraryGames = (userId: string) => [
     {
         user_id: userId,
         title: "Split Fiction",
-        genre: "action adventure",
+        genre: "action",
         platform: "PC",
         status: "playing",
         favorite: false,
@@ -451,7 +451,7 @@ const libraryGames = (userId: string) => [
     {
         user_id: userId,
         title: "Monster Hunter Wilds",
-        genre: "action adventure",
+        genre: "action",
         platform: "PC",
         status: "playing",
         favorite: false,
@@ -469,7 +469,7 @@ const libraryGames = (userId: string) => [
     {
         user_id: userId,
         title: "Like a Dragon: Pirate Yakuza in Hawaii",
-        genre: "action adventure",
+        genre: "action",
         platform: "PC",
         status: "completed",
         favorite: false,
@@ -487,7 +487,7 @@ const libraryGames = (userId: string) => [
     {
         user_id: userId,
         title: "Indiana Jones and the Great Circle",
-        genre: "action adventure",
+        genre: "action",
         platform: "xbox",
         status: "completed",
         favorite: false,
@@ -505,7 +505,7 @@ const libraryGames = (userId: string) => [
     {
         user_id: userId,
         title: "Black Myth: Wukong",
-        genre: "action adventure",
+        genre: "action",
         platform: "PC",
         status: "completed",
         favorite: true,
@@ -559,7 +559,7 @@ const libraryGames = (userId: string) => [
     {
         user_id: userId,
         title: "Silent Hill 2",
-        genre: "action adventure",
+        genre: "action",
         platform: "playstation",
         status: "completed",
         favorite: false,
@@ -596,7 +596,7 @@ const libraryGames = (userId: string) => [
     {
         user_id: userId,
         title: "GTA VI",
-        genre: "action adventure",
+        genre: "action",
         platform: "playstation",
         status: "wishlist",
         favorite: false,

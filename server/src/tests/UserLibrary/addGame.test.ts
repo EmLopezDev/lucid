@@ -9,7 +9,7 @@ vi.mock("connect-mongo", async () => {
 
 const testGame = {
     title: "The Last of Us",
-    genre: "action adventure",
+    genre: "action",
     platform: "playstation",
     status: "playing",
 };
@@ -70,5 +70,4 @@ describe("POST /api/v1/user/:userId/library", () => {
         expect(res.status).toBe(400);
         expect(res.body.message).toBe("Invalid fields");
     });
-
 });

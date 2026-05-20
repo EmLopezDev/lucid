@@ -9,17 +9,22 @@ export const Platform = z.literal(["playstation", "xbox", "nintendo", "PC"]);
 export type PlatformType = z.infer<typeof Platform>;
 
 export const Genre = z.literal([
+    "action",
+    "adventure",
     "role-playing",
-    "action adventure",
-    "survival",
-    "shooter",
     "strategy",
+    "shooter",
     "simulation",
-    "battle royal",
-    "sport",
-    "racing",
-    "platform",
     "puzzle",
+    "platformer",
+    "racing",
+    "sports",
+    "fighting",
+    "indie",
+    "casual",
+    "arcade",
+    "multiplayer",
+    "family",
     "other",
 ]);
 

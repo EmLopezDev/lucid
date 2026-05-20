@@ -16,5 +16,11 @@ export default defineConfig([
                 { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
             ],
         },
+        languageOptions: {
+            ecmaVersion: 2022,
+            parserOptions: {
+                tsconfigRootDir: import.meta.dirname,
+            },
+        },
     },
 ]);

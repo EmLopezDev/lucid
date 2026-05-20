@@ -7,7 +7,7 @@ const mockGame = {
     _id: "507f1f77bcf86cd799439011",
     user_id: "507f1f77bcf86cd799439012",
     title: "The Last of Us",
-    genre: "action adventure" as const,
+    genre: "action" as const,
     platform: "playstation" as const,
     status: "playing" as const,
     favorite: false,
@@ -39,7 +39,7 @@ describe("Card", () => {
 
         it("renders the genre capitalized", () => {
             render(<Card {...defaultProps} />);
-            expect(screen.getByText("Action adventure")).toBeInTheDocument();
+            expect(screen.getByText("Action")).toBeInTheDocument();
         });
 
         it("renders the platform capitalized", () => {
@@ -51,7 +51,7 @@ describe("Card", () => {
             render(<Card {...defaultProps} />);
             expect(
                 screen.getByRole("button", {
-                    name: "The Last of Us, Playing, Action adventure, Playstation",
+                    name: "The Last of Us, Playing, Action, Playstation",
                 }),
             ).toBeInTheDocument();
         });
@@ -69,12 +69,22 @@ describe("Card", () => {
         });
 
         it("shows 'Free' when price is '0.00'", () => {
-            render(<Card {...defaultProps} data={{ ...mockGame, price: "0.00" }} />);
+            render(
+                <Card
+                    {...defaultProps}
+                    data={{ ...mockGame, price: "0.00" }}
+                />,
+            );
             expect(screen.getByText("Free")).toBeInTheDocument();
         });
 
         it("does not render price when price is null", () => {
-            render(<Card {...defaultProps} data={{ ...mockGame, price: null }} />);
+            render(
+                <Card
+                    {...defaultProps}
+                    data={{ ...mockGame, price: null }}
+                />,
+            );
             expect(screen.queryByText(/\$/)).not.toBeInTheDocument();
             expect(screen.queryByText("Free")).not.toBeInTheDocument();
         });
@@ -82,30 +92,50 @@ describe("Card", () => {
 
     describe("selected state", () => {
         it("select button has aria-pressed false when not selected", () => {
-            render(<Card {...defaultProps} selectedId="other-id" />);
+            render(
+                <Card
+                    {...defaultProps}
+                    selectedId="other-id"
+                />,
+            );
             expect(
                 screen.getByRole("button", {
-                    name: "The Last of Us, Playing, Action adventure, Playstation",
+                    name: "The Last of Us, Playing, Action, Playstation",
                 }),
             ).toHaveAttribute("aria-pressed", "false");
         });
 
         it("select button has aria-pressed true when selected", () => {
-            render(<Card {...defaultProps} selectedId={mockGame._id} />);
+            render(
+                <Card
+                    {...defaultProps}
+                    selectedId={mockGame._id}
+                />,
+            );
             expect(
                 screen.getByRole("button", {
-                    name: "The Last of Us, Playing, Action adventure, Playstation",
+                    name: "The Last of Us, Playing, Action, Playstation",
                 }),
             ).toHaveAttribute("aria-pressed", "true");
         });
 
         it("applies card__selected class when selected", () => {
-            const { container } = render(<Card {...defaultProps} selectedId={mockGame._id} />);
+            const { container } = render(
+                <Card
+                    {...defaultProps}
+                    selectedId={mockGame._id}
+                />,
+            );
             expect(container.firstChild).toHaveClass("card__selected");
         });
 
         it("does not apply card__selected class when not selected", () => {
-            const { container } = render(<Card {...defaultProps} selectedId="other-id" />);
+            const { container } = render(
+                <Card
+                    {...defaultProps}
+                    selectedId="other-id"
+                />,
+            );
             expect(container.firstChild).not.toHaveClass("card__selected");
         });
     });
@@ -113,10 +143,15 @@ describe("Card", () => {
     describe("interaction", () => {
         it("calls handleCardSelect with data._id when select button is clicked", async () => {
             const handleCardSelect = vi.fn();
-            render(<Card {...defaultProps} handleCardSelect={handleCardSelect} />);
+            render(
+                <Card
+                    {...defaultProps}
+                    handleCardSelect={handleCardSelect}
+                />,
+            );
             await userEvent.click(
                 screen.getByRole("button", {
-                    name: "The Last of Us, Playing, Action adventure, Playstation",
+                    name: "The Last of Us, Playing, Action, Playstation",
                 }),
             );
             expect(handleCardSelect).toHaveBeenCalledWith(mockGame._id);
@@ -124,7 +159,12 @@ describe("Card", () => {
 
         it("calls handleDelete with data._id when delete button is clicked", async () => {
             const handleDelete = vi.fn();
-            render(<Card {...defaultProps} handleDelete={handleDelete} />);
+            render(
+                <Card
+                    {...defaultProps}
+                    handleDelete={handleDelete}
+                />,
+            );
             await userEvent.click(screen.getByRole("button", { name: "Delete The Last of Us" }));
             expect(handleDelete).toHaveBeenCalledWith(mockGame._id);
         });

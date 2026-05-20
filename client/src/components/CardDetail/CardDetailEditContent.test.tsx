@@ -7,7 +7,7 @@ const mockGame = {
     _id: "507f1f77bcf86cd799439011",
     user_id: "507f1f77bcf86cd799439012",
     title: "The Last of Us",
-    genre: "action adventure" as const,
+    genre: "action" as const,
     platform: "playstation" as const,
     status: "playing" as const,
     favorite: false,
@@ -26,7 +26,11 @@ const mockGame = {
 describe("CardDetailEditContent", () => {
     it("pre-fills the title input with the game's title", () => {
         render(
-            <CardDetailEditContent data={mockGame} onSubmit={vi.fn()} onCancel={vi.fn()} />,
+            <CardDetailEditContent
+                data={mockGame}
+                onSubmit={vi.fn()}
+                onCancel={vi.fn()}
+            />,
         );
         expect(screen.getByDisplayValue("The Last of Us")).toBeInTheDocument();
     });
@@ -34,7 +38,11 @@ describe("CardDetailEditContent", () => {
     it("calls onCancel when the cancel button is clicked", async () => {
         const handleCancel = vi.fn();
         render(
-            <CardDetailEditContent data={mockGame} onSubmit={vi.fn()} onCancel={handleCancel} />,
+            <CardDetailEditContent
+                data={mockGame}
+                onSubmit={vi.fn()}
+                onCancel={handleCancel}
+            />,
         );
         await userEvent.click(screen.getByRole("button", { name: "Cancel" }));
         expect(handleCancel).toHaveBeenCalledOnce();
@@ -43,7 +51,11 @@ describe("CardDetailEditContent", () => {
     it("calls onSubmit when the form is submitted", async () => {
         const handleSubmit = vi.fn();
         render(
-            <CardDetailEditContent data={mockGame} onSubmit={handleSubmit} onCancel={vi.fn()} />,
+            <CardDetailEditContent
+                data={mockGame}
+                onSubmit={handleSubmit}
+                onCancel={vi.fn()}
+            />,
         );
         await userEvent.click(screen.getByRole("button", { name: "Submit" }));
         expect(handleSubmit).toHaveBeenCalledOnce();

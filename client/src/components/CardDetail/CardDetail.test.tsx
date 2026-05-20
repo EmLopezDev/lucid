@@ -8,7 +8,7 @@ const mockGame: UserLibraryDataType = {
     _id: "507f1f77bcf86cd799439011",
     user_id: "507f1f77bcf86cd799439012",
     title: "The Last of Us",
-    genre: "action adventure",
+    genre: "action",
     platform: "playstation",
     status: "playing",
     favorite: false,
@@ -49,7 +49,9 @@ describe("CardDetail", () => {
 
         it("does not apply the closing class initially", () => {
             const { container } = renderCardDetail();
-            expect(container.querySelector(".card-detail__container--closing")).not.toBeInTheDocument();
+            expect(
+                container.querySelector(".card-detail__container--closing"),
+            ).not.toBeInTheDocument();
         });
 
         it("renders the Edit button in view mode", () => {
