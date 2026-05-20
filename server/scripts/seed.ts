@@ -33,7 +33,7 @@ const libraryGames = (userId: string) => [
     {
         user_id: userId,
         title: "Hollow Knight",
-        genre: "platform",
+        genre: "platformer",
         platform: "PC",
         status: "completed",
         favorite: true,
@@ -159,7 +159,7 @@ const libraryGames = (userId: string) => [
     {
         user_id: userId,
         title: "Celeste",
-        genre: "platform",
+        genre: "platformer",
         platform: "nintendo",
         status: "completed",
         favorite: false,
@@ -214,7 +214,7 @@ const libraryGames = (userId: string) => [
     {
         user_id: userId,
         title: "FIFA 25",
-        genre: "sport",
+        genre: "sports",
         platform: "playstation",
         status: "playing",
         favorite: false,
@@ -305,7 +305,7 @@ const libraryGames = (userId: string) => [
     {
         user_id: userId,
         title: "Minecraft",
-        genre: "survival",
+        genre: "other",
         platform: "PC",
         status: "paused",
         favorite: false,
@@ -541,7 +541,7 @@ const libraryGames = (userId: string) => [
     {
         user_id: userId,
         title: "Astro Bot",
-        genre: "platform",
+        genre: "platformer",
         platform: "playstation",
         status: "completed",
         favorite: true,
@@ -578,7 +578,7 @@ const libraryGames = (userId: string) => [
     {
         user_id: userId,
         title: "Silksong",
-        genre: "platform",
+        genre: "platformer",
         platform: "nintendo",
         status: "wishlist",
         favorite: false,
