@@ -1,5 +1,43 @@
 # Changelog
 
+## [1.4.0] - 2026-05-21
+
+### Features
+
+#### Game Search
+
+- Add game form now includes a search-as-you-type title field powered by the RAWG API
+- Search results appear in a dropdown with cover art thumbnails and game titles
+- Selecting a game auto-populates the platform and genre fields with the game's actual data
+- Genre and platform dropdowns are filtered to only the options relevant to the selected game
+- Cover art is automatically saved to the game record when a game is selected from search
+
+#### SearchInput Component
+
+- New generic `SearchInput<T>` component — reusable for any future search needs
+- Full keyboard navigation: `ArrowDown` / `ArrowUp` to move through results, `Enter` to select, `Escape` to close
+- Dropdown scrolls to keep the focused item in view during keyboard navigation
+- Pressing `Enter` no longer accidentally submits the form while the dropdown is open
+- Animated dropdown with staggered result fade-in and a pulsing loading indicator
+
+#### Expanded Genres and Platforms
+
+- Genre list expanded from 4 to 17 values aligned with RAWG (action, adventure, role-playing, strategy, shooter, simulation, puzzle, platformer, racing, sports, fighting, indie, casual, arcade, multiplayer, family, other)
+- Platform field changed from a fixed enum to a free-form string with 30+ curated options across PlayStation, Xbox, Nintendo, PC, and mobile
+- Existing library data migrated to the new genre and platform values
+
+### Infrastructure
+
+- Added RAWG API service on the server with a `GET /api/v1/games/search` endpoint
+- CSP updated to allow images from `media.rawg.io`
+- Server now loads `.env.local` before `.env` so local secrets stay out of version control
+- Added `:prod` migration script variants for running against the production database
+
+### Testing
+
+- 445 client unit tests (+26 new tests covering `SearchInput` behaviour and keyboard navigation)
+- 77 server integration tests (+5 new tests covering the game search endpoint)
+
 ## [1.3.1] - 2026-05-19
 
 ### Bug Fixes
