@@ -65,10 +65,42 @@ export const sortOptions: SortOptionType[] = toOptions([
 ]);
 
 export const platformOptions: PlatformOptionType[] = toOptions([
-    "playstation",
-    "xbox",
-    "nintendo",
+    // PlayStation
+    "PlayStation 5",
+    "PlayStation 4",
+    "PlayStation 3",
+    "PlayStation 2",
+    "PlayStation",
+    "PS Vita",
+    "PSP",
+    // Xbox
+    "Xbox Series X/S",
+    "Xbox One",
+    "Xbox 360",
+    "Xbox",
+    // Nintendo
+    "Nintendo Switch",
+    "Wii U",
+    "Wii",
+    "GameCube",
+    "Nintendo 64",
+    "SNES",
+    "NES",
+    "Game Boy Advance",
+    "Game Boy Color",
+    "Game Boy",
+    "Nintendo 3DS",
+    "Nintendo DS",
+    "Nintendo",
+    // PC & OS
     "PC",
+    "macOS",
+    "Linux",
+    // Mobile
+    "iOS",
+    "Android",
+    // Other
+    "Other",
 ]);
 
 export const genreOptions: GenreOptionType[] = toOptions([

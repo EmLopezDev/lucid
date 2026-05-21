@@ -26,7 +26,7 @@ export const useGameSearch = (query: string): UseGameSearchResultType => {
             setError(null);
             try {
                 const response = await fetch(
-                    `${API_URL}/games/search/q=${encodeURIComponent(debouncedQuery)}`,
+                    `${API_URL}/games/search?q=${encodeURIComponent(debouncedQuery)}`,
                     { credentials: "include", signal: controller.signal },
                 );
                 if (!response.ok) throw new Error("Search failed");

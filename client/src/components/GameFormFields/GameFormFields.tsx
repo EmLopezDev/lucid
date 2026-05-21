@@ -1,3 +1,4 @@
+import { type ReactNode } from "react";
 import Input from "@components/Input/Input";
 import Select from "@components/Select/Select";
 import DatePicker from "@components/DatePicker/DatePicker";
@@ -27,30 +28,52 @@ type GameFormFieldsProps = {
     value: GameFormData;
     inputSize?: "small" | "medium" | "large";
     onChange: (data: GameFormData) => void;
+    availablePlatforms?: string[];
+    availableGenres?: GenreType[];
+    titleInput?: ReactNode;
 };
 
-const GameFormFields = ({ value, inputSize = "medium", onChange }: GameFormFieldsProps) => {
+const GameFormFields = ({
+    value,
+    inputSize = "medium",
+    onChange,
+    availablePlatforms,
+    availableGenres,
+    titleInput,
+}: GameFormFieldsProps) => {
     const update = (patch: Partial<GameFormData>) => onChange({ ...value, ...patch });
+
+    const filteredPlatformOptions = availablePlatforms
+        ? platformOptions.filter(
+              (o) => availablePlatforms.includes(o.value) || o.value === "Other",
+          )
+        : platformOptions;
+
+    const filteredGenreOptions = availableGenres
+        ? genreOptions.filter((o) => availableGenres.includes(o.value) || o.value === "other")
+        : genreOptions;
 
     return (
         <>
             <div className="card-detail__content__edit">
                 <div className="card-detail__content__edit--full">
-                    <Input
-                        id="title-input"
-                        label="Title"
-                        value={value.title}
-                        onChange={(e) => update({ title: e.target.value })}
-                        inputSize={inputSize}
-                        hasErrorText={false}
-                        placeholder="eg. Mario Party"
-                    />
+                    {titleInput ?? (
+                        <Input
+                            id="title-input"
+                            label="Title"
+                            value={value.title}
+                            onChange={(e) => update({ title: e.target.value })}
+                            inputSize={inputSize}
+                            hasErrorText={false}
+                            placeholder="eg. Mario Party"
+                        />
+                    )}
                 </div>
                 <div className="card-detail__content__edit--full">
                     <Select<GenreType, GenreType>
                         id="genre-select"
                         label="Genre"
-                        options={genreOptions}
+                        options={filteredGenreOptions}
                         value={value.genre.value}
                         onChange={(option) => update({ genre: option })}
                         selectSize={inputSize}
@@ -59,7 +82,7 @@ const GameFormFields = ({ value, inputSize = "medium", onChange }: GameFormField
                 <Select<string, string>
                     id="platform-select"
                     label="Platform"
-                    options={platformOptions}
+                    options={filteredPlatformOptions}
                     value={value.platform.value}
                     onChange={(option) => update({ platform: option })}
                     selectSize={inputSize}

@@ -1,0 +1,108 @@
+@use "../utils/" as u;
+
+.search-input {
+    position: relative;
+    width: 100%;
+
+    // When the dropdown is open, square off the input's bottom corners
+    // so it connects seamlessly to the dropdown — mirrors the select pattern
+    &--open .input {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-color: var(--color-brand);
+        border-bottom-color: transparent;
+        transition:
+            border-color 0.15s ease,
+            border-radius 0.15s ease;
+    }
+
+    &__dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 20;
+        background: var(--color-bg-card);
+        border: u.em(0.5) solid var(--color-brand);
+        border-top: none;
+        border-bottom-left-radius: u.em(8);
+        border-bottom-right-radius: u.em(8);
+        overflow: hidden;
+        max-height: u.em(260);
+        overflow-y: auto;
+        animation: slide-down 0.15s ease;
+
+        &::-webkit-scrollbar {
+            width: u.em(6);
+        }
+
+        &::-webkit-scrollbar-track {
+            background: rgba(var(--color-brand-rgb), 0.06);
+            border-radius: u.em(4);
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: rgba(var(--color-brand-rgb), 0.35);
+            border-radius: u.em(4);
+
+            &:hover {
+                background: var(--color-brand);
+            }
+        }
+    }
+
+    &__status {
+        padding: u.em(14) u.em(16);
+        color: var(--color-text-tertiary);
+        font-size: u.$font-size-lg;
+        text-align: center;
+
+        &--loading {
+            animation: search-input-pulse 1.4s ease-in-out infinite;
+        }
+    }
+
+    &__result {
+        display: flex;
+        align-items: center;
+        gap: u.em(10);
+        padding: u.em(12) u.em(16);
+        color: var(--color-text-secondary);
+        font-size: u.$font-size-lg;
+        cursor: pointer;
+        transition:
+            background 0.15s ease,
+            color 0.15s ease,
+            padding-left 0.15s ease;
+
+        // Staggered fade-in for each result row
+        animation: fade-in 0.2s ease both;
+
+        @for $i from 1 through 10 {
+            &:nth-child(#{$i}) {
+                animation-delay: #{($i - 1) * 30}ms;
+            }
+        }
+
+        &:not(:last-child) {
+            border-bottom: u.em(0.5) solid rgba(var(--color-brand-rgb), 0.1);
+        }
+
+        &:hover {
+            background: rgba(var(--color-brand-rgb), 0.12);
+            color: var(--color-text-primary);
+            padding-left: u.em(20);
+        }
+    }
+}
+
+// Pulse for the loading / no-results status text
+@keyframes search-input-pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.35;
+    }
+}
