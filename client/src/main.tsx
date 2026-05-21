@@ -20,7 +20,7 @@ createRoot(root!).render(
                 <UserProvider>
                     <Toaster
                         richColors
-                        position="top-center"
+                        position="bottom-right"
                     />
                     <App />
                 </UserProvider>
