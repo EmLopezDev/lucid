@@ -150,4 +150,5 @@
 
 ---
 
+[1.4.0]: https://github.com/EmLopezDev/lucid/releases/tag/v1.4.0
 [1.0.0]: https://github.com/EmLopezDev/lucid/releases/tag/v1.0.0
