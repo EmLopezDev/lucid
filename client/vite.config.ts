@@ -15,7 +15,7 @@ function cspPlugin() {
                 "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
                 "font-src 'self' https://fonts.gstatic.com",
                 "connect-src 'self' https://sentry.io https://*.sentry.io",
-                "img-src 'self' data: https://cdn.cloudflare.steamstatic.com https://cdn.steamstatic.com",
+                "img-src 'self' data: https://cdn.cloudflare.steamstatic.com https://cdn.steamstatic.com https://media.rawg.io",
                 "object-src 'none'",
                 "base-uri 'self'",
                 "form-action 'self'",
