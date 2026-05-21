@@ -44,9 +44,7 @@ const GameFormFields = ({
     const update = (patch: Partial<GameFormData>) => onChange({ ...value, ...patch });
 
     const filteredPlatformOptions = availablePlatforms
-        ? platformOptions.filter(
-              (o) => availablePlatforms.includes(o.value) || o.value === "Other",
-          )
+        ? platformOptions.filter((o) => availablePlatforms.includes(o.value) || o.value === "Other")
         : platformOptions;
 
     const filteredGenreOptions = availableGenres

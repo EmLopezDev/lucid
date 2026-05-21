@@ -21,7 +21,16 @@ app.use("/api/v1", corsMiddleware);
 app.use("/api/v1/auth", authLimiter);
 app.use("/api/v1", generalLimiter);
 
-app.use(helmet());
+app.use(
+    helmet({
+        contentSecurityPolicy: {
+            directives: {
+                ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+                "img-src": ["'self'", "data:", "https://media.rawg.io"],
+            },
+        },
+    }),
+);
 
 app.use(httpLogger);
 

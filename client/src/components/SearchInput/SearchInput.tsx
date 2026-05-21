@@ -1,4 +1,11 @@
-import { useState, useRef, useEffect, type ReactNode, type ChangeEvent } from "react";
+import {
+    useState,
+    useRef,
+    useEffect,
+    type ReactNode,
+    type ChangeEvent,
+    type KeyboardEvent,
+} from "react";
 import Input from "@components/Input/Input";
 
 type SearchInputType<T> = {
@@ -34,8 +41,10 @@ const SearchInput = <T,>({
 }: SearchInputType<T>) => {
     const [isOpen, setIsOpen] = useState(false);
     const [hasSelected, setHasSelected] = useState(false);
+    const [focusedIndex, setFocusedIndex] = useState(-1);
 
     const containerRef = useRef<HTMLDivElement>(null);
+    const listboxRef = useRef<HTMLUListElement>(null);
 
     useEffect(() => {
         const handleOutsideClick = (e: MouseEvent) => {
@@ -47,9 +56,17 @@ const SearchInput = <T,>({
         return () => document.removeEventListener("mousedown", handleOutsideClick);
     }, []);
 
+    // Scroll the focused item into view when navigating with arrow keys
+    useEffect(() => {
+        if (focusedIndex < 0 || !listboxRef.current) return;
+        const options = listboxRef.current.querySelectorAll('[role="option"]');
+        options[focusedIndex]?.scrollIntoView({ block: "nearest" });
+    }, [focusedIndex]);
+
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         onQueryChange(e.target.value);
         setIsOpen(true);
+        setFocusedIndex(-1);
         if (hasSelected) {
             setHasSelected(false);
             onReset();
@@ -60,7 +77,28 @@ const SearchInput = <T,>({
         onQueryChange(getLabel(result));
         setIsOpen(false);
         setHasSelected(true);
+        setFocusedIndex(-1);
         onSelect(result);
+    };
+
+    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (!showDropdown) return;
+
+        if (e.key === "ArrowDown") {
+            e.preventDefault();
+            setFocusedIndex((prev) => Math.min(prev + 1, results.length - 1));
+        } else if (e.key === "ArrowUp") {
+            e.preventDefault();
+            setFocusedIndex((prev) => Math.max(prev - 1, -1));
+        } else if (e.key === "Enter") {
+            e.preventDefault(); // always block form submission while dropdown is open
+            if (focusedIndex >= 0 && results[focusedIndex]) {
+                handleSelect(results[focusedIndex]);
+            }
+        } else if (e.key === "Escape") {
+            setIsOpen(false);
+            setFocusedIndex(-1);
+        }
     };
 
     const showDropdown = isOpen && query.trim().length >= minQueryLength;
@@ -76,6 +114,7 @@ const SearchInput = <T,>({
                 value={query}
                 onChange={handleChange}
                 onFocus={() => setIsOpen(true)}
+                onKeyDown={handleKeyDown}
                 inputSize={inputSize}
                 hasErrorText={false}
                 placeholder={placeholder}
@@ -85,6 +124,7 @@ const SearchInput = <T,>({
                 <ul
                     className="search-input__dropdown"
                     role="listbox"
+                    ref={listboxRef}
                 >
                     {isLoading && (
                         <li className="search-input__status search-input__status--loading">
@@ -95,16 +135,18 @@ const SearchInput = <T,>({
                         <li className="search-input__status">No results found</li>
                     )}
                     {!isLoading &&
-                        results.map((result) => (
+                        results.map((result, index) => (
                             <li
                                 key={getKey(result)}
                                 role="option"
-                                aria-selected="false"
-                                className="search-input__result"
+                                aria-selected={index === focusedIndex}
+                                className={`search-input__result${index === focusedIndex ? " search-input__result--focused" : ""}`}
                                 onMouseDown={(e) => {
                                     e.preventDefault();
                                     handleSelect(result);
                                 }}
+                                onMouseEnter={() => setFocusedIndex(index)}
+                                onMouseLeave={() => setFocusedIndex(-1)}
                             >
                                 {renderResult(result)}
                             </li>

@@ -28,7 +28,7 @@
         border-bottom-left-radius: u.em(8);
         border-bottom-right-radius: u.em(8);
         overflow: hidden;
-        max-height: u.em(260);
+        max-height: u.em(360);
         overflow-y: auto;
         animation: slide-down 0.15s ease;
 
@@ -65,15 +65,14 @@
     &__result {
         display: flex;
         align-items: center;
-        gap: u.em(10);
-        padding: u.em(12) u.em(16);
+        gap: u.em(12);
+        padding: u.em(10) u.em(14);
         color: var(--color-text-secondary);
-        font-size: u.$font-size-lg;
+        font-size: u.$font-size-xl;
         cursor: pointer;
         transition:
             background 0.15s ease,
-            color 0.15s ease,
-            padding-left 0.15s ease;
+            color 0.15s ease;
 
         // Staggered fade-in for each result row
         animation: fade-in 0.2s ease both;
@@ -88,10 +87,37 @@
             border-bottom: u.em(0.5) solid rgba(var(--color-brand-rgb), 0.1);
         }
 
-        &:hover {
+        &:hover,
+        &--focused {
             background: rgba(var(--color-brand-rgb), 0.12);
             color: var(--color-text-primary);
-            padding-left: u.em(20);
+        }
+
+        &-game {
+            display: flex;
+            align-items: center;
+            gap: u.em(12);
+            width: 100%;
+        }
+
+        &-cover {
+            width: u.em(72);
+            height: u.em(48);
+            border-radius: u.em(6);
+            object-fit: cover;
+            flex-shrink: 0;
+            background: var(--color-bg-app);
+
+            &--empty {
+                background: rgba(var(--color-brand-rgb), 0.08);
+            }
+        }
+
+        &-title {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
     }
 }

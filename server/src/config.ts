@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 
+dotenv.config({ path: ".env.local", override: false });
 dotenv.config();
 
 if (!process.env.SESSION_SECRET) {

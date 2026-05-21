@@ -147,6 +147,52 @@ describe("SearchInput", () => {
         });
     });
 
+    describe("keyboard navigation", () => {
+        it("prevents form submission when Enter is pressed and dropdown is open", () => {
+            renderOpen({ results: mockResults });
+            const event = fireEvent.keyDown(screen.getByRole("textbox"), { key: "Enter" });
+            expect(event).toBe(false); // false means preventDefault was called
+        });
+
+        it("selects the focused result when Enter is pressed", () => {
+            const onSelect = vi.fn();
+            renderOpen({ results: mockResults, onSelect });
+            const input = screen.getByRole("textbox");
+            fireEvent.keyDown(input, { key: "ArrowDown" });
+            fireEvent.keyDown(input, { key: "Enter" });
+            expect(onSelect).toHaveBeenCalledWith(mockResults[0]);
+        });
+
+        it("moves focus down through results with ArrowDown", () => {
+            renderOpen({ results: mockResults });
+            const input = screen.getByRole("textbox");
+            fireEvent.keyDown(input, { key: "ArrowDown" });
+            expect(screen.getAllByRole("option")[0]).toHaveClass("search-input__result--focused");
+        });
+
+        it("moves focus up through results with ArrowUp", () => {
+            renderOpen({ results: mockResults });
+            const input = screen.getByRole("textbox");
+            fireEvent.keyDown(input, { key: "ArrowDown" });
+            fireEvent.keyDown(input, { key: "ArrowDown" });
+            fireEvent.keyDown(input, { key: "ArrowUp" });
+            expect(screen.getAllByRole("option")[0]).toHaveClass("search-input__result--focused");
+        });
+
+        it("closes the dropdown when Escape is pressed", () => {
+            renderOpen({ results: mockResults });
+            fireEvent.keyDown(screen.getByRole("textbox"), { key: "Escape" });
+            expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+        });
+
+        it("does not prevent Enter when the dropdown is closed", () => {
+            render(<SearchInput {...defaultProps} query="ze" />);
+            // dropdown is closed (not focused), Enter should not be intercepted
+            const event = fireEvent.keyDown(screen.getByRole("textbox"), { key: "Enter" });
+            expect(event).toBe(true); // true means preventDefault was NOT called
+        });
+    });
+
     describe("minQueryLength", () => {
         it("does not show the dropdown when query is below a custom minQueryLength", () => {
             render(

@@ -113,7 +113,21 @@ const AddGameForm = ({ onSubmit, onCancel }: AddGameFormProps) => {
                         onQueryChange={handleQueryChange}
                         onSelect={handleGameSelect}
                         onReset={handleReset}
-                        renderResult={(result) => result.title}
+                        renderResult={(result) => (
+                            <div className="search-input__result-game">
+                                {result.coverUrl ? (
+                                    <img
+                                        className="search-input__result-cover"
+                                        src={result.coverUrl}
+                                        alt=""
+                                        aria-hidden="true"
+                                    />
+                                ) : (
+                                    <div className="search-input__result-cover search-input__result-cover--empty" />
+                                )}
+                                <span className="search-input__result-title">{result.title}</span>
+                            </div>
+                        )}
                         getKey={(result) => result.id}
                         getLabel={(result) => result.title}
                     />
