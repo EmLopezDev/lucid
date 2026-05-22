@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.1] - 2026-05-22
+
+### Bug Fixes
+
+- Fixed filter dropdowns being clipped by their parent container on mobile — select listboxes now escape the filter panel correctly when open
+
 ## [1.5.0] - 2026-05-22
 
 ### Features
@@ -175,6 +181,7 @@
 
 ---
 
+[1.5.1]: https://github.com/EmLopezDev/lucid/releases/tag/v1.5.1
 [1.5.0]: https://github.com/EmLopezDev/lucid/releases/tag/v1.5.0
 [1.4.0]: https://github.com/EmLopezDev/lucid/releases/tag/v1.4.0
 [1.0.0]: https://github.com/EmLopezDev/lucid/releases/tag/v1.0.0
