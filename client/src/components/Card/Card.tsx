@@ -25,24 +25,34 @@ const Card = ({ data, selectedId, handleCardSelect, handleDelete }: CardType) =>
                 className="card__select"
                 onClick={() => handleCardSelect(data._id)}
                 aria-pressed={isSelected}
-                aria-label={`${data.title}, ${capitalizeString(data.status)}, ${capitalizeString(data.genre)}, ${capitalizeString(data.platform)}`}
+                aria-label={`${data.title}, ${capitalizeString(data.status ?? "")}, ${capitalizeString(data.genre ?? "")}, ${capitalizeString(data.platform ?? "")}`}
             >
-                <div className={cx({ card__banner: true, [`card__banner--${data.status}`]: true, "card__banner--has-image": hasImage })}>
+                <div
+                    className={cx({
+                        card__banner: true,
+                        [`card__banner--${data.status}`]: !!data.status,
+                        "card__banner--has-image": hasImage,
+                    })}
+                >
                     {hasImage && (
-                        <img className="card__banner-img" src={data.cover_url!} alt="" aria-hidden="true" onError={() => setImgFailed(true)} />
-                    )}
-                    {data.status && (
-                        <Badge
-                            size="medium"
-                            status={data.status}
+                        <img
+                            className="card__banner-img"
+                            src={data.cover_url!}
+                            alt=""
+                            aria-hidden="true"
+                            onError={() => setImgFailed(true)}
                         />
                     )}
+                    <Badge
+                        size="medium"
+                        status={data.status}
+                    />
                 </div>
                 <div className="card__content">
                     <h4 className="card__title">{data.title}</h4>
                     <div className="card__genre">
-                        <span>{capitalizeString(data.genre)}</span> &#8226;{" "}
-                        <span>{capitalizeString(data.platform)}</span>
+                        <span>{data.genre ? capitalizeString(data.genre) : "-"}</span> &#8226;{" "}
+                        <span>{data.platform ? capitalizeString(data.platform) : "-"}</span>
                     </div>
                     <div className="card__meta">
                         {data.price !== null && (

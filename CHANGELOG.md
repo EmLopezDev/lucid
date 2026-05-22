@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.5.0] - 2026-05-22
+
+### Features
+
+#### Optional Status, Genre, and Platform
+
+- Title is now the only required field when adding a game
+- Status, genre, and platform all default to `null` — users can add a game quickly and fill in details later
+- All three select dropdowns now include a "Not set" option as the first choice
+- Badge renders nothing when status is null
+- Cards and detail view show `–` for null genre and platform
+- Status breakdown chart on the dashboard excludes null-status games
+
+### Infrastructure
+
+- `Status`, `Genre`, and `Platform` Zod schemas made nullable at the definition level — the change cascades automatically to all schemas that use them
+- Mongoose schema updated to allow null for `status`, `genre`, and `platform`
+- `GameSearchResult.platforms` typed as `string[]` (decoupled from nullable `PlatformType`) since RAWG always returns real values
+- `StatusFilterType` preserved as-is — null-status games appear under "all" naturally
+
+### Testing
+
+- 453 client unit tests (+8 new tests covering null status, genre, and platform rendering)
+- 77 server integration tests (updated add-game test to assert title-only submissions return 201 with null fields)
+
 ## [1.4.0] - 2026-05-21
 
 ### Features
@@ -150,5 +175,6 @@
 
 ---
 
+[1.5.0]: https://github.com/EmLopezDev/lucid/releases/tag/v1.5.0
 [1.4.0]: https://github.com/EmLopezDev/lucid/releases/tag/v1.4.0
 [1.0.0]: https://github.com/EmLopezDev/lucid/releases/tag/v1.0.0

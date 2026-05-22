@@ -8,6 +8,7 @@ type BadgeType = {
 };
 
 const Badge = ({ status, size = "small" }: BadgeType) => {
+    if (!status) return;
     const label = capitalizeString(status);
     const className = cx({
         badge: true,

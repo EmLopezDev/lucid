@@ -35,13 +35,16 @@ describe("POST /api/v1/user/:userId/library", () => {
         expect(res.body._id).toBeDefined();
     });
 
-    it("returns 400 when required fields are missing", async () => {
+    it("returns 201 with nulls when only title is provided", async () => {
         const res = await agent
             .post(`/api/v1/user/${userId}/library`)
             .send({ title: "Incomplete Game" });
 
-        expect(res.status).toBe(400);
-        expect(res.body.message).toBe("Invalid fields");
+        expect(res.status).toBe(201);
+        expect(res.body.title).toBe("Incomplete Game");
+        expect(res.body.genre).toBeNull();
+        expect(res.body.platform).toBeNull();
+        expect(res.body.status).toBeNull();
     });
 
     it("returns 400 when status is invalid", async () => {
@@ -61,5 +64,4 @@ describe("POST /api/v1/user/:userId/library", () => {
         expect(res.status).toBe(400);
         expect(res.body.message).toBe("Invalid fields");
     });
-
 });

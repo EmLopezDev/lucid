@@ -16,9 +16,9 @@ const UserLibrarySchema = new Schema<UserLibraryDocument>(
     {
         user_id: { type: String, required: true },
         title: { type: String, required: true },
-        genre: { type: String, required: true },
-        platform: { type: String, required: true },
-        status: { type: String, required: true },
+        genre: { type: String, default: null },
+        platform: { type: String, default: null },
+        status: { type: String, default: null },
         favorite: { type: Boolean, required: true, default: false },
         date_played: { type: Date, default: null },
         date_purchased: { type: Date, default: null },

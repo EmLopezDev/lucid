@@ -40,13 +40,10 @@ function toOptions<V extends string, L extends string>(
     );
 }
 
-export const statusOptions: StatusOptionType[] = toOptions([
-    "playing",
-    "completed",
-    "paused",
-    "dropped",
-    "wishlist",
-]);
+export const statusOptions: StatusOptionType[] = [
+    { value: null, label: "Not set" },
+    ...toOptions(["playing", "completed", "paused", "dropped", "wishlist"]),
+];
 
 export const statusFilterOptions: StatusFilterOptionType[] = toOptions([
     "all",
@@ -64,61 +61,67 @@ export const sortOptions: SortOptionType[] = toOptions([
     ["price", "Highest Price"],
 ]);
 
-export const platformOptions: PlatformOptionType[] = toOptions([
-    // PlayStation
-    "PlayStation 5",
-    "PlayStation 4",
-    "PlayStation 3",
-    "PlayStation 2",
-    "PlayStation",
-    "PS Vita",
-    "PSP",
-    // Xbox
-    "Xbox Series X/S",
-    "Xbox One",
-    "Xbox 360",
-    "Xbox",
-    // Nintendo
-    "Nintendo Switch",
-    "Wii U",
-    "Wii",
-    "GameCube",
-    "Nintendo 64",
-    "SNES",
-    "NES",
-    "Game Boy Advance",
-    "Game Boy Color",
-    "Game Boy",
-    "Nintendo 3DS",
-    "Nintendo DS",
-    "Nintendo",
-    // PC & OS
-    "PC",
-    "macOS",
-    "Linux",
-    // Mobile
-    "iOS",
-    "Android",
-    // Other
-    "Other",
-]);
+export const platformOptions: PlatformOptionType[] = [
+    { value: null, label: "Not set" },
+    ...toOptions([
+        // PlayStation
+        "PlayStation 5",
+        "PlayStation 4",
+        "PlayStation 3",
+        "PlayStation 2",
+        "PlayStation",
+        "PS Vita",
+        "PSP",
+        // Xbox
+        "Xbox Series X/S",
+        "Xbox One",
+        "Xbox 360",
+        "Xbox",
+        // Nintendo
+        "Nintendo Switch",
+        "Wii U",
+        "Wii",
+        "GameCube",
+        "Nintendo 64",
+        "SNES",
+        "NES",
+        "Game Boy Advance",
+        "Game Boy Color",
+        "Game Boy",
+        "Nintendo 3DS",
+        "Nintendo DS",
+        "Nintendo",
+        // PC & OS
+        "PC",
+        "macOS",
+        "Linux",
+        // Mobile
+        "iOS",
+        "Android",
+        // Other
+        "Other",
+    ]),
+];
 
-export const genreOptions: GenreOptionType[] = toOptions([
-    "action",
-    "adventure",
-    "role-playing",
-    "strategy",
-    "shooter",
-    "simulation",
-    "puzzle",
-    "platformer",
-    "racing",
-    "sports",
-    "fighting",
-    "indie",
-    "casual",
-    "arcade",
-    "multiplayer",
-    "family",
-    "other",
-]);
+export const genreOptions: GenreOptionType[] = [
+    { value: null, label: "Not set" },
+    ...toOptions([
+        "action",
+        "adventure",
+        "role-playing",
+        "strategy",
+        "shooter",
+        "simulation",
+        "puzzle",
+        "platformer",
+        "racing",
+        "sports",
+        "fighting",
+        "indie",
+        "casual",
+        "arcade",
+        "multiplayer",
+        "family",
+        "other",
+    ]),
+];

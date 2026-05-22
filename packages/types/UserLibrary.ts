@@ -1,32 +1,36 @@
 import * as z from "zod";
 
-export const Status = z.literal(["playing", "completed", "paused", "dropped", "wishlist"]);
+export const Status = z
+    .literal(["playing", "completed", "paused", "dropped", "wishlist"])
+    .nullable();
 
 export type StatusType = z.infer<typeof Status>;
 
-export const Platform = z.string().min(1).max(100);
+export const Platform = z.string().min(1).max(100).nullable();
 
 export type PlatformType = z.infer<typeof Platform>;
 
-export const Genre = z.literal([
-    "action",
-    "adventure",
-    "role-playing",
-    "strategy",
-    "shooter",
-    "simulation",
-    "puzzle",
-    "platformer",
-    "racing",
-    "sports",
-    "fighting",
-    "indie",
-    "casual",
-    "arcade",
-    "multiplayer",
-    "family",
-    "other",
-]);
+export const Genre = z
+    .literal([
+        "action",
+        "adventure",
+        "role-playing",
+        "strategy",
+        "shooter",
+        "simulation",
+        "puzzle",
+        "platformer",
+        "racing",
+        "sports",
+        "fighting",
+        "indie",
+        "casual",
+        "arcade",
+        "multiplayer",
+        "family",
+        "other",
+    ])
+    .nullable();
 
 export type GenreType = z.infer<typeof Genre>;
 
@@ -34,8 +38,8 @@ export const UserLibraryData = z.object({
     _id: z.uuid(),
     user_id: z.uuid(),
     title: z.string(),
-    genre: Genre,
-    platform: Platform,
+    genre: Genre.default(null),
+    platform: Platform.default(null),
     favorite: z.boolean().default(false),
     date_played: z.string().nullable().default(null),
     date_purchased: z.string().nullable().default(null),
@@ -50,7 +54,7 @@ export const UserLibraryData = z.object({
         .nullable()
         .default(null),
     comment: z.string().nullable().default(null),
-    status: Status,
+    status: Status.default(null),
     price: z.string().nullable().default(null),
     cover_url: z.string().nullable().default(null),
     created_at: z.string(),
@@ -93,9 +97,9 @@ export type PatchUserLibraryGameBodyType = z.infer<typeof PatchUserLibraryGameBo
 
 export const PostUserLibraryGameBody = z.object({
     title: z.string().min(1).max(200),
-    genre: Genre,
-    platform: Platform,
-    status: Status,
+    genre: Genre.default(null),
+    platform: Platform.default(null),
+    status: Status.default(null),
     favorite: z.boolean().default(false),
     date_played: z.iso.date().nullable().default(null),
     date_purchased: z.iso.date().nullable().default(null),

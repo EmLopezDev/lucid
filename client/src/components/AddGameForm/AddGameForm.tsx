@@ -5,13 +5,13 @@ import SearchInput from "@components/SearchInput/SearchInput";
 import { useGameSearch } from "@hooks/useGameSearch";
 import { type PostUserLibraryGameBodyType } from "../../../../packages/types/UserLibrary";
 import { type GameSearchResult, type GenreType } from "../../../../packages/types";
-import { genreOptions, platformOptions, statusOptions } from "@lib/form";
+import { genreOptions, platformOptions } from "@lib/form";
 
 const emptyFormData: GameFormData = {
     title: "",
-    genre: genreOptions[0]!,
-    platform: platformOptions[0]!,
-    status: statusOptions[0]!,
+    genre: { value: null, label: "Not set" },
+    platform: { value: null, label: "Not set" },
+    status: { value: null, label: "Not set" },
     price: "",
     datePurchased: "",
     hoursPlayed: "",
@@ -28,8 +28,8 @@ const AddGameForm = ({ onSubmit, onCancel }: AddGameFormProps) => {
     const [formData, setFormData] = useState<GameFormData>(emptyFormData);
     const [query, setQuery] = useState("");
     const [coverUrl, setCoverUrl] = useState<string | null>(null);
-    const [availablePlatforms, setAvailablePlatforms] = useState<string[] | undefined>(undefined);
-    const [availableGenres, setAvailableGenres] = useState<GenreType[] | undefined>(undefined);
+    const [availablePlatforms, setAvailablePlatforms] = useState<string[] | null>(null);
+    const [availableGenres, setAvailableGenres] = useState<GenreType[] | null>(null);
 
     const { results, isLoading } = useGameSearch(query);
 
@@ -56,8 +56,8 @@ const AddGameForm = ({ onSubmit, onCancel }: AddGameFormProps) => {
             genre: firstGenre,
         }));
         setCoverUrl(game.coverUrl ?? null);
-        setAvailablePlatforms(game.platforms.length > 0 ? game.platforms : undefined);
-        setAvailableGenres(game.genres.length > 0 ? game.genres : undefined);
+        setAvailablePlatforms(game.platforms.length > 0 ? game.platforms : null);
+        setAvailableGenres(game.genres.length > 0 ? game.genres : null);
     }, []);
 
     const handleReset = useCallback(() => {
@@ -68,8 +68,8 @@ const AddGameForm = ({ onSubmit, onCancel }: AddGameFormProps) => {
             genre: genreOptions[0]!,
         }));
         setCoverUrl(null);
-        setAvailablePlatforms(undefined);
-        setAvailableGenres(undefined);
+        setAvailablePlatforms(null);
+        setAvailableGenres(null);
     }, []);
 
     const handleSubmit = useCallback(
@@ -96,7 +96,11 @@ const AddGameForm = ({ onSubmit, onCancel }: AddGameFormProps) => {
     );
 
     return (
-        <Form onSubmit={handleSubmit} onCancel={onCancel} primaryButtonText="Add Game">
+        <Form
+            onSubmit={handleSubmit}
+            onCancel={onCancel}
+            primaryButtonText="Add Game"
+        >
             <GameFormFields
                 value={formData}
                 onChange={setFormData}

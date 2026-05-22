@@ -80,6 +80,7 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
     const statusCounts = useMemo(() => {
         const counts: Record<string, number> = { all: libraryData.length };
         for (const game of libraryData) {
+            if (!game.status) continue;
             counts[game.status] = (counts[game.status] ?? 0) + 1;
         }
         return counts;

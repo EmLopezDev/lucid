@@ -9,6 +9,7 @@ import {
     type GenreOptionType,
     type PlatformOptionType,
     type StatusOptionType,
+    type PlatformType,
 } from "../../../../packages/types";
 import { genreOptions, platformOptions, statusOptions } from "@lib/form";
 
@@ -28,8 +29,8 @@ type GameFormFieldsProps = {
     value: GameFormData;
     inputSize?: "small" | "medium" | "large";
     onChange: (data: GameFormData) => void;
-    availablePlatforms?: string[];
-    availableGenres?: GenreType[];
+    availablePlatforms?: string[] | null;
+    availableGenres?: GenreType[] | null;
     titleInput?: ReactNode;
 };
 
@@ -44,11 +45,16 @@ const GameFormFields = ({
     const update = (patch: Partial<GameFormData>) => onChange({ ...value, ...patch });
 
     const filteredPlatformOptions = availablePlatforms
-        ? platformOptions.filter((o) => availablePlatforms.includes(o.value) || o.value === "Other")
+        ? platformOptions.filter(
+              (o) =>
+                  o.value === null || o.value === "Other" || availablePlatforms.includes(o.value),
+          )
         : platformOptions;
 
     const filteredGenreOptions = availableGenres
-        ? genreOptions.filter((o) => availableGenres.includes(o.value) || o.value === "other")
+        ? genreOptions.filter(
+              (o) => o.value === null || o.value === "other" || availableGenres.includes(o.value),
+          )
         : genreOptions;
 
     return (
@@ -68,7 +74,7 @@ const GameFormFields = ({
                     )}
                 </div>
                 <div className="card-detail__content__edit--full">
-                    <Select<GenreType, GenreType>
+                    <Select<GenreType, string>
                         id="genre-select"
                         label="Genre"
                         options={filteredGenreOptions}
@@ -77,7 +83,7 @@ const GameFormFields = ({
                         selectSize={inputSize}
                     />
                 </div>
-                <Select<string, string>
+                <Select<PlatformType, string>
                     id="platform-select"
                     label="Platform"
                     options={filteredPlatformOptions}
@@ -85,7 +91,7 @@ const GameFormFields = ({
                     onChange={(option) => update({ platform: option })}
                     selectSize={inputSize}
                 />
-                <Select<StatusType, StatusType>
+                <Select<StatusType, string>
                     id="status-select"
                     label="Status"
                     options={statusOptions}

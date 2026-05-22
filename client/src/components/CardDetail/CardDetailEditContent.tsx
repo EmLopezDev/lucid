@@ -12,9 +12,15 @@ type CardDetailEditContentProps = {
 
 const toFormData = (data: UserLibraryDataType): GameFormData => ({
     title: data.title,
-    genre: { value: data.genre, label: data.genre },
-    platform: { value: data.platform, label: data.platform },
-    status: { value: data.status, label: data.status },
+    genre: data.genre
+        ? { value: data.genre, label: data.genre }
+        : { value: null, label: "Not set" },
+    platform: data.platform
+        ? { value: data.platform, label: data.platform }
+        : { value: null, label: "Not set" },
+    status: data.status
+        ? { value: data.status, label: data.status }
+        : { value: null, label: "Not set" },
     price: data.price ?? "",
     datePurchased: data.date_purchased ? toInputDate(data.date_purchased) : "",
     hoursPlayed: String(data.hours_played ?? ""),
