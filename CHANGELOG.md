@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.2] - 2026-05-23
+
+### Bug Fixes
+
+- Fixed "No results found" flashing before "Searching..." on first keystroke in game search — loading state is now true immediately while the debounce is pending
+- Fixed `import.meta.env.Dev` typo (should be `DEV`) — console errors in development were never firing
+- Stale search results are now cleared at the start of each new search instead of persisting behind the loading spinner
+
 ## [1.5.1] - 2026-05-22
 
 ### Bug Fixes
@@ -181,6 +189,7 @@
 
 ---
 
+[1.5.2]: https://github.com/EmLopezDev/lucid/releases/tag/v1.5.2
 [1.5.1]: https://github.com/EmLopezDev/lucid/releases/tag/v1.5.1
 [1.5.0]: https://github.com/EmLopezDev/lucid/releases/tag/v1.5.0
 [1.4.0]: https://github.com/EmLopezDev/lucid/releases/tag/v1.4.0

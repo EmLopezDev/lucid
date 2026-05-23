@@ -22,6 +22,7 @@ export const useGameSearch = (query: string): UseGameSearchResultType => {
         const controller = new AbortController();
 
         const search = async () => {
+            setResults([]);
             setIsLoading(true);
             setError(null);
             try {
@@ -36,7 +37,7 @@ export const useGameSearch = (query: string): UseGameSearchResultType => {
             } catch (error) {
                 if (error instanceof Error && error.name === "AbortError") return;
                 setError("Failed to search game");
-                if (import.meta.env.Dev) {
+                if (import.meta.env.DEV) {
                     console.error(error instanceof Error ? error.message : error);
                 }
             } finally {
@@ -48,11 +49,12 @@ export const useGameSearch = (query: string): UseGameSearchResultType => {
         return () => controller.abort();
     }, [debouncedQuery]);
 
-    const isTooShort = debouncedQuery.trim().length < 2;
+    const isTooShort = query.trim().length < 2;
+    const isPending = !isTooShort && query !== debouncedQuery;
 
     return {
         results: isTooShort ? [] : results,
-        isLoading: isTooShort ? false : isLoading,
+        isLoading: isTooShort ? false : isPending || isLoading,
         error,
     };
 };
