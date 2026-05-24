@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from "react";
+import { useReducedMotion } from "./useReduceMotion";
 
 export const useCountUp = (target: number, duration = 1000) => {
     const [value, setValue] = useState(0);
     const rafRef = useRef<number | null>(null);
+    const prefersReducedMotion = useReducedMotion();
 
     useEffect(() => {
+        if (prefersReducedMotion) return;
         const start = performance.now();
 
         const tick = (now: number) => {
@@ -17,7 +20,7 @@ export const useCountUp = (target: number, duration = 1000) => {
         return () => {
             if (rafRef.current) cancelAnimationFrame(rafRef.current);
         };
-    }, [target, duration]);
+    }, [target, duration, prefersReducedMotion]);
 
-    return value;
+    return prefersReducedMotion ? target : value;
 };

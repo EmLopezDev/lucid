@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.3] - 2026-05-24
+
+### Accessibility
+
+- Added `useReducedMotion` hook that reads the system `prefers-reduced-motion` setting and listens reactively for changes
+- `useCountUp` now skips the animation loop entirely when reduced motion is preferred, returning the final value immediately with no intermediate renders
+- Spending chart bar and line entrance animations are disabled when reduced motion is preferred
+
 ## [1.5.2] - 2026-05-23
 
 ### Bug Fixes

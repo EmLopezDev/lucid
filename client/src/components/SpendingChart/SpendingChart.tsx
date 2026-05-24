@@ -8,10 +8,8 @@ import {
     ResponsiveContainer,
     CartesianGrid,
 } from "recharts";
-import {
-    type TimePeriodType,
-    type SpendingDataType,
-} from "@pages/DashboardPage/useSpendingChart";
+import { type TimePeriodType, type SpendingDataType } from "@pages/DashboardPage/useSpendingChart";
+import { useReducedMotion } from "@hooks/useReduceMotion";
 
 const PERIODS: { label: string; value: TimePeriodType }[] = [
     { label: "All time", value: "all" },
@@ -46,6 +44,7 @@ const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
 };
 
 const SpendingChart = ({ data, period, onPeriodChange }: SpendingChartType) => {
+    const prefersReducedMotion = useReducedMotion();
     return (
         <div className="spending-chart">
             <div className="spending-chart__header">
@@ -89,12 +88,14 @@ const SpendingChart = ({ data, period, onPeriodChange }: SpendingChartType) => {
                         dataKey="spent"
                         fill="var(--color-teal)"
                         radius={[4, 4, 0, 0]}
+                        isAnimationActive={!prefersReducedMotion}
                     />
                     <Line
                         dataKey="cumulative"
                         stroke="var(--color-brand)"
                         strokeWidth={2}
                         dot={false}
+                        isAnimationActive={!prefersReducedMotion}
                     />
                 </ComposedChart>
             </ResponsiveContainer>
