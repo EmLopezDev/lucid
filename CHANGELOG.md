@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.5.4] - 2026-05-25
+
+### Improvements
+
+- Transactional emails (verification and password reset) now use a styled HTML template matching the app's visual design — dark background, brand colours, and a prominent call-to-action button
+- Lucid gem logo and wordmark appear in the email header, table-aligned for consistent rendering across all email clients
+- Gem icon is embedded directly in the email as an inline attachment — no external URL required, works in all environments
+- Plain text fallback added to all emails for clients that do not render HTML
+- Removed leftover debug outline comment from base stylesheet
+
 ## [1.5.3] - 2026-05-24
 
 ### Accessibility
