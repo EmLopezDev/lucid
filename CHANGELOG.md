@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.5.5] - 2026-05-26
+
+### Features
+
+- Added "Recently Added" section to the dashboard showing the last 6 games by date added
+- Each game displays as a landscape card with cover art, title, status badge, and platform
+- Cards use a coloured top border accent matching the game's status — consistent with the HeroStat card design language
+- Cards are arranged in a 2-column grid on medium and large screens, single column on small screens
+- Added `--color-badge-dropped` solid hex variable to both light and dark theme — previously only the RGB variant existed
+
+### Testing
+
+- 467 client unit tests (+16 new tests covering `useRecentGames` sort order, limit, mutation safety, and `RecentGames` rendering, status classes, and accessibility)
+
 ## [1.5.4] - 2026-05-25
 
 ### Improvements
@@ -207,6 +221,9 @@
 
 ---
 
+[1.5.5]: https://github.com/EmLopezDev/lucid/releases/tag/v1.5.5
+[1.5.4]: https://github.com/EmLopezDev/lucid/releases/tag/v1.5.4
+[1.5.3]: https://github.com/EmLopezDev/lucid/releases/tag/v1.5.3
 [1.5.2]: https://github.com/EmLopezDev/lucid/releases/tag/v1.5.2
 [1.5.1]: https://github.com/EmLopezDev/lucid/releases/tag/v1.5.1
 [1.5.0]: https://github.com/EmLopezDev/lucid/releases/tag/v1.5.0

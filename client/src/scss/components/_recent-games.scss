@@ -1,0 +1,101 @@
+@use "../utils/" as u;
+
+.recent-games {
+    &__title {
+        font-size: u.$font-size-3xl;
+        font-weight: 600;
+        margin-block-end: u.em(12);
+        color: var(--color-text-primary);
+    }
+
+    &__list {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: u.em(12);
+
+        @include u.breakpoint-min("medium") {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+}
+
+.recent-game-card {
+    display: flex;
+    flex-direction: row;
+    border: u.em(1) solid rgba(var(--color-brand-rgb), 0.2);
+    border-radius: u.em(12);
+    overflow: hidden;
+    background-color: var(--color-bg-card);
+    text-decoration: none;
+    color: var(--color-text-primary);
+    transition:
+        border-color 0.2s,
+        background-color 0.2s,
+        box-shadow 0.2s;
+
+    &:hover {
+        background-color: var(--color-bg-card-hover);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    &:focus-visible {
+        outline: u.rem(2) solid var(--color-brand);
+        outline-offset: u.rem(-2);
+    }
+
+    &--playing   { border-top: u.em(2) solid var(--color-badge-playing); }
+    &--completed { border-top: u.em(2) solid var(--color-badge-completed); }
+    &--wishlist  { border-top: u.em(2) solid var(--color-badge-wishlist); }
+    &--paused    { border-top: u.em(2) solid var(--color-badge-paused); }
+    &--dropped   { border-top: u.em(2) solid var(--color-badge-dropped); }
+
+    &__cover {
+        width: u.em(130);
+        flex-shrink: 0;
+        position: relative;
+        overflow: hidden;
+        background-color: rgba(var(--color-brand-rgb), 0.06);
+
+        img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            display: block;
+        }
+    }
+
+    &__info {
+        flex: 1;
+        min-width: 0;
+        padding: u.em(12) u.em(14);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: u.em(8);
+    }
+
+    &__title {
+        font-weight: 600;
+        font-size: u.$font-size-2xl;
+        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    &__meta {
+        display: flex;
+        align-items: center;
+        gap: u.em(6);
+        flex-wrap: wrap;
+    }
+
+    &__platform {
+        font-size: u.$font-size-md;
+        color: var(--color-text-tertiary);
+    }
+}
