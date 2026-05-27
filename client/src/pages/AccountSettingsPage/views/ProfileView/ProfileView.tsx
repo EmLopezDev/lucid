@@ -1,14 +1,23 @@
 import { useCallback, useState } from "react";
+import { useProfileView } from "./useProfileView";
 import Button from "@components/Button/Button";
 import Form from "@components/Form/Form";
 import Input from "@components/Input/Input";
-import { useProfileView } from "./useProfileView";
 import ConfirmModal from "@components/ConfirmModal/ConfirmModal";
+import Textarea from "@components/Textarea/Textarea";
 
 const ProfileView = () => {
     const [pendingDeleteAccount, setPendingDeleteAccount] = useState(false);
-    const { formData, errors, formError, onChange, onSubmit, onReset, onDeleteProfile } =
-        useProfileView();
+    const {
+        formData,
+        errors,
+        formError,
+        onChange,
+        onBioChange,
+        onSubmit,
+        onReset,
+        onDeleteProfile,
+    } = useProfileView();
 
     const onRequestDelete = useCallback(() => {
         setPendingDeleteAccount(true);
@@ -63,6 +72,15 @@ const ProfileView = () => {
                     errorText={errors.email}
                     required
                     onChange={onChange}
+                />
+                <Textarea
+                    name="bio"
+                    label="Bio"
+                    textareaSize="large"
+                    value={formData.bio}
+                    rows={3}
+                    maxCount={160}
+                    onChange={onBioChange}
                 />
             </Form>
             <span className="profile-view__delete-button">

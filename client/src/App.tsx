@@ -16,6 +16,7 @@ import PasswordView from "./pages/AccountSettingsPage/views/PasswordView/Passwor
 import ForgotPasswordPage from "./pages/ForgotPasswordPage/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage/VerifyEmailPage";
+import ProfilePage from "@pages/ProfilePage/ProfilePage";
 
 function App() {
     const { isUserAuthenticated, isSessionLoading } = useUserContext();
@@ -62,6 +63,10 @@ function App() {
                     <Route
                         path="/user/dashboard"
                         element={<DashboardPage />}
+                    />
+                    <Route
+                        path="/user/profile"
+                        element={<ProfilePage />}
                     />
                     <Route
                         path="/user/settings"

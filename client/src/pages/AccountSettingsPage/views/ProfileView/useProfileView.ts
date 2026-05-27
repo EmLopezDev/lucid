@@ -11,12 +11,14 @@ type ProfileFormType = {
     first_name: string;
     last_name: string;
     email: string;
+    bio: string;
 };
 
 const EMPTY_ERRORS: ProfileFormType = {
     first_name: "",
     last_name: "",
     email: "",
+    bio: "",
 };
 
 const PROFILE_RULES: FormRules<ProfileFormType> = {
@@ -32,6 +34,7 @@ const PROFILE_RULES: FormRules<ProfileFormType> = {
         [Boolean, "Email is required"],
         [emailCheck, "Email format is invalid"],
     ],
+    bio: [],
 };
 
 export const useProfileView = () => {
@@ -41,6 +44,7 @@ export const useProfileView = () => {
         first_name: currentUser?.first_name ?? "",
         last_name: currentUser?.last_name ?? "",
         email: currentUser?.email ?? "",
+        bio: currentUser?.bio ?? "",
     });
     const [errors, setErrors] = useState<ProfileFormType>(objectCopy(EMPTY_ERRORS));
     const [formError, setFormError] = useState("");
@@ -51,6 +55,11 @@ export const useProfileView = () => {
     const onChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
+    }, []);
+
+    const onBioChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
+        const { value } = e.target;
+        setFormData((prev) => ({ ...prev, bio: value }));
     }, []);
 
     const onSubmit = useCallback(
@@ -93,6 +102,7 @@ export const useProfileView = () => {
             first_name: currentUser?.first_name ?? "",
             last_name: currentUser?.last_name ?? "",
             email: currentUser?.email ?? "",
+            bio: currentUser?.bio ?? "",
         });
         setErrors(objectCopy(EMPTY_ERRORS));
         setFormError("");
@@ -124,6 +134,7 @@ export const useProfileView = () => {
         formError,
         isSubmitting,
         onChange,
+        onBioChange,
         onSubmit,
         onReset,
         onDeleteProfile,

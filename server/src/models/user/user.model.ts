@@ -87,7 +87,7 @@ export const updateUser = async (id: string, updates: UserUpdateProfileType) => 
         id,
         { ...updates, updated_at: new Date() },
         { new: true },
-    ).select("_id first_name last_name email created_at updated_at");
+    ).select("_id first_name last_name email bio created_at updated_at");
 
     if (!user) {
         throw new HttpError("User not found", 404);

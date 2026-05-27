@@ -1,0 +1,122 @@
+@use "../utils/" as u;
+
+.profile-page {
+    display: flex;
+    flex-direction: column;
+    gap: u.em(32);
+    padding: u.em(20);
+    max-width: u.em(960);
+    margin: 0 auto;
+
+    &__loading,
+    &__error {
+        padding: u.em(20);
+        color: var(--color-text-secondary);
+        font-size: u.$font-size-lg;
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        gap: u.em(20);
+    }
+
+    &__avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: u.em(64);
+        height: u.em(64);
+        border-radius: 50%;
+        background-color: var(--color-brand-bg);
+        color: var(--color-brand);
+        font-size: u.$font-size-2xl;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    &__name {
+        font-size: u.$font-size-3xl;
+        font-weight: 700;
+        color: var(--color-text-primary);
+        margin: 0;
+    }
+
+    &__email {
+        font-size: u.$font-size-lg;
+        color: var(--color-text-secondary);
+        margin: u.em(2) 0 0;
+    }
+
+    &__bio {
+        font-size: u.$font-size-lg;
+        color: var(--color-text-secondary);
+        margin: u.em(8) 0 0;
+    }
+
+    &__stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: u.em(12);
+
+        @include u.breakpoint-min("large") {
+            grid-template-columns: repeat(5, 1fr);
+        }
+    }
+
+    &__section {
+        display: flex;
+        flex-direction: column;
+        gap: u.em(12);
+    }
+
+    &__section-title {
+        font-size: u.$font-size-2xl;
+        font-weight: 600;
+        color: var(--color-text-primary);
+        margin: 0;
+    }
+
+    &__game-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: u.em(8);
+    }
+
+    &__game-item {
+        padding: u.em(12) u.em(16);
+        background-color: var(--color-bg-card);
+        border-radius: u.em(8);
+        font-size: u.$font-size-lg;
+        color: var(--color-text-primary);
+    }
+}
+
+.profile-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: u.em(4);
+    padding: u.em(16);
+    background-color: var(--color-bg-card);
+    border-radius: u.em(12);
+    text-align: center;
+
+    &__value {
+        font-size: u.$font-size-2xl;
+        font-weight: 700;
+        color: var(--color-text-primary);
+    }
+
+    &__label {
+        font-size: u.$font-size-xs;
+        color: var(--color-text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+}

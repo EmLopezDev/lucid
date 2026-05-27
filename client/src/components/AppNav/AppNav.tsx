@@ -94,6 +94,12 @@ function AppNav({ isUserAuthenticated }: { isUserAuthenticated: boolean }) {
                             </NavLink>
                             <NavLink
                                 className="app-layout__nav-link"
+                                to="/user/profile"
+                            >
+                                Profile
+                            </NavLink>
+                            <NavLink
+                                className="app-layout__nav-link"
                                 to="/user/settings"
                             >
                                 Settings
@@ -184,6 +190,12 @@ function AppNav({ isUserAuthenticated }: { isUserAuthenticated: boolean }) {
                                 to="/user/dashboard"
                             >
                                 Dashboard
+                            </NavLink>
+                            <NavLink
+                                className="app-layout__nav-link"
+                                to="/user/profile"
+                            >
+                                Profile
                             </NavLink>
                             <NavLink
                                 className="app-layout__nav-link"

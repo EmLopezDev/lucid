@@ -1,5 +1,35 @@
 # Changelog
 
+## [1.6.0] - 2026-05-27
+
+### Features
+
+#### Profile Page
+
+- Added `/user/profile` page showing a user's identity, computed stats, and game lists
+- Profile header displays avatar initials, full name, email, and bio
+- Stats section shows total games, total hours played, completion rate, average rating, and favourite genre — all computed from the library at request time
+- Three game lists — Currently Playing, Completed, and Recently Added — each showing cover art and a status badge
+- Skeleton loading state mirrors the page layout while data is in flight
+- Added `Profile` nav link to both the desktop and mobile navigation menus
+
+#### Bio
+
+- Added `bio` field (max 160 characters) to the user model, schema, and shared types
+- Bio textarea with live character counter added to the account settings profile form
+- Bio is returned in all user select queries and persisted correctly through the settings save flow
+
+#### Backend
+
+- New `GET /api/v1/user/:userId/profile` endpoint protected by `requireAuth` and `requireOwner`
+- Stats computed server-side from the user's library: total games, total hours played, completion rate (games with a status only), average rating (rated games only), and favourite genre by frequency
+- Library sorted once at query time — all derived lists (currently playing, completed, recently added) reuse the sorted result with no redundant passes
+
+### Testing
+
+- 98 server integration tests (+20 covering the profile endpoint: auth guards, response shape, all stat computations, derived list filtering, and bio round-trip)
+- 467 client unit tests
+
 ## [1.5.5] - 2026-05-26
 
 ### Features
@@ -221,6 +251,7 @@
 
 ---
 
+[1.6.0]: https://github.com/EmLopezDev/lucid/releases/tag/v1.6.0
 [1.5.5]: https://github.com/EmLopezDev/lucid/releases/tag/v1.5.5
 [1.5.4]: https://github.com/EmLopezDev/lucid/releases/tag/v1.5.4
 [1.5.3]: https://github.com/EmLopezDev/lucid/releases/tag/v1.5.3
