@@ -13,6 +13,7 @@ const mockCurrentUser = {
     first_name: "Test",
     last_name: "User",
     email: "test@example.com",
+    bio: null,
     created_at: new Date(),
     updated_at: null,
     deleted_at: null,
@@ -50,7 +51,7 @@ describe("useProfileView", () => {
 
     it("starts with no errors", () => {
         const { result } = renderHook(() => useProfileView());
-        expect(result.current.errors).toEqual({ first_name: "", last_name: "", email: "" });
+        expect(result.current.errors).toEqual({ first_name: "", last_name: "", email: "", bio: "" });
         expect(result.current.formError).toBe("");
     });
 
@@ -158,7 +159,7 @@ describe("useProfileView", () => {
             expect(result.current.errors.first_name).toBe("First name is required");
             act(() => result.current.onReset());
             expect(result.current.formData.first_name).toBe("Test");
-            expect(result.current.errors).toEqual({ first_name: "", last_name: "", email: "" });
+            expect(result.current.errors).toEqual({ first_name: "", last_name: "", email: "", bio: "" });
             expect(result.current.formError).toBe("");
         });
     });
