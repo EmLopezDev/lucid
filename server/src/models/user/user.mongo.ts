@@ -11,6 +11,7 @@ const UserSchema = new Schema<UserType>(
             unique: [true, "Account with that email already exists"],
         },
         email_verified: { type: Boolean, required: true, default: false },
+        bio: { type: String, default: null },
         created_at: { type: Date, required: true, default: () => new Date() },
         updated_at: { type: Date, default: null },
         deleted_at: { type: Date, default: null },

@@ -20,6 +20,7 @@ export const BaseUser = z.object({
         .min(8, { error: "Must be a minimum of 8 characters" })
         .max(72, { error: "Exceeded maximum characters" }),
     email_verified: z.boolean().default(false),
+    bio: z.string().max(160).nullable().default(null),
     created_at: z.date(),
     updated_at: z.date().nullable().default(null),
     deleted_at: z.date().nullable().default(null),
@@ -31,6 +32,7 @@ export const User = BaseUser.pick({
     last_name: true,
     email: true,
     email_verified: true,
+    bio: true,
     created_at: true,
     updated_at: true,
     deleted_at: true,
@@ -58,6 +60,7 @@ export const UserUpdateProfile = BaseUser.pick({
     first_name: true,
     last_name: true,
     email: true,
+    bio: true,
 }).partial();
 
 export type UserUpdateProfileType = z.infer<typeof UserUpdateProfile>;

@@ -23,13 +23,13 @@ import config from "../../config";
 
 export const findUserByEmail = async (email: string) => {
     return await UserModel.findOne({ email: email }).select(
-        "_id first_name last_name email email_verified created_at",
+        "_id first_name last_name email email_verified bio created_at",
     );
 };
 
 export const findUserById = async (id: string) => {
     return await UserModel.findById(id).select(
-        "_id first_name last_name email email_verified created_at",
+        "_id first_name last_name email email_verified bio created_at",
     );
 };
 
@@ -149,4 +149,71 @@ export const resendEmailVerification = async (email: string) => {
     const token = await createEmailVerificationToken(user._id);
     const verifyURL = `${config.CLIENT_URL}/verify-email?token=${token}`;
     await sendEmailVerificationEmail(email, verifyURL);
+};
+
+export const getUserProfile = async (userId: string) => {
+    const user = await UserModel.findById(userId).select("_id first_name last_name bio created_at");
+    if (!user) throw new HttpError("User not found", 404);
+
+    const library = await UserLibraryModel.find({
+        user_id: userId,
+        deleted_at: null,
+    });
+
+    const sortedLibrary = [...library].sort(
+        (a, b) => b.created_at.getTime() - a.created_at.getTime(),
+    );
+
+    const totalGames = library.length;
+
+    const totalHoursPlayed = library.reduce((sum, game) => sum + (game.hours_played ?? 0), 0);
+
+    const gamesWithStatus = library.filter((game) => game.status !== null);
+
+    const completed = sortedLibrary.filter((g) => g.status === "completed");
+
+    const completionRate =
+        gamesWithStatus.length > 0
+            ? Math.round((completed.length / gamesWithStatus.length) * 100)
+            : 0;
+
+    const ratedGames = library.filter((game) => game.rating !== null);
+
+    const averageRating =
+        ratedGames.length > 0
+            ? +(
+                  ratedGames.reduce((sum, game) => sum + game.rating!, 0) / ratedGames.length
+              ).toFixed(2)
+            : null;
+
+    const genreCounts = library.reduce<Record<string, number>>((acc, game) => {
+        if (game.genre) acc[game.genre] = (acc[game.genre] ?? 0) + 1;
+        return acc;
+    }, {});
+
+    const sortedGenres = Object.entries(genreCounts).sort((a, b) => b[1] - a[1]);
+
+    const favoriteGenre = sortedGenres.length > 0 ? sortedGenres[0]![0] : null;
+
+    const currentlyPlaying = sortedLibrary.filter((g) => g.status === "playing");
+
+    const recentlyAdded = sortedLibrary.slice(0, 6);
+
+    return {
+        _id: user._id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        bio: user.bio ?? null,
+        created_at: user.created_at,
+        stats: {
+            totalGames,
+            totalHoursPlayed,
+            completionRate,
+            averageRating,
+            favoriteGenre,
+        },
+        currentlyPlaying,
+        completed,
+        recentlyAdded,
+    };
 };

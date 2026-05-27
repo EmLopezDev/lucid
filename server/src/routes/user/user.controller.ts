@@ -1,6 +1,11 @@
 import { type Request, type Response, type NextFunction } from "express";
 import { UserUpdateProfile, UserUpdatePassword } from "../../../../packages/types/UserTypes";
-import { updateUser, updatePassword, destroyUser } from "../../models/user/user.model";
+import {
+    updateUser,
+    updatePassword,
+    destroyUser,
+    getUserProfile,
+} from "../../models/user/user.model";
 import { flattenError } from "zod";
 
 export const patchUser = async (
@@ -65,6 +70,20 @@ export const patchPassword = async (
                 res.sendStatus(204);
             });
         });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getProfile = async (
+    req: Request<{ userId: string }>,
+    res: Response,
+    next: NextFunction,
+) => {
+    try {
+        const { userId } = req.params;
+        const profile = await getUserProfile(userId);
+        res.status(200).json(profile);
     } catch (error) {
         next(error);
     }
