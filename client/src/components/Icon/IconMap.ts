@@ -19,6 +19,7 @@ import {
     DollarSign,
     Star,
     Library,
+    Settings,
 } from "lucide-react";
 
 export const iconRegistry = {
@@ -41,6 +42,7 @@ export const iconRegistry = {
     dollar: DollarSign,
     star: Star,
     library: Library,
+    settings: Settings,
 } satisfies Record<string, LucideIcon>;
 
 export type IconName = keyof typeof iconRegistry;

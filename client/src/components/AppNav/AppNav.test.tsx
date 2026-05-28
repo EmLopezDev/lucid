@@ -62,6 +62,16 @@ describe("AppNav", () => {
             await userEvent.click(screen.getAllByRole("button", { name: "Sign Out" })[0]!);
             expect(mockSignOut).toHaveBeenCalledOnce();
         });
+
+        it("shows Profile link", () => {
+            renderNav(true);
+            expect(screen.getAllByRole("link", { name: "Profile" }).length).toBeGreaterThan(0);
+        });
+
+        it("does not show Settings link", () => {
+            renderNav(true);
+            expect(screen.queryByRole("link", { name: "Settings" })).not.toBeInTheDocument();
+        });
     });
 
     describe("hamburger menu", () => {

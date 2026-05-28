@@ -1,6 +1,8 @@
 import { SkeletonLoader, Skeleton } from "@components/Skeleton";
 import { useUserProfile } from "./useUserProfile";
 import { useUserContext } from "@contexts/UserContext/useUserContext";
+import { NavLink } from "react-router";
+import Icon from "@components/Icon/Icon";
 
 const ProfilePage = () => {
     const { currentUser } = useUserContext();
@@ -11,23 +13,28 @@ const ProfilePage = () => {
             <SkeletonLoader label="Loading profile">
                 <div className="profile-page">
                     <div className="profile-page__header">
-                        <Skeleton
-                            height="4rem"
-                            width="4rem"
-                            borderRadius="50%"
-                        />
-                        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                        <div className="profile-page__header-top">
                             <Skeleton
-                                height="1.5rem"
-                                width="12rem"
-                                borderRadius="0.25rem"
-                            />
-                            <Skeleton
-                                height="1rem"
-                                width="9rem"
-                                borderRadius="0.25rem"
+                                height="4.5rem"
+                                width="4.5rem"
+                                borderRadius="50%"
                             />
                         </div>
+                        <Skeleton
+                            height="2rem"
+                            width="14rem"
+                            borderRadius="0.25rem"
+                        />
+                        <Skeleton
+                            height="1rem"
+                            width="10rem"
+                            borderRadius="0.25rem"
+                        />
+                        <Skeleton
+                            height="1rem"
+                            width="8rem"
+                            borderRadius="0.25rem"
+                        />
                     </div>
                     <div className="profile-page__stats">
                         {Array.from({ length: 5 }).map((_, i) => (
@@ -63,16 +70,35 @@ const ProfilePage = () => {
     return (
         <div className="profile-page">
             <section className="profile-page__header">
-                <div className="profile-page__avatar">
-                    {currentUser?.first_name[0]}
-                    {currentUser?.last_name[0]}
+                <div className="profile-page__header-top">
+                    <div className="profile-page__avatar">
+                        {currentUser?.first_name[0]}
+                        {currentUser?.last_name[0]}
+                    </div>
+                    <NavLink
+                        className="profile-page__settings-link"
+                        to="/user/settings"
+                        aria-label="Account settings"
+                    >
+                        <Icon
+                            name="settings"
+                            size="medium"
+                        />
+                    </NavLink>
                 </div>
-                <div className="profile-page__identity">
-                    <h1 className="profile-page__name">
-                        {profile.first_name} {profile.last_name}
-                    </h1>
-                    <p className="profile-page__email">{currentUser?.email}</p>
-                    {profile.bio && <p className="profile-page__bio">{profile.bio}</p>}
+                <h1 className="profile-page__name">
+                    {profile.first_name} {profile.last_name}
+                </h1>
+                {profile.bio && <p className="profile-page__bio">{profile.bio}</p>}
+                <div className="profile-page__meta">
+                    <span>{currentUser?.email}</span>
+                    <span>
+                        Member since{" "}
+                        {new Date(profile.created_at).toLocaleDateString("en-US", {
+                            month: "long",
+                            year: "numeric",
+                        })}
+                    </span>
                 </div>
             </section>
 

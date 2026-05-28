@@ -7,11 +7,12 @@
 #### Profile Page
 
 - Added `/user/profile` page showing a user's identity, computed stats, and game lists
-- Profile header displays avatar initials, full name, email, and bio
+- Profile header displays avatar initials, full name, email, bio, member since date, and a settings icon link — stacked vertically with the name as the primary headline
 - Stats section shows total games, total hours played, completion rate, average rating, and favourite genre — all computed from the library at request time
 - Three game lists — Currently Playing, Completed, and Recently Added — each showing cover art and a status badge
 - Skeleton loading state mirrors the page layout while data is in flight
 - Added `Profile` nav link to both the desktop and mobile navigation menus
+- Removed `Settings` from the main nav — settings are now accessed via the gear icon on the profile page
 
 #### Bio
 
