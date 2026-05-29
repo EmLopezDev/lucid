@@ -1,10 +1,22 @@
+import { useState } from "react";
 import { SkeletonLoader, Skeleton } from "@components/Skeleton";
 import { useUserProfile } from "./useUserProfile";
 import { useUserContext } from "@contexts/UserContext/useUserContext";
 import { NavLink } from "react-router";
 import Icon from "@components/Icon/Icon";
+import Badge from "@components/Badge/Badge";
+
+type TabIdType = "stats" | "playing" | "completed" | "recent";
+
+const tabs: { id: TabIdType; label: string }[] = [
+    { id: "stats", label: "Stats" },
+    { id: "playing", label: "Currently Playing" },
+    { id: "completed", label: "Completed" },
+    { id: "recent", label: "Recently Added" },
+];
 
 const ProfilePage = () => {
+    const [activeTab, setActiveTab] = useState<TabIdType>("stats");
     const { currentUser } = useUserContext();
     const { profile, isLoading, error } = useUserProfile();
 
@@ -102,80 +114,166 @@ const ProfilePage = () => {
                 </div>
             </section>
 
-            <section className="profile-page__stats">
-                <div className="profile-stat">
-                    <span className="profile-stat__value">{profile.stats.totalGames}</span>
-                    <span className="profile-stat__label">Games</span>
-                </div>
-                <div className="profile-stat">
-                    <span className="profile-stat__value">{profile.stats.totalHoursPlayed}</span>
-                    <span className="profile-stat__label">Hours Played</span>
-                </div>
-                <div className="profile-stat">
-                    <span className="profile-stat__value">{profile.stats.completionRate}%</span>
-                    <span className="profile-stat__label">Completion Rate</span>
-                </div>
-                <div className="profile-stat">
-                    <span className="profile-stat__value">
-                        {profile.stats.averageRating ?? "—"}
-                    </span>
-                    <span className="profile-stat__label">Avg Rating</span>
-                </div>
-                <div className="profile-stat">
-                    <span className="profile-stat__value">
-                        {profile.stats.favoriteGenre ?? "—"}
-                    </span>
-                    <span className="profile-stat__label">Fav Genre</span>
-                </div>
-            </section>
+            <div
+                className="profile-page__tabs"
+                role="tablist"
+                aria-label="Profile sections"
+            >
+                {tabs.map((tab) => (
+                    <button
+                        key={tab.id}
+                        role="tab"
+                        aria-selected={activeTab === tab.id}
+                        className={`profile-page__tab${activeTab === tab.id ? " profile-page__tab--active" : ""}`}
+                        onClick={() => setActiveTab(tab.id)}
+                    >
+                        {tab.label}
+                    </button>
+                ))}
+            </div>
 
-            {profile.currentlyPlaying.length > 0 && (
-                <section className="profile-page__section">
-                    <h2 className="profile-page__section-title">Currently Playing</h2>
-                    <ul className="profile-page__game-list">
-                        {profile.currentlyPlaying.map((game) => (
-                            <li
-                                key={game._id}
-                                className="profile-page__game-item"
-                            >
-                                {game.title}
-                            </li>
-                        ))}
-                    </ul>
-                </section>
-            )}
+            <div className="profile-page__tab-panel">
+                {activeTab === "stats" && (
+                    <section className="profile-page__stats">
+                        <div className="profile-stat">
+                            <span className="profile-stat__value">{profile.stats.totalGames}</span>
+                            <span className="profile-stat__label">Games</span>
+                        </div>
+                        <div className="profile-stat">
+                            <span className="profile-stat__value">
+                                {profile.stats.totalHoursPlayed}
+                            </span>
+                            <span className="profile-stat__label">Hours Played</span>
+                        </div>
+                        <div className="profile-stat">
+                            <span className="profile-stat__value">
+                                {profile.stats.completionRate}%
+                            </span>
+                            <span className="profile-stat__label">Completion Rate</span>
+                        </div>
+                        <div className="profile-stat">
+                            <span className="profile-stat__value">
+                                {profile.stats.averageRating ?? "—"}
+                            </span>
+                            <span className="profile-stat__label">Avg Rating</span>
+                        </div>
+                        <div className="profile-stat">
+                            <span className="profile-stat__value">
+                                {profile.stats.favoriteGenre ?? "—"}
+                            </span>
+                            <span className="profile-stat__label">Fav Genre</span>
+                        </div>
+                    </section>
+                )}
 
-            {profile.completed.length > 0 && (
-                <section className="profile-page__section">
-                    <h2 className="profile-page__section-title">Completed</h2>
-                    <ul className="profile-page__game-list">
-                        {profile.completed.map((game) => (
-                            <li
-                                key={game._id}
-                                className="profile-page__game-item"
-                            >
-                                {game.title}
-                            </li>
-                        ))}
-                    </ul>
-                </section>
-            )}
+                {activeTab === "playing" && (
+                    <section className="profile-page__section">
+                        {profile.currentlyPlaying.length === 0 ? (
+                            <p className="profile-page__empty">No games currently playing.</p>
+                        ) : (
+                            <ul className="profile-page__game-list">
+                                {profile.currentlyPlaying.map((game) => (
+                                    <li
+                                        key={game._id}
+                                        className="profile-page__game-item"
+                                    >
+                                        <div className="profile-page__game-cover">
+                                            {game.cover_url && (
+                                                <img
+                                                    src={game.cover_url}
+                                                    alt=""
+                                                    aria-hidden="true"
+                                                />
+                                            )}
+                                        </div>
+                                        <div className="profile-page__game-info">
+                                            <span className="profile-page__game-title">
+                                                {game.title}
+                                            </span>
+                                            <Badge
+                                                status={game.status}
+                                                size="small"
+                                            />
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </section>
+                )}
 
-            {profile.recentlyAdded.length > 0 && (
-                <section className="profile-page__section">
-                    <h2 className="profile-page__section-title">Recently Added</h2>
-                    <ul className="profile-page__game-list">
-                        {profile.recentlyAdded.map((game) => (
-                            <li
-                                key={game._id}
-                                className="profile-page__game-item"
-                            >
-                                {game.title}
-                            </li>
-                        ))}
-                    </ul>
-                </section>
-            )}
+                {activeTab === "completed" && (
+                    <section className="profile-page__section">
+                        {profile.completed.length === 0 ? (
+                            <p className="profile-page__empty">No completed games yet.</p>
+                        ) : (
+                            <ul className="profile-page__game-list">
+                                {profile.completed.map((game) => (
+                                    <li
+                                        key={game._id}
+                                        className="profile-page__game-item"
+                                    >
+                                        <div className="profile-page__game-cover">
+                                            {game.cover_url && (
+                                                <img
+                                                    src={game.cover_url}
+                                                    alt=""
+                                                    aria-hidden="true"
+                                                />
+                                            )}
+                                        </div>
+                                        <div className="profile-page__game-info">
+                                            <span className="profile-page__game-title">
+                                                {game.title}
+                                            </span>
+                                            <Badge
+                                                status={game.status}
+                                                size="small"
+                                            />
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </section>
+                )}
+
+                {activeTab === "recent" && (
+                    <section className="profile-page__section">
+                        {profile.recentlyAdded.length === 0 ? (
+                            <p className="profile-page__empty">No games added yet.</p>
+                        ) : (
+                            <ul className="profile-page__game-list">
+                                {profile.recentlyAdded.map((game) => (
+                                    <li
+                                        key={game._id}
+                                        className="profile-page__game-item"
+                                    >
+                                        <div className="profile-page__game-cover">
+                                            {game.cover_url && (
+                                                <img
+                                                    src={game.cover_url}
+                                                    alt=""
+                                                    aria-hidden="true"
+                                                />
+                                            )}
+                                        </div>
+                                        <div className="profile-page__game-info">
+                                            <span className="profile-page__game-title">
+                                                {game.title}
+                                            </span>
+                                            <Badge
+                                                status={game.status}
+                                                size="small"
+                                            />
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </section>
+                )}
+            </div>
         </div>
     );
 };

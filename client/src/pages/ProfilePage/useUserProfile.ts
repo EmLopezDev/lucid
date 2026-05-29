@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useUserContext } from "@contexts/UserContext/useUserContext";
 import { API_URL } from "@config/api";
+import { type StatusType } from "@lucid/types";
 
 export type ProfileStats = {
     totalGames: number;
@@ -14,10 +15,11 @@ export type ProfileGame = {
     _id: string;
     title: string;
     cover_image: string | null;
-    status: string | null;
+    status: StatusType | null;
     genre: string | null;
     rating: number | null;
     hours_played: number | null;
+    cover_url: string | null;
 };
 
 export type UserProfileType = {
