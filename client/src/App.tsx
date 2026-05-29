@@ -76,17 +76,17 @@ function App() {
                             index
                             element={
                                 <Navigate
-                                    to="profile"
+                                    to="account"
                                     replace
                                 />
                             }
                         />
                         <Route
-                            path="profile"
+                            path="account"
                             element={<ProfileView />}
                         />
                         <Route
-                            path="password"
+                            path="security"
                             element={<PasswordView />}
                         />
                     </Route>

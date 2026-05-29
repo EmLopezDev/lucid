@@ -1,24 +1,35 @@
-import { NavLink, Outlet } from "react-router";
+import { NavLink, Link, Outlet } from "react-router";
+import Icon from "@components/Icon/Icon";
 
 const AccountSettingsPage = () => {
     return (
         <section className="account-settings-page">
             <aside className="account-settings-page__nav">
+                <Link
+                    to="/user/profile"
+                    className="account-settings-page__back-link"
+                >
+                    <Icon
+                        name="chevron-left"
+                        size="medium"
+                    />
+                    Profile
+                </Link>
                 <NavLink
-                    to="profile"
+                    to="account"
                     className={({ isActive }) =>
                         `account-settings-page__nav-link${isActive ? " account-settings-page__nav-link--active" : ""}`
                     }
                 >
-                    Profile
+                    Account
                 </NavLink>
                 <NavLink
-                    to="password"
+                    to="security"
                     className={({ isActive }) =>
                         `account-settings-page__nav-link${isActive ? " account-settings-page__nav-link--active" : ""}`
                     }
                 >
-                    Password
+                    Security
                 </NavLink>
             </aside>
             <div className="account-settings-page__content">
