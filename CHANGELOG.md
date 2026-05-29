@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.6.1] - 2026-05-29
+
+### Improvements
+
+#### Profile Page
+
+- Game cards in Currently Playing, Completed, and Recently Added tabs now match the dashboard card style — wider 130px cover, coloured top-border accent per status, border, and hover state
+- Games without a cover image now show a fallback gamepad icon centred in the cover area instead of a blank space
+- Stat cards now display a coloured icon above each value (gamepad, clock, check, star, tag) using accent colours (blue, teal, green, gold, orange)
+- Added `blue`, `teal`, `green`, `gold`, and `orange` colour variants to the `Icon` component
+
 ## [1.6.0] - 2026-05-27
 
 ### Features

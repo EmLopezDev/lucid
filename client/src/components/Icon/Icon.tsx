@@ -2,7 +2,17 @@ import { cx } from "css-variants";
 import { type IconName, iconRegistry } from "./IconMap";
 
 type IconSize = "x-small" | "small" | "medium" | "large" | "x-large" | "2x-large";
-type IconColor = "default" | "primary" | "danger" | "muted" | "inherit";
+type IconColor =
+    | "default"
+    | "primary"
+    | "danger"
+    | "muted"
+    | "inherit"
+    | "blue"
+    | "teal"
+    | "green"
+    | "gold"
+    | "orange";
 
 type IconProps = {
     name: IconName;

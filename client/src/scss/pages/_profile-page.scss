@@ -163,43 +163,87 @@
 
     &__game-item {
         display: flex;
-        align-items: center;
-        gap: u.em(12);
-        padding: u.em(10) u.em(12);
+        flex-direction: row;
+        border: u.em(1) solid rgba(var(--color-brand-rgb), 0.2);
+        border-radius: u.em(12);
+        overflow: hidden;
         background-color: var(--color-bg-card);
-        border-radius: u.em(8);
+        transition:
+            background-color 0.2s,
+            box-shadow 0.2s;
+
+        &:hover {
+            background-color: var(--color-bg-card-hover);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        &--playing {
+            border-top: u.em(2) solid var(--color-badge-playing);
+        }
+
+        &--completed {
+            border-top: u.em(2) solid var(--color-badge-completed);
+        }
+
+        &--wishlist {
+            border-top: u.em(2) solid var(--color-badge-wishlist);
+        }
+
+        &--paused {
+            border-top: u.em(2) solid var(--color-badge-paused);
+        }
+
+        &--dropped {
+            border-top: u.em(2) solid var(--color-badge-dropped);
+        }
     }
 
     &__game-cover {
+        width: u.em(130);
         flex-shrink: 0;
-        width: u.em(40);
-        height: u.em(54);
-        border-radius: u.em(4);
-        background-color: var(--color-bg-input);
+        position: relative;
         overflow: hidden;
+        background-color: rgba(var(--color-brand-rgb), 0.06);
 
         img {
+            position: absolute;
+            inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
             object-position: center top;
+            display: block;
         }
     }
 
+    &__game-cover-fallback {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     &__game-info {
+        flex: 1;
+        min-width: 0;
+        padding: u.em(12) u.em(14);
         display: flex;
         flex-direction: column;
-        gap: u.em(6);
-        min-width: 0;
+        justify-content: center;
+        align-items: flex-start;
+        gap: u.em(8);
     }
 
     &__game-title {
-        font-size: u.$font-size-lg;
+        font-size: u.$font-size-2xl;
+        font-weight: 600;
         color: var(--color-text-primary);
-        font-weight: 500;
-        white-space: nowrap;
+        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
         overflow: hidden;
-        text-overflow: ellipsis;
     }
 }
 

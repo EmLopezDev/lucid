@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { cx } from "css-variants";
 import { SkeletonLoader, Skeleton } from "@components/Skeleton";
 import { useUserProfile } from "./useUserProfile";
 import { useUserContext } from "@contexts/UserContext/useUserContext";
@@ -136,28 +137,53 @@ const ProfilePage = () => {
                 {activeTab === "stats" && (
                     <section className="profile-page__stats">
                         <div className="profile-stat">
+                            <Icon
+                                name="gamepad"
+                                size="medium"
+                                color="blue"
+                            />
                             <span className="profile-stat__value">{profile.stats.totalGames}</span>
                             <span className="profile-stat__label">Games</span>
                         </div>
                         <div className="profile-stat">
+                            <Icon
+                                name="clock"
+                                size="medium"
+                                color="teal"
+                            />
                             <span className="profile-stat__value">
                                 {profile.stats.totalHoursPlayed}
                             </span>
                             <span className="profile-stat__label">Hours Played</span>
                         </div>
                         <div className="profile-stat">
+                            <Icon
+                                name="check"
+                                size="medium"
+                                color="green"
+                            />
                             <span className="profile-stat__value">
                                 {profile.stats.completionRate}%
                             </span>
                             <span className="profile-stat__label">Completion Rate</span>
                         </div>
                         <div className="profile-stat">
+                            <Icon
+                                name="star"
+                                size="medium"
+                                color="gold"
+                            />
                             <span className="profile-stat__value">
                                 {profile.stats.averageRating ?? "—"}
                             </span>
                             <span className="profile-stat__label">Avg Rating</span>
                         </div>
                         <div className="profile-stat">
+                            <Icon
+                                name="tag"
+                                size="medium"
+                                color="orange"
+                            />
                             <span className="profile-stat__value">
                                 {profile.stats.favoriteGenre ?? "—"}
                             </span>
@@ -175,15 +201,27 @@ const ProfilePage = () => {
                                 {profile.currentlyPlaying.map((game) => (
                                     <li
                                         key={game._id}
-                                        className="profile-page__game-item"
+                                        className={cx({
+                                            "profile-page__game-item": true,
+                                            [`profile-page__game-item--${game.status}`]:
+                                                !!game.status,
+                                        })}
                                     >
                                         <div className="profile-page__game-cover">
-                                            {game.cover_url && (
+                                            {game.cover_url ? (
                                                 <img
                                                     src={game.cover_url}
                                                     alt=""
                                                     aria-hidden="true"
                                                 />
+                                            ) : (
+                                                <div className="profile-page__game-cover-fallback">
+                                                    <Icon
+                                                        name="gamepad"
+                                                        size="medium"
+                                                        color="muted"
+                                                    />
+                                                </div>
                                             )}
                                         </div>
                                         <div className="profile-page__game-info">
@@ -211,15 +249,27 @@ const ProfilePage = () => {
                                 {profile.completed.map((game) => (
                                     <li
                                         key={game._id}
-                                        className="profile-page__game-item"
+                                        className={cx({
+                                            "profile-page__game-item": true,
+                                            [`profile-page__game-item--${game.status}`]:
+                                                !!game.status,
+                                        })}
                                     >
                                         <div className="profile-page__game-cover">
-                                            {game.cover_url && (
+                                            {game.cover_url ? (
                                                 <img
                                                     src={game.cover_url}
                                                     alt=""
                                                     aria-hidden="true"
                                                 />
+                                            ) : (
+                                                <div className="profile-page__game-cover-fallback">
+                                                    <Icon
+                                                        name="gamepad"
+                                                        size="medium"
+                                                        color="muted"
+                                                    />
+                                                </div>
                                             )}
                                         </div>
                                         <div className="profile-page__game-info">
@@ -247,15 +297,27 @@ const ProfilePage = () => {
                                 {profile.recentlyAdded.map((game) => (
                                     <li
                                         key={game._id}
-                                        className="profile-page__game-item"
+                                        className={cx({
+                                            "profile-page__game-item": true,
+                                            [`profile-page__game-item--${game.status}`]:
+                                                !!game.status,
+                                        })}
                                     >
                                         <div className="profile-page__game-cover">
-                                            {game.cover_url && (
+                                            {game.cover_url ? (
                                                 <img
                                                     src={game.cover_url}
                                                     alt=""
                                                     aria-hidden="true"
                                                 />
+                                            ) : (
+                                                <div className="profile-page__game-cover-fallback">
+                                                    <Icon
+                                                        name="gamepad"
+                                                        size="medium"
+                                                        color="muted"
+                                                    />
+                                                </div>
                                             )}
                                         </div>
                                         <div className="profile-page__game-info">
