@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useCoverImage } from "@hooks/useCoverImage";
 import {
     type UserLibraryDataType,
     type PatchUserLibraryGameBodyType,
@@ -42,7 +43,7 @@ const CardDetail = ({
     const [gameData, setGameData] = useState(objectCopy(data));
     const [editMode, setEditMode] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
-    const [imgFailed, setImgFailed] = useState(false);
+    const { hasImage, handleError, reset: resetCoverImage } = useCoverImage(gameData.cover_url);
     const [prevCardData, setPrevCardData] = useState(data);
     const [prevExternallyClosing, setPrevExternallyClosing] = useState(!!isExternallyClosing);
 
@@ -51,7 +52,7 @@ const CardDetail = ({
         setGameData(objectCopy(data));
         setEditMode(false);
         setIsClosing(false);
-        setImgFailed(false);
+        resetCoverImage();
     }
 
     if (!!isExternallyClosing !== prevExternallyClosing) {
@@ -149,14 +150,14 @@ const CardDetail = ({
                     />
                 </span>
                 <div
-                    className={`card-detail__image card-detail__image--${gameData.status}${gameData.cover_url && !imgFailed ? " card-detail__image--has-image" : ""}`}
+                    className={`card-detail__image card-detail__image--${gameData.status}${hasImage ? " card-detail__image--has-image" : ""}`}
                 >
-                    {gameData.cover_url && !imgFailed && (
+                    {hasImage && (
                         <img
                             className="card-detail__image-img"
-                            src={gameData.cover_url}
+                            src={gameData.cover_url!}
                             alt={gameData.title}
-                            onError={() => setImgFailed(true)}
+                            onError={handleError}
                         />
                     )}
                 </div>

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 import Badge from "@components/Badge/Badge";
 import HoursBar from "@components/HoursBar/HoursBar";
@@ -6,6 +5,7 @@ import Icon from "@components/Icon/Icon";
 import { cx } from "css-variants";
 import StarRating from "@components/StarRating/StarRating";
 import { capitalizeString } from "@lib/string";
+import { useCoverImage } from "@hooks/useCoverImage";
 
 type CardType = {
     data: UserLibraryDataType;
@@ -15,9 +15,8 @@ type CardType = {
 };
 
 const Card = ({ data, selectedId, handleCardSelect, handleDelete }: CardType) => {
-    const [imgFailed, setImgFailed] = useState(false);
+    const { hasImage, handleError } = useCoverImage(data.cover_url);
     const isSelected = selectedId === data._id;
-    const hasImage = !!data.cover_url && !imgFailed;
     return (
         <div className={cx({ card: true, card__selected: isSelected })}>
             <button
@@ -40,7 +39,7 @@ const Card = ({ data, selectedId, handleCardSelect, handleDelete }: CardType) =>
                             src={data.cover_url!}
                             alt=""
                             aria-hidden="true"
-                            onError={() => setImgFailed(true)}
+                            onError={handleError}
                         />
                     )}
                     <Badge

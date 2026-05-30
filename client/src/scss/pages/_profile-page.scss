@@ -179,22 +179,62 @@
 
         &--playing {
             border-top: u.em(2) solid var(--color-badge-playing);
+
+            .profile-page__game-cover {
+                background: linear-gradient(
+                    135deg,
+                    rgba(var(--color-badge-playing-rgb), 0.25),
+                    rgba(var(--color-badge-playing-rgb), 0.65)
+                );
+            }
         }
 
         &--completed {
             border-top: u.em(2) solid var(--color-badge-completed);
+
+            .profile-page__game-cover {
+                background: linear-gradient(
+                    135deg,
+                    rgba(var(--color-badge-completed-rgb), 0.25),
+                    rgba(var(--color-badge-completed-rgb), 0.65)
+                );
+            }
         }
 
         &--wishlist {
             border-top: u.em(2) solid var(--color-badge-wishlist);
+
+            .profile-page__game-cover {
+                background: linear-gradient(
+                    135deg,
+                    rgba(var(--color-badge-wishlist-rgb), 0.25),
+                    rgba(var(--color-badge-wishlist-rgb), 0.65)
+                );
+            }
         }
 
         &--paused {
             border-top: u.em(2) solid var(--color-badge-paused);
+
+            .profile-page__game-cover {
+                background: linear-gradient(
+                    135deg,
+                    rgba(var(--color-badge-paused-rgb), 0.25),
+                    rgba(var(--color-badge-paused-rgb), 0.65)
+                );
+            }
         }
 
         &--dropped {
             border-top: u.em(2) solid var(--color-badge-dropped);
+
+            .profile-page__game-cover {
+                background: linear-gradient(
+                    135deg,
+                    rgba(var(--color-badge-dropped-rgb), 0.25),
+                    rgba(var(--color-badge-dropped-rgb), 0.65)
+                );
+            }
         }
     }
 
@@ -216,13 +256,6 @@
         }
     }
 
-    &__game-cover-fallback {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
 
     &__game-info {
         flex: 1;

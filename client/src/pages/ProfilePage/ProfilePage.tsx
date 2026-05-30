@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { cx } from "css-variants";
 import { SkeletonLoader, Skeleton } from "@components/Skeleton";
-import { useUserProfile } from "./useUserProfile";
+import { useUserProfile, type ProfileGame } from "./useUserProfile";
 import { useUserContext } from "@contexts/UserContext/useUserContext";
 import { NavLink } from "react-router";
 import Icon from "@components/Icon/Icon";
 import Badge from "@components/Badge/Badge";
+import { useCoverImage } from "@hooks/useCoverImage";
 
 type TabIdType = "stats" | "playing" | "completed" | "recent";
 
@@ -15,6 +16,37 @@ const tabs: { id: TabIdType; label: string }[] = [
     { id: "completed", label: "Completed" },
     { id: "recent", label: "Recently Added" },
 ];
+
+const ProfileGameItem = ({ game }: { game: ProfileGame }) => {
+    const { hasImage, handleError } = useCoverImage(game.cover_url);
+
+    return (
+        <li
+            className={cx({
+                "profile-page__game-item": true,
+                [`profile-page__game-item--${game.status}`]: !!game.status,
+            })}
+        >
+            <div className="profile-page__game-cover">
+                {hasImage && (
+                    <img
+                        src={game.cover_url!}
+                        alt=""
+                        aria-hidden="true"
+                        onError={handleError}
+                    />
+                )}
+            </div>
+            <div className="profile-page__game-info">
+                <span className="profile-page__game-title">{game.title}</span>
+                <Badge
+                    status={game.status}
+                    size="small"
+                />
+            </div>
+        </li>
+    );
+};
 
 const ProfilePage = () => {
     const [activeTab, setActiveTab] = useState<TabIdType>("stats");
@@ -199,41 +231,10 @@ const ProfilePage = () => {
                         ) : (
                             <ul className="profile-page__game-list">
                                 {profile.currentlyPlaying.map((game) => (
-                                    <li
+                                    <ProfileGameItem
                                         key={game._id}
-                                        className={cx({
-                                            "profile-page__game-item": true,
-                                            [`profile-page__game-item--${game.status}`]:
-                                                !!game.status,
-                                        })}
-                                    >
-                                        <div className="profile-page__game-cover">
-                                            {game.cover_url ? (
-                                                <img
-                                                    src={game.cover_url}
-                                                    alt=""
-                                                    aria-hidden="true"
-                                                />
-                                            ) : (
-                                                <div className="profile-page__game-cover-fallback">
-                                                    <Icon
-                                                        name="gamepad"
-                                                        size="medium"
-                                                        color="muted"
-                                                    />
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className="profile-page__game-info">
-                                            <span className="profile-page__game-title">
-                                                {game.title}
-                                            </span>
-                                            <Badge
-                                                status={game.status}
-                                                size="small"
-                                            />
-                                        </div>
-                                    </li>
+                                        game={game}
+                                    />
                                 ))}
                             </ul>
                         )}
@@ -247,41 +248,10 @@ const ProfilePage = () => {
                         ) : (
                             <ul className="profile-page__game-list">
                                 {profile.completed.map((game) => (
-                                    <li
+                                    <ProfileGameItem
                                         key={game._id}
-                                        className={cx({
-                                            "profile-page__game-item": true,
-                                            [`profile-page__game-item--${game.status}`]:
-                                                !!game.status,
-                                        })}
-                                    >
-                                        <div className="profile-page__game-cover">
-                                            {game.cover_url ? (
-                                                <img
-                                                    src={game.cover_url}
-                                                    alt=""
-                                                    aria-hidden="true"
-                                                />
-                                            ) : (
-                                                <div className="profile-page__game-cover-fallback">
-                                                    <Icon
-                                                        name="gamepad"
-                                                        size="medium"
-                                                        color="muted"
-                                                    />
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className="profile-page__game-info">
-                                            <span className="profile-page__game-title">
-                                                {game.title}
-                                            </span>
-                                            <Badge
-                                                status={game.status}
-                                                size="small"
-                                            />
-                                        </div>
-                                    </li>
+                                        game={game}
+                                    />
                                 ))}
                             </ul>
                         )}
@@ -295,41 +265,10 @@ const ProfilePage = () => {
                         ) : (
                             <ul className="profile-page__game-list">
                                 {profile.recentlyAdded.map((game) => (
-                                    <li
+                                    <ProfileGameItem
                                         key={game._id}
-                                        className={cx({
-                                            "profile-page__game-item": true,
-                                            [`profile-page__game-item--${game.status}`]:
-                                                !!game.status,
-                                        })}
-                                    >
-                                        <div className="profile-page__game-cover">
-                                            {game.cover_url ? (
-                                                <img
-                                                    src={game.cover_url}
-                                                    alt=""
-                                                    aria-hidden="true"
-                                                />
-                                            ) : (
-                                                <div className="profile-page__game-cover-fallback">
-                                                    <Icon
-                                                        name="gamepad"
-                                                        size="medium"
-                                                        color="muted"
-                                                    />
-                                                </div>
-                                            )}
-                                        </div>
-                                        <div className="profile-page__game-info">
-                                            <span className="profile-page__game-title">
-                                                {game.title}
-                                            </span>
-                                            <Badge
-                                                status={game.status}
-                                                size="small"
-                                            />
-                                        </div>
-                                    </li>
+                                        game={game}
+                                    />
                                 ))}
                             </ul>
                         )}

@@ -1,17 +1,16 @@
-import { useState } from "react";
 import { NavLink } from "react-router";
 import { type UserLibraryDataType } from "@lucid/types";
 import Badge from "@components/Badge/Badge";
 import { capitalizeString } from "@lib/string";
 import { cx } from "css-variants";
+import { useCoverImage } from "@hooks/useCoverImage";
 
 type RecentGameCardProps = {
     game: UserLibraryDataType;
 };
 
 const RecentGameCard = ({ game }: RecentGameCardProps) => {
-    const [imgFailed, setImgFailed] = useState(false);
-    const hasImage = !!game.cover_url && !imgFailed;
+    const { hasImage, handleError } = useCoverImage(game.cover_url);
 
     return (
         <NavLink
@@ -28,7 +27,7 @@ const RecentGameCard = ({ game }: RecentGameCardProps) => {
                         src={game.cover_url!}
                         alt=""
                         aria-hidden="true"
-                        onError={() => setImgFailed(true)}
+                        onError={handleError}
                     />
                 )}
             </div>
