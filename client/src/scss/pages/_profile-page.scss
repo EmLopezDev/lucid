@@ -97,6 +97,11 @@
         }
     }
 
+    &__genre-chart {
+        margin-block-start: u.em(24);
+        max-width: u.em(480);
+    }
+
     &__tabs {
         display: flex;
         gap: u.em(4);

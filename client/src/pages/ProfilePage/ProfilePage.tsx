@@ -7,6 +7,8 @@ import { NavLink } from "react-router";
 import Icon from "@components/Icon/Icon";
 import Badge from "@components/Badge/Badge";
 import { useCoverImage } from "@hooks/useCoverImage";
+import { useGenreBreakdown } from "./useGenreBreakdown";
+import GenreBreakdownChart from "@components/GenreBreakdownChart/GenreBreakdownChart";
 
 type TabIdType = "stats" | "playing" | "completed" | "recent";
 
@@ -52,6 +54,7 @@ const ProfilePage = () => {
     const [activeTab, setActiveTab] = useState<TabIdType>("stats");
     const { currentUser } = useUserContext();
     const { profile, isLoading, error } = useUserProfile();
+    const { data: genreData } = useGenreBreakdown();
 
     if (isLoading) {
         return (
@@ -167,6 +170,7 @@ const ProfilePage = () => {
 
             <div className="profile-page__tab-panel">
                 {activeTab === "stats" && (
+                    <>
                     <section className="profile-page__stats">
                         <div className="profile-stat">
                             <Icon
@@ -222,6 +226,10 @@ const ProfilePage = () => {
                             <span className="profile-stat__label">Fav Genre</span>
                         </div>
                     </section>
+                    <div className="profile-page__genre-chart">
+                        <GenreBreakdownChart data={genreData} />
+                    </div>
+                    </>
                 )}
 
                 {activeTab === "playing" && (
