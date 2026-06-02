@@ -171,64 +171,66 @@ const ProfilePage = () => {
             <div className="profile-page__tab-panel">
                 {activeTab === "stats" && (
                     <>
-                    <section className="profile-page__stats">
-                        <div className="profile-stat">
-                            <Icon
-                                name="gamepad"
-                                size="medium"
-                                color="blue"
-                            />
-                            <span className="profile-stat__value">{profile.stats.totalGames}</span>
-                            <span className="profile-stat__label">Games</span>
+                        <section className="profile-page__stats">
+                            <div className="profile-stat profile-stat--games">
+                                <Icon
+                                    name="gamepad"
+                                    size="medium"
+                                    color="blue"
+                                />
+                                <span className="profile-stat__value">
+                                    {profile.stats.totalGames}
+                                </span>
+                                <span className="profile-stat__label">Games</span>
+                            </div>
+                            <div className="profile-stat profile-stat--hours">
+                                <Icon
+                                    name="clock"
+                                    size="medium"
+                                    color="cyan"
+                                />
+                                <span className="profile-stat__value">
+                                    {profile.stats.totalHoursPlayed}
+                                </span>
+                                <span className="profile-stat__label">Hours Played</span>
+                            </div>
+                            <div className="profile-stat profile-stat--completion">
+                                <Icon
+                                    name="check"
+                                    size="medium"
+                                    color="green"
+                                />
+                                <span className="profile-stat__value">
+                                    {profile.stats.completionRate}%
+                                </span>
+                                <span className="profile-stat__label">Completion Rate</span>
+                            </div>
+                            <div className="profile-stat profile-stat--rating">
+                                <Icon
+                                    name="star"
+                                    size="medium"
+                                    color="gold"
+                                />
+                                <span className="profile-stat__value">
+                                    {profile.stats.averageRating ?? "—"}
+                                </span>
+                                <span className="profile-stat__label">Avg Rating</span>
+                            </div>
+                            <div className="profile-stat profile-stat--genre">
+                                <Icon
+                                    name="tag"
+                                    size="medium"
+                                    color="purple"
+                                />
+                                <span className="profile-stat__value">
+                                    {profile.stats.favoriteGenre ?? "—"}
+                                </span>
+                                <span className="profile-stat__label">Fav Genre</span>
+                            </div>
+                        </section>
+                        <div className="profile-page__genre-chart">
+                            <GenreBreakdownChart data={genreData} />
                         </div>
-                        <div className="profile-stat">
-                            <Icon
-                                name="clock"
-                                size="medium"
-                                color="teal"
-                            />
-                            <span className="profile-stat__value">
-                                {profile.stats.totalHoursPlayed}
-                            </span>
-                            <span className="profile-stat__label">Hours Played</span>
-                        </div>
-                        <div className="profile-stat">
-                            <Icon
-                                name="check"
-                                size="medium"
-                                color="green"
-                            />
-                            <span className="profile-stat__value">
-                                {profile.stats.completionRate}%
-                            </span>
-                            <span className="profile-stat__label">Completion Rate</span>
-                        </div>
-                        <div className="profile-stat">
-                            <Icon
-                                name="star"
-                                size="medium"
-                                color="gold"
-                            />
-                            <span className="profile-stat__value">
-                                {profile.stats.averageRating ?? "—"}
-                            </span>
-                            <span className="profile-stat__label">Avg Rating</span>
-                        </div>
-                        <div className="profile-stat">
-                            <Icon
-                                name="tag"
-                                size="medium"
-                                color="orange"
-                            />
-                            <span className="profile-stat__value">
-                                {profile.stats.favoriteGenre ?? "—"}
-                            </span>
-                            <span className="profile-stat__label">Fav Genre</span>
-                        </div>
-                    </section>
-                    <div className="profile-page__genre-chart">
-                        <GenreBreakdownChart data={genreData} />
-                    </div>
                     </>
                 )}
 

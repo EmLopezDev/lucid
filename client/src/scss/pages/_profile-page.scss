@@ -261,7 +261,6 @@
         }
     }
 
-
     &__game-info {
         flex: 1;
         min-width: 0;
@@ -280,6 +279,7 @@
         line-height: 1.3;
         display: -webkit-box;
         -webkit-line-clamp: 2;
+        line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
@@ -295,6 +295,26 @@
     background-color: var(--color-bg-card);
     border-radius: u.em(12);
     text-align: center;
+
+    &--games {
+        background-color: rgba(var(--color-blue-rgb), 0.08);
+    }
+
+    &--hours {
+        background-color: rgba(var(--color-cyan-rgb), 0.08);
+    }
+
+    &--completion {
+        background-color: rgba(var(--color-green-rgb), 0.08);
+    }
+
+    &--rating {
+        background-color: rgba(var(--color-gold-rgb), 0.08);
+    }
+
+    &--genre {
+        background-color: rgba(var(--color-badge-wishlist-rgb), 0.08);
+    }
 
     &__value {
         font-size: u.$font-size-2xl;

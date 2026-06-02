@@ -12,7 +12,9 @@ type IconColor =
     | "teal"
     | "green"
     | "gold"
-    | "orange";
+    | "orange"
+    | "purple"
+    | "cyan";
 
 type IconProps = {
     name: IconName;
