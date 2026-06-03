@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.1] - 2026-06-03
+
+### Improvements
+
+#### Backend
+
+- Refactored `getUserProfile` to use a single MongoDB aggregation pipeline with `$facet` — stats, genre counts, and all three game lists now compute in one database round trip instead of fetching all documents into memory and processing them in JavaScript
+
 ## [1.7.0] - 2026-06-03
 
 ### Features
@@ -306,6 +314,7 @@
 
 ---
 
+[1.7.1]: https://github.com/EmLopezDev/lucid/releases/tag/v1.7.1
 [1.7.0]: https://github.com/EmLopezDev/lucid/releases/tag/v1.7.0
 [1.6.0]: https://github.com/EmLopezDev/lucid/releases/tag/v1.6.0
 [1.5.5]: https://github.com/EmLopezDev/lucid/releases/tag/v1.5.5

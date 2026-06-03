@@ -155,56 +155,85 @@ export const getUserProfile = async (userId: string) => {
     const user = await UserModel.findById(userId).select("_id first_name last_name bio created_at");
     if (!user) throw new HttpError("User not found", 404);
 
-    const library = await UserLibraryModel.find({
-        user_id: userId,
-        deleted_at: null,
-    });
+    const gameProjection = {
+        _id: 1,
+        title: 1,
+        cover_url: 1,
+        status: 1,
+        genre: 1,
+        rating: 1,
+        hours_played: 1,
+    };
 
-    const sortedLibrary = [...library].sort(
-        (a, b) => b.created_at.getTime() - a.created_at.getTime(),
-    );
+    const [facet] = await UserLibraryModel.aggregate([
+        { $match: { user_id: userId, deleted_at: null } },
+        {
+            $facet: {
+                stats: [
+                    {
+                        $group: {
+                            _id: null,
+                            totalGames: { $sum: 1 },
+                            totalHoursPlayed: { $sum: { $ifNull: ["$hours_played", 0] } },
+                            gamesWithStatus: {
+                                $sum: { $cond: [{ $ne: ["$status", null] }, 1, 0] },
+                            },
+                            completedGames: {
+                                $sum: { $cond: [{ $eq: ["$status", "completed"] }, 1, 0] },
+                            },
+                            averageRating: { $avg: "$rating" },
+                            pricedGames: { $sum: { $cond: [{ $ne: ["$price", null] }, 1, 0] } },
+                            totalSpent: {
+                                $sum: {
+                                    $cond: [{ $ne: ["$price", null] }, { $toDouble: "$price" }, 0],
+                                },
+                            },
+                        },
+                    },
+                ],
+                genreCounts: [
+                    { $match: { genre: { $ne: null } } },
+                    { $group: { _id: "$genre", count: { $sum: 1 } } },
+                    { $sort: { count: -1 } },
+                    { $limit: 1 },
+                ],
+                currentlyPlaying: [
+                    { $match: { status: "playing" } },
+                    { $sort: { created_at: -1 } },
+                    {
+                        $project: gameProjection,
+                    },
+                ],
+                completed: [
+                    { $match: { status: "completed" } },
+                    { $sort: { created_at: -1 } },
+                    {
+                        $project: gameProjection,
+                    },
+                ],
+                recentlyAdded: [
+                    { $sort: { created_at: -1 } },
+                    { $limit: 6 },
+                    {
+                        $project: gameProjection,
+                    },
+                ],
+            },
+        },
+    ]);
 
-    const totalGames = library.length;
+    const statsRaw = facet.stats[0];
 
-    const totalHoursPlayed = library.reduce((sum, game) => sum + (game.hours_played ?? 0), 0);
-
-    const gamesWithStatus = library.filter((game) => game.status !== null);
-
-    const completed = sortedLibrary.filter((g) => g.status === "completed");
-
+    const totalGames = statsRaw?.totalGames ?? 0;
+    const totalHoursPlayed = statsRaw?.totalHoursPlayed ?? 0;
     const completionRate =
-        gamesWithStatus.length > 0
-            ? Math.round((completed.length / gamesWithStatus.length) * 100)
+        statsRaw?.gamesWithStatus > 0
+            ? Math.round((statsRaw.completedGames / statsRaw.gamesWithStatus) * 100)
             : 0;
-
-    const ratedGames = library.filter((game) => game.rating !== null);
-
     const averageRating =
-        ratedGames.length > 0
-            ? +(
-                  ratedGames.reduce((sum, game) => sum + game.rating!, 0) / ratedGames.length
-              ).toFixed(2)
-            : null;
-
-    const genreCounts = library.reduce<Record<string, number>>((acc, game) => {
-        if (game.genre) acc[game.genre] = (acc[game.genre] ?? 0) + 1;
-        return acc;
-    }, {});
-
-    const sortedGenres = Object.entries(genreCounts).sort((a, b) => b[1] - a[1]);
-
-    const mostPlayedGenre = sortedGenres.length > 0 ? sortedGenres[0]![0] : null;
-
-    const currentlyPlaying = sortedLibrary.filter((g) => g.status === "playing");
-
-    const recentlyAdded = sortedLibrary.slice(0, 6);
-
-    const pricedGames = library.filter((game) => game.price !== null);
-
-    const totalSpent =
-        pricedGames.length > 0
-            ? +pricedGames.reduce((sum, game) => sum + Number(game.price), 0).toFixed(2)
-            : null;
+        statsRaw?.averageRating != null ? +statsRaw.averageRating.toFixed(2) : null;
+    const mostPlayedGenre = facet.genreCounts[0]?._id ?? null;
+    const totalSpent = statsRaw?.pricedGames > 0 ? +statsRaw.totalSpent.toFixed(2) : null;
 
     return {
         _id: user._id,
@@ -220,8 +249,8 @@ export const getUserProfile = async (userId: string) => {
             mostPlayedGenre,
             totalSpent,
         },
-        currentlyPlaying,
-        completed,
-        recentlyAdded,
+        currentlyPlaying: facet.currentlyPlaying,
+        completed: facet.completed,
+        recentlyAdded: facet.recentlyAdded,
     };
 };

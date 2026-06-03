@@ -15,7 +15,6 @@ export type ProfileStats = {
 export type ProfileGame = {
     _id: string;
     title: string;
-    cover_image: string | null;
     status: StatusType | null;
     genre: string | null;
     rating: number | null;
