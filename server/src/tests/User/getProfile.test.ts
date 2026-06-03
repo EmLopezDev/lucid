@@ -1,4 +1,6 @@
 import { vi, describe, it, expect, beforeEach } from "vitest";
+import request from "supertest";
+import app from "../../app";
 
 vi.mock("connect-mongo", async () => {
     const session = await import("express-session");
@@ -16,11 +18,7 @@ beforeEach(async () => {
     ({ agent, userId } = await createAuthenticatedAgent());
 });
 
-const addGame = (
-    a: typeof agent,
-    id: string,
-    overrides: Record<string, unknown> = {},
-) =>
+const addGame = (a: typeof agent, id: string, overrides: Record<string, unknown> = {}) =>
     a.post(`/api/v1/user/${id}/library`).send({
         title: "Test Game",
         genre: "action",
@@ -32,9 +30,7 @@ const addGame = (
 describe("GET /api/v1/user/:userId/profile", () => {
     describe("authentication", () => {
         it("returns 401 when not signed in", async () => {
-            const unauthenticated = (await import("supertest")).default(
-                (await import("../../app")).default,
-            );
+            const unauthenticated = request(app);
             const res = await unauthenticated.get(`/api/v1/user/${userId}/profile`);
             expect(res.status).toBe(401);
         });
@@ -61,7 +57,8 @@ describe("GET /api/v1/user/:userId/profile", () => {
                     totalGames: expect.any(Number),
                     totalHoursPlayed: expect.any(Number),
                     completionRate: expect.any(Number),
-                    favoriteGenre: null,
+                    mostPlayedGenre: null,
+                    totalSpent: null,
                 }),
                 currentlyPlaying: expect.any(Array),
                 completed: expect.any(Array),
@@ -83,7 +80,8 @@ describe("GET /api/v1/user/:userId/profile", () => {
             expect(res.body.stats.totalHoursPlayed).toBe(0);
             expect(res.body.stats.completionRate).toBe(0);
             expect(res.body.stats.averageRating).toBeNull();
-            expect(res.body.stats.favoriteGenre).toBeNull();
+            expect(res.body.stats.mostPlayedGenre).toBeNull();
+            expect(res.body.stats.totalSpent).toBeNull();
         });
 
         it("returns empty arrays for all lists when the library is empty", async () => {
@@ -149,20 +147,38 @@ describe("GET /api/v1/user/:userId/profile", () => {
             expect(res.body.stats.averageRating).toBeNull();
         });
 
-        it("returns the most common genre as favoriteGenre", async () => {
+        it("returns the most common genre as mostPlayedGenre", async () => {
             await addGame(agent, userId, { title: "Game 1", genre: "action" });
             await addGame(agent, userId, { title: "Game 2", genre: "action" });
             await addGame(agent, userId, { title: "Game 3", genre: "indie" });
 
             const res = await agent.get(`/api/v1/user/${userId}/profile`);
-            expect(res.body.stats.favoriteGenre).toBe("action");
+            expect(res.body.stats.mostPlayedGenre).toBe("action");
         });
 
-        it("returns null favoriteGenre when no games have a genre set", async () => {
+        it("returns null mostPlayedGenre when no games have a genre set", async () => {
             await addGame(agent, userId, { title: "Game 1", genre: null });
+            await addGame(agent, userId, { title: "Game 2", genre: null });
 
             const res = await agent.get(`/api/v1/user/${userId}/profile`);
-            expect(res.body.stats.favoriteGenre).toBeNull();
+            expect(res.body.stats.mostPlayedGenre).toBeNull();
+        });
+
+        it("returns the the total amount spent as totalSpent", async () => {
+            await addGame(agent, userId, { title: "Game 1", price: "59.99" });
+            await addGame(agent, userId, { title: "Game 2", price: "29.99" });
+            await addGame(agent, userId, { title: "Game 3", price: null });
+
+            const res = await agent.get(`/api/v1/user/${userId}/profile`);
+            expect(res.body.stats.totalSpent).toBe(89.98);
+        });
+
+        it("returns null totalSpent when no games have a price set", async () => {
+            await addGame(agent, userId, { title: "Game 1", price: null });
+            await addGame(agent, userId, { title: "Game 2", price: null });
+
+            const res = await agent.get(`/api/v1/user/${userId}/profile`);
+            expect(res.body.stats.totalSpent).toBeNull();
         });
     });
 

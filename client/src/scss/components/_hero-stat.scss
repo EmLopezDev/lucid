@@ -36,6 +36,14 @@
         border-top: 2px solid var(--color-gold);
     }
 
+    &--check {
+        border-top: 2px solid var(--color-green);
+    }
+
+    &--tag {
+        border-top: 2px solid var(--color-badge-wishlist);
+    }
+
     @include u.breakpoint-min("large") {
         flex-direction: row;
         align-items: center;
@@ -68,6 +76,16 @@
             color: var(--color-gold);
             background-color: rgba(var(--color-gold-rgb), 0.15);
         }
+
+        &--check {
+            color: var(--color-green);
+            background-color: rgba(var(--color-green-rgb), 0.15);
+        }
+
+        &--tag {
+            color: var(--color-badge-wishlist);
+            background-color: rgba(var(--color-badge-wishlist-rgb), 0.15);
+        }
     }
 
     &__data {
@@ -94,6 +112,14 @@
 
         &--star {
             color: var(--color-gold);
+        }
+
+        &--check {
+            color: var(--color-green);
+        }
+
+        &--tag {
+            color: var(--color-badge-wishlist);
         }
     }
 

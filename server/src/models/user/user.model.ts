@@ -193,11 +193,18 @@ export const getUserProfile = async (userId: string) => {
 
     const sortedGenres = Object.entries(genreCounts).sort((a, b) => b[1] - a[1]);
 
-    const favoriteGenre = sortedGenres.length > 0 ? sortedGenres[0]![0] : null;
+    const mostPlayedGenre = sortedGenres.length > 0 ? sortedGenres[0]![0] : null;
 
     const currentlyPlaying = sortedLibrary.filter((g) => g.status === "playing");
 
     const recentlyAdded = sortedLibrary.slice(0, 6);
+
+    const pricedGames = library.filter((game) => game.price !== null);
+
+    const totalSpent =
+        pricedGames.length > 0
+            ? +pricedGames.reduce((sum, game) => sum + Number(game.price), 0).toFixed(2)
+            : null;
 
     return {
         _id: user._id,
@@ -210,7 +217,8 @@ export const getUserProfile = async (userId: string) => {
             totalHoursPlayed,
             completionRate,
             averageRating,
-            favoriteGenre,
+            mostPlayedGenre,
+            totalSpent,
         },
         currentlyPlaying,
         completed,

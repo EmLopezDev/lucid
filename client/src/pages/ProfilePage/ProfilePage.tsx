@@ -4,19 +4,25 @@ import { SkeletonLoader, Skeleton } from "@components/Skeleton";
 import { useUserProfile, type ProfileGame } from "./useUserProfile";
 import { useUserContext } from "@contexts/UserContext/useUserContext";
 import { NavLink } from "react-router";
-import Icon from "@components/Icon/Icon";
-import Badge from "@components/Badge/Badge";
 import { useCoverImage } from "@hooks/useCoverImage";
 import { useGenreBreakdown } from "./useGenreBreakdown";
+import { useSpendingChart } from "./useSpendingChart";
+import { useStatusBreakdown } from "./useStatusBreakdown";
+import Icon from "@components/Icon/Icon";
+import Badge from "@components/Badge/Badge";
 import GenreBreakdownChart from "@components/GenreBreakdownChart/GenreBreakdownChart";
+import StatusBreakdownChart from "@components/StatusBreakdownChart/StatusBreakdownChart";
+import SpendingChart from "@components/SpendingChart/SpendingChart";
+import HeroStats from "@components/HeroStats/HeroStats";
 
-type TabIdType = "stats" | "playing" | "completed" | "recent";
+type TabIdType = "stats" | "playing" | "completed" | "recent" | "expenditure";
 
 const tabs: { id: TabIdType; label: string }[] = [
     { id: "stats", label: "Stats" },
     { id: "playing", label: "Currently Playing" },
     { id: "completed", label: "Completed" },
     { id: "recent", label: "Recently Added" },
+    { id: "expenditure", label: "Expenditure" },
 ];
 
 const ProfileGameItem = ({ game }: { game: ProfileGame }) => {
@@ -55,6 +61,8 @@ const ProfilePage = () => {
     const { currentUser } = useUserContext();
     const { profile, isLoading, error } = useUserProfile();
     const { data: genreData } = useGenreBreakdown();
+    const { data: statusData } = useStatusBreakdown();
+    const { data, period, setPeriod } = useSpendingChart();
 
     if (isLoading) {
         return (
@@ -172,64 +180,35 @@ const ProfilePage = () => {
                 {activeTab === "stats" && (
                     <>
                         <section className="profile-page__stats">
-                            <div className="profile-stat profile-stat--games">
-                                <Icon
-                                    name="gamepad"
-                                    size="medium"
-                                    color="blue"
-                                />
-                                <span className="profile-stat__value">
-                                    {profile.stats.totalGames}
-                                </span>
-                                <span className="profile-stat__label">Games</span>
-                            </div>
-                            <div className="profile-stat profile-stat--hours">
-                                <Icon
-                                    name="clock"
-                                    size="medium"
-                                    color="cyan"
-                                />
-                                <span className="profile-stat__value">
-                                    {profile.stats.totalHoursPlayed}
-                                </span>
-                                <span className="profile-stat__label">Hours Played</span>
-                            </div>
-                            <div className="profile-stat profile-stat--completion">
-                                <Icon
-                                    name="check"
-                                    size="medium"
-                                    color="green"
-                                />
-                                <span className="profile-stat__value">
-                                    {profile.stats.completionRate}%
-                                </span>
-                                <span className="profile-stat__label">Completion Rate</span>
-                            </div>
-                            <div className="profile-stat profile-stat--rating">
-                                <Icon
-                                    name="star"
-                                    size="medium"
-                                    color="gold"
-                                />
-                                <span className="profile-stat__value">
-                                    {profile.stats.averageRating ?? "—"}
-                                </span>
-                                <span className="profile-stat__label">Avg Rating</span>
-                            </div>
-                            <div className="profile-stat profile-stat--genre">
-                                <Icon
-                                    name="tag"
-                                    size="medium"
-                                    color="purple"
-                                />
-                                <span className="profile-stat__value">
-                                    {profile.stats.favoriteGenre ?? "—"}
-                                </span>
-                                <span className="profile-stat__label">Fav Genre</span>
-                            </div>
+                            <HeroStats
+                                iconName="gamepad"
+                                statValue={profile.stats.totalGames}
+                                text="Games"
+                            />
+                            <HeroStats
+                                iconName="clock"
+                                statValue={profile.stats.totalHoursPlayed}
+                                text="Hours Played"
+                            />
+                            <HeroStats
+                                iconName="check"
+                                statValue={profile.stats.completionRate}
+                                text="Completion Rate"
+                            />
+                            <HeroStats
+                                iconName="star"
+                                statValue={profile.stats.averageRating ?? 0}
+                                text="Avg Rating"
+                            />
+                            <HeroStats
+                                iconName="tag"
+                                statValue={profile.stats.mostPlayedGenre ?? "-"}
+                                text="Most Played Genre"
+                            />
                         </section>
-                        <div className="profile-page__genre-chart">
+                        <div className="profile-page__charts">
                             <GenreBreakdownChart data={genreData} />
+                            <StatusBreakdownChart data={statusData} />
                         </div>
                     </>
                 )}
@@ -283,6 +262,25 @@ const ProfilePage = () => {
                             </ul>
                         )}
                     </section>
+                )}
+
+                {activeTab === "expenditure" && (
+                    <>
+                        <section className="profile-page__stats">
+                            <HeroStats
+                                iconName="dollar"
+                                statValue={profile.stats.totalSpent ?? 0}
+                                text="Total Spent"
+                            />
+                        </section>
+                        <div className="profile-page__spending-chart">
+                            <SpendingChart
+                                data={data}
+                                period={period}
+                                onPeriodChange={setPeriod}
+                            />
+                        </div>
+                    </>
                 )}
             </div>
         </div>

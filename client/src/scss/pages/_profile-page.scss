@@ -97,9 +97,22 @@
         }
     }
 
-    &__genre-chart {
+    &__charts {
+        display: flex;
+        gap: u.em(16);
         margin-block-start: u.em(24);
-        max-width: u.em(480);
+
+        > * {
+            flex: 1;
+        }
+
+        @include u.breakpoint-max("small") {
+            flex-direction: column;
+        }
+    }
+
+    &__spending-chart {
+        margin-block-start: u.em(24);
     }
 
     &__tabs {

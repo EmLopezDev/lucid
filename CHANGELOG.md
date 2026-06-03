@@ -1,5 +1,48 @@
 # Changelog
 
+## [1.7.0] - 2026-06-03
+
+### Features
+
+#### Profile Page — Dashboard Consolidation
+
+- Dashboard page removed — all content consolidated into the Profile page
+- Dashboard nav link removed — navigation is now Library | Profile
+- New **Expenditure** tab on the Profile page containing the spending chart and a Total Spent hero stat
+- New **Stats** tab additions: Status Breakdown chart and Genre Breakdown chart rendered side-by-side below the hero stat cards
+- Stats tab hero stats now use the `HeroStats` component for consistent styling with the rest of the app
+
+#### Profile Page — Genre Breakdown Chart
+
+- New donut chart showing library genre distribution with a custom legend and tooltip
+- Built on the existing Recharts setup, sourced from `UserLibraryContext` for full library coverage
+- Renders nothing when no games have a genre set
+
+#### Backend
+
+- `totalSpent` added to the profile stats response — sum of all priced library entries, `null` when no games have a price set
+- `mostPlayedGenre` replaces `favoriteGenre` as the field name in the profile stats response
+
+### Improvements
+
+#### Profile Page — Stat Card Color Tints
+
+- Each stat card now has a subtle tinted background matching its icon colour
+- Modifier classes renamed to semantic names (`--games`, `--hours`, `--completion`, `--rating`, `--genre`) so colours can change without touching class names
+
+#### Icon Component
+
+- Added `cyan` and `purple` colour variants
+
+#### Design Tokens
+
+- Added `--color-green`, `--color-green-rgb`, `--color-orange`, `--color-orange-rgb`, `--color-cyan`, and `--color-cyan-rgb` to both dark and light theme
+
+#### HeroStats Component
+
+- `statValue` now accepts `string | number` — string values are automatically capitalised via `capitalizeString`
+- Number formatting unchanged: integers are rounded, decimals truncated to 2 places with count-up animation
+
 ## [1.6.1] - 2026-05-29
 
 ### Improvements
@@ -263,6 +306,7 @@
 
 ---
 
+[1.7.0]: https://github.com/EmLopezDev/lucid/releases/tag/v1.7.0
 [1.6.0]: https://github.com/EmLopezDev/lucid/releases/tag/v1.6.0
 [1.5.5]: https://github.com/EmLopezDev/lucid/releases/tag/v1.5.5
 [1.5.4]: https://github.com/EmLopezDev/lucid/releases/tag/v1.5.4

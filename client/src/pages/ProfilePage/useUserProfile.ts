@@ -8,7 +8,8 @@ export type ProfileStats = {
     totalHoursPlayed: number;
     completionRate: number;
     averageRating: number | null;
-    favoriteGenre: string | null;
+    mostPlayedGenre: string | null;
+    totalSpent: number | null;
 };
 
 export type ProfileGame = {

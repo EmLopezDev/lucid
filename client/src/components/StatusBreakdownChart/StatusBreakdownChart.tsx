@@ -1,5 +1,5 @@
 import { PieChart, Pie, Tooltip, ResponsiveContainer } from "recharts";
-import { type StatusDataType } from "@pages/DashboardPage/useStatusBreakdown";
+import { type StatusDataType } from "@pages/ProfilePage/useStatusBreakdown";
 import { capitalizeString } from "@lib/string";
 
 type CustomTooltipType = {
@@ -53,7 +53,7 @@ type StatusBreakdownChartProps = {
 const StatusBreakdownChart = ({ data }: StatusBreakdownChartProps) => {
     return (
         <div className="status-breakdown-chart">
-            <h2 className="status-breakdown-chart__title">Library Status Breakdown</h2>
+            <h2 className="status-breakdown-chart__title">Status Breakdown</h2>
             <div className="status-breakdown-chart__body">
                 <ResponsiveContainer
                     width="100%"
