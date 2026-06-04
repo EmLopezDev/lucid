@@ -13,6 +13,7 @@ const base = {
     updated_at: null,
     deleted_at: null,
     cover_url: null,
+    played_with_club: null,
 };
 
 const games: UserLibraryDataType[] = [

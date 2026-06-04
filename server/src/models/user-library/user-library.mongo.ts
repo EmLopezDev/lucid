@@ -3,8 +3,17 @@ import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary
 
 type UserLibraryDocument = Omit<
     UserLibraryDataType,
-    "date_played" | "date_purchased" | "created_at" | "updated_at" | "deleted_at"
+    | "date_played"
+    | "date_purchased"
+    | "created_at"
+    | "updated_at"
+    | "deleted_at"
+    | "played_with_club"
 > & {
+    played_with_club: {
+        name: string;
+        end_date: Date;
+    } | null;
     date_played: Date | null;
     date_purchased: Date | null;
     created_at: Date;
@@ -27,6 +36,13 @@ const UserLibrarySchema = new Schema<UserLibraryDocument>(
         comment: { type: String, default: null },
         price: { type: String, default: null },
         cover_url: { type: String, default: null },
+        played_with_club: {
+            type: {
+                name: { type: String, required: true },
+                end_date: { type: Date, required: true },
+            },
+            default: null,
+        },
         created_at: { type: Date, required: true },
         updated_at: { type: Date, default: null },
         deleted_at: { type: Date, default: null },
