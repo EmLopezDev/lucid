@@ -8,6 +8,10 @@ export const getAllGamingClubPosts = async (clubId: string) => {
     return await GamingClubPostModel.find({ club_id: clubId, deleted_at: null });
 };
 
+export const getGamingClubPostById = async (postId: string) => {
+    return await GamingClubPostModel.findOne({ _id: postId });
+};
+
 export const createGamingClubPost = async (
     clubId: string,
     userId: string,
