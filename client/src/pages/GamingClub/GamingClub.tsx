@@ -28,24 +28,24 @@ const GamingClub = () => {
             </div>
             <div className="gaming-club__cards">
                 <article className="club-card">
-                    <div>🎮</div>
-                    <h3>Game Over</h3>
+                    <div className="club-card__avatar">🎮</div>
+                    <h3 className="club-card__name">Game Over</h3>
                     <span>🌐 Public</span>
                     <span>Elden Ring</span>
                     <span>15 members</span>
                     <button>Join</button>
                 </article>
                 <article className="club-card">
-                    <div>🎮</div>
-                    <h3>Game Over</h3>
+                    <div className="club-card__avatar">🎮</div>
+                    <h3 className="club-card__name">Game Over</h3>
                     <span>🌐 Public</span>
                     <span>Elden Ring</span>
                     <span>15 members</span>
                     <button>Join</button>
                 </article>
                 <article className="club-card">
-                    <div>🎮</div>
-                    <h3>Game Over</h3>
+                    <div className="club-card__avatar">🎮</div>
+                    <h3 className="club-card__name">Game Over</h3>
                     <span>🌐 Public</span>
                     <span>Elden Ring</span>
                     <span>15 members</span>
