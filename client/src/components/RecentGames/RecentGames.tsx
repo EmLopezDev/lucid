@@ -34,10 +34,7 @@ const RecentGameCard = ({ game }: RecentGameCardProps) => {
             <div className="recent-game-card__info">
                 <span className="recent-game-card__title">{game.title}</span>
                 <div className="recent-game-card__meta">
-                    <Badge
-                        size="small"
-                        status={game.status}
-                    />
+                    {game.status && <Badge size="small" label={game.status} />}
                     {game.platform && (
                         <span className="recent-game-card__platform">
                             {capitalizeString(game.platform)}
