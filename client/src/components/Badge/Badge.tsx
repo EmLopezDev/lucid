@@ -1,26 +1,24 @@
 import { cx } from "css-variants";
 import { capitalizeString } from "@lib/string";
-import { type StatusType } from "../../../../packages/types";
 
 type BadgeType = {
-    status: StatusType;
+    label: string;
     size?: "small" | "medium" | "large";
 };
 
-const Badge = ({ status, size = "small" }: BadgeType) => {
-    if (!status) return;
-    const label = capitalizeString(status);
+const Badge = ({ label, size = "small" }: BadgeType) => {
+    const capLabel = capitalizeString(label);
     const className = cx({
         badge: true,
         [`badge--${size}`]: true,
-        [`badge__${status}`]: true,
+        [`badge__${label.toLowerCase()}`]: true,
     });
     return (
         <span
             className={className}
-            aria-label={`Status: ${label}`}
+            aria-label={capLabel}
         >
-            {label}
+            {capLabel}
         </span>
     );
 };

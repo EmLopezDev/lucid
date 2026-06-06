@@ -23,10 +23,7 @@ const CardDetailContent = ({ data, setEditMode, handleOnDeleteById }: CardDetail
                 <span>{data.platform ? capitalizeString(data.platform) : "-"}</span>
             </div>
             <div className="card-detail__content__status">
-                <Badge
-                    status={data.status}
-                    size="large"
-                />
+                {data.status && <Badge label={data.status} size="large" />}
             </div>
             <div className="card-detail__grid">
                 <div className="card-detail__grid__stat">

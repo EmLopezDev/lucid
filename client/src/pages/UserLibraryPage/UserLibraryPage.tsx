@@ -51,7 +51,7 @@ const UserLibraryPageContent = () => {
                 <span className="status-option__label">All</span>
             ) : (
                 <Badge
-                    status={label}
+                    label={label}
                     size="medium"
                 />
             )}
@@ -74,7 +74,7 @@ const UserLibraryPageContent = () => {
             ) : (
                 <Badge
                     size="large"
-                    status={label}
+                    label={label}
                 />
             )}
             <span

@@ -47,10 +47,7 @@ const ProfileGameItem = ({ game }: { game: ProfileGame }) => {
             </div>
             <div className="profile-page__game-info">
                 <span className="profile-page__game-title">{game.title}</span>
-                <Badge
-                    status={game.status}
-                    size="small"
-                />
+                {game.status && <Badge label={game.status} size="small" />}
             </div>
         </li>
     );

@@ -28,23 +28,23 @@ function HomePage() {
                 <div className="home-page__hero-content">
                     <div className="home-page__badges">
                         <Badge
-                            status="playing"
+                            label="playing"
                             size="medium"
                         />
                         <Badge
-                            status="completed"
+                            label="completed"
                             size="medium"
                         />
                         <Badge
-                            status="wishlist"
+                            label="wishlist"
                             size="medium"
                         />
                         <Badge
-                            status="paused"
+                            label="paused"
                             size="medium"
                         />
                         <Badge
-                            status="dropped"
+                            label="dropped"
                             size="medium"
                         />
                     </div>

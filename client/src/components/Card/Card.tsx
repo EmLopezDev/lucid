@@ -42,10 +42,7 @@ const Card = ({ data, selectedId, handleCardSelect, handleDelete }: CardType) =>
                             onError={handleError}
                         />
                     )}
-                    <Badge
-                        size="medium"
-                        status={data.status}
-                    />
+                    {data.status && <Badge size="medium" label={data.status} />}
                 </div>
                 <div className="card__content">
                     <h4 className="card__title">{data.title}</h4>
