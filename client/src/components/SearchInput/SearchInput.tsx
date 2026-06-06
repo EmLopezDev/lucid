@@ -11,7 +11,7 @@ import Input from "@components/Input";
 type SearchInputType<T> = {
     label?: string;
     placeholder?: string;
-    inputSize: "small" | "medium" | "large";
+    inputSize?: "small" | "medium" | "large";
     query: string;
     results: T[];
     minQueryLength?: number;
