@@ -16,7 +16,7 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage/VerifyEmailPage";
 import ProfilePage from "@pages/ProfilePage/ProfilePage";
-import GamingClub from "@pages/GamingClub/GamingClub";
+import GamingClubPage from "@pages/GamingClub/GamingClubPage";
 
 function App() {
     const { isUserAuthenticated, isSessionLoading } = useUserContext();
@@ -58,7 +58,7 @@ function App() {
                 <Route element={<AuthorizedRoutes isAuthenticated={isUserAuthenticated} />}>
                     <Route
                         path="/clubs"
-                        element={<GamingClub />}
+                        element={<GamingClubPage />}
                     />
                     <Route
                         path="/user/library"

@@ -1,7 +1,7 @@
 import SearchInput from "@components/SearchInput/SearchInput";
 import Button from "@components/Button/Button";
 
-const GamingClub = () => {
+const GamingClubPage = () => {
     return (
         <section className="gaming-club">
             <div className="gaming-club__header">
@@ -56,4 +56,4 @@ const GamingClub = () => {
     );
 };
 
-export default GamingClub;
+export default GamingClubPage;
