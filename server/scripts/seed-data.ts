@@ -658,7 +658,7 @@ export const libraryGames = (userId: string) => [
     },
 ];
 
-const FAKE_OWNERS = {
+export const FAKE_OWNERS = {
     alice: "aaaaaaaaaaaaaaaaaaaaaaaa",
     bob: "bbbbbbbbbbbbbbbbbbbbbbbb",
     carol: "cccccccccccccccccccccccc",
