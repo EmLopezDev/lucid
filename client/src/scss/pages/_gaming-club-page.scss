@@ -26,17 +26,9 @@
 
     &__cards {
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
         gap: u.em(20);
         padding-block-end: u.em(24);
-
-        @include u.breakpoint-min("medium") {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        @include u.breakpoint-min("large") {
-            grid-template-columns: repeat(3, 1fr);
-        }
     }
 }
 
@@ -46,7 +38,7 @@
     background-color: var(--color-bg-surface);
     border: 1px solid var(--color-border);
     border-radius: u.em(12);
-    padding: u.em(20);
+    overflow: hidden;
     transition:
         border-color 150ms ease,
         box-shadow 150ms ease;
@@ -56,20 +48,58 @@
         box-shadow: 0 0 0 1px var(--color-blue);
     }
 
+    &__banner {
+        width: 100%;
+        min-height: u.em(160);
+    }
+
+    &__image {
+        width: inherit;
+    }
+
+    &__gradient {
+        min-height: u.em(160);
+        position: relative;
+
+        &::after {
+            content: "";
+            height: inherit;
+            width: inherit;
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(var(--color-badge-playing-rgb), 0.25),
+                rgba(var(--color-badge-playing-rgb), 0.65)
+            );
+        }
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        padding: u.em(20);
+        position: relative;
+    }
+
     &__avatar {
-        width: u.em(80);
-        height: u.em(80);
+        background-color: var(--color-bg-surface);
+        width: u.em(50);
+        height: u.em(50);
         border-radius: 50%;
         border: 1px solid var(--color-border);
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 0 auto;
+        position: absolute;
+        top: u.em(-30);
+        left: u.em(20);
     }
 
     &__name {
         font-size: u.$font-size-2xl;
         color: var(--color-text-primary);
+        width: u.em(260);
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;

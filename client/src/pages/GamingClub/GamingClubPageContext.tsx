@@ -30,10 +30,13 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
             } catch (error) {
                 if (import.meta.env.DEV)
                     console.error(error instanceof Error ? error.message : error);
+            } finally {
+                setIsLoading(false);
             }
         };
         fetchGamingClubData();
     }, []);
+
     return (
         <GamingClubPageContext.Provider value={contextValue}>
             {children}
