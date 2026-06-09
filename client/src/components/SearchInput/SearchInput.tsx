@@ -6,7 +6,7 @@ import {
     type ChangeEvent,
     type KeyboardEvent,
 } from "react";
-import Input from "@components/Input/Input";
+import Input from "@components/Input";
 
 type SearchInputType<T> = {
     label?: string;

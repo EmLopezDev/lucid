@@ -1,8 +1,8 @@
 import { type ReactNode } from "react";
-import Input from "@components/Input/Input";
-import Select from "@components/Select/Select";
-import DatePicker from "@components/DatePicker/DatePicker";
-import Textarea from "@components/Textarea/Textarea";
+import Input from "@components/Input";
+import Select from "@components/Select";
+import DatePicker from "@components/DatePicker";
+import Textarea from "@components/Textarea";
 import {
     type GenreType,
     type StatusType,

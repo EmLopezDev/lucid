@@ -1,6 +1,6 @@
 import { Link } from "react-router";
-import Form from "@components/Form/Form";
-import Input from "@components/Input/Input";
+import Form from "@components/Form";
+import Input from "@components/Input";
 import { ForgotPasswordPageProvider } from "./ForgotPasswordPageContext";
 import { useForgotPasswordPageContext } from "./useForgotPasswordPageContext";
 

@@ -1,7 +1,7 @@
 import { type ButtonHTMLAttributes, type ReactNode } from "react";
 import { cx } from "css-variants";
-import Icon from "@components/Icon/Icon";
-import { type IconName } from "@components/Icon/IconMap";
+import Icon from "@components/Icon";
+import { type IconName } from "@components/Icon";
 
 type ButtonBase = {
     type?: "submit" | "button" | "reset";

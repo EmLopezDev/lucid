@@ -1,6 +1,6 @@
 import { useState, useCallback, type SubmitEvent } from "react";
-import Form from "@components/Form/Form";
-import GameFormFields, { type GameFormData } from "@components/GameFormFields/GameFormFields";
+import Form from "@components/Form";
+import GameFormFields, { type GameFormData } from "@components/GameFormFields";
 import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
 import { toInputDate } from "@lib/date";
 

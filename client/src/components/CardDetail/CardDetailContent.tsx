@@ -1,9 +1,9 @@
 import { type SetStateAction } from "react";
 import type { UserLibraryDataType } from "../../../../packages/types/UserLibrary";
-import Badge from "@components/Badge/Badge";
-import Button from "@components/Button/Button";
-import HoursBar from "@components/HoursBar/HoursBar";
-import StarRating from "@components/StarRating/StarRating";
+import Badge from "@components/Badge";
+import Button from "@components/Button";
+import HoursBar from "@components/HoursBar";
+import StarRating from "@components/StarRating";
 import { formatDate } from "@lib/date";
 import { capitalizeString } from "@lib/string";
 

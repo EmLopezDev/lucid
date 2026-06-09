@@ -1,5 +1,5 @@
-import Form from "@components/Form/Form";
-import Input from "@components/Input/Input";
+import Form from "@components/Form";
+import Input from "@components/Input";
 import { usePasswordView } from "./usePasswordView.js";
 
 const PasswordView = () => {

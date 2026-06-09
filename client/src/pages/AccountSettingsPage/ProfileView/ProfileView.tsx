@@ -1,10 +1,10 @@
 import { useCallback, useState } from "react";
 import { useProfileView } from "./useProfileView.js";
-import Button from "@components/Button/Button";
-import Form from "@components/Form/Form";
-import Input from "@components/Input/Input";
-import ConfirmModal from "@components/ConfirmModal/ConfirmModal";
-import Textarea from "@components/Textarea/Textarea";
+import Button from "@components/Button";
+import Form from "@components/Form";
+import Input from "@components/Input";
+import ConfirmModal from "@components/ConfirmModal";
+import Textarea from "@components/Textarea";
 
 const ProfileView = () => {
     const [pendingDeleteAccount, setPendingDeleteAccount] = useState(false);

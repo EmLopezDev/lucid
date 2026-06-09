@@ -2,8 +2,8 @@ import { useState, useRef, useEffect, useLayoutEffect, useCallback, useId } from
 import { createPortal } from "react-dom";
 import { DayPicker } from "react-day-picker";
 import { cx } from "css-variants";
-import Button from "@components/Button/Button";
-import Icon from "@components/Icon/Icon";
+import Button from "@components/Button";
+import Icon from "@components/Icon";
 import "react-day-picker/style.css";
 
 type DatePickerProps = {

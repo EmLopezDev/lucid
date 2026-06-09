@@ -1,15 +1,15 @@
 import { useState, useCallback } from "react";
 import { cx } from "css-variants";
-import Card from "@components/Card/Card";
-import CardDetail from "@components/CardDetail/CardDetail";
-import Input from "@components/Input/Input";
-import Button from "@components/Button/Button";
-import Select from "@components/Select/Select";
-import Badge from "@components/Badge/Badge";
-import Icon from "@components/Icon/Icon";
-import Modal from "@components/Modal/Modal";
-import ConfirmModal from "@components/ConfirmModal/ConfirmModal";
-import AddGameForm from "@components/AddGameForm/AddGameForm";
+import Card from "@components/Card";
+import CardDetail from "@components/CardDetail";
+import Input from "@components/Input";
+import Button from "@components/Button";
+import Select from "@components/Select";
+import Badge from "@components/Badge";
+import Icon from "@components/Icon";
+import Modal from "@components/Modal";
+import ConfirmModal from "@components/ConfirmModal";
+import AddGameForm from "@components/AddGameForm";
 import { UserLibraryPageProvider } from "./UserLibraryPageContext";
 import { useUserLibraryPageContext } from "./useUserLibraryPageContext";
 import {
