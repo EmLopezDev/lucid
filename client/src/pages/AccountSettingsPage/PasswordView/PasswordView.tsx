@@ -1,6 +1,6 @@
 import Form from "@components/Form/Form";
 import Input from "@components/Input/Input";
-import { usePasswordView } from "./usePasswordView";
+import { usePasswordView } from "./usePasswordView.js";
 
 const PasswordView = () => {
     const { formData, errors, formError, onChange, onSubmit, onReset } = usePasswordView();

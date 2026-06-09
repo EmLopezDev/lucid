@@ -1,13 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook, act, waitFor } from "@testing-library/react";
-import { usePasswordView } from "./usePasswordView";
+import { usePasswordView } from "./usePasswordView.js";
 import { toast } from "sonner";
 
 vi.mock("sonner", () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 const mockCurrentUser = { _id: "user-1" };
 
-vi.mock("../../../../contexts/UserContext/useUserContext", () => ({
+vi.mock("../../../contexts/UserContext/useUserContext", () => ({
     useUserContext: () => ({ currentUser: mockCurrentUser }),
 }));
 

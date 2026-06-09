@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook, act, waitFor } from "@testing-library/react";
-import { useProfileView } from "./useProfileView";
+import { useProfileView } from "./useProfileView.js";
 import { toast } from "sonner";
 
 vi.mock("sonner", () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
@@ -19,7 +19,7 @@ const mockCurrentUser = {
     deleted_at: null,
 };
 
-vi.mock("../../../../contexts/UserContext/useUserContext", () => ({
+vi.mock("../../../contexts/UserContext/useUserContext", () => ({
     useUserContext: () => ({ currentUser: mockCurrentUser, setUser: mockSetUser }),
 }));
 
@@ -51,7 +51,12 @@ describe("useProfileView", () => {
 
     it("starts with no errors", () => {
         const { result } = renderHook(() => useProfileView());
-        expect(result.current.errors).toEqual({ first_name: "", last_name: "", email: "", bio: "" });
+        expect(result.current.errors).toEqual({
+            first_name: "",
+            last_name: "",
+            email: "",
+            bio: "",
+        });
         expect(result.current.formError).toBe("");
     });
 
@@ -159,7 +164,12 @@ describe("useProfileView", () => {
             expect(result.current.errors.first_name).toBe("First name is required");
             act(() => result.current.onReset());
             expect(result.current.formData.first_name).toBe("Test");
-            expect(result.current.errors).toEqual({ first_name: "", last_name: "", email: "", bio: "" });
+            expect(result.current.errors).toEqual({
+                first_name: "",
+                last_name: "",
+                email: "",
+                bio: "",
+            });
             expect(result.current.formError).toBe("");
         });
     });
