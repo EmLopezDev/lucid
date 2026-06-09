@@ -1,6 +1,6 @@
 import { vi, describe, it, expect, beforeEach } from "vitest";
-import { clearDatabase } from "../helpers/db";
-import { createAuthenticatedAgent } from "../helpers/auth";
+import { clearDatabase } from "../../../test-helpers/db";
+import { createAuthenticatedAgent } from "../../../test-helpers/auth";
 
 vi.mock("connect-mongo", async () => {
     const session = await import("express-session");

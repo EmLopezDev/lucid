@@ -1,8 +1,8 @@
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import request from "supertest";
-import app from "../../app";
-import { clearDatabase } from "../helpers/db";
-import { verifyTestUser } from "../helpers/auth";
+import app from "../../../app";
+import { clearDatabase } from "../../../test-helpers/db";
+import { verifyTestUser } from "../../../test-helpers/auth";
 
 vi.mock("connect-mongo", async () => {
     const session = await import("express-session");

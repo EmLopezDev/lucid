@@ -1,9 +1,9 @@
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import request from "supertest";
-import app from "../../app";
-import { clearDatabase } from "../helpers/db";
-import { sendPasswordResetEmail } from "../../services/email";
-import { getResetToken } from "../helpers/auth";
+import app from "../../../app";
+import { clearDatabase } from "../../../test-helpers/db";
+import { sendPasswordResetEmail } from "../../../services/email";
+import { getResetToken } from "../../../test-helpers/auth";
 
 vi.mock("connect-mongo", async () => {
     const session = await import("express-session");
@@ -14,7 +14,7 @@ vi.mock("connect-mongo", async () => {
     };
 });
 
-vi.mock("../../services/email", () => ({
+vi.mock("../../../services/email", () => ({
     sendPasswordResetEmail: vi.fn().mockResolvedValue(undefined),
     sendEmailVerificationEmail: vi.fn().mockResolvedValue(undefined),
 }));

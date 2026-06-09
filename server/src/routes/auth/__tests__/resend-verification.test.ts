@@ -6,10 +6,10 @@ vi.mock("connect-mongo", async () => {
 });
 
 import request from "supertest";
-import app from "../../app";
-import { clearDatabase } from "../helpers/db";
-import { getVerificationToken, verifyTestUser } from "../helpers/auth";
-import { sendEmailVerificationEmail } from "../../services/email";
+import app from "../../../app";
+import { clearDatabase } from "../../../test-helpers/db";
+import { getVerificationToken, verifyTestUser } from "../../../test-helpers/auth";
+import { sendEmailVerificationEmail } from "../../../services/email";
 
 const testUser = {
     first_name: "Test",
@@ -35,17 +35,13 @@ describe("POST /api/v1/auth/resend-verification", () => {
     it("sends a new verification email", async () => {
         const callsBefore = vi.mocked(sendEmailVerificationEmail).mock.calls.length;
 
-        await request(app)
-            .post("/api/v1/auth/resend-verification")
-            .send({ email: testUser.email });
+        await request(app).post("/api/v1/auth/resend-verification").send({ email: testUser.email });
 
         expect(vi.mocked(sendEmailVerificationEmail).mock.calls.length).toBe(callsBefore + 1);
     });
 
     it("new token from resend works for verification", async () => {
-        await request(app)
-            .post("/api/v1/auth/resend-verification")
-            .send({ email: testUser.email });
+        await request(app).post("/api/v1/auth/resend-verification").send({ email: testUser.email });
 
         const newToken = getVerificationToken();
         const res = await request(app).get(`/api/v1/auth/verify-email?token=${newToken}`);
@@ -85,9 +81,7 @@ describe("POST /api/v1/auth/resend-verification", () => {
         await verifyTestUser(testUser.email);
         const callsBefore = vi.mocked(sendEmailVerificationEmail).mock.calls.length;
 
-        await request(app)
-            .post("/api/v1/auth/resend-verification")
-            .send({ email: testUser.email });
+        await request(app).post("/api/v1/auth/resend-verification").send({ email: testUser.email });
 
         expect(vi.mocked(sendEmailVerificationEmail).mock.calls.length).toBe(callsBefore);
     });
@@ -101,9 +95,7 @@ describe("POST /api/v1/auth/resend-verification", () => {
     });
 
     it("returns 400 when email is missing", async () => {
-        const res = await request(app)
-            .post("/api/v1/auth/resend-verification")
-            .send({});
+        const res = await request(app).post("/api/v1/auth/resend-verification").send({});
 
         expect(res.status).toBe(400);
     });

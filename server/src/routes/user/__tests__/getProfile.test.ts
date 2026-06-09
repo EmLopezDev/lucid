@@ -1,14 +1,14 @@
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import request from "supertest";
-import app from "../../app";
+import app from "../../../app";
 
 vi.mock("connect-mongo", async () => {
     const session = await import("express-session");
     return { default: { create: () => new session.default.MemoryStore() } };
 });
 
-import { clearDatabase } from "../helpers/db";
-import { createAuthenticatedAgent } from "../helpers/auth";
+import { clearDatabase } from "../../../test-helpers/db";
+import { createAuthenticatedAgent } from "../../../test-helpers/auth";
 
 let agent: Awaited<ReturnType<typeof createAuthenticatedAgent>>["agent"];
 let userId: string;

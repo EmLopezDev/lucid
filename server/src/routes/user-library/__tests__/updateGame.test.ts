@@ -5,8 +5,8 @@ vi.mock("connect-mongo", async () => {
     return { default: { create: () => new session.default.MemoryStore() } };
 });
 
-import { clearDatabase } from "../helpers/db";
-import { createAuthenticatedAgent } from "../helpers/auth";
+import { clearDatabase } from "../../../test-helpers/db";
+import { createAuthenticatedAgent } from "../../../test-helpers/auth";
 
 const testGame = {
     title: "The Last of Us",

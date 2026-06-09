@@ -6,8 +6,8 @@ vi.mock("connect-mongo", async () => {
 });
 
 import request from "supertest";
-import app from "../../app";
-import { clearDatabase } from "../helpers/db";
+import app from "../../../app";
+import { clearDatabase } from "../../../test-helpers/db";
 
 const userId = "test-user-id";
 

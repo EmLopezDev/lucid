@@ -1,21 +1,21 @@
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import request from "supertest";
-import app from "../../app";
-import { clearDatabase } from "../helpers/db";
-import { createAuthenticatedAgent } from "../helpers/auth";
+import app from "../../../app";
+import { clearDatabase } from "../../../test-helpers/db";
+import { createAuthenticatedAgent } from "../../../test-helpers/auth";
 
 vi.mock("connect-mongo", async () => {
     const session = await import("express-session");
     return { default: { create: () => new session.default.MemoryStore() } };
 });
 
-vi.mock("../../services/rawg", () => ({
+vi.mock("../../../services/rawg", () => ({
     searchGame: vi.fn(),
 }));
 
-import { searchGame } from "../../services/rawg";
+import { searchGame } from "../../../services/rawg";
 
-const mockResults = [
+const mockResults: Awaited<ReturnType<typeof searchGame>> = [
     {
         id: 3498,
         title: "Grand Theft Auto V",

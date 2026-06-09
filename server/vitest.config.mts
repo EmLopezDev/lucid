@@ -4,8 +4,8 @@ export default defineConfig({
     test: {
         globals: true,
         environment: "node",
-        globalSetup: "./src/tests/helpers/globalSetup.ts",
-        setupFiles: ["./src/tests/helpers/setup.ts"],
+        globalSetup: "./src/test-helpers/globalSetup.ts",
+        setupFiles: ["./src/test-helpers/setup.ts"],
         fileParallelism: false,
         exclude: ["dist/**", "node_modules/**"],
     },

@@ -6,9 +6,9 @@ vi.mock("connect-mongo", async () => {
 });
 
 import request from "supertest";
-import app from "../../app";
-import { clearDatabase } from "../helpers/db";
-import { createAuthenticatedAgent } from "../helpers/auth";
+import app from "../../../app";
+import { clearDatabase } from "../../../test-helpers/db";
+import { createAuthenticatedAgent } from "../../../test-helpers/auth";
 
 let agent: Awaited<ReturnType<typeof createAuthenticatedAgent>>["agent"];
 let userId: string;

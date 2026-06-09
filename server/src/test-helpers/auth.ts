@@ -1,8 +1,8 @@
 import { vi } from "vitest";
 import request from "supertest";
-import app from "../../app";
-import { sendPasswordResetEmail, sendEmailVerificationEmail } from "../../services/email";
-import { UserModel } from "../../models/user/user.mongo";
+import app from "../app";
+import { sendPasswordResetEmail, sendEmailVerificationEmail } from "../services/email";
+import { UserModel } from "../models/user/user.mongo";
 
 const testUser = {
     first_name: "Test",
