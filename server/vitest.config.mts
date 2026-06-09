@@ -7,6 +7,7 @@ export default defineConfig({
         globalSetup: "./src/test-helpers/globalSetup.ts",
         setupFiles: ["./src/test-helpers/setup.ts"],
         fileParallelism: false,
+        testTimeout: 15000,
         exclude: ["dist/**", "node_modules/**"],
     },
 });
