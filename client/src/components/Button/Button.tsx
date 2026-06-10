@@ -5,7 +5,7 @@ import { type IconName } from "@components/Icon";
 
 type ButtonBase = {
     type?: "submit" | "button" | "reset";
-    variant?: "primary" | "secondary" | "danger" | "transparent";
+    variant?: "primary" | "secondary" | "danger" | "success" | "transparent" | "outline";
     buttonSize?: "x-small" | "small" | "medium" | "large";
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
