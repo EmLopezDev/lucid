@@ -14,14 +14,41 @@
     }
 
     &__title {
-        font-size: u.$font-size-2xl;
+        font-size: u.$font-size-3xl;
         font-weight: 700;
         color: var(--color-text-primary);
     }
 
+    &__empty-state {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: u.em(12);
+        padding: u.em(48) u.em(24);
+
+        &__icon {
+            font-size: u.rem(48);
+            opacity: 0.4;
+            margin-block-end: u.em(8);
+        }
+
+        &__title {
+            font-size: u.$font-size-2xl;
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        &__sub {
+            font-size: u.$font-size-xl;
+            color: var(--color-text-tertiary);
+            margin-block-end: u.em(8);
+        }
+    }
+
     &__search {
         width: 100%;
-        margin-block-end: u.em(24);
+        margin-block-end: u.em(32);
     }
 
     &__cards {
