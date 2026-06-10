@@ -17,16 +17,19 @@
     }
 
     &__banner {
+        height: u.em(160);
         width: 100%;
-        min-height: u.em(160);
     }
 
     &__image {
         width: inherit;
+        height: inherit;
+        object-fit: cover;
+        display: block;
     }
 
     &__gradient {
-        min-height: u.em(160);
+        height: u.em(160);
         position: relative;
 
         &::after {
@@ -43,34 +46,82 @@
         }
     }
 
-    &__content {
+    &__header {
         display: flex;
-        flex-direction: column;
-        padding: u.em(20);
+        align-items: flex-end;
+        gap: 0.75rem;
+        padding: 0 1.25rem;
+        margin-top: u.em(-28);
         position: relative;
+        z-index: 1;
+        margin-bottom: 0.75rem;
     }
 
     &__avatar {
         background-color: var(--color-bg-surface);
-        width: u.em(50);
-        height: u.em(50);
+        width: u.em(56);
+        height: u.em(56);
         border-radius: 50%;
         border: 1px solid var(--color-border);
         display: flex;
         justify-content: center;
         align-items: center;
-        position: absolute;
-        top: u.em(-30);
-        left: u.em(20);
+        position: relative;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        padding: 0 u.em(20) u.em(20);
     }
 
     &__name {
         font-size: u.$font-size-2xl;
         color: var(--color-text-primary);
-        width: u.em(260);
+        font-weight: 700;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-        margin-block-end: u.em(6);
+        margin-block-end: u.em(12);
+        letter-spacing: -0.01em;
+    }
+
+    &__stats {
+        display: flex;
+        flex-direction: column;
+        gap: u.em(8);
+        margin-block-end: u.em(16);
+        flex: 1;
+    }
+
+    &__stat {
+        display: flex;
+        align-items: center;
+        gap: u.em(8);
+        font-size: u.$font-size-lg;
+        color: var(--color-text-secondary);
+    }
+
+    &__pulse-dot {
+        width: u.em(8);
+        height: u.em(8);
+        border-radius: 50%;
+        background: var(--color-green);
+        flex-shrink: 0;
+        animation: pulse-dot 2s ease-in-out infinite;
+    }
+}
+
+@keyframes pulse-dot {
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.4;
+        transform: scale(0.75);
     }
 }

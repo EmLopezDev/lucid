@@ -23,6 +23,9 @@ import {
     Library,
     Settings,
     Tag,
+    Users,
+    Activity,
+    Loader,
 } from "lucide-react";
 
 export const iconRegistry = {
@@ -49,6 +52,9 @@ export const iconRegistry = {
     library: Library,
     settings: Settings,
     tag: Tag,
+    users: Users,
+    activity: Activity,
+    loader: Loader,
 } satisfies Record<string, LucideIcon>;
 
 export type IconName = keyof typeof iconRegistry;
