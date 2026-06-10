@@ -12,12 +12,12 @@ import {
     type UserLibraryDataType,
     type PostUserLibraryGameBodyType,
     type PatchUserLibraryGameBodyType,
-} from "../../../../packages/types/UserLibrary";
+} from "@lucid/types";
 import {
     type StatusFilterOptionType,
     type StatusOptionType,
     type SortOptionType,
-} from "../../../../packages/types/SelectOptionsTypes.ts";
+} from "../../types/SelectOptionsTypes";
 import { sortOptions, statusFilterOptions, statusOptions } from "@lib/form";
 import { filterBySort, filterByStatus, filterByTitle } from "@lib/filter";
 import { useUserLibraryContext } from "@contexts/UserLibraryContext/useUserLibraryContext";

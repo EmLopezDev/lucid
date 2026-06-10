@@ -3,14 +3,8 @@ import Input from "@components/Input";
 import Select from "@components/Select";
 import DatePicker from "@components/DatePicker";
 import Textarea from "@components/Textarea";
-import {
-    type GenreType,
-    type StatusType,
-    type GenreOptionType,
-    type PlatformOptionType,
-    type StatusOptionType,
-    type PlatformType,
-} from "../../../../packages/types";
+import { type GenreType, type StatusType, type PlatformType } from "@lucid/types";
+import { type GenreOptionType, type PlatformOptionType, type StatusOptionType } from "../../types/SelectOptionsTypes";
 import { genreOptions, platformOptions, statusOptions } from "@lib/form";
 
 export type GameFormData = {

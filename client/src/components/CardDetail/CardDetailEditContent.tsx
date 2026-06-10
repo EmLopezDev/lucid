@@ -1,7 +1,7 @@
 import { useState, useCallback, type SubmitEvent } from "react";
 import Form from "@components/Form";
 import GameFormFields, { type GameFormData } from "@components/GameFormFields";
-import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
+import { type UserLibraryDataType } from "@lucid/types";
 import { toInputDate } from "@lib/date";
 
 type CardDetailEditContentProps = {

@@ -1,4 +1,4 @@
-import { type GenreType } from "./UserLibrary";
+import { type GenreType } from "@lucid/types";
 
 export type GameSearchResult = {
     id: number;

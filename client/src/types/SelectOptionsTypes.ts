@@ -1,4 +1,4 @@
-import { type StatusType, type PlatformType, type GenreType } from "./UserLibrary";
+import { type StatusType, type PlatformType, type GenreType } from "@lucid/types";
 
 export interface SelectOptionType<V = string, L extends string = string> {
     value: V;

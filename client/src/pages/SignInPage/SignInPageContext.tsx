@@ -7,7 +7,7 @@ import {
     type SubmitEvent,
 } from "react";
 import { useNavigate } from "react-router";
-import { type UserSigninType } from "../../../../packages/types";
+import { type UserSigninType } from "@lucid/types";
 import { SignInPageContext } from "./useSignInPageContext";
 import { emailCheck } from "@lib/string";
 import { useUserContext } from "@contexts/UserContext/useUserContext";

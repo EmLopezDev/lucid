@@ -12,11 +12,7 @@ import ConfirmModal from "@components/ConfirmModal";
 import AddGameForm from "@components/AddGameForm";
 import { UserLibraryPageProvider } from "./UserLibraryPageContext";
 import { useUserLibraryPageContext } from "./useUserLibraryPageContext";
-import {
-    type StatusFilterType,
-    type SortValueType,
-    type SortLabelType,
-} from "../../../../packages/types";
+import { type StatusFilterType, type SortValueType, type SortLabelType } from "../../types/SelectOptionsTypes";
 import { SkeletonLoader, SkeletonCard, SkeletonCardDetail } from "@components/Skeleton";
 
 const UserLibraryPageContent = () => {

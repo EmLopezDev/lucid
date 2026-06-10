@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import CardDetail from "./CardDetail";
-import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
+import { type UserLibraryDataType } from "@lucid/types";
 
 const mockGame: UserLibraryDataType = {
     _id: "507f1f77bcf86cd799439011",

@@ -1,4 +1,5 @@
-import type { UserLibraryDataType, StatusType, SortValueType } from "@lucid/types";
+import type { UserLibraryDataType, StatusType } from "@lucid/types";
+import type { SortValueType } from "../types/SelectOptionsTypes";
 
 export const filterByTitle = (data: UserLibraryDataType[], title: string) => {
     if (!title) return data;

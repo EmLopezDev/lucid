@@ -6,7 +6,7 @@ import {
     type SortOptionType,
     type PlatformOptionType,
     type GenreOptionType,
-} from "../../../packages/types";
+} from "../types/SelectOptionsTypes";
 
 export type FormRules<T> = Record<keyof T, [(v: string) => boolean, string][]>;
 

@@ -1,5 +1,5 @@
 import { type SetStateAction } from "react";
-import type { UserLibraryDataType } from "../../../../packages/types/UserLibrary";
+import type { UserLibraryDataType } from "@lucid/types";
 import Badge from "@components/Badge";
 import Button from "@components/Button";
 import HoursBar from "@components/HoursBar";
