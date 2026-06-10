@@ -2,8 +2,8 @@ import { useCallback } from "react";
 import { Link, NavLink, useLocation } from "react-router";
 import { SignInPageProvider } from "./SignInPageContext";
 import { useSignInPageContext } from "./useSignInPageContext";
-import Form from "@components/Form/Form";
-import Input from "@components/Input/Input";
+import Form from "@components/Form";
+import Input from "@components/Input";
 
 const SignInPageContent = () => {
     const {

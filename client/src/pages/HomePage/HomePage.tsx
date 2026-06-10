@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
-import Button from "@components/Button/Button";
-import Badge from "@components/Badge/Badge";
+import Button from "@components/Button";
+import Badge from "@components/Badge";
 import { STEAM_CDN, ROW_ONE, ROW_TWO } from "./homePageGames";
 import { useUserContext } from "@contexts/UserContext/useUserContext";
 

@@ -1,6 +1,6 @@
 import { NavLink } from "react-router";
 import { type UserLibraryDataType } from "@lucid/types";
-import Badge from "@components/Badge/Badge";
+import Badge from "@components/Badge";
 import { capitalizeString } from "@lib/string";
 import { cx } from "css-variants";
 import { useCoverImage } from "@hooks/useCoverImage";

@@ -1,5 +1,5 @@
 import { NavLink, Link, Outlet } from "react-router";
-import Icon from "@components/Icon/Icon";
+import Icon from "@components/Icon";
 
 const AccountSettingsPage = () => {
     return (

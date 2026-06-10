@@ -1,10 +1,11 @@
 import { useState, useCallback, type SubmitEvent } from "react";
-import Form from "@components/Form/Form";
-import GameFormFields, { type GameFormData } from "@components/GameFormFields/GameFormFields";
-import SearchInput from "@components/SearchInput/SearchInput";
+import Form from "@components/Form";
+import GameFormFields, { type GameFormData } from "@components/GameFormFields";
+import SearchInput from "@components/SearchInput";
 import { useGameSearch } from "@hooks/useGameSearch";
-import { type PostUserLibraryGameBodyType } from "../../../../packages/types/UserLibrary";
-import { type GameSearchResult, type GenreType } from "../../../../packages/types";
+import { type PostUserLibraryGameBodyType } from "@lucid/types";
+import { type GenreType } from "@lucid/types";
+import { type GameSearchResult } from "../../types/GameSearch";
 import { genreOptions, platformOptions } from "@lib/form";
 
 const emptyFormData: GameFormData = {

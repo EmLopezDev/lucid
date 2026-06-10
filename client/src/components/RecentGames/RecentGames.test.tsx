@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 import RecentGames from "./RecentGames";
-import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
+import { type UserLibraryDataType } from "@lucid/types";
 
 function makeGame(overrides: Partial<UserLibraryDataType> = {}): UserLibraryDataType {
     return {

@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router";
 import { ResetPasswordPageProvider } from "./ResetPasswordPageContext";
 import { useResetPasswordPageContext } from "./useResetPasswordContext";
-import Form from "@components/Form/Form";
-import Input from "@components/Input/Input";
+import Form from "@components/Form";
+import Input from "@components/Input";
 
 const ResetPasswordPageContent = () => {
     const { errors, formDataError, isSuccess, onPasswordChange, onSubmitForm, onResetForm } =

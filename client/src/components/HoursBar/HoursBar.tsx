@@ -1,5 +1,5 @@
 import { cx } from "css-variants";
-import { type StatusType } from "../../../../packages/types";
+import { type StatusType } from "@lucid/types";
 
 type HoursBarProps = {
     hours: number | null;

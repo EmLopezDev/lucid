@@ -1,5 +1,5 @@
 import { Outlet } from "react-router";
-import AppNav from "@components/AppNav/AppNav";
+import AppNav from "@components/AppNav";
 
 type AppLayoutType = {
     isUserAuthenticated: boolean;

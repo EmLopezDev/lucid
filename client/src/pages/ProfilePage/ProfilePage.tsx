@@ -8,12 +8,12 @@ import { useCoverImage } from "@hooks/useCoverImage";
 import { useGenreBreakdown } from "./useGenreBreakdown";
 import { useSpendingChart } from "./useSpendingChart";
 import { useStatusBreakdown } from "./useStatusBreakdown";
-import Icon from "@components/Icon/Icon";
-import Badge from "@components/Badge/Badge";
-import GenreBreakdownChart from "@components/GenreBreakdownChart/GenreBreakdownChart";
-import StatusBreakdownChart from "@components/StatusBreakdownChart/StatusBreakdownChart";
-import SpendingChart from "@components/SpendingChart/SpendingChart";
-import HeroStats from "@components/HeroStats/HeroStats";
+import Icon from "@components/Icon";
+import Badge from "@components/Badge";
+import GenreBreakdownChart from "@components/GenreBreakdownChart";
+import StatusBreakdownChart from "@components/StatusBreakdownChart";
+import SpendingChart from "@components/SpendingChart";
+import HeroStats from "@components/HeroStats";
 
 type TabIdType = "stats" | "playing" | "completed" | "recent" | "expenditure";
 

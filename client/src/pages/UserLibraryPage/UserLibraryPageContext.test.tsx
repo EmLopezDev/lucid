@@ -4,7 +4,7 @@ import { type ReactNode } from "react";
 import { UserLibraryPageProvider } from "./UserLibraryPageContext";
 import { useUserLibraryPageContext } from "./useUserLibraryPageContext";
 import { UserLibraryProvider } from "@contexts/UserLibraryContext/UserLibraryContext";
-import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
+import { type UserLibraryDataType } from "@lucid/types";
 
 const mockCurrentUser = { _id: "user-1", first_name: "John", last_name: "Doe" };
 

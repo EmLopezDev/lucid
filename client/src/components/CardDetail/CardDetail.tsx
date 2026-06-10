@@ -3,12 +3,12 @@ import { useCoverImage } from "@hooks/useCoverImage";
 import {
     type UserLibraryDataType,
     type PatchUserLibraryGameBodyType,
-} from "../../../../packages/types/UserLibrary";
+} from "@lucid/types";
 import { objectCopy } from "@lib/generic";
-import { type GameFormData } from "@components/GameFormFields/GameFormFields";
+import { type GameFormData } from "@components/GameFormFields";
 import CardDetailContent from "./CardDetailContent";
 import CardDetailEditContent from "./CardDetailEditContent";
-import Button from "@components/Button/Button";
+import Button from "@components/Button";
 
 type CardDetailType = {
     data: UserLibraryDataType;

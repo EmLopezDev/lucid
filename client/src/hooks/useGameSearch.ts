@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDebounce } from "@lib/debounce";
 import { API_URL } from "@config/api";
-import { type GameSearchResult } from "@lucid/types";
+import { type GameSearchResult } from "../types/GameSearch";
 
 type UseGameSearchResultType = {
     results: GameSearchResult[];

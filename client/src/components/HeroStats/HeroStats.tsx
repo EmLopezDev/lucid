@@ -1,5 +1,5 @@
-import Icon from "@components/Icon/Icon";
-import { type IconName } from "@components/Icon/IconMap.ts";
+import Icon from "@components/Icon";
+import { type IconName } from "@components/Icon";
 import { useCountUp } from "@hooks/useCountUp.ts";
 import { capitalizeString } from "@lib/string";
 

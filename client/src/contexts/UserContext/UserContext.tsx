@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback, useEffect, type ReactNode } from "react";
 import { UserContext } from "./useUserContext";
-import { type UserType } from "../../../../packages/types";
+import { type UserType } from "@lucid/types";
 import { API_URL } from "@config/api";
 import { toast } from "sonner";
 

@@ -9,7 +9,7 @@ import {
 } from "react";
 import { nameCheck, emailCheck } from "@lib/string";
 import { RegisterPageContext } from "./useRegisterPageContext";
-import { type UserRegisterType } from "../../../../packages/types";
+import { type UserRegisterType } from "@lucid/types";
 import { objectCopy } from "@lib/generic";
 import { isFormDataValid, type FormRules, hasErrors } from "@lib/form";
 import { API_URL } from "@config/api";

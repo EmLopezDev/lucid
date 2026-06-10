@@ -1,9 +1,9 @@
-import { type UserLibraryDataType } from "../../../../packages/types/UserLibrary";
-import Badge from "@components/Badge/Badge";
-import HoursBar from "@components/HoursBar/HoursBar";
-import Icon from "@components/Icon/Icon";
+import { type UserLibraryDataType } from "@lucid/types";
+import Badge from "@components/Badge";
+import HoursBar from "@components/HoursBar";
+import Icon from "@components/Icon";
 import { cx } from "css-variants";
-import StarRating from "@components/StarRating/StarRating";
+import StarRating from "@components/StarRating";
 import { capitalizeString } from "@lib/string";
 import { useCoverImage } from "@hooks/useCoverImage";
 
