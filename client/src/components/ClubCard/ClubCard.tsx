@@ -1,5 +1,4 @@
-import type { GamingClubType } from "@lucid/types";
-import { type UserType } from "@lucid/types";
+import { type GamingClubType, type UserType } from "@lucid/types";
 import Button from "@components/Button/Button";
 import Icon from "@components/Icon";
 
@@ -9,21 +8,24 @@ type ClubCardType = {
 };
 
 const ClubCard = ({ club, currentUser }: ClubCardType) => {
-    const joinButton = (members: string[]) => {
-        if (currentUser && members.includes(currentUser._id)) {
-            return (
-                <Button
-                    icon="check"
-                    iconPosition="left"
-                    buttonSize="small"
-                >
-                    Joined
-                </Button>
-            );
-        } else {
-            return <Button buttonSize="small">Join</Button>;
-        }
-    };
+    const joinButton =
+        currentUser && club.members.includes(currentUser._id) ? (
+            <Button
+                icon="check"
+                iconPosition="left"
+                buttonSize="small"
+                variant="success"
+            >
+                Joined
+            </Button>
+        ) : (
+            <Button
+                variant="outline"
+                buttonSize="small"
+            >
+                Join
+            </Button>
+        );
 
     return (
         <article
@@ -65,7 +67,7 @@ const ClubCard = ({ club, currentUser }: ClubCardType) => {
                                     size="small"
                                     color="muted"
                                 />
-                                <span className="club-card__current-game__none">No game set</span>
+                                <span className="club-card__no-game">No game set</span>
                             </>
                         )}
                     </div>
@@ -86,7 +88,7 @@ const ClubCard = ({ club, currentUser }: ClubCardType) => {
                         <span>{`${club.members.length} ${club.members.length === 1 ? "member" : "members"}`}</span>
                     </div>
                 </div>
-                {joinButton(club.members)}
+                {joinButton}
             </div>
         </article>
     );

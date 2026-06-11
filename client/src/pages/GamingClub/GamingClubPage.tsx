@@ -3,7 +3,7 @@ import { GamingClubPageProvider } from "./GamingClubPageContext";
 import { useUserContext } from "@contexts/UserContext/useUserContext";
 import Input from "@components/Input/Input";
 import Button from "@components/Button/Button";
-import ClubCard from "@components/ClubCard/ClubCard";
+import ClubCard from "@components/ClubCard";
 import { SkeletonCard } from "@components/Skeleton";
 
 const GamingClubPageContent = () => {
@@ -52,6 +52,7 @@ const GamingClubPageContent = () => {
                     <div className="gaming-club__cards">
                         {clubData.map((club) => (
                             <ClubCard
+                                key={club._id}
                                 club={club}
                                 currentUser={currentUser}
                             />

@@ -12,8 +12,8 @@
         box-shadow 150ms ease;
 
     &:hover {
-        border-color: var(--color-blue);
-        box-shadow: 0 0 0 1px var(--color-blue);
+        border-color: var(--color-brand);
+        box-shadow: 0 0 0 1px var(--color-brand);
     }
 
     &__banner {
@@ -110,6 +110,10 @@
         background: var(--color-green);
         flex-shrink: 0;
         animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    &__no-game {
+        color: var(--color-text-tertiary);
     }
 }
 
