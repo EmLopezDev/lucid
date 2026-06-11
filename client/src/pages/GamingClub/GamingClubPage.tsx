@@ -7,7 +7,8 @@ import ClubCard from "@components/ClubCard";
 import { SkeletonCard } from "@components/Skeleton";
 
 const GamingClubPageContent = () => {
-    const { isLoading, clubData } = useGamingClubPageContext();
+    const { isLoading, error, filteredClubData, handleOnSearchClub, refetch } =
+        useGamingClubPageContext();
     const { currentUser } = useUserContext();
 
     return (
@@ -23,34 +24,42 @@ const GamingClubPageContent = () => {
                     </Button>
                 </span>
             </div>
-            {isLoading ? (
-                <div className="gaming-club__cards">
-                    {Array.from({ length: 9 }).map((_, i) => (
-                        <SkeletonCard key={i} />
-                    ))}
+            <>
+                <div className="gaming-club__search">
+                    <Input
+                        placeholder="Search..."
+                        onChange={handleOnSearchClub}
+                    />
                 </div>
-            ) : !clubData.length ? (
-                <div className="gaming-club__empty-state">
-                    <span className="gaming-club__empty-state__icon">🎮</span>
-                    <span className="gaming-club__empty-state__title">No Clubs Yet</span>
-                    <p className="gaming-club__empty-state__sub">Be the first to create one</p>
-                    <Button
-                        icon="plus"
-                        iconPosition="left"
-                    >
-                        Create Club
-                    </Button>
-                </div>
-            ) : (
-                <>
-                    <div className="gaming-club__search">
-                        <Input
-                            placeholder="Search..."
-                            onChange={() => {}}
-                        />
-                    </div>
+                {isLoading ? (
                     <div className="gaming-club__cards">
-                        {clubData.map((club) => (
+                        {Array.from({ length: 9 }).map((_, i) => (
+                            <SkeletonCard key={i} />
+                        ))}
+                    </div>
+                ) : error ? (
+                    <div className="gaming-club__empty-state">
+                        <span className="gaming-club__empty-state__title">
+                            Failed to load clubs
+                        </span>
+                        <p className="gaming-club__empty-state__sub">{error}</p>
+                        <Button onClick={refetch}>Try again</Button>
+                    </div>
+                ) : !filteredClubData.length ? (
+                    <div className="gaming-club__empty-state">
+                        <span className="gaming-club__empty-state__icon">🎮</span>
+                        <span className="gaming-club__empty-state__title">No Clubs Yet</span>
+                        <p className="gaming-club__empty-state__sub">Be the first to create one</p>
+                        <Button
+                            icon="plus"
+                            iconPosition="left"
+                        >
+                            Create Club
+                        </Button>
+                    </div>
+                ) : (
+                    <div className="gaming-club__cards">
+                        {filteredClubData.map((club) => (
                             <ClubCard
                                 key={club._id}
                                 club={club}
@@ -58,8 +67,8 @@ const GamingClubPageContent = () => {
                             />
                         ))}
                     </div>
-                </>
-            )}
+                )}
+            </>
         </section>
     );
 };

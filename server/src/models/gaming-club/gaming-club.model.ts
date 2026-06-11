@@ -10,7 +10,7 @@ export const getGamingClubById = async (clubId: string) => {
 };
 
 export const getAllGamingClubs = async () => {
-    return await GamingClubModel.find({ deleted_at: null });
+    return await GamingClubModel.find({ visibility: "public", deleted_at: null });
 };
 
 export const createGamingClub = async (userId: string, data: PostGamingClubType) => {
