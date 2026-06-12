@@ -16,6 +16,7 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
     const [error, setError] = useState<string | null>(null);
     const [clubData, setClubData] = useState<GamingClubType[]>([]);
     const [filterData, setFilterData] = useState({ searchName: "" });
+    const [fetchTrigger, setFetchTrigger] = useState(0);
 
     const filteredClubData = useMemo(() => {
         if (!filterData.searchName) return clubData;
@@ -23,8 +24,6 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
             return club.name.toLowerCase().includes(filterData.searchName.toLowerCase());
         });
     }, [clubData, filterData]);
-
-    const [fetchTrigger, setFetchTrigger] = useState(0);
 
     const handleOnSearchClub = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setFilterData((prevState) => ({ ...prevState, searchName: event.target.value }));
