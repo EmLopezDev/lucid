@@ -68,7 +68,7 @@ describe("filterByTitle", () => {
         expect(filterByTitle(games, "")).toHaveLength(games.length);
     });
 
-    it("filters by prefix match (case-insensitive)", () => {
+    it("filters by substring match (case-insensitive)", () => {
         const result = filterByTitle(games, "zel");
         expect(result).toHaveLength(2);
         expect(result.map((g) => g.title)).toEqual(["Zelda", "zelda breath"]);
@@ -82,8 +82,8 @@ describe("filterByTitle", () => {
         expect(filterByTitle(games, "xyz")).toHaveLength(0);
     });
 
-    it("does not match mid-string — only prefix", () => {
-        expect(filterByTitle(games, "Ring")).toHaveLength(0);
+    it("matches mid-string", () => {
+        expect(filterByTitle(games, "Ring")).toHaveLength(1);
     });
 });
 
