@@ -112,7 +112,7 @@ const UserLibraryPageContent = () => {
         (filters.sortValue.value !== "recently" ? 1 : 0);
 
     return (
-        <div className="user-library-page">
+        <section className="user-library-page">
             <div className="user-library-page__controls">
                 <div className="user-library-page__controls-right">
                     <Input
@@ -243,7 +243,7 @@ const UserLibraryPageContent = () => {
                 onCancel={onCancelDelete}
                 onConfirm={onConfirmDelete}
             />
-        </div>
+        </section>
     );
 };
 

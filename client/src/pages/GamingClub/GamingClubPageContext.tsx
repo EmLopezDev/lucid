@@ -2,12 +2,16 @@ import { useMemo, useState, useEffect, useCallback, type ReactNode, type ChangeE
 import { type GamingClubType } from "@lucid/types";
 import { GamingClubPageContext } from "./useGamingClubPageContext";
 import { API_URL } from "@config/api";
+import { filterByName } from "@lib/filter";
 
 export type GamingClubPageContextType = {
     isLoading: boolean;
     error: string | null;
     filteredClubData: GamingClubType[];
+    isCreateClubModalOpen: boolean;
     handleOnSearchClub: (event: ChangeEvent<HTMLInputElement>) => void;
+    onOpenCreateClubModal: () => void;
+    onCloseCreateClubModal: () => void;
     refetch: () => void;
 };
 
@@ -16,13 +20,11 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
     const [error, setError] = useState<string | null>(null);
     const [clubData, setClubData] = useState<GamingClubType[]>([]);
     const [filterData, setFilterData] = useState({ searchName: "" });
+    const [isCreateClubModalOpen, setIsCreateClubModalOpen] = useState(false);
     const [fetchTrigger, setFetchTrigger] = useState(0);
 
     const filteredClubData = useMemo(() => {
-        if (!filterData.searchName) return clubData;
-        return clubData.filter((club) => {
-            return club.name.toLowerCase().includes(filterData.searchName.toLowerCase());
-        });
+        return filterByName(clubData, filterData.searchName);
     }, [clubData, filterData]);
 
     const handleOnSearchClub = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -30,6 +32,9 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
     }, []);
 
     const refetch = useCallback(() => setFetchTrigger((n) => n + 1), []);
+
+    const onOpenCreateClubModal = useCallback(() => setIsCreateClubModalOpen(true), []);
+    const onCloseCreateClubModal = useCallback(() => setIsCreateClubModalOpen(false), []);
 
     useEffect(() => {
         const fetchGamingClubData = async () => {
@@ -56,11 +61,23 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
         () => ({
             isLoading,
             error,
+            isCreateClubModalOpen,
             filteredClubData,
             handleOnSearchClub,
+            onOpenCreateClubModal,
+            onCloseCreateClubModal,
             refetch,
         }),
-        [isLoading, error, filteredClubData, handleOnSearchClub, refetch],
+        [
+            isLoading,
+            error,
+            isCreateClubModalOpen,
+            filteredClubData,
+            handleOnSearchClub,
+            onOpenCreateClubModal,
+            onCloseCreateClubModal,
+            refetch,
+        ],
     );
 
     return (

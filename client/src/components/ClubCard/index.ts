@@ -1,1 +1,1 @@
-export { default } from "./ClubCard.tsx";
+export { default } from "./ClubCard";
