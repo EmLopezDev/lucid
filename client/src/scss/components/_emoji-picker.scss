@@ -1,0 +1,69 @@
+@use "../utils/" as u;
+
+.emoji-picker {
+    display: flex;
+    flex-direction: column;
+    gap: u.rem(6);
+    position: relative;
+
+    &__label {
+        font-size: u.$font-size-lg;
+        font-weight: 500;
+        color: var(--color-text-secondary);
+    }
+
+    &__trigger {
+        width: u.em(52);
+        padding: u.em(14) u.em(12);
+        border-radius: u.em(8);
+        border: 1px solid var(--color-border);
+        background-color: var(--color-bg-card);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+            border-color 0.15s ease,
+            background-color 0.15s ease;
+
+        &:hover {
+            border-color: var(--color-brand);
+            background-color: var(--color-bg-card-hover);
+        }
+
+        &[aria-expanded="true"] {
+            border-color: var(--color-brand);
+        }
+    }
+
+    &__emoji {
+        font-size: u.$font-size-lg;
+        line-height: 1;
+    }
+
+    &__popover {
+        position: fixed;
+        z-index: 1000;
+        border-radius: u.em(12);
+        overflow: hidden;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+
+        // Override emoji-picker-react defaults to match app theme
+        .EmojiPickerReact {
+            --epr-bg-color: var(--color-bg-card);
+            --epr-category-label-bg-color: var(--color-bg-card);
+            --epr-text-color: var(--color-text-primary);
+            --epr-search-input-bg-color: var(--color-bg-surface);
+            --epr-search-border-color: var(--color-border);
+            --epr-highlight-color: var(--color-brand);
+            --epr-hover-bg-color: var(--color-bg-card-hover);
+            --epr-border-color: var(--color-border);
+            --epr-search-input-text-color: var(--color-text-primary);
+            --epr-search-input-placeholder-color: var(--color-text-secondary);
+            --epr-category-icon-active-color: var(--color-brand);
+
+            border: 1px solid var(--color-border);
+            border-radius: u.em(12);
+        }
+    }
+}

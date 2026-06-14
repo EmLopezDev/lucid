@@ -1,0 +1,84 @@
+@use "../utils/" as u;
+
+.radio-group {
+    display: flex;
+    padding: u.em(12) 0;
+    border: none;
+
+    &--row {
+        flex-direction: row;
+        flex: 1;
+    }
+
+    &--column {
+        flex-direction: column;
+        gap: u.em(12);
+    }
+
+    &__legend {
+        font-size: u.$font-size-lg;
+        font-weight: 500;
+        color: var(--color-text-secondary);
+        margin-block-end: u.em(8);
+        text-transform: capitalize;
+    }
+
+    &__required {
+        color: var(--color-brand);
+        margin-inline-start: u.em(4);
+    }
+
+    &__label {
+        display: flex;
+        align-items: center;
+        gap: u.em(8);
+        flex: 1;
+        text-transform: capitalize;
+        font-size: u.$font-size-lg;
+        color: var(--color-text-primary);
+        cursor: pointer;
+
+        &:hover .radio-group__input {
+            border-color: var(--color-brand);
+        }
+    }
+
+    &__input {
+        outline: none;
+        appearance: none;
+        width: u.em(20);
+        height: u.em(20);
+        border: 2px solid var(--color-border);
+        border-radius: 50%;
+        position: relative;
+        cursor: pointer;
+        display: grid;
+        place-content: center;
+        flex-shrink: 0;
+        transition:
+            border-color 0.15s ease-in-out,
+            box-shadow 0.15s ease-in-out;
+
+        &::before {
+            content: "";
+            width: u.em(10);
+            height: u.em(10);
+            border-radius: 50%;
+            transform: scale(0);
+            transition: transform 0.15s ease-in-out;
+            background-color: var(--color-brand);
+        }
+
+        &:checked {
+            border-color: var(--color-brand);
+
+            &::before {
+                transform: scale(1);
+            }
+        }
+
+        &:focus-visible {
+            box-shadow: 0 0 0 3px rgba(var(--color-brand-rgb), 0.3);
+        }
+    }
+}

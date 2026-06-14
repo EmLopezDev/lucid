@@ -58,3 +58,15 @@
         padding-block-end: u.em(24);
     }
 }
+
+.create-club-form {
+    &__identity {
+        display: flex;
+        align-items: flex-end;
+        gap: u.em(12);
+
+        .input__container {
+            flex: 1;
+        }
+    }
+}
