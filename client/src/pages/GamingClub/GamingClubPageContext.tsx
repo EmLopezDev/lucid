@@ -15,13 +15,13 @@ export type GamingClubPageContextType = {
     isLoading: boolean;
     error: string | null;
     filteredClubData: GamingClubType[];
-    createClub: CreateClubType;
+    createClubData: CreateClubType;
     isCreateClubModalOpen: boolean;
-    handleOnSearchClub: (event: ChangeEvent<HTMLInputElement>) => void;
-    handleOnClubName: (event: ChangeEvent<HTMLInputElement>) => void;
-    handleOnClubAvatar: (value: string) => void;
-    handleOnClubVisibility: (value: string) => void;
-    handleOnClubDescription: (event: ChangeEvent<HTMLTextAreaElement>) => void;
+    onClubSearch: (event: ChangeEvent<HTMLInputElement>) => void;
+    onClubNameChange: (event: ChangeEvent<HTMLInputElement>) => void;
+    onClubAvatarChange: (value: string) => void;
+    onClubVisibilityChange: (value: string) => void;
+    onClubDescriptionChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
     onOpenCreateClubModal: () => void;
     onCloseCreateClubModal: () => void;
     refetch: () => void;
@@ -32,7 +32,7 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
     const [error, setError] = useState<string | null>(null);
     const [clubData, setClubData] = useState<GamingClubType[]>([]);
     const [filterData, setFilterData] = useState({ searchName: "" });
-    const [createClub, setCreateClub] = useState<CreateClubType>({
+    const [createClubData, setCreateClubData] = useState<CreateClubType>({
         clubName: "",
         visibility: "public",
         avatar: "",
@@ -45,30 +45,30 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
         return filterByName(clubData, filterData.searchName);
     }, [clubData, filterData]);
 
-    const handleOnSearchClub = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    const onClubSearch = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setFilterData((prevState) => ({ ...prevState, searchName: event.target.value }));
     }, []);
 
-    const handleOnClubName = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        setCreateClub((prevState) => ({
+    const onClubNameChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+        setCreateClubData((prevState) => ({
             ...prevState,
             clubName: event.target.value,
         }));
     }, []);
 
-    const handleOnClubVisibility = useCallback((value: string) => {
-        setCreateClub((prevState) => ({
+    const onClubVisibilityChange = useCallback((value: string) => {
+        setCreateClubData((prevState) => ({
             ...prevState,
             visibility: value as "public" | "private",
         }));
     }, []);
 
-    const handleOnClubAvatar = useCallback((value: string) => {
-        setCreateClub((prevState) => ({ ...prevState, avatar: value }));
+    const onClubAvatarChange = useCallback((value: string) => {
+        setCreateClubData((prevState) => ({ ...prevState, avatar: value }));
     }, []);
 
-    const handleOnClubDescription = useCallback((event: ChangeEvent<HTMLTextAreaElement>) => {
-        setCreateClub((prevState) => ({
+    const onClubDescriptionChange = useCallback((event: ChangeEvent<HTMLTextAreaElement>) => {
+        setCreateClubData((prevState) => ({
             ...prevState,
             description: event.target.value,
         }));
@@ -79,7 +79,7 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
     const onOpenCreateClubModal = useCallback(() => setIsCreateClubModalOpen(true), []);
     const onCloseCreateClubModal = useCallback(() => {
         setIsCreateClubModalOpen(false);
-        setCreateClub({ clubName: "", visibility: "public", avatar: "", description: "" });
+        setCreateClubData({ clubName: "", visibility: "public", avatar: "", description: "" });
     }, []);
 
     useEffect(() => {
@@ -109,12 +109,12 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
             error,
             isCreateClubModalOpen,
             filteredClubData,
-            createClub,
-            handleOnSearchClub,
-            handleOnClubName,
-            handleOnClubVisibility,
-            handleOnClubAvatar,
-            handleOnClubDescription,
+            createClubData,
+            onClubSearch,
+            onClubNameChange,
+            onClubVisibilityChange,
+            onClubAvatarChange,
+            onClubDescriptionChange,
             onOpenCreateClubModal,
             onCloseCreateClubModal,
             refetch,
@@ -124,12 +124,12 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
             error,
             isCreateClubModalOpen,
             filteredClubData,
-            createClub,
-            handleOnSearchClub,
-            handleOnClubName,
-            handleOnClubVisibility,
-            handleOnClubAvatar,
-            handleOnClubDescription,
+            createClubData,
+            onClubSearch,
+            onClubNameChange,
+            onClubVisibilityChange,
+            onClubAvatarChange,
+            onClubDescriptionChange,
             onOpenCreateClubModal,
             onCloseCreateClubModal,
             refetch,

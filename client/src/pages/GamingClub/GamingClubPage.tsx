@@ -17,15 +17,15 @@ const GamingClubPageContent = () => {
         error,
         filteredClubData,
         isCreateClubModalOpen,
-        handleOnSearchClub,
-        handleOnClubName,
-        handleOnClubVisibility,
-        handleOnClubAvatar,
-        handleOnClubDescription,
+        createClubData,
+        onClubSearch,
+        onClubNameChange,
+        onClubVisibilityChange,
+        onClubAvatarChange,
+        onClubDescriptionChange,
         onOpenCreateClubModal,
         onCloseCreateClubModal,
         refetch,
-        createClub,
     } = useGamingClubPageContext();
     const { currentUser } = useUserContext();
 
@@ -47,7 +47,7 @@ const GamingClubPageContent = () => {
                 <div className="gaming-club__search">
                     <Input
                         placeholder="Search..."
-                        onChange={handleOnSearchClub}
+                        onChange={onClubSearch}
                         hasErrorText={false}
                     />
                 </div>
@@ -104,14 +104,14 @@ const GamingClubPageContent = () => {
                         <Input
                             label="Club name"
                             placeholder="Elite RPG"
-                            onChange={handleOnClubName}
+                            onChange={onClubNameChange}
                             hasErrorText={false}
                             required
                         />
                         <EmojiPicker
                             label="Avatar"
-                            value={createClub.avatar}
-                            onChange={handleOnClubAvatar}
+                            value={createClubData.avatar}
+                            onChange={onClubAvatarChange}
                         />
                     </div>
                     <RadioGroup
@@ -121,12 +121,12 @@ const GamingClubPageContent = () => {
                             { value: "public", label: "public" },
                             { value: "private", label: "private" },
                         ]}
-                        value={createClub.visibility}
-                        onChange={handleOnClubVisibility}
+                        value={createClubData.visibility}
+                        onChange={onClubVisibilityChange}
                     />
                     <Textarea
                         label="Description"
-                        onChange={handleOnClubDescription}
+                        onChange={onClubDescriptionChange}
                         required
                         hasErrorText={false}
                         maxCount={300}
