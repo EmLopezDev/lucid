@@ -68,5 +68,9 @@
         .input__container {
             flex: 1;
         }
+
+        .emoji-picker {
+            padding-block-end: calc(u.rem(6) + u.rem(16));
+        }
     }
 }

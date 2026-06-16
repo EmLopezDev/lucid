@@ -18,6 +18,7 @@ const GamingClubPageContent = () => {
         filteredClubData,
         isCreateClubModalOpen,
         createClubData,
+        createClubErrors,
         onClubSearch,
         onClubNameChange,
         onClubVisibilityChange,
@@ -25,6 +26,7 @@ const GamingClubPageContent = () => {
         onClubDescriptionChange,
         onOpenCreateClubModal,
         onCloseCreateClubModal,
+        onSubmitCreateClubForm,
         refetch,
     } = useGamingClubPageContext();
     const { currentUser } = useUserContext();
@@ -96,7 +98,7 @@ const GamingClubPageContent = () => {
                 onClose={onCloseCreateClubModal}
             >
                 <Form
-                    onSubmit={() => {}}
+                    onSubmit={onSubmitCreateClubForm}
                     onCancel={onCloseCreateClubModal}
                     primaryButtonText="Create"
                 >
@@ -105,7 +107,7 @@ const GamingClubPageContent = () => {
                             label="Club name"
                             placeholder="Elite RPG"
                             onChange={onClubNameChange}
-                            hasErrorText={false}
+                            errorText={createClubErrors.clubName}
                             required
                         />
                         <EmojiPicker
@@ -128,8 +130,9 @@ const GamingClubPageContent = () => {
                         label="Description"
                         onChange={onClubDescriptionChange}
                         required
-                        hasErrorText={false}
                         maxCount={300}
+                        value={createClubData.description}
+                        errorText={createClubErrors.description}
                     />
                 </Form>
             </Modal>

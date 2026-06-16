@@ -13,6 +13,7 @@
     }
 
     &__trigger {
+        font-size: u.$font-size-lg;
         width: u.em(52);
         padding: u.em(14) u.em(12);
         border-radius: u.em(8);
