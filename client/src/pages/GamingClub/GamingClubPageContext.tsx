@@ -40,8 +40,8 @@ const CREATE_CLUB_EMPTY_ERRORS: CreateClubErrorsType = {
 const CREATE_CLUB_RULES: FormRules<CreateClubType> = {
     clubName: [[Boolean, "Club name is required"]],
     description: [[Boolean, "Description is required"]],
-    visibility: [[Boolean, "Visibility is required"]],
-    avatar: [[Boolean, "Avatar is required"]],
+    visibility: [],
+    avatar: [],
 };
 
 export type GamingClubPageContextType = {
@@ -120,16 +120,13 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
             if (!response.ok) throw new Error("Failed to create club");
             const newClub: GamingClubType = await response.json();
             setClubData((prevState) => [newClub, ...prevState]);
+            return true;
         } catch (error) {
             if (import.meta.env.DEV) {
                 console.error(error instanceof Error ? error.message : error);
             }
+            return false;
         }
-    }, []);
-
-    const onResetCreateClubForm = useCallback(() => {
-        setCreateClubData(objectCopy(CREATE_CLUB_EMPTY_FORM));
-        setCreateClubErrors(objectCopy(CREATE_CLUB_EMPTY_ERRORS));
     }, []);
 
     const refetch = useCallback(() => setFetchTrigger((n) => n + 1), []);
@@ -137,11 +134,12 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
     const onOpenCreateClubModal = useCallback(() => setIsCreateClubModalOpen(true), []);
     const onCloseCreateClubModal = useCallback(() => {
         setIsCreateClubModalOpen(false);
-        onResetCreateClubForm();
-    }, [onResetCreateClubForm]);
+        setCreateClubData(objectCopy(CREATE_CLUB_EMPTY_FORM));
+        setCreateClubErrors(objectCopy(CREATE_CLUB_EMPTY_ERRORS));
+    }, []);
 
     const onSubmitCreateClubForm = useCallback(
-        (event: SubmitEvent<HTMLFormElement>) => {
+        async (event: SubmitEvent<HTMLFormElement>) => {
             event.preventDefault();
             const validationErrors = isFormDataValid(
                 createClubData,
@@ -152,13 +150,13 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
                 setCreateClubErrors(validationErrors);
                 return;
             }
-            createClub({
+            const success = await createClub({
                 name: createClubData.clubName,
                 visibility: createClubData.visibility,
                 description: createClubData.description,
                 avatar_url: createClubData.avatar,
             });
-            onCloseCreateClubModal();
+            if (success) onCloseCreateClubModal();
         },
         [createClubData, createClub, onCloseCreateClubModal],
     );
