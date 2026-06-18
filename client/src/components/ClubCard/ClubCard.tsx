@@ -5,9 +5,10 @@ import Icon from "@components/Icon";
 type ClubCardType = {
     club: GamingClubType;
     currentUser: UserType | null;
+    onJoinClub: (clubId: string) => Promise<boolean>;
 };
 
-const ClubCard = ({ club, currentUser }: ClubCardType) => {
+const ClubCard = ({ club, currentUser, onJoinClub }: ClubCardType) => {
     const joinButton =
         currentUser && club.members.includes(currentUser._id) ? (
             <Button
@@ -22,6 +23,7 @@ const ClubCard = ({ club, currentUser }: ClubCardType) => {
             <Button
                 variant="outline"
                 buttonSize="small"
+                onClick={() => onJoinClub(club._id)}
             >
                 Join
             </Button>
@@ -48,7 +50,7 @@ const ClubCard = ({ club, currentUser }: ClubCardType) => {
                     className="club-card__avatar"
                     aria-hidden="true"
                 >
-                    🎮
+                    {club.avatar_url ?? "🎮"}
                 </div>
             </div>
             <div className="club-card__content">

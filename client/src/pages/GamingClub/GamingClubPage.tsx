@@ -27,6 +27,7 @@ const GamingClubPageContent = () => {
         onOpenCreateClubModal,
         onCloseCreateClubModal,
         onSubmitCreateClubForm,
+        onJoinClub,
         refetch,
     } = useGamingClubPageContext();
     const { currentUser } = useUserContext();
@@ -87,6 +88,7 @@ const GamingClubPageContent = () => {
                                 key={club._id}
                                 club={club}
                                 currentUser={currentUser}
+                                onJoinClub={onJoinClub}
                             />
                         ))}
                     </div>

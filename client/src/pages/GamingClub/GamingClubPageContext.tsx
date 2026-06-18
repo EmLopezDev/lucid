@@ -59,6 +59,7 @@ export type GamingClubPageContextType = {
     onOpenCreateClubModal: () => void;
     onCloseCreateClubModal: () => void;
     onSubmitCreateClubForm: (event: SubmitEvent<HTMLFormElement>) => void;
+    onJoinClub: (clubId: string) => Promise<boolean>;
     refetch: () => void;
 };
 
@@ -109,7 +110,7 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
         }));
     }, []);
 
-    const createClub = useCallback(async (data: PostGamingClubType) => {
+    const onCreateClub = useCallback(async (data: PostGamingClubType) => {
         try {
             const response = await fetch(`${API_URL}/clubs`, {
                 method: "POST",
@@ -120,6 +121,26 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
             if (!response.ok) throw new Error("Failed to create club");
             const newClub: GamingClubType = await response.json();
             setClubData((prevState) => [newClub, ...prevState]);
+            return true;
+        } catch (error) {
+            if (import.meta.env.DEV) {
+                console.error(error instanceof Error ? error.message : error);
+            }
+            return false;
+        }
+    }, []);
+
+    const onJoinClub = useCallback(async (clubId: string) => {
+        try {
+            const response = await fetch(`${API_URL}/clubs/${clubId}/join`, {
+                method: "PATCH",
+                credentials: "include",
+            });
+            if (!response.ok) throw new Error("Failed to join club");
+            const joinedClub: GamingClubType = await response.json();
+            setClubData((prevState) =>
+                prevState.map((club) => (club._id === joinedClub._id ? joinedClub : club)),
+            );
             return true;
         } catch (error) {
             if (import.meta.env.DEV) {
@@ -150,7 +171,7 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
                 setCreateClubErrors(validationErrors);
                 return;
             }
-            const success = await createClub({
+            const success = await onCreateClub({
                 name: createClubData.clubName,
                 visibility: createClubData.visibility,
                 description: createClubData.description,
@@ -158,7 +179,7 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
             });
             if (success) onCloseCreateClubModal();
         },
-        [createClubData, createClub, onCloseCreateClubModal],
+        [createClubData, onCreateClub, onCloseCreateClubModal],
     );
 
     useEffect(() => {
@@ -198,6 +219,7 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
             onOpenCreateClubModal,
             onCloseCreateClubModal,
             onSubmitCreateClubForm,
+            onJoinClub,
             refetch,
         }),
         [
@@ -215,6 +237,7 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
             onOpenCreateClubModal,
             onCloseCreateClubModal,
             onSubmitCreateClubForm,
+            onJoinClub,
             refetch,
         ],
     );
