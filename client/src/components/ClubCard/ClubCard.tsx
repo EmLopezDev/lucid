@@ -6,9 +6,10 @@ type ClubCardType = {
     club: GamingClubType;
     currentUser: UserType | null;
     onJoinClub: (clubId: string) => Promise<boolean>;
+    onLeaveClub: (clubId: string) => Promise<boolean>;
 };
 
-const ClubCard = ({ club, currentUser, onJoinClub }: ClubCardType) => {
+const ClubCard = ({ club, currentUser, onJoinClub, onLeaveClub }: ClubCardType) => {
     const joinButton =
         currentUser && club.members.includes(currentUser._id) ? (
             <Button
@@ -16,6 +17,7 @@ const ClubCard = ({ club, currentUser, onJoinClub }: ClubCardType) => {
                 iconPosition="left"
                 buttonSize="small"
                 variant="success"
+                onClick={() => onLeaveClub(club._id)}
             >
                 Joined
             </Button>

@@ -13,6 +13,7 @@ import { API_URL } from "@config/api";
 import { filterByName } from "@lib/filter";
 import { isFormDataValid, hasErrors, type FormRules } from "@lib/form";
 import { objectCopy } from "@lib/generic";
+import { toast } from "sonner";
 
 type CreateClubType = {
     clubName: string;
@@ -60,6 +61,7 @@ export type GamingClubPageContextType = {
     onCloseCreateClubModal: () => void;
     onSubmitCreateClubForm: (event: SubmitEvent<HTMLFormElement>) => void;
     onJoinClub: (clubId: string) => Promise<boolean>;
+    onLeaveClub: (clubId: string) => Promise<boolean>;
     refetch: () => void;
 };
 
@@ -121,11 +123,13 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
             if (!response.ok) throw new Error("Failed to create club");
             const newClub: GamingClubType = await response.json();
             setClubData((prevState) => [newClub, ...prevState]);
+            toast.success(`Successfully created the club: ${newClub.name}.`);
             return true;
         } catch (error) {
             if (import.meta.env.DEV) {
                 console.error(error instanceof Error ? error.message : error);
             }
+            toast.error("Unable to create club, try again.");
             return false;
         }
     }, []);
@@ -141,11 +145,35 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
             setClubData((prevState) =>
                 prevState.map((club) => (club._id === joinedClub._id ? joinedClub : club)),
             );
+            toast.success(`Joined ${joinedClub.name} successfully.`);
             return true;
         } catch (error) {
             if (import.meta.env.DEV) {
                 console.error(error instanceof Error ? error.message : error);
             }
+            toast.error("Unable to join club, try again.");
+            return false;
+        }
+    }, []);
+
+    const onLeaveClub = useCallback(async (clubId: string) => {
+        try {
+            const response = await fetch(`${API_URL}/clubs/${clubId}/leave`, {
+                method: "PATCH",
+                credentials: "include",
+            });
+            if (!response.ok) throw new Error("Failed to leave club");
+            const leftClub: GamingClubType = await response.json();
+            setClubData((prevState) =>
+                prevState.map((club) => (club._id === leftClub._id ? leftClub : club)),
+            );
+            toast.success(`Left club ${leftClub.name} successfully.`);
+            return true;
+        } catch (error) {
+            if (import.meta.env.DEV) {
+                console.error(error instanceof Error ? error.message : error);
+            }
+            toast.error("Unable to leave club, try again.");
             return false;
         }
     }, []);
@@ -220,6 +248,7 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
             onCloseCreateClubModal,
             onSubmitCreateClubForm,
             onJoinClub,
+            onLeaveClub,
             refetch,
         }),
         [
@@ -238,6 +267,7 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
             onCloseCreateClubModal,
             onSubmitCreateClubForm,
             onJoinClub,
+            onLeaveClub,
             refetch,
         ],
     );
