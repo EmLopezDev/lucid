@@ -16,7 +16,8 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage/VerifyEmailPage";
 import ProfilePage from "@pages/ProfilePage/ProfilePage";
-import GamingClubPage from "@pages/GamingClub/GamingClubPage";
+import GamingClubPage from "@pages/GamingClubPage/GamingClubPage";
+import ClubPage from "@pages/ClubPage/ClubPage";
 
 function App() {
     const { isUserAuthenticated, isSessionLoading } = useUserContext();
@@ -59,6 +60,10 @@ function App() {
                     <Route
                         path="/clubs"
                         element={<GamingClubPage />}
+                    />
+                    <Route
+                        path="/clubs/:clubId"
+                        element={<ClubPage />}
                     />
                     <Route
                         path="/user/library"
