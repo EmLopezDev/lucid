@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { type GamingClubType, type UserType } from "@lucid/types";
 import Button from "@components/Button/Button";
 import Icon from "@components/Icon";
@@ -13,6 +14,7 @@ const ClubCard = ({ club, currentUser, onJoinClub, onLeaveClub }: ClubCardType) 
     const joinButton =
         currentUser && club.members.includes(currentUser._id) ? (
             <Button
+                className="club-card__join-button"
                 icon="check"
                 iconPosition="left"
                 buttonSize="small"
@@ -23,6 +25,7 @@ const ClubCard = ({ club, currentUser, onJoinClub, onLeaveClub }: ClubCardType) 
             </Button>
         ) : (
             <Button
+                className="club-card__join-button"
                 variant="outline"
                 buttonSize="small"
                 onClick={() => onJoinClub(club._id)}
@@ -56,7 +59,14 @@ const ClubCard = ({ club, currentUser, onJoinClub, onLeaveClub }: ClubCardType) 
                 </div>
             </div>
             <div className="club-card__content">
-                <h3 className="club-card__name">{club.name}</h3>
+                <h3 className="club-card__name">
+                    <Link
+                        className="club-card__link"
+                        to={`/clubs/${club._id}`}
+                    >
+                        {club.name}
+                    </Link>
+                </h3>
                 <div className="club-card__stats">
                     <div className="club-card__stat">
                         {club.current_game ? (

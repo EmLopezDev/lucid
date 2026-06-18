@@ -36,6 +36,7 @@ const Button = ({
     icon,
     iconPosition = "left",
     children,
+    className: externalClassName,
     ...props
 }: ButtonProps) => {
     const isIconOnly = !!icon && !children;
@@ -56,7 +57,7 @@ const Button = ({
 
     return (
         <button
-            className={className}
+            className={[className, externalClassName].filter(Boolean).join(" ")}
             type={type}
             {...props}
         >
