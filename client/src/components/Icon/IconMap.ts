@@ -26,6 +26,8 @@ import {
     Users,
     Activity,
     Loader,
+    Eye,
+    EyeOff,
 } from "lucide-react";
 
 export const iconRegistry = {
@@ -55,6 +57,8 @@ export const iconRegistry = {
     users: Users,
     activity: Activity,
     loader: Loader,
+    eye: Eye,
+    "eye-off": EyeOff,
 } satisfies Record<string, LucideIcon>;
 
 export type IconName = keyof typeof iconRegistry;

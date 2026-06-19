@@ -10,7 +10,9 @@ export const getGamingClubById = async (clubId: string) => {
 };
 
 export const getAllGamingClubs = async () => {
-    return await GamingClubModel.find({ visibility: "public", deleted_at: null });
+    return await GamingClubModel.find({ visibility: "public", deleted_at: null }).sort({
+        created_at: -1,
+    });
 };
 
 export const createGamingClub = async (userId: string, data: PostGamingClubType) => {
@@ -22,6 +24,7 @@ export const createGamingClub = async (userId: string, data: PostGamingClubType)
         description: data.description ?? null,
         invite_code: data.visibility === "private" ? randomBytes(6).toString("hex") : null,
         created_at: new Date(),
+        members: [userId],
     });
 };
 
