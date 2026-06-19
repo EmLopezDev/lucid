@@ -11,28 +11,38 @@ type ClubCardType = {
 };
 
 const ClubCard = ({ club, currentUser, onJoinClub, onLeaveClub }: ClubCardType) => {
-    const joinButton =
-        currentUser && club.members.includes(currentUser._id) ? (
-            <Button
-                className="club-card__join-button"
-                icon="check"
-                iconPosition="left"
-                buttonSize="small"
-                variant="success"
-                onClick={() => onLeaveClub(club._id)}
-            >
-                Joined
-            </Button>
-        ) : (
-            <Button
-                className="club-card__join-button"
-                variant="outline"
-                buttonSize="small"
-                onClick={() => onJoinClub(club._id)}
-            >
-                Join
-            </Button>
-        );
+    const isOwner = currentUser?._id === club.owner;
+    const isMember = !!currentUser && club.members.includes(currentUser._id);
+
+    const joinButton = isOwner ? (
+        <Button
+            buttonSize="small"
+            variant="secondary"
+            disabled
+        >
+            Owner
+        </Button>
+    ) : isMember ? (
+        <Button
+            className="club-card__join-button"
+            icon="check"
+            iconPosition="left"
+            buttonSize="small"
+            variant="success"
+            onClick={() => onLeaveClub(club._id)}
+        >
+            Joined
+        </Button>
+    ) : (
+        <Button
+            className="club-card__join-button"
+            variant="outline"
+            buttonSize="small"
+            onClick={() => onJoinClub(club._id)}
+        >
+            Join
+        </Button>
+    );
 
     return (
         <article
