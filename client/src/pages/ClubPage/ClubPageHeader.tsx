@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { useClubPageContext } from "./useClubPageContext";
 import Button from "@components/Button/Button";
 import Icon from "@components/Icon";
@@ -21,57 +22,70 @@ const ClubPageHeader = () => {
                     <div className="club-page__banner-gradient" />
                 )}
                 <div className="club-page__banner-overlay" />
+                <Link
+                    to="/clubs"
+                    className="club-page__back-link"
+                >
+                    <Icon name="arrow-left" size="small" />
+                    Clubs
+                </Link>
             </div>
 
             <div className="club-page__header">
                 <div className="club-page__header-inner">
-                    <div
-                        className="club-page__avatar"
-                        aria-hidden="true"
-                    >
-                        {clubData.avatar_url ?? "🎮"}
-                    </div>
-
-                    <div className="club-page__identity">
-                        <div className="club-page__badges">
-                            {isOwner && (
-                                <span className="club-page__badge club-page__badge--owner">
-                                    Owner
-                                </span>
-                            )}
-                            {isMember && !isOwner && (
-                                <span className="club-page__badge club-page__badge--member">
-                                    Member
-                                </span>
-                            )}
-                            {clubData.visibility === "private" && (
-                                <span className="club-page__badge club-page__badge--private">
-                                    <Icon
-                                        name="eye-off"
-                                        size="x-small"
-                                    />
-                                    Private
-                                </span>
-                            )}
+                    <div className="club-page__identity-group">
+                        <div
+                            className="club-page__avatar"
+                            aria-hidden="true"
+                        >
+                            {clubData.avatar_url ?? "🎮"}
                         </div>
-                        <h1 className="club-page__name">{clubData.name}</h1>
-                        <div className="club-page__meta">
-                            <span className="club-page__meta-item">
-                                <Icon
-                                    name="users"
-                                    size="small"
-                                    color="muted"
-                                />
-                                {`${clubData.members.length} ${clubData.members.length === 1 ? "member" : "members"}`}
-                            </span>
-                            <span className="club-page__meta-item">
-                                <Icon
-                                    name="activity"
-                                    size="small"
-                                    color="muted"
-                                />
-                                {`${clubData.past_games.length} ${clubData.past_games.length === 1 ? "game" : "games"} completed`}
-                            </span>
+                        <div className="club-page__identity">
+                            <div className="club-page__name-row">
+                                <h1 className="club-page__name">{clubData.name}</h1>
+                                <span
+                                    className={`club-page__badge club-page__badge--${clubData.visibility}`}
+                                >
+                                    {clubData.visibility === "private" ? (
+                                        <>
+                                            <Icon
+                                                name="eye-off"
+                                                size="x-small"
+                                            />
+                                            Private
+                                        </>
+                                    ) : (
+                                        "Public"
+                                    )}
+                                </span>
+                            </div>
+                            <div className="club-page__meta">
+                                {clubData.current_game && (
+                                    <span className="club-page__meta-item">
+                                        <span
+                                            className="club-page__pulse-dot"
+                                            aria-hidden="true"
+                                        />
+                                        {clubData.current_game.title}
+                                    </span>
+                                )}
+                                <span className="club-page__meta-item">
+                                    <Icon
+                                        name="users"
+                                        size="small"
+                                        color="muted"
+                                    />
+                                    {`${clubData.members.length} ${clubData.members.length === 1 ? "member" : "members"}`}
+                                </span>
+                                <span className="club-page__meta-item">
+                                    <Icon
+                                        name="activity"
+                                        size="small"
+                                        color="muted"
+                                    />
+                                    {`${clubData.past_games.length} ${clubData.past_games.length === 1 ? "game" : "games"} completed`}
+                                </span>
+                            </div>
                         </div>
                     </div>
 
@@ -80,7 +94,7 @@ const ClubPageHeader = () => {
                             <>
                                 <Button
                                     variant="secondary"
-                                    buttonSize="small"
+                                    buttonSize="medium"
                                     icon="settings"
                                     iconPosition="left"
                                 >
@@ -88,7 +102,7 @@ const ClubPageHeader = () => {
                                 </Button>
                                 <Button
                                     variant="primary"
-                                    buttonSize="small"
+                                    buttonSize="medium"
                                     icon="plus"
                                     iconPosition="left"
                                 >
@@ -98,20 +112,26 @@ const ClubPageHeader = () => {
                         ) : isMember ? (
                             <Button
                                 variant="outline"
-                                buttonSize="small"
+                                buttonSize="medium"
                             >
                                 Leave Club
                             </Button>
                         ) : (
                             <Button
                                 variant="primary"
-                                buttonSize="small"
+                                buttonSize="medium"
                             >
                                 Join Club
                             </Button>
                         )}
                     </div>
                 </div>
+
+                {clubData.description && (
+                    <p className="club-page__description club-page__description--header">
+                        {clubData.description}
+                    </p>
+                )}
             </div>
         </>
     );
