@@ -104,7 +104,7 @@
 
     &__name-row {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         gap: u.em(10);
         margin-bottom: u.em(8);
         overflow: hidden;
