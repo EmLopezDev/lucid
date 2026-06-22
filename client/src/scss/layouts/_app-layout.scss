@@ -226,5 +226,7 @@
         min-height: 0;
         overflow-y: auto;
         width: 100%;
+        max-width: u.rem(1440);
+        margin-inline: auto;
     }
 }
