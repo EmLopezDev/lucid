@@ -1,5 +1,5 @@
 export * from "./AuthTypes";
-export * from "./GamingClubTypes";
-export * from "./GamingClubPostTypes";
+export * from "./ClubTypes";
+export * from "./ClubPostTypes";
 export * from "./UserLibrary";
 export * from "./UserTypes";

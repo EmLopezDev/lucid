@@ -3,11 +3,11 @@ import { Types } from "mongoose";
 import {
     type CreateClubType,
     type UpdateClubType,
-} from "../../../../packages/types/GamingClubTypes";
-import { GamingClubModel } from "./gaming-club.mongo";
+} from "../../../../packages/types/ClubTypes";
+import { ClubModel } from "./club.mongo";
 
 export const getGamingClubById = async (clubId: string) => {
-    const results = await GamingClubModel.aggregate([
+    const results = await ClubModel.aggregate([
         { $match: { _id: new Types.ObjectId(clubId) } },
 
         // Extract user_ids from members array for the lookup
@@ -109,13 +109,13 @@ export const getGamingClubById = async (clubId: string) => {
 };
 
 export const getAllGamingClubs = async () => {
-    return await GamingClubModel.find({ visibility: "public", deleted_at: null }).sort({
+    return await ClubModel.find({ visibility: "public", deleted_at: null }).sort({
         created_at: -1,
     });
 };
 
 export const createGamingClub = async (userId: string, data: CreateClubType) => {
-    return await GamingClubModel.create({
+    return await ClubModel.create({
         owner: userId,
         name: data.name,
         visibility: data.visibility,
@@ -139,17 +139,17 @@ export const updateGamingClub = async (clubId: string, data: UpdateClubType) => 
         updateData.invite_code = null;
     }
 
-    return await GamingClubModel.findOneAndUpdate({ _id: clubId }, updateData, {
+    return await ClubModel.findOneAndUpdate({ _id: clubId }, updateData, {
         returnDocument: "after",
     });
 };
 
 export const deleteGamingClub = async (clubId: string) => {
-    return await GamingClubModel.findOneAndUpdate({ _id: clubId }, { deleted_at: new Date() });
+    return await ClubModel.findOneAndUpdate({ _id: clubId }, { deleted_at: new Date() });
 };
 
 export const joinGamingClub = async (userId: string, clubId: string) => {
-    return await GamingClubModel.findOneAndUpdate(
+    return await ClubModel.findOneAndUpdate(
         { _id: clubId, "members.user_id": { $ne: userId } },
         { $push: { members: { user_id: userId, joined_at: new Date() } } },
         { returnDocument: "after" },
@@ -157,7 +157,7 @@ export const joinGamingClub = async (userId: string, clubId: string) => {
 };
 
 export const leaveGamingClub = async (userId: string, clubId: string) => {
-    return await GamingClubModel.findOneAndUpdate(
+    return await ClubModel.findOneAndUpdate(
         { _id: clubId },
         { $pull: { members: { user_id: userId } } },
         { returnDocument: "after" },

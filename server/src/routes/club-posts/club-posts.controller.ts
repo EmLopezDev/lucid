@@ -6,11 +6,11 @@ import {
     createGamingClubPost,
     updateGamingClubPost,
     deleteGamingClubPost,
-} from "../../models/gaming-club-post/gaming-club-post.model";
+} from "../../models/club-post/club-post.model";
 import {
     CreateClubPost,
     UpdateClubPost,
-} from "../../../../packages/types/GamingClubPostTypes";
+} from "../../../../packages/types/ClubPostTypes";
 
 export const getGamingClubPost = async (
     req: Request<{ postId: string }>,

@@ -8,7 +8,7 @@ import {
     type SubmitEvent,
 } from "react";
 import { type ClubType, type CreateClubType } from "@lucid/types";
-import { GamingClubPageContext } from "./useGamingClubPageContext";
+import { ClubsPageContext } from "./useClubsPageContext";
 import { API_URL } from "@config/api";
 import { filterByName } from "@lib/filter";
 import { isFormDataValid, hasErrors, type FormRules } from "@lib/form";
@@ -45,7 +45,7 @@ const CREATE_CLUB_RULES: FormRules<NewClubFormType> = {
     avatar: [],
 };
 
-export type GamingClubPageContextType = {
+export type ClubsPageContextType = {
     isLoading: boolean;
     error: string | null;
     filteredClubData: ClubType[];
@@ -65,7 +65,7 @@ export type GamingClubPageContextType = {
     refetch: () => void;
 };
 
-export const GamingClubPageProvider = ({ children }: { children: ReactNode }) => {
+export const ClubsPageProvider = ({ children }: { children: ReactNode }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [clubData, setClubData] = useState<ClubType[]>([]);
@@ -273,8 +273,8 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
     );
 
     return (
-        <GamingClubPageContext.Provider value={contextValue}>
+        <ClubsPageContext.Provider value={contextValue}>
             {children}
-        </GamingClubPageContext.Provider>
+        </ClubsPageContext.Provider>
     );
 };

@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { ClubPost } from "./GamingClubPostTypes";
+import { ClubPost } from "./ClubPostTypes";
 
 const CurrentGame = z.object({
     title: z.string(),

@@ -3,8 +3,8 @@ import { mongoClientPromise, mongoDisconnect } from "../src/services/mongo";
 import { UserModel } from "../src/models/user/user.mongo";
 import { AuthModel } from "../src/models/auth/auth.mongo";
 import { UserLibraryModel } from "../src/models/user-library/user-library.mongo";
-import { GamingClubModel } from "../src/models/gaming-club/gaming-club.mongo";
-import { GamingClubPostModel } from "../src/models/gaming-club-post/gaming-club-post.mongo";
+import { ClubModel } from "../src/models/club/club.mongo";
+import { ClubPostModel } from "../src/models/club-post/club-post.mongo";
 import { libraryGames, clubs, clubPosts } from "./seed-data";
 
 const SEED_EMAIL = "dev@lucid.com";
@@ -20,8 +20,8 @@ const seed = async () => {
         await Promise.all([
             AuthModel.deleteMany({ user_id: String(existing._id) }),
             UserLibraryModel.deleteMany({ user_id: String(existing._id) }),
-            GamingClubModel.deleteMany({}),
-            GamingClubPostModel.deleteMany({}),
+            ClubModel.deleteMany({}),
+            ClubPostModel.deleteMany({}),
         ]);
         await UserModel.deleteOne({ _id: existing._id });
         console.log("Removed existing dev user");
@@ -41,7 +41,7 @@ const seed = async () => {
     await AuthModel.create({ user_id: String(user._id), hash });
 
     await UserLibraryModel.insertMany(libraryGames(String(user._id)));
-    const insertedClubs = await GamingClubModel.insertMany(clubs(String(user.id)));
+    const insertedClubs = await ClubModel.insertMany(clubs(String(user.id)));
 
     const clubIdMap: Record<string, string> = {};
     for (const club of insertedClubs) {
@@ -49,7 +49,7 @@ const seed = async () => {
     }
 
     const posts = clubPosts(String(user._id), clubIdMap);
-    await GamingClubPostModel.insertMany(posts);
+    await ClubPostModel.insertMany(posts);
     console.log(`  Posts:    ${posts.length} entries`);
 
     console.log(`\nSeed complete`);

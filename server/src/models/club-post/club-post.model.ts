@@ -1,15 +1,15 @@
 import {
     type CreateClubPostType,
     type UpdateClubPostType,
-} from "../../../../packages/types/GamingClubPostTypes";
-import { GamingClubPostModel } from "./gaming-club-post.mongo";
+} from "../../../../packages/types/ClubPostTypes";
+import { ClubPostModel } from "./club-post.mongo";
 
 export const getAllGamingClubPosts = async (clubId: string) => {
-    return await GamingClubPostModel.find({ club_id: clubId, deleted_at: null });
+    return await ClubPostModel.find({ club_id: clubId, deleted_at: null });
 };
 
 export const getGamingClubPostById = async (postId: string) => {
-    return await GamingClubPostModel.findOne({ _id: postId });
+    return await ClubPostModel.findOne({ _id: postId });
 };
 
 export const createGamingClubPost = async (
@@ -17,7 +17,7 @@ export const createGamingClubPost = async (
     userId: string,
     data: CreateClubPostType,
 ) => {
-    return await GamingClubPostModel.create({
+    return await ClubPostModel.create({
         club_id: clubId,
         author: userId,
         ...data,
@@ -26,7 +26,7 @@ export const createGamingClubPost = async (
 };
 
 export const updateGamingClubPost = async (postId: string, data: UpdateClubPostType) => {
-    return await GamingClubPostModel.findOneAndUpdate(
+    return await ClubPostModel.findOneAndUpdate(
         { _id: postId },
         { ...data, updated_at: new Date() },
         { returnDocument: "after" },
@@ -34,5 +34,5 @@ export const updateGamingClubPost = async (postId: string, data: UpdateClubPostT
 };
 
 export const deleteGamingClubPost = async (postId: string) => {
-    return await GamingClubPostModel.findOneAndUpdate({ _id: postId }, { deleted_at: new Date() });
+    return await ClubPostModel.findOneAndUpdate({ _id: postId }, { deleted_at: new Date() });
 };

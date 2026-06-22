@@ -1,13 +1,13 @@
 import { Schema, model } from "mongoose";
-import { type ClubPostType } from "../../../../packages/types/GamingClubPostTypes";
+import { type ClubPostType } from "../../../../packages/types/ClubPostTypes";
 
-type GamingClubDocument = Omit<ClubPostType, "created_at" | "updated_at" | "deleted_at"> & {
+type ClubPostDocument = Omit<ClubPostType, "created_at" | "updated_at" | "deleted_at"> & {
     created_at: Date;
     updated_at: Date | null;
     deleted_at: Date | null;
 };
 
-const GamingClubPostSchema = new Schema<GamingClubDocument>(
+const ClubPostSchema = new Schema<ClubPostDocument>(
     {
         author: { type: String, required: true },
         club_id: { type: String, required: true },
@@ -20,7 +20,7 @@ const GamingClubPostSchema = new Schema<GamingClubDocument>(
     { versionKey: false },
 );
 
-export const GamingClubPostModel = model<GamingClubDocument>(
+export const ClubPostModel = model<ClubPostDocument>(
     "GamingClubPost",
-    GamingClubPostSchema,
+    ClubPostSchema,
 );

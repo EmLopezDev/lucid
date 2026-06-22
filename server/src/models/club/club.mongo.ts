@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
-import { type ClubType } from "../../../../packages/types/GamingClubTypes";
+import { type ClubType } from "../../../../packages/types/ClubTypes";
 
-type GamingClubDocument = Omit<
+type ClubDocument = Omit<
     ClubType,
     "current_game" | "past_games" | "created_at" | "updated_at" | "deleted_at" | "members"
 > & {
@@ -22,7 +22,7 @@ type GamingClubDocument = Omit<
     deleted_at: Date | null;
 };
 
-const GamingClubSchema = new Schema<GamingClubDocument>(
+const ClubSchema = new Schema<ClubDocument>(
     {
         name: { type: String, required: true },
         owner: { type: String, required: true },
@@ -63,4 +63,4 @@ const GamingClubSchema = new Schema<GamingClubDocument>(
     { versionKey: false },
 );
 
-export const GamingClubModel = model<GamingClubDocument>("GamingClub", GamingClubSchema);
+export const ClubModel = model<ClubDocument>("GamingClub", ClubSchema);

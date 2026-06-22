@@ -1,6 +1,6 @@
 import { type Request, type Response, type NextFunction } from "express";
 import { flattenError } from "zod";
-import { UpdateClub, CreateClub } from "../../../../packages/types/GamingClubTypes";
+import { UpdateClub, CreateClub } from "../../../../packages/types/ClubTypes";
 import {
     getGamingClubById,
     getAllGamingClubs,
@@ -9,7 +9,7 @@ import {
     deleteGamingClub,
     joinGamingClub,
     leaveGamingClub,
-} from "../../models/gaming-club/gaming-club.model";
+} from "../../models/club/club.model";
 
 export const getGamingClub = async (
     req: Request<{ clubId: string }>,

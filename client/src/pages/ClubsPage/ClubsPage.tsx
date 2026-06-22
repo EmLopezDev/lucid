@@ -1,5 +1,5 @@
-import { useGamingClubPageContext } from "./useGamingClubPageContext";
-import { GamingClubPageProvider } from "./GamingClubPageContext";
+import { useClubsPageContext } from "./useClubsPageContext";
+import { ClubsPageProvider } from "./ClubsPageContext";
 import { useUserContext } from "@contexts/UserContext/useUserContext";
 import { SkeletonCard } from "@components/Skeleton";
 import Modal from "@components/Modal";
@@ -11,7 +11,7 @@ import Textarea from "@components/Textarea";
 import RadioGroup from "@components/RadioGroup";
 import EmojiPicker from "@components/EmojiPicker";
 
-const GamingClubPageContent = () => {
+const ClubsPageContent = () => {
     const {
         isLoading,
         error,
@@ -30,13 +30,13 @@ const GamingClubPageContent = () => {
         onJoinClub,
         onLeaveClub,
         refetch,
-    } = useGamingClubPageContext();
+    } = useClubsPageContext();
     const { currentUser } = useUserContext();
 
     return (
-        <section className="gaming-club">
-            <div className="gaming-club__header">
-                <h1 className="gaming-club__title">Clubs</h1>
+        <section className="clubs-page">
+            <div className="clubs-page__header">
+                <h1 className="clubs-page__title">Clubs</h1>
                 <span>
                     <Button
                         icon="plus"
@@ -48,7 +48,7 @@ const GamingClubPageContent = () => {
                 </span>
             </div>
             <>
-                <div className="gaming-club__search">
+                <div className="clubs-page__search">
                     <Input
                         placeholder="Search..."
                         onChange={onClubSearch}
@@ -56,24 +56,24 @@ const GamingClubPageContent = () => {
                     />
                 </div>
                 {isLoading ? (
-                    <div className="gaming-club__cards">
+                    <div className="clubs-page__cards">
                         {Array.from({ length: 9 }).map((_, i) => (
                             <SkeletonCard key={i} />
                         ))}
                     </div>
                 ) : error ? (
-                    <div className="gaming-club__empty-state">
-                        <span className="gaming-club__empty-state__title">
+                    <div className="clubs-page__empty-state">
+                        <span className="clubs-page__empty-state__title">
                             Failed to load clubs
                         </span>
-                        <p className="gaming-club__empty-state__sub">{error}</p>
+                        <p className="clubs-page__empty-state__sub">{error}</p>
                         <Button onClick={refetch}>Try again</Button>
                     </div>
                 ) : !filteredClubData.length ? (
-                    <div className="gaming-club__empty-state">
-                        <span className="gaming-club__empty-state__icon">🎮</span>
-                        <span className="gaming-club__empty-state__title">No Clubs Yet</span>
-                        <p className="gaming-club__empty-state__sub">Be the first to create one</p>
+                    <div className="clubs-page__empty-state">
+                        <span className="clubs-page__empty-state__icon">🎮</span>
+                        <span className="clubs-page__empty-state__title">No Clubs Yet</span>
+                        <p className="clubs-page__empty-state__sub">Be the first to create one</p>
                         <Button
                             icon="plus"
                             iconPosition="left"
@@ -83,7 +83,7 @@ const GamingClubPageContent = () => {
                         </Button>
                     </div>
                 ) : (
-                    <div className="gaming-club__cards">
+                    <div className="clubs-page__cards">
                         {filteredClubData.map((club) => (
                             <ClubCard
                                 key={club._id}
@@ -144,12 +144,12 @@ const GamingClubPageContent = () => {
     );
 };
 
-const GamingClubPage = () => {
+const ClubsPage = () => {
     return (
-        <GamingClubPageProvider>
-            <GamingClubPageContent />
-        </GamingClubPageProvider>
+        <ClubsPageProvider>
+            <ClubsPageContent />
+        </ClubsPageProvider>
     );
 };
 
-export default GamingClubPage;
+export default ClubsPage;
