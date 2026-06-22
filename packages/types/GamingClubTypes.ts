@@ -23,7 +23,7 @@ export const GamingClub = z.object({
     owner: z.string(),
     avatar_url: z.string().nullable().default(null),
     description: z.string().max(160).nullable().default(null),
-    members: z.array(z.string()).default([]),
+    members: z.array(z.object({ user_id: z.string(), joined_at: z.string() })).default([]),
     visibility: z.enum(["public", "private"]),
     invite_code: z.string().nullable().default(null),
     current_game: CurrentGame.nullable().default(null),
@@ -34,6 +34,32 @@ export const GamingClub = z.object({
 });
 
 export type GamingClubType = z.infer<typeof GamingClub>;
+
+export const ClubMember = z.object({
+    _id: z.string(),
+    first_name: z.string(),
+    last_name: z.string(),
+    joined_at: z.string(),
+});
+export type ClubMemberType = z.infer<typeof ClubMember>;
+
+export const ClubPost = z.object({
+    _id: z.string(),
+    author: z.string(),
+    club_id: z.string(),
+    content: z.string(),
+    is_spoiler: z.boolean(),
+    created_at: z.string(),
+    updated_at: z.string().nullable(),
+    deleted_at: z.string().nullable(),
+});
+export type ClubPostType = z.infer<typeof ClubPost>;
+
+export const GamingClubDetail = GamingClub.omit({ members: true }).extend({
+    members: z.array(ClubMember),
+    posts: z.array(ClubPost),
+});
+export type GamingClubDetailType = z.infer<typeof GamingClubDetail>;
 
 export const PostGamingClub = GamingClub.pick({
     name: true,

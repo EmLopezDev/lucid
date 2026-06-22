@@ -815,6 +815,8 @@ export const clubPosts = (userId: string, clubIdMap: Record<string, string>) => 
     ];
 };
 
+const mb = (uid: string, date: string) => ({ user_id: uid, joined_at: new Date(date) });
+
 export const clubs = (userId: string) => [
     {
         name: "Souls Collective",
@@ -822,7 +824,13 @@ export const clubs = (userId: string) => [
         avatar_url: null,
         description:
             "For those who love punishment. We play one FromSoftware game at a time, together.",
-        members: [userId, FAKE_OWNERS.alice, FAKE_OWNERS.bob, FAKE_OWNERS.grace, FAKE_OWNERS.iris],
+        members: [
+            mb(userId, "2025-09-01"),
+            mb(FAKE_OWNERS.alice, "2025-09-03"),
+            mb(FAKE_OWNERS.bob, "2025-09-05"),
+            mb(FAKE_OWNERS.grace, "2025-09-08"),
+            mb(FAKE_OWNERS.iris, "2025-09-12"),
+        ],
         visibility: "public",
         invite_code: null,
         current_game: {
@@ -845,12 +853,12 @@ export const clubs = (userId: string) => [
         avatar_url: null,
         description: "We dig through the itch.io backlog so you don't have to.",
         members: [
-            userId,
-            FAKE_OWNERS.dave,
-            FAKE_OWNERS.henry,
-            FAKE_OWNERS.kate,
-            FAKE_OWNERS.liam,
-            FAKE_OWNERS.bob,
+            mb(userId, "2026-01-15"),
+            mb(FAKE_OWNERS.dave, "2026-01-18"),
+            mb(FAKE_OWNERS.henry, "2026-01-22"),
+            mb(FAKE_OWNERS.kate, "2026-01-25"),
+            mb(FAKE_OWNERS.liam, "2026-01-28"),
+            mb(FAKE_OWNERS.bob, "2026-02-01"),
         ],
         visibility: "public",
         invite_code: null,
@@ -869,7 +877,12 @@ export const clubs = (userId: string) => [
         avatar_url: null,
         description:
             "Deep stories, rich worlds, long save files. We work through one RPG at a time as a group.",
-        members: [FAKE_OWNERS.alice, FAKE_OWNERS.bob, FAKE_OWNERS.carol, userId],
+        members: [
+            mb(FAKE_OWNERS.alice, "2025-06-10"),
+            mb(FAKE_OWNERS.bob, "2025-06-12"),
+            mb(FAKE_OWNERS.carol, "2025-06-15"),
+            mb(userId, "2025-06-20"),
+        ],
         visibility: "public",
         invite_code: null,
         current_game: {
@@ -896,18 +909,18 @@ export const clubs = (userId: string) => [
         avatar_url: null,
         description: "100% or nothing. We don't move on until every achievement is unlocked.",
         members: [
-            FAKE_OWNERS.alice,
-            FAKE_OWNERS.bob,
-            FAKE_OWNERS.carol,
-            userId,
-            FAKE_OWNERS.dave,
-            FAKE_OWNERS.eve,
-            FAKE_OWNERS.frank,
-            FAKE_OWNERS.grace,
-            FAKE_OWNERS.henry,
-            FAKE_OWNERS.iris,
-            FAKE_OWNERS.jack,
-            FAKE_OWNERS.kate,
+            mb(FAKE_OWNERS.alice, "2025-03-20"),
+            mb(FAKE_OWNERS.bob, "2025-03-20"),
+            mb(FAKE_OWNERS.carol, "2025-03-24"),
+            mb(userId, "2025-03-28"),
+            mb(FAKE_OWNERS.dave, "2025-04-02"),
+            mb(FAKE_OWNERS.eve, "2025-04-07"),
+            mb(FAKE_OWNERS.frank, "2025-04-12"),
+            mb(FAKE_OWNERS.grace, "2025-04-18"),
+            mb(FAKE_OWNERS.henry, "2025-04-25"),
+            mb(FAKE_OWNERS.iris, "2025-05-01"),
+            mb(FAKE_OWNERS.jack, "2025-05-08"),
+            mb(FAKE_OWNERS.kate, "2025-05-15"),
         ],
         visibility: "public",
         invite_code: null,
@@ -935,11 +948,11 @@ export const clubs = (userId: string) => [
         avatar_url: null,
         description: "We only play in the dark. One horror game per month, voted on by the group.",
         members: [
-            FAKE_OWNERS.alice,
-            FAKE_OWNERS.carol,
-            FAKE_OWNERS.dave,
-            FAKE_OWNERS.eve,
-            FAKE_OWNERS.frank,
+            mb(FAKE_OWNERS.alice, "2025-10-01"),
+            mb(FAKE_OWNERS.carol, "2025-10-01"),
+            mb(FAKE_OWNERS.dave, "2025-10-03"),
+            mb(FAKE_OWNERS.eve, "2025-10-05"),
+            mb(FAKE_OWNERS.frank, "2025-10-08"),
         ],
         visibility: "public",
         invite_code: null,
@@ -966,7 +979,12 @@ export const clubs = (userId: string) => [
         avatar_url: null,
         description:
             "Weekly time trials, weekend tournaments. Sim racers and arcade racers both welcome.",
-        members: [FAKE_OWNERS.alice, FAKE_OWNERS.bob, FAKE_OWNERS.dave, FAKE_OWNERS.eve],
+        members: [
+            mb(FAKE_OWNERS.alice, "2026-02-14"),
+            mb(FAKE_OWNERS.bob, "2026-02-16"),
+            mb(FAKE_OWNERS.dave, "2026-02-19"),
+            mb(FAKE_OWNERS.eve, "2026-02-23"),
+        ],
         visibility: "public",
         invite_code: null,
         current_game: {
@@ -986,7 +1004,11 @@ export const clubs = (userId: string) => [
         avatar_url: null,
         description:
             "Split-screen, local multiplayer, online co-op — if you can play it together, we're playing it.",
-        members: [FAKE_OWNERS.bob, FAKE_OWNERS.carol, FAKE_OWNERS.dave],
+        members: [
+            mb(FAKE_OWNERS.bob, "2025-11-05"),
+            mb(FAKE_OWNERS.carol, "2025-11-07"),
+            mb(FAKE_OWNERS.dave, "2025-11-10"),
+        ],
         visibility: "public",
         invite_code: null,
         current_game: {
@@ -1008,7 +1030,10 @@ export const clubs = (userId: string) => [
         avatar_url: null,
         description:
             "Going back to the classics. PS1, PS2, SNES, N64 — if it's older than 2005, it's on the list.",
-        members: [FAKE_OWNERS.alice, FAKE_OWNERS.carol],
+        members: [
+            mb(FAKE_OWNERS.alice, "2025-05-20"),
+            mb(FAKE_OWNERS.carol, "2025-05-20"),
+        ],
         visibility: "public",
         invite_code: null,
         current_game: null,
@@ -1031,12 +1056,12 @@ export const clubs = (userId: string) => [
         avatar_url: null,
         description: "Private squad for our weekly FPS sessions. Invite only.",
         members: [
-            FAKE_OWNERS.alice,
-            FAKE_OWNERS.bob,
-            FAKE_OWNERS.dave,
-            FAKE_OWNERS.eve,
-            FAKE_OWNERS.frank,
-            FAKE_OWNERS.grace,
+            mb(FAKE_OWNERS.alice, "2026-03-01"),
+            mb(FAKE_OWNERS.bob, "2026-03-03"),
+            mb(FAKE_OWNERS.dave, "2026-03-05"),
+            mb(FAKE_OWNERS.eve, "2026-03-07"),
+            mb(FAKE_OWNERS.frank, "2026-03-09"),
+            mb(FAKE_OWNERS.grace, "2026-03-11"),
         ],
         visibility: "private",
         invite_code: "FPS-7X2K",
@@ -1056,7 +1081,10 @@ export const clubs = (userId: string) => [
         owner: FAKE_OWNERS.bob,
         avatar_url: null,
         description: "We exclusively play games with 80+ hour runtimes. No short games allowed.",
-        members: [FAKE_OWNERS.bob, FAKE_OWNERS.dave],
+        members: [
+            mb(FAKE_OWNERS.bob, "2025-12-01"),
+            mb(FAKE_OWNERS.dave, "2025-12-04"),
+        ],
         visibility: "public",
         invite_code: null,
         current_game: {
@@ -1082,13 +1110,13 @@ export const clubs = (userId: string) => [
         avatar_url: null,
         description: "We lose ourselves in open worlds. The bigger the map the better.",
         members: [
-            FAKE_OWNERS.alice,
-            FAKE_OWNERS.bob,
-            FAKE_OWNERS.carol,
-            FAKE_OWNERS.dave,
-            FAKE_OWNERS.eve,
-            FAKE_OWNERS.frank,
-            FAKE_OWNERS.grace,
+            mb(FAKE_OWNERS.alice, "2025-04-15"),
+            mb(FAKE_OWNERS.bob, "2025-04-17"),
+            mb(FAKE_OWNERS.carol, "2025-04-20"),
+            mb(FAKE_OWNERS.dave, "2025-04-23"),
+            mb(FAKE_OWNERS.eve, "2025-04-27"),
+            mb(FAKE_OWNERS.frank, "2025-05-01"),
+            mb(FAKE_OWNERS.grace, "2025-05-05"),
         ],
         visibility: "public",
         invite_code: null,
@@ -1116,7 +1144,11 @@ export const clubs = (userId: string) => [
         avatar_url: null,
         description:
             "Permanent death, procedural generation, one more run. Every week we share our best runs.",
-        members: [FAKE_OWNERS.alice, FAKE_OWNERS.carol, FAKE_OWNERS.dave],
+        members: [
+            mb(FAKE_OWNERS.alice, "2025-08-10"),
+            mb(FAKE_OWNERS.carol, "2025-08-12"),
+            mb(FAKE_OWNERS.dave, "2025-08-15"),
+        ],
         visibility: "public",
         invite_code: null,
         current_game: {
@@ -1139,7 +1171,11 @@ export const clubs = (userId: string) => [
         avatar_url: null,
         description:
             "Brain-melting puzzles only. We discuss solutions, compare times, and suffer together.",
-        members: [FAKE_OWNERS.bob, FAKE_OWNERS.dave, FAKE_OWNERS.eve],
+        members: [
+            mb(FAKE_OWNERS.bob, "2026-04-01"),
+            mb(FAKE_OWNERS.dave, "2026-04-03"),
+            mb(FAKE_OWNERS.eve, "2026-04-06"),
+        ],
         visibility: "public",
         invite_code: null,
         current_game: {
@@ -1158,7 +1194,10 @@ export const clubs = (userId: string) => [
         owner: FAKE_OWNERS.carol,
         avatar_url: null,
         description: "Turn-based, real-time, 4X — if it requires a plan, we're interested.",
-        members: [FAKE_OWNERS.alice, FAKE_OWNERS.carol],
+        members: [
+            mb(FAKE_OWNERS.alice, "2025-07-04"),
+            mb(FAKE_OWNERS.carol, "2025-07-04"),
+        ],
         visibility: "public",
         invite_code: null,
         current_game: null,
@@ -1176,21 +1215,21 @@ export const clubs = (userId: string) => [
         avatar_url: null,
         description: "The sweet spot between action and RPG. Fast combat, deep builds, great loot.",
         members: [
-            FAKE_OWNERS.alice,
-            FAKE_OWNERS.bob,
-            FAKE_OWNERS.carol,
-            FAKE_OWNERS.dave,
-            FAKE_OWNERS.eve,
-            FAKE_OWNERS.frank,
-            FAKE_OWNERS.grace,
-            FAKE_OWNERS.henry,
-            FAKE_OWNERS.iris,
-            FAKE_OWNERS.jack,
-            FAKE_OWNERS.kate,
-            FAKE_OWNERS.liam,
-            FAKE_OWNERS.mia,
-            FAKE_OWNERS.noah,
-            FAKE_OWNERS.olivia,
+            mb(FAKE_OWNERS.alice, "2024-11-01"),
+            mb(FAKE_OWNERS.bob, "2024-11-03"),
+            mb(FAKE_OWNERS.carol, "2024-11-05"),
+            mb(FAKE_OWNERS.dave, "2024-11-08"),
+            mb(FAKE_OWNERS.eve, "2024-11-12"),
+            mb(FAKE_OWNERS.frank, "2024-11-16"),
+            mb(FAKE_OWNERS.grace, "2024-11-21"),
+            mb(FAKE_OWNERS.henry, "2024-11-27"),
+            mb(FAKE_OWNERS.iris, "2024-12-03"),
+            mb(FAKE_OWNERS.jack, "2024-12-10"),
+            mb(FAKE_OWNERS.kate, "2024-12-17"),
+            mb(FAKE_OWNERS.liam, "2024-12-25"),
+            mb(FAKE_OWNERS.mia, "2025-01-02"),
+            mb(FAKE_OWNERS.noah, "2025-01-10"),
+            mb(FAKE_OWNERS.olivia, "2025-01-18"),
         ],
         visibility: "public",
         invite_code: null,
@@ -1215,7 +1254,12 @@ export const clubs = (userId: string) => [
         avatar_url: null,
         description:
             "Gameplay is secondary. We're here for the writing, the characters, and the moments that stick with you.",
-        members: [FAKE_OWNERS.bob, FAKE_OWNERS.carol, FAKE_OWNERS.dave, FAKE_OWNERS.eve],
+        members: [
+            mb(FAKE_OWNERS.bob, "2025-02-14"),
+            mb(FAKE_OWNERS.carol, "2025-02-16"),
+            mb(FAKE_OWNERS.dave, "2025-02-19"),
+            mb(FAKE_OWNERS.eve, "2025-02-23"),
+        ],
         visibility: "public",
         invite_code: null,
         current_game: {
@@ -1242,7 +1286,11 @@ export const clubs = (userId: string) => [
         avatar_url: null,
         description:
             "Dedicated to finally finishing the games we bought and forgot about. No shame, only progress.",
-        members: [FAKE_OWNERS.alice, FAKE_OWNERS.bob, FAKE_OWNERS.carol],
+        members: [
+            mb(FAKE_OWNERS.alice, "2025-01-01"),
+            mb(FAKE_OWNERS.bob, "2025-01-03"),
+            mb(FAKE_OWNERS.carol, "2025-01-06"),
+        ],
         visibility: "public",
         invite_code: null,
         current_game: null,
@@ -1266,7 +1314,9 @@ export const clubs = (userId: string) => [
         avatar_url: null,
         description:
             "Nintendo exclusives only. We play through the Switch library one game at a time.",
-        members: [FAKE_OWNERS.alice],
+        members: [
+            mb(FAKE_OWNERS.alice, "2026-05-01"),
+        ],
         visibility: "public",
         invite_code: null,
         current_game: null,
@@ -1281,7 +1331,12 @@ export const clubs = (userId: string) => [
         avatar_url: null,
         description:
             "City builders, farming sims, life sims. If it simulates something, we're playing it.",
-        members: [FAKE_OWNERS.bob, FAKE_OWNERS.dave, FAKE_OWNERS.eve, FAKE_OWNERS.frank],
+        members: [
+            mb(FAKE_OWNERS.bob, "2025-09-15"),
+            mb(FAKE_OWNERS.dave, "2025-09-17"),
+            mb(FAKE_OWNERS.eve, "2025-09-20"),
+            mb(FAKE_OWNERS.frank, "2025-09-24"),
+        ],
         visibility: "public",
         invite_code: null,
         current_game: {
@@ -1304,13 +1359,13 @@ export const clubs = (userId: string) => [
         description:
             "We appreciate the genre but we don't gatekeep. All skill levels welcome, summons encouraged.",
         members: [
-            FAKE_OWNERS.alice,
-            FAKE_OWNERS.carol,
-            FAKE_OWNERS.dave,
-            FAKE_OWNERS.eve,
-            FAKE_OWNERS.frank,
-            FAKE_OWNERS.grace,
-            FAKE_OWNERS.henry,
+            mb(FAKE_OWNERS.alice, "2025-05-01"),
+            mb(FAKE_OWNERS.carol, "2025-05-01"),
+            mb(FAKE_OWNERS.dave, "2025-05-03"),
+            mb(FAKE_OWNERS.eve, "2025-05-06"),
+            mb(FAKE_OWNERS.frank, "2025-05-09"),
+            mb(FAKE_OWNERS.grace, "2025-05-13"),
+            mb(FAKE_OWNERS.henry, "2025-05-17"),
         ],
         visibility: "public",
         invite_code: null,

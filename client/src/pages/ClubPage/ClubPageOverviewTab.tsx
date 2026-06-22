@@ -10,6 +10,7 @@ const formatMonthYear = (iso: string) =>
 
 const ClubPageOverviewTab = () => {
     const { clubData, isOwner } = useClubPageContext();
+    const ownerMember = clubData?.members.find((m) => m._id === clubData.owner);
 
     if (!clubData) return null;
 
@@ -34,7 +35,11 @@ const ClubPageOverviewTab = () => {
                         <div className="club-page__about-row">
                             <Icon name="users" size="small" color="muted" />
                             <span className="club-page__about-label">Owner</span>
-                            <span className="club-page__about-value">{clubData.owner}</span>
+                            <span className="club-page__about-value">
+                                {ownerMember
+                                    ? `${ownerMember.first_name} ${ownerMember.last_name}`
+                                    : clubData.owner}
+                            </span>
                         </div>
                         <div className="club-page__about-row">
                             <Icon name="calendar" size="small" color="muted" />

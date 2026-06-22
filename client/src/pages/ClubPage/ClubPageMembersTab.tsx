@@ -2,14 +2,17 @@ import { useState } from "react";
 import { useClubPageContext } from "./useClubPageContext";
 import Button from "@components/Button/Button";
 
+const formatJoinDate = (iso: string) =>
+    new Date(iso).toLocaleDateString("en-US", { month: "short", year: "numeric" });
+
 const ClubPageMembersTab = () => {
     const { clubData, isOwner } = useClubPageContext();
     const [search, setSearch] = useState("");
 
     if (!clubData) return null;
 
-    const filtered = clubData.members.filter((id) =>
-        id.toLowerCase().includes(search.toLowerCase()),
+    const filtered = clubData.members.filter((m) =>
+        `${m.first_name} ${m.last_name}`.toLowerCase().includes(search.toLowerCase()),
     );
 
     return (
@@ -32,9 +35,9 @@ const ClubPageMembersTab = () => {
             </div>
 
             <ul className="club-page__member-list">
-                {filtered.map((memberId) => (
+                {filtered.map((member) => (
                     <li
-                        key={memberId}
+                        key={member._id}
                         className="club-page__member-item"
                     >
                         <div
@@ -43,15 +46,20 @@ const ClubPageMembersTab = () => {
                         />
                         <div className="club-page__member-info">
                             <div className="club-page__member-name-row">
-                                <span className="club-page__member-name">{memberId}</span>
-                                {memberId === clubData.owner && (
+                                <span className="club-page__member-name">
+                                    {member.first_name} {member.last_name}
+                                </span>
+                                {member._id === clubData.owner && (
                                     <span className="club-page__badge club-page__badge--owner">
                                         Owner
                                     </span>
                                 )}
                             </div>
+                            <span className="club-page__member-joined">
+                                Member since {formatJoinDate(member.joined_at)}
+                            </span>
                         </div>
-                        {isOwner && memberId !== clubData.owner && (
+                        {isOwner && member._id !== clubData.owner && (
                             <Button
                                 variant="danger"
                                 buttonSize="small"
@@ -62,7 +70,9 @@ const ClubPageMembersTab = () => {
                     </li>
                 ))}
                 {filtered.length === 0 && (
-                    <li className="club-page__members-empty">No members match &ldquo;{search}&rdquo;</li>
+                    <li className="club-page__members-empty">
+                        No members match &ldquo;{search}&rdquo;
+                    </li>
                 )}
             </ul>
         </div>

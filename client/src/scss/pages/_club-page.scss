@@ -709,6 +709,11 @@
         text-overflow: ellipsis;
     }
 
+    &__member-joined {
+        font-size: u.$font-size-sm;
+        color: var(--color-text-tertiary);
+    }
+
     // ─── Posts Tab ─────────────────────────────────────────────────────────
 
     &__posts-header {

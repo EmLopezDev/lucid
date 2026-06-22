@@ -3,8 +3,9 @@ import { type GamingClubType } from "../../../../packages/types/GamingClubTypes"
 
 type GamingClubDocument = Omit<
     GamingClubType,
-    "current_game" | "past_games" | "created_at" | "updated_at" | "deleted_at"
+    "current_game" | "past_games" | "created_at" | "updated_at" | "deleted_at" | "members"
 > & {
+    members: Array<{ user_id: string; joined_at: Date }>;
     current_game: {
         title: string;
         cover_url: string | null;
@@ -27,7 +28,14 @@ const GamingClubSchema = new Schema<GamingClubDocument>(
         owner: { type: String, required: true },
         avatar_url: { type: String, default: null },
         description: { type: String, default: null },
-        members: [{ type: String }],
+        members: [
+            {
+                type: {
+                    user_id: { type: String, required: true },
+                    joined_at: { type: Date, required: true },
+                },
+            },
+        ],
         visibility: { type: String, required: true },
         invite_code: { type: String, default: null },
         current_game: {

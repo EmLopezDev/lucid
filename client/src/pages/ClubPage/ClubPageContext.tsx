@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, type ReactNode } from "react";
-import { type GamingClubType } from "@lucid/types";
+import { type GamingClubDetailType } from "@lucid/types";
 import { API_URL } from "@config/api";
 import { ClubPageContext } from "./useClubPageContext";
 import { useUserContext } from "@contexts/UserContext/useUserContext";
@@ -7,7 +7,7 @@ import { useUserContext } from "@contexts/UserContext/useUserContext";
 export type ClubPageContextType = {
     isLoading: boolean;
     error: string | null;
-    clubData: GamingClubType | null;
+    clubData: GamingClubDetailType | null;
     isOwner: boolean;
     isMember: boolean;
 };
@@ -15,12 +15,12 @@ export type ClubPageContextType = {
 export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; clubId: string }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [clubData, setClubData] = useState<GamingClubType | null>(null);
+    const [clubData, setClubData] = useState<GamingClubDetailType | null>(null);
 
     const { currentUser } = useUserContext();
 
     const isOwner = currentUser?._id === clubData?.owner;
-    const isMember = clubData?.members.includes(currentUser?._id ?? "") ?? false;
+    const isMember = clubData?.members.some((m) => m._id === (currentUser?._id ?? "")) ?? false;
 
     useEffect(() => {
         const fetchClubData = async () => {
@@ -28,7 +28,7 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
                 setIsLoading(true);
                 const response = await fetch(`${API_URL}/clubs/${clubId}`);
                 if (!response.ok) throw new Error("Failed to fetch club data");
-                const club: GamingClubType = await response.json();
+                const club: GamingClubDetailType = await response.json();
                 setClubData(club);
             } catch (error) {
                 if (import.meta.env.DEV) {
