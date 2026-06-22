@@ -1,8 +1,8 @@
 import { Schema, model } from "mongoose";
-import { type GamingClubType } from "../../../../packages/types/GamingClubTypes";
+import { type ClubType } from "../../../../packages/types/GamingClubTypes";
 
 type GamingClubDocument = Omit<
-    GamingClubType,
+    ClubType,
     "current_game" | "past_games" | "created_at" | "updated_at" | "deleted_at" | "members"
 > & {
     members: Array<{ user_id: string; joined_at: Date }>;

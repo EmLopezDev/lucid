@@ -1,10 +1,10 @@
 import { Link } from "react-router";
-import { type GamingClubType, type UserType } from "@lucid/types";
+import { type ClubType, type UserType } from "@lucid/types";
 import Button from "@components/Button/Button";
 import Icon from "@components/Icon";
 
 type ClubCardType = {
-    club: GamingClubType;
+    club: ClubType;
     currentUser: UserType | null;
     onJoinClub: (clubId: string) => Promise<boolean>;
     onLeaveClub: (clubId: string) => Promise<boolean>;

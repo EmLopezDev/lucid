@@ -1,6 +1,6 @@
 import { type Request, type Response, type NextFunction } from "express";
 import { flattenError } from "zod";
-import { PatchGamingClub, PostGamingClub } from "../../../../packages/types/GamingClubTypes";
+import { UpdateClub, CreateClub } from "../../../../packages/types/GamingClubTypes";
 import {
     getGamingClubById,
     getAllGamingClubs,
@@ -41,7 +41,7 @@ export const postGamingClub = async (req: Request, res: Response, next: NextFunc
         if (!req.session.userId) {
             return res.status(401).json({ message: "Unauthorized" });
         }
-        const parsed = PostGamingClub.safeParse(req.body);
+        const parsed = CreateClub.safeParse(req.body);
         if (!parsed.success) {
             return res
                 .status(400)
@@ -60,7 +60,7 @@ export const patchGamingClub = async (
     next: NextFunction,
 ) => {
     try {
-        const parsed = PatchGamingClub.safeParse(req.body);
+        const parsed = UpdateClub.safeParse(req.body);
         if (!parsed.success) {
             return res
                 .status(400)

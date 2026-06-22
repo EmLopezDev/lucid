@@ -8,8 +8,8 @@ import {
     deleteGamingClubPost,
 } from "../../models/gaming-club-post/gaming-club-post.model";
 import {
-    CreateGamingClubPost,
-    UpdateGamingClubPost,
+    CreateClubPost,
+    UpdateClubPost,
 } from "../../../../packages/types/GamingClubPostTypes";
 
 export const getGamingClubPost = async (
@@ -50,7 +50,7 @@ export const postGamingClubPost = async (
         if (!req.session.userId) {
             return res.status(401).json({ message: "Unauthorized" });
         }
-        const parsed = CreateGamingClubPost.safeParse(req.body);
+        const parsed = CreateClubPost.safeParse(req.body);
         if (!parsed.success) {
             return res
                 .status(400)
@@ -69,7 +69,7 @@ export const patchGamingClubPost = async (
     next: NextFunction,
 ) => {
     try {
-        const parsed = UpdateGamingClubPost.safeParse(req.body);
+        const parsed = UpdateClubPost.safeParse(req.body);
         if (!parsed.success) {
             return res
                 .status(400)

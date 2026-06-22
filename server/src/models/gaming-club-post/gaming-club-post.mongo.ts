@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
-import { type GamingClubPostType } from "../../../../packages/types/GamingClubPostTypes";
+import { type ClubPostType } from "../../../../packages/types/GamingClubPostTypes";
 
-type GamingClubDocument = Omit<GamingClubPostType, "created_at" | "updated_at" | "deleted_at"> & {
+type GamingClubDocument = Omit<ClubPostType, "created_at" | "updated_at" | "deleted_at"> & {
     created_at: Date;
     updated_at: Date | null;
     deleted_at: Date | null;

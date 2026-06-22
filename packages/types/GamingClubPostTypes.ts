@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const GamingClubPost = z.object({
+export const ClubPost = z.object({
     _id: z.string(),
     author: z.string(),
     club_id: z.string(),
@@ -11,18 +11,18 @@ export const GamingClubPost = z.object({
     deleted_at: z.string().nullable().default(null),
 });
 
-export type GamingClubPostType = z.infer<typeof GamingClubPost>;
+export type ClubPostType = z.infer<typeof ClubPost>;
 
-export const CreateGamingClubPost = GamingClubPost.pick({
+export const CreateClubPost = ClubPost.pick({
     content: true,
     is_spoiler: true,
 });
 
-export type CreateGamingClubPostType = z.infer<typeof CreateGamingClubPost>;
+export type CreateClubPostType = z.infer<typeof CreateClubPost>;
 
-export const UpdateGamingClubPost = GamingClubPost.pick({
+export const UpdateClubPost = ClubPost.pick({
     content: true,
     is_spoiler: true,
 }).partial();
 
-export type UpdateGamingClubPostType = z.infer<typeof UpdateGamingClubPost>;
+export type UpdateClubPostType = z.infer<typeof UpdateClubPost>;

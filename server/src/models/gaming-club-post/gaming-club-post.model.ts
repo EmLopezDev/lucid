@@ -1,6 +1,6 @@
 import {
-    type CreateGamingClubPostType,
-    type UpdateGamingClubPostType,
+    type CreateClubPostType,
+    type UpdateClubPostType,
 } from "../../../../packages/types/GamingClubPostTypes";
 import { GamingClubPostModel } from "./gaming-club-post.mongo";
 
@@ -15,7 +15,7 @@ export const getGamingClubPostById = async (postId: string) => {
 export const createGamingClubPost = async (
     clubId: string,
     userId: string,
-    data: CreateGamingClubPostType,
+    data: CreateClubPostType,
 ) => {
     return await GamingClubPostModel.create({
         club_id: clubId,
@@ -25,7 +25,7 @@ export const createGamingClubPost = async (
     });
 };
 
-export const updateGamingClubPost = async (postId: string, data: UpdateGamingClubPostType) => {
+export const updateGamingClubPost = async (postId: string, data: UpdateClubPostType) => {
     return await GamingClubPostModel.findOneAndUpdate(
         { _id: postId },
         { ...data, updated_at: new Date() },

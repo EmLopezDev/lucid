@@ -1,4 +1,4 @@
-import type { UserLibraryDataType, StatusType, GamingClubType } from "@lucid/types";
+import type { UserLibraryDataType, StatusType, ClubType } from "@lucid/types";
 import type { SortValueType } from "../types/SelectOptionsTypes";
 
 export const filterByTitle = (data: UserLibraryDataType[], title: string) => {
@@ -8,7 +8,7 @@ export const filterByTitle = (data: UserLibraryDataType[], title: string) => {
     });
 };
 
-export const filterByName = (data: GamingClubType[], name: string) => {
+export const filterByName = (data: ClubType[], name: string) => {
     if (!name) return data;
     return data.filter((d) => {
         return d.name.toLowerCase().includes(name.toLowerCase());

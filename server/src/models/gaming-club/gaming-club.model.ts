@@ -1,8 +1,8 @@
 import { randomBytes } from "crypto";
 import { Types } from "mongoose";
 import {
-    type PostGamingClubType,
-    type PatchGamingClubType,
+    type CreateClubType,
+    type UpdateClubType,
 } from "../../../../packages/types/GamingClubTypes";
 import { GamingClubModel } from "./gaming-club.mongo";
 
@@ -114,7 +114,7 @@ export const getAllGamingClubs = async () => {
     });
 };
 
-export const createGamingClub = async (userId: string, data: PostGamingClubType) => {
+export const createGamingClub = async (userId: string, data: CreateClubType) => {
     return await GamingClubModel.create({
         owner: userId,
         name: data.name,
@@ -127,7 +127,7 @@ export const createGamingClub = async (userId: string, data: PostGamingClubType)
     });
 };
 
-export const updateGamingClub = async (clubId: string, data: PatchGamingClubType) => {
+export const updateGamingClub = async (clubId: string, data: UpdateClubType) => {
     const updateData: Record<string, unknown> = {
         ...data,
         updated_at: new Date(),

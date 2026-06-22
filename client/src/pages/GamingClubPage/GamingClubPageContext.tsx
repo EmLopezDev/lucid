@@ -7,7 +7,7 @@ import {
     type ChangeEvent,
     type SubmitEvent,
 } from "react";
-import { type GamingClubType, type PostGamingClubType } from "@lucid/types";
+import { type ClubType, type CreateClubType } from "@lucid/types";
 import { GamingClubPageContext } from "./useGamingClubPageContext";
 import { API_URL } from "@config/api";
 import { filterByName } from "@lib/filter";
@@ -15,30 +15,30 @@ import { isFormDataValid, hasErrors, type FormRules } from "@lib/form";
 import { objectCopy } from "@lib/generic";
 import { toast } from "sonner";
 
-type CreateClubType = {
+type NewClubFormType = {
     clubName: string;
     visibility: "public" | "private";
     avatar: string;
     description: string;
 };
 
-type CreateClubErrorsType = Record<keyof CreateClubType, string>;
+type NewClubFormErrorsType = Record<keyof NewClubFormType, string>;
 
-const CREATE_CLUB_EMPTY_FORM: CreateClubType = {
+const CREATE_CLUB_EMPTY_FORM: NewClubFormType = {
     clubName: "",
     visibility: "public",
     avatar: "🎮",
     description: "",
 };
 
-const CREATE_CLUB_EMPTY_ERRORS: CreateClubErrorsType = {
+const CREATE_CLUB_EMPTY_ERRORS: NewClubFormErrorsType = {
     clubName: "",
     visibility: "",
     avatar: "",
     description: "",
 };
 
-const CREATE_CLUB_RULES: FormRules<CreateClubType> = {
+const CREATE_CLUB_RULES: FormRules<NewClubFormType> = {
     clubName: [[Boolean, "Club name is required"]],
     description: [[Boolean, "Description is required"]],
     visibility: [],
@@ -48,10 +48,10 @@ const CREATE_CLUB_RULES: FormRules<CreateClubType> = {
 export type GamingClubPageContextType = {
     isLoading: boolean;
     error: string | null;
-    filteredClubData: GamingClubType[];
-    createClubData: CreateClubType;
+    filteredClubData: ClubType[];
+    createClubData: NewClubFormType;
     isCreateClubModalOpen: boolean;
-    createClubErrors: CreateClubErrorsType;
+    createClubErrors: NewClubFormErrorsType;
     onClubSearch: (event: ChangeEvent<HTMLInputElement>) => void;
     onClubNameChange: (event: ChangeEvent<HTMLInputElement>) => void;
     onClubAvatarChange: (value: string) => void;
@@ -68,12 +68,12 @@ export type GamingClubPageContextType = {
 export const GamingClubPageProvider = ({ children }: { children: ReactNode }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [clubData, setClubData] = useState<GamingClubType[]>([]);
+    const [clubData, setClubData] = useState<ClubType[]>([]);
     const [filterData, setFilterData] = useState({ searchName: "" });
-    const [createClubData, setCreateClubData] = useState<CreateClubType>(
+    const [createClubData, setCreateClubData] = useState<NewClubFormType>(
         objectCopy(CREATE_CLUB_EMPTY_FORM),
     );
-    const [createClubErrors, setCreateClubErrors] = useState<CreateClubErrorsType>(
+    const [createClubErrors, setCreateClubErrors] = useState<NewClubFormErrorsType>(
         objectCopy(CREATE_CLUB_EMPTY_ERRORS),
     );
     const [isCreateClubModalOpen, setIsCreateClubModalOpen] = useState(false);
@@ -112,7 +112,7 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
         }));
     }, []);
 
-    const onCreateClub = useCallback(async (data: PostGamingClubType) => {
+    const onCreateClub = useCallback(async (data: CreateClubType) => {
         try {
             const response = await fetch(`${API_URL}/clubs`, {
                 method: "POST",
@@ -121,7 +121,7 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
                 body: JSON.stringify(data),
             });
             if (!response.ok) throw new Error("Failed to create club");
-            const newClub: GamingClubType = await response.json();
+            const newClub: ClubType = await response.json();
             setClubData((prevState) => [newClub, ...prevState]);
             toast.success(`Successfully created the club: ${newClub.name}.`);
             return true;
@@ -141,7 +141,7 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
                 credentials: "include",
             });
             if (!response.ok) throw new Error("Failed to join club");
-            const joinedClub: GamingClubType = await response.json();
+            const joinedClub: ClubType = await response.json();
             setClubData((prevState) =>
                 prevState.map((club) => (club._id === joinedClub._id ? joinedClub : club)),
             );
@@ -163,7 +163,7 @@ export const GamingClubPageProvider = ({ children }: { children: ReactNode }) =>
                 credentials: "include",
             });
             if (!response.ok) throw new Error("Failed to leave club");
-            const leftClub: GamingClubType = await response.json();
+            const leftClub: ClubType = await response.json();
             setClubData((prevState) =>
                 prevState.map((club) => (club._id === leftClub._id ? leftClub : club)),
             );

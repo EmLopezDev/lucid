@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { GamingClubPost } from "./GamingClubPostTypes";
+import { ClubPost } from "./GamingClubPostTypes";
 
 const CurrentGame = z.object({
     title: z.string(),
@@ -14,7 +14,7 @@ const PastGame = z.object({
     end_date: z.string(),
 });
 
-export const GamingClub = z.object({
+export const Club = z.object({
     _id: z.uuid(),
     name: z
         .string()
@@ -34,7 +34,7 @@ export const GamingClub = z.object({
     deleted_at: z.string().nullable().default(null),
 });
 
-export type GamingClubType = z.infer<typeof GamingClub>;
+export type ClubType = z.infer<typeof Club>;
 
 export const ClubMember = z.object({
     _id: z.string(),
@@ -44,23 +44,23 @@ export const ClubMember = z.object({
 });
 export type ClubMemberType = z.infer<typeof ClubMember>;
 
-export const GamingClubDetail = GamingClub.omit({ members: true }).extend({
+export const ClubDetail = Club.omit({ members: true }).extend({
     members: z.array(ClubMember),
-    posts: z.array(GamingClubPost),
+    posts: z.array(ClubPost),
 });
-export type GamingClubDetailType = z.infer<typeof GamingClubDetail>;
+export type ClubDetailType = z.infer<typeof ClubDetail>;
 
-export const PostGamingClub = GamingClub.pick({
+export const CreateClub = Club.pick({
     name: true,
     visibility: true,
 }).extend({
-    avatar_url: GamingClub.shape.avatar_url.optional(),
-    description: GamingClub.shape.description.optional(),
+    avatar_url: Club.shape.avatar_url.optional(),
+    description: Club.shape.description.optional(),
 });
 
-export type PostGamingClubType = z.infer<typeof PostGamingClub>;
+export type CreateClubType = z.infer<typeof CreateClub>;
 
-export const PatchGamingClub = GamingClub.pick({
+export const UpdateClub = Club.pick({
     name: true,
     avatar_url: true,
     description: true,
@@ -68,4 +68,4 @@ export const PatchGamingClub = GamingClub.pick({
     current_game: true,
 }).partial();
 
-export type PatchGamingClubType = z.infer<typeof PatchGamingClub>;
+export type UpdateClubType = z.infer<typeof UpdateClub>;
