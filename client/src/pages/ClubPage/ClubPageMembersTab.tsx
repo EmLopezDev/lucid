@@ -43,7 +43,9 @@ const ClubPageMembersTab = () => {
                         <div
                             className="club-page__member-avatar"
                             aria-hidden="true"
-                        />
+                        >
+                            {member.first_name[0]}{member.last_name[0]}
+                        </div>
                         <div className="club-page__member-info">
                             <div className="club-page__member-name-row">
                                 <span className="club-page__member-name">
