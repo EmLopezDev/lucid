@@ -51,11 +51,31 @@
         margin-block-end: u.em(32);
     }
 
+    &__sections {
+        display: flex;
+        flex-direction: column;
+        gap: u.em(36);
+    }
+
+    &__section {
+        display: flex;
+        flex-direction: column;
+        gap: u.em(16);
+    }
+
+    &__section-heading {
+        font-size: u.$font-size-sm;
+        font-weight: 700;
+        color: var(--color-text-tertiary);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+    }
+
     &__cards {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: u.em(20);
-        padding-block-end: u.em(24);
+        padding-block-end: u.em(8);
     }
 }
 

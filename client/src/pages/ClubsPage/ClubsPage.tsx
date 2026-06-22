@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useClubsPageContext } from "./useClubsPageContext";
 import { ClubsPageProvider } from "./ClubsPageContext";
 import { useUserContext } from "@contexts/UserContext/useUserContext";
@@ -32,6 +33,32 @@ const ClubsPageContent = () => {
         refetch,
     } = useClubsPageContext();
     const { currentUser } = useUserContext();
+
+    const { yourClubs, discoverClubs } = useMemo(() => {
+        const userId = currentUser?._id ?? "";
+        const yours = filteredClubData
+            .filter((c) => c.members.some((m) => m.user_id === userId))
+            .sort((a, b) => {
+                const aOwned = a.owner === userId ? 1 : 0;
+                const bOwned = b.owner === userId ? 1 : 0;
+                return bOwned - aOwned;
+            });
+        const discover = filteredClubData.filter(
+            (c) => !c.members.some((m) => m.user_id === userId),
+        );
+        return { yourClubs: yours, discoverClubs: discover };
+    }, [filteredClubData, currentUser]);
+
+    const renderCards = (clubs: typeof filteredClubData) =>
+        clubs.map((club) => (
+            <ClubCard
+                key={club._id}
+                club={club}
+                currentUser={currentUser}
+                onJoinClub={onJoinClub}
+                onLeaveClub={onLeaveClub}
+            />
+        ));
 
     return (
         <section className="clubs-page">
@@ -83,16 +110,23 @@ const ClubsPageContent = () => {
                         </Button>
                     </div>
                 ) : (
-                    <div className="clubs-page__cards">
-                        {filteredClubData.map((club) => (
-                            <ClubCard
-                                key={club._id}
-                                club={club}
-                                currentUser={currentUser}
-                                onJoinClub={onJoinClub}
-                                onLeaveClub={onLeaveClub}
-                            />
-                        ))}
+                    <div className="clubs-page__sections">
+                        {yourClubs.length > 0 && (
+                            <div className="clubs-page__section">
+                                <h2 className="clubs-page__section-heading">Your Clubs</h2>
+                                <div className="clubs-page__cards">
+                                    {renderCards(yourClubs)}
+                                </div>
+                            </div>
+                        )}
+                        {discoverClubs.length > 0 && (
+                            <div className="clubs-page__section">
+                                <h2 className="clubs-page__section-heading">Discover</h2>
+                                <div className="clubs-page__cards">
+                                    {renderCards(discoverClubs)}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
             </>
