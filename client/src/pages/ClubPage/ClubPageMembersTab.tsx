@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useClubPageContext } from "./useClubPageContext";
 import Button from "@components/Button/Button";
+import Input from "@components/Input/Input";
 
 const formatJoinDate = (iso: string) =>
     new Date(iso).toLocaleDateString("en-US", { month: "short", year: "numeric" });
@@ -25,12 +26,12 @@ const ClubPageMembersTab = () => {
                     {clubData.members.length}{" "}
                     {clubData.members.length === 1 ? "member" : "members"}
                 </p>
-                <input
-                    className="club-page__members-search"
+                <Input
                     placeholder="Search members…"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     aria-label="Search members"
+                    hasErrorText={false}
                 />
             </div>
 
