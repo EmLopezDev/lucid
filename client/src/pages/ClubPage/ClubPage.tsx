@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useParams } from "react-router";
 import { ClubPageProvider } from "./ClubPageContext";
 import { useClubPageContext } from "./useClubPageContext";
@@ -8,11 +7,8 @@ import ClubPageMembersTab from "./ClubPageMembersTab";
 import ClubPagePostsTab from "./ClubPagePostsTab";
 import ClubPageModals from "./ClubPageModals";
 
-type Tab = "overview" | "members" | "posts";
-
 const ClubPageContent = () => {
-    const { clubData } = useClubPageContext();
-    const [activeTab, setActiveTab] = useState<Tab>("overview");
+    const { clubData, activeTab, onSwitchTab } = useClubPageContext();
 
     if (!clubData) return null;
 
@@ -27,14 +23,14 @@ const ClubPageContent = () => {
                 <button
                     className={`club-page__tab${activeTab === "overview" ? " club-page__tab--active" : ""}`}
                     role="tab"
-                    onClick={() => setActiveTab("overview")}
+                    onClick={() => onSwitchTab("overview")}
                 >
                     Overview
                 </button>
                 <button
                     className={`club-page__tab${activeTab === "members" ? " club-page__tab--active" : ""}`}
                     role="tab"
-                    onClick={() => setActiveTab("members")}
+                    onClick={() => onSwitchTab("members")}
                 >
                     Members
                     <span className="club-page__tab-count">{clubData.members.length}</span>
@@ -42,7 +38,7 @@ const ClubPageContent = () => {
                 <button
                     className={`club-page__tab${activeTab === "posts" ? " club-page__tab--active" : ""}`}
                     role="tab"
-                    onClick={() => setActiveTab("posts")}
+                    onClick={() => onSwitchTab("posts")}
                 >
                     Posts
                 </button>

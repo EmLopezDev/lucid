@@ -193,7 +193,9 @@ const ClubPageOverviewTab = () => {
                                 <span className="club-page__stat-label">Games</span>
                             </div>
                             <div className="club-page__stat-item">
-                                <span className="club-page__stat-value">0</span>
+                                <span className="club-page__stat-value">
+                                    {clubData.posts.length}
+                                </span>
                                 <span className="club-page__stat-label">Posts</span>
                             </div>
                             <div className="club-page__stat-item">

@@ -1,8 +1,10 @@
-import { useState, useEffect, useMemo, type ReactNode } from "react";
+import { useState, useEffect, useMemo, useCallback, type ReactNode } from "react";
 import { type ClubDetailType } from "@lucid/types";
 import { API_URL } from "@config/api";
 import { ClubPageContext } from "./useClubPageContext";
 import { useUserContext } from "@contexts/UserContext/useUserContext";
+
+export type ClubTab = "overview" | "members" | "posts";
 
 export type ClubPageContextType = {
     isLoading: boolean;
@@ -10,17 +12,22 @@ export type ClubPageContextType = {
     clubData: ClubDetailType | null;
     isOwner: boolean;
     isMember: boolean;
+    activeTab: ClubTab;
+    onSwitchTab: (tab: ClubTab) => void;
 };
 
 export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; clubId: string }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [clubData, setClubData] = useState<ClubDetailType | null>(null);
+    const [activeTab, setActiveTab] = useState<ClubTab>("overview");
 
     const { currentUser } = useUserContext();
 
     const isOwner = currentUser?._id === clubData?.owner;
     const isMember = clubData?.members.some((m) => m._id === (currentUser?._id ?? "")) ?? false;
+
+    const onSwitchTab = useCallback((tab: ClubTab) => setActiveTab(tab), []);
 
     useEffect(() => {
         const fetchClubData = async () => {
@@ -49,8 +56,10 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
             clubData,
             isOwner,
             isMember,
+            activeTab,
+            onSwitchTab,
         }),
-        [isLoading, error, clubData, isOwner, isMember],
+        [isLoading, error, clubData, isOwner, isMember, activeTab, onSwitchTab],
     );
 
     return <ClubPageContext.Provider value={contextValue}>{children}</ClubPageContext.Provider>;
