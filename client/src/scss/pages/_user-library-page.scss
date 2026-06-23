@@ -14,7 +14,7 @@
         align-items: center;
         justify-content: space-between;
         gap: u.em(12);
-        border-bottom: u.rem(1) solid rgba(var(--color-brand-rgb), 0.18);
+        border-block-end: u.rem(1) solid rgba(var(--color-brand-rgb), 0.18);
         position: sticky;
         top: 0;
         background-color: var(--color-bg-app);
@@ -92,20 +92,20 @@
             overflow: hidden;
             max-height: 0;
             opacity: 0;
-            padding-top: 0;
-            border-top: u.rem(1) solid transparent;
+            padding-block-start: 0;
+            border-block-start: u.rem(1) solid transparent;
             transition:
                 max-height 0.25s ease,
                 opacity 0.2s ease,
-                padding-top 0.25s ease,
+                padding-block-start 0.25s ease,
                 border-color 0.25s ease;
 
             &--open {
                 max-height: u.rem(200);
                 overflow: visible;
                 opacity: 1;
-                padding-top: u.em(10);
-                border-top-color: rgba(var(--color-brand-rgb), 0.12);
+                padding-block-start: u.em(10);
+                border-block-start-color: rgba(var(--color-brand-rgb), 0.12);
             }
 
             .select {
@@ -186,7 +186,7 @@
             overflow: auto;
 
             @include u.breakpoint-max("small") {
-                padding-bottom: u.rem(56);
+                padding-block-end: u.rem(56);
             }
         }
     }

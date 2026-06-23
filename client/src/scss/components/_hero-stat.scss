@@ -21,27 +21,27 @@
     }
 
     &--gamepad {
-        border-top: 2px solid var(--color-brand);
+        border-block-start: 2px solid var(--color-brand);
     }
 
     &--clock {
-        border-top: 2px solid var(--color-blue);
+        border-block-start: 2px solid var(--color-blue);
     }
 
     &--dollar {
-        border-top: 2px solid var(--color-teal);
+        border-block-start: 2px solid var(--color-teal);
     }
 
     &--star {
-        border-top: 2px solid var(--color-gold);
+        border-block-start: 2px solid var(--color-gold);
     }
 
     &--check {
-        border-top: 2px solid var(--color-green);
+        border-block-start: 2px solid var(--color-green);
     }
 
     &--tag {
-        border-top: 2px solid var(--color-badge-wishlist);
+        border-block-start: 2px solid var(--color-badge-wishlist);
     }
 
     @include u.breakpoint-min("large") {

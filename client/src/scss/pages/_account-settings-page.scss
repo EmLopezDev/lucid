@@ -42,7 +42,7 @@
             background-color 0.15s;
 
         @include u.breakpoint-min("large") {
-            margin-bottom: u.em(8);
+            margin-block-end: u.em(8);
         }
 
         .icon {
@@ -102,7 +102,7 @@
     }
 
     &__delete-button {
-        margin-top: u.em(24);
+        margin-block-start: u.em(24);
         align-self: flex-end;
     }
 }

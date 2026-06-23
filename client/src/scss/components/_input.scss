@@ -45,7 +45,7 @@
         color-scheme: dark;
         font-family: inherit;
         color: var(--color-text-primary);
-        padding-right: u.em(12);
+        padding-inline-end: u.em(12);
 
         &::-webkit-calendar-picker-indicator {
             opacity: 0.5;

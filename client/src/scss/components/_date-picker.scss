@@ -204,9 +204,9 @@
     }
 
     &__footer {
-        border-top: u.em(0.5) solid rgba(var(--color-brand-rgb), 0.18);
-        margin-top: u.em(4);
-        padding-top: u.em(8);
+        border-block-start: u.em(0.5) solid rgba(var(--color-brand-rgb), 0.18);
+        margin-block-start: u.em(4);
+        padding-block-start: u.em(8);
         display: flex;
         justify-content: center;
         gap: u.em(8);

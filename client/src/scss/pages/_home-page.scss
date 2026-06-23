@@ -23,7 +23,7 @@
         justify-content: center;
         position: relative;
         overflow: hidden;
-        padding-bottom: u.rem(48);
+        padding-block-end: u.rem(48);
     }
 
     &__glow {
@@ -138,7 +138,7 @@
         flex-shrink: 0;
         display: block;
         user-select: none;
-        margin-right: u.rem(12);
+        margin-inline-end: u.rem(12);
     }
 
     // Features

@@ -3,7 +3,6 @@
 .club-page {
     max-width: u.em(1100);
     margin: 0 auto;
-    padding-bottom: u.em(64);
 
     // ─── Banner ────────────────────────────────────────────────────────────
 
@@ -64,7 +63,7 @@
 
     &__header {
         padding: 0 u.em(32);
-        margin-top: u.em(-52);
+        margin-block-start: u.em(-52);
         position: relative;
     }
 
@@ -99,14 +98,14 @@
     &__identity {
         flex: 1;
         min-width: 0;
-        padding-bottom: u.em(6);
+        padding-block-end: u.em(6);
     }
 
     &__name-row {
         display: flex;
         align-items: flex-start;
         gap: u.em(10);
-        margin-bottom: u.em(8);
+        margin-block-end: u.em(8);
         overflow: hidden;
     }
 
@@ -152,7 +151,7 @@
         font-weight: 700;
         letter-spacing: -0.02em;
         color: var(--color-text-primary);
-        margin-bottom: u.em(8);
+        margin-block-end: u.em(8);
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -177,7 +176,7 @@
         display: flex;
         align-items: center;
         gap: u.em(8);
-        padding-bottom: u.em(6);
+        padding-block-end: u.em(6);
         flex-shrink: 0;
     }
 
@@ -185,9 +184,9 @@
 
     &__tabs {
         display: flex;
-        margin-top: u.em(32);
+        margin-block-start: u.em(32);
         padding: 0 u.em(32);
-        border-bottom: 1px solid var(--color-border);
+        border-block-end: 1px solid var(--color-border);
     }
 
     &__tab {
@@ -200,8 +199,8 @@
         color: var(--color-text-secondary);
         background: none;
         border: none;
-        border-bottom: 2px solid transparent;
-        margin-bottom: -1px;
+        border-block-end: 2px solid transparent;
+        margin-block-end: -1px;
         cursor: pointer;
         font-family: inherit;
         transition:
@@ -214,7 +213,7 @@
 
         &--active {
             color: var(--color-brand);
-            border-bottom-color: var(--color-brand);
+            border-block-end-color: var(--color-brand);
         }
 
         &-count {
@@ -293,7 +292,7 @@
         color: var(--color-text-tertiary);
         text-transform: uppercase;
         letter-spacing: 0.07em;
-        margin-bottom: u.em(14);
+        margin-block-end: u.em(14);
 
         &--danger {
             color: var(--color-danger);
@@ -543,7 +542,7 @@
         font-size: u.$font-size-lg;
         font-weight: 600;
         color: var(--color-text-primary);
-        margin-bottom: u.em(3);
+        margin-block-end: u.em(3);
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -577,15 +576,15 @@
 
     &__stat-item {
         padding: u.em(16);
-        border-right: 1px solid var(--color-border);
-        border-bottom: 1px solid var(--color-border);
+        border-inline-end: 1px solid var(--color-border);
+        border-block-end: 1px solid var(--color-border);
 
         &:nth-child(2n) {
-            border-right: none;
+            border-inline-end: none;
         }
 
         &:nth-last-child(-n + 2) {
-            border-bottom: none;
+            border-block-end: none;
         }
     }
 
@@ -594,7 +593,7 @@
         font-size: u.$font-size-3xl;
         font-weight: 700;
         color: var(--color-text-primary);
-        margin-bottom: u.em(3);
+        margin-block-end: u.em(3);
     }
 
     &__stat-label {
@@ -614,7 +613,7 @@
         margin: 0;
 
         &--header {
-            margin-top: u.em(16);
+            margin-block-start: u.em(16);
             max-width: u.em(680);
         }
 
@@ -631,7 +630,7 @@
         align-items: center;
         justify-content: space-between;
         gap: u.em(12);
-        margin-bottom: u.em(20);
+        margin-block-end: u.em(20);
         flex-wrap: wrap;
 
         .input__container {
@@ -713,7 +712,7 @@
         .club-page__badge {
             padding: u.em(1) u.em(5);
             font-size: u.rem(9);
-            margin-top: u.em(2);
+            margin-block-start: u.em(2);
         }
     }
 
@@ -737,7 +736,7 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        margin-bottom: u.em(20);
+        margin-block-end: u.em(20);
 
         .button {
             flex: none;

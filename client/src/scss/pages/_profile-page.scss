@@ -27,7 +27,7 @@
         justify-content: space-between;
         align-items: flex-start;
         width: 100%;
-        margin-bottom: u.em(4);
+        margin-block-end: u.em(4);
     }
 
     &__avatar {
@@ -118,19 +118,19 @@
     &__tabs {
         display: flex;
         gap: u.em(4);
-        border-bottom: u.em(1) solid var(--color-border);
-        padding-bottom: u.em(2);
+        border-block-end: u.em(1) solid var(--color-border);
+        padding-block-end: u.em(2);
     }
 
     &__tab {
         padding: u.em(8) u.em(12);
         border: none;
-        border-bottom: u.em(2) solid transparent;
+        border-block-end: u.em(2) solid transparent;
         background: none;
         color: var(--color-text-secondary);
         font-size: u.$font-size-lg;
         cursor: pointer;
-        margin-bottom: u.em(-3);
+        margin-block-end: u.em(-3);
         transition:
             color 0.15s,
             border-color 0.15s;
@@ -141,7 +141,7 @@
 
         &--active {
             color: var(--color-text-primary);
-            border-bottom-color: var(--color-brand);
+            border-block-end-color: var(--color-brand);
             font-weight: 600;
         }
     }
@@ -196,7 +196,7 @@
         }
 
         &--playing {
-            border-top: u.em(2) solid var(--color-badge-playing);
+            border-block-start: u.em(2) solid var(--color-badge-playing);
 
             .profile-page__game-cover {
                 background: linear-gradient(
@@ -208,7 +208,7 @@
         }
 
         &--completed {
-            border-top: u.em(2) solid var(--color-badge-completed);
+            border-block-start: u.em(2) solid var(--color-badge-completed);
 
             .profile-page__game-cover {
                 background: linear-gradient(
@@ -220,7 +220,7 @@
         }
 
         &--wishlist {
-            border-top: u.em(2) solid var(--color-badge-wishlist);
+            border-block-start: u.em(2) solid var(--color-badge-wishlist);
 
             .profile-page__game-cover {
                 background: linear-gradient(
@@ -232,7 +232,7 @@
         }
 
         &--paused {
-            border-top: u.em(2) solid var(--color-badge-paused);
+            border-block-start: u.em(2) solid var(--color-badge-paused);
 
             .profile-page__game-cover {
                 background: linear-gradient(
@@ -244,7 +244,7 @@
         }
 
         &--dropped {
-            border-top: u.em(2) solid var(--color-badge-dropped);
+            border-block-start: u.em(2) solid var(--color-badge-dropped);
 
             .profile-page__game-cover {
                 background: linear-gradient(

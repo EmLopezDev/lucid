@@ -10,7 +10,7 @@
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
         border-color: var(--color-brand);
-        border-bottom-color: transparent;
+        border-block-end-color: transparent;
         transition:
             border-color 0.15s ease,
             border-radius 0.15s ease;
@@ -24,9 +24,9 @@
         z-index: 20;
         background: var(--color-bg-card);
         border: u.em(0.5) solid var(--color-brand);
-        border-top: none;
-        border-bottom-left-radius: u.em(8);
-        border-bottom-right-radius: u.em(8);
+        border-block-start: none;
+        border-end-start-radius: u.em(8);
+        border-end-end-radius: u.em(8);
         overflow: hidden;
         max-height: u.em(360);
         overflow-y: auto;
@@ -84,7 +84,7 @@
         }
 
         &:not(:last-child) {
-            border-bottom: u.em(0.5) solid rgba(var(--color-brand-rgb), 0.1);
+            border-block-end: u.em(0.5) solid rgba(var(--color-brand-rgb), 0.1);
         }
 
         &:hover,
