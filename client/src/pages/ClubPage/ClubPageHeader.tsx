@@ -91,24 +91,14 @@ const ClubPageHeader = () => {
 
                     <div className="club-page__actions">
                         {isOwner ? (
-                            <>
-                                <Button
-                                    variant="secondary"
-                                    buttonSize="medium"
-                                    icon="settings"
-                                    iconPosition="left"
-                                >
-                                    Edit Club
-                                </Button>
-                                <Button
-                                    variant="primary"
-                                    buttonSize="medium"
-                                    icon="plus"
-                                    iconPosition="left"
-                                >
-                                    Set Game
-                                </Button>
-                            </>
+                            <Button
+                                variant="secondary"
+                                buttonSize="medium"
+                                icon="settings"
+                                iconPosition="left"
+                            >
+                                Edit Club
+                            </Button>
                         ) : isMember ? (
                             <Button
                                 variant="outline"

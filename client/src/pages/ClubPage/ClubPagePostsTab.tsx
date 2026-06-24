@@ -49,63 +49,61 @@ const ClubPagePostsTab = () => {
                                     key={post._id}
                                     className="club-page__post-item"
                                 >
-                                    <div
-                                        className="club-page__post-avatar"
-                                        aria-hidden="true"
-                                    >
-                                        {resolveInitials(post.author)}
-                                    </div>
-                                    <div className="club-page__post-content">
-                                        <div className="club-page__post-meta">
-                                            <span className="club-page__post-author">
-                                                {resolveAuthor(post.author)}
+                                    <div className="club-page__post-header">
+                                        <div
+                                            className="club-page__post-avatar"
+                                            aria-hidden="true"
+                                        >
+                                            {resolveInitials(post.author)}
+                                        </div>
+                                        <span className="club-page__post-author">
+                                            {resolveAuthor(post.author)}
+                                        </span>
+                                        <div className="club-page__post-meta-right">
+                                            {post.is_spoiler && (
+                                                <span className="club-page__badge club-page__badge--spoiler">
+                                                    Spoiler
+                                                </span>
+                                            )}
+                                            <span className="club-page__post-timestamp">
+                                                {formatPostDate(post.created_at)}
                                             </span>
-                                            <div className="club-page__post-meta-right">
-                                                {post.is_spoiler && (
-                                                    <span className="club-page__badge club-page__badge--spoiler">
+                                        </div>
+                                    </div>
+                                    <div className={`club-page__post-body-wrapper${post.is_spoiler && !revealedPosts.has(post._id) ? " club-page__post-body-wrapper--spoiler" : ""}`}>
+                                        <p
+                                            className={`club-page__post-body${post.is_spoiler && !revealedPosts.has(post._id) ? " club-page__post-body--blurred" : ""}`}
+                                        >
+                                            {post.content}
+                                        </p>
+                                        {post.is_spoiler &&
+                                            !revealedPosts.has(post._id) && (
+                                                <div className="club-page__post-spoiler-overlay">
+                                                    <Icon
+                                                        name="eye-off"
+                                                        size="small"
+                                                        color="gold"
+                                                    />
+                                                    <span className="club-page__post-spoiler-label">
                                                         Spoiler
                                                     </span>
-                                                )}
-                                                <span className="club-page__post-timestamp">
-                                                    {formatPostDate(post.created_at)}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div className={`club-page__post-body-wrapper${post.is_spoiler && !revealedPosts.has(post._id) ? " club-page__post-body-wrapper--spoiler" : ""}`}>
-                                            <p
-                                                className={`club-page__post-body${post.is_spoiler && !revealedPosts.has(post._id) ? " club-page__post-body--blurred" : ""}`}
-                                            >
-                                                {post.content}
-                                            </p>
-                                            {post.is_spoiler &&
-                                                !revealedPosts.has(post._id) && (
-                                                    <div className="club-page__post-spoiler-overlay">
-                                                        <Icon
-                                                            name="eye-off"
-                                                            size="small"
-                                                            color="gold"
-                                                        />
-                                                        <span className="club-page__post-spoiler-label">
-                                                            Spoiler
-                                                        </span>
-                                                        <Button
-                                                            variant="secondary"
-                                                            buttonSize="small"
-                                                            onClick={() =>
-                                                                setRevealedPosts(
-                                                                    (prev) =>
-                                                                        new Set([
-                                                                            ...prev,
-                                                                            post._id,
-                                                                        ]),
-                                                                )
-                                                            }
-                                                        >
-                                                            Reveal post
-                                                        </Button>
-                                                    </div>
-                                                )}
-                                        </div>
+                                                    <Button
+                                                        variant="secondary"
+                                                        buttonSize="small"
+                                                        onClick={() =>
+                                                            setRevealedPosts(
+                                                                (prev) =>
+                                                                    new Set([
+                                                                        ...prev,
+                                                                        post._id,
+                                                                    ]),
+                                                            )
+                                                        }
+                                                    >
+                                                        Reveal post
+                                                    </Button>
+                                                </div>
+                                            )}
                                     </div>
                                 </li>
                             ))}
