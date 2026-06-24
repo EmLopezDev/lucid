@@ -15,3 +15,9 @@ export const toInputDate = (iso: string): string => {
     const day = String(d.getUTCDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
 };
+
+export const formatShortDate = (iso: string) =>
+    new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+
+export const formatMonthYear = (iso: string) =>
+    new Date(iso).toLocaleDateString("en-US", { month: "short", year: "numeric" });

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useClubPageContext } from "./useClubPageContext";
+import { useClubPageContext } from "../hooks/useClubPageContext";
 import Button from "@components/Button/Button";
 import Icon from "@components/Icon";
 

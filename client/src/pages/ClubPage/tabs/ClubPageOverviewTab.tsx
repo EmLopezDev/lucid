@@ -1,16 +1,10 @@
-import { useClubPageContext } from "./useClubPageContext";
+import { useClubPageContext } from "../hooks/useClubPageContext";
+import { formatShortDate, formatMonthYear } from "@lib/date";
 import Button from "@components/Button/Button";
 import Icon from "@components/Icon";
 
-const formatShortDate = (iso: string) =>
-    new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric" });
-
-const formatMonthYear = (iso: string) =>
-    new Date(iso).toLocaleDateString("en-US", { month: "short", year: "numeric" });
-
 const ClubPageOverviewTab = () => {
-    const { clubData, isOwner } = useClubPageContext();
-    const ownerMember = clubData?.members.find((m) => m._id === clubData.owner);
+    const { clubData, isOwner, ownerMember } = useClubPageContext();
 
     if (!clubData) return null;
 
@@ -20,7 +14,6 @@ const ClubPageOverviewTab = () => {
             role="tabpanel"
         >
             <div className="club-page__overview-layout">
-
                 {/* Main — left col on desktop */}
                 <div className="club-page__main">
                     <section className="club-page__section">
@@ -183,7 +176,9 @@ const ClubPageOverviewTab = () => {
                         <h2 className="club-page__section-title">Stats</h2>
                         <div className="club-page__stats-grid">
                             <div className="club-page__stat-item">
-                                <span className="club-page__stat-value">{clubData.members.length}</span>
+                                <span className="club-page__stat-value">
+                                    {clubData.members.length}
+                                </span>
                                 <span className="club-page__stat-label">Members</span>
                             </div>
                             <div className="club-page__stat-item">
@@ -228,7 +223,6 @@ const ClubPageOverviewTab = () => {
                         </div>
                     )}
                 </div>
-
             </div>
         </div>
     );

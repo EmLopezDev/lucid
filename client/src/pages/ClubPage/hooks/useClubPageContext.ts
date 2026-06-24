@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { type ClubPageContextType } from "./ClubPageContext";
+import { type ClubPageContextType } from "../ClubPageContext";
 
 export const ClubPageContext = createContext<ClubPageContextType | null>(null);
 

@@ -1,10 +1,10 @@
 import { useParams } from "react-router";
 import { ClubPageProvider } from "./ClubPageContext";
-import { useClubPageContext } from "./useClubPageContext";
+import { useClubPageContext } from "./hooks/useClubPageContext";
 import ClubPageHeader from "./ClubPageHeader";
-import ClubPageOverviewTab from "./ClubPageOverviewTab";
-import ClubPageMembersTab from "./ClubPageMembersTab";
-import ClubPagePostsTab from "./ClubPagePostsTab";
+import ClubPageOverviewTab from "./tabs/ClubPageOverviewTab";
+import ClubPageMembersTab from "./tabs/ClubPageMembersTab";
+import ClubPagePostsTab from "./tabs/ClubPagePostsTab";
 import ClubPageModals from "./ClubPageModals";
 
 const ClubPageContent = () => {

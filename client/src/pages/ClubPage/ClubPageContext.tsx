@@ -1,7 +1,7 @@
-import { useState, useEffect, useMemo, useCallback, type ReactNode } from "react";
-import { type ClubDetailType } from "@lucid/types";
+import { useState, useEffect, useMemo, useCallback, type ReactNode, type Dispatch, type SetStateAction } from "react";
+import { type ClubDetailType, type ClubMemberType } from "@lucid/types";
 import { API_URL } from "@config/api";
-import { ClubPageContext } from "./useClubPageContext";
+import { ClubPageContext } from "./hooks/useClubPageContext";
 import { useUserContext } from "@contexts/UserContext/useUserContext";
 
 export type ClubTab = "overview" | "members" | "posts";
@@ -10,8 +10,10 @@ export type ClubPageContextType = {
     isLoading: boolean;
     error: string | null;
     clubData: ClubDetailType | null;
+    setClubData: Dispatch<SetStateAction<ClubDetailType | null>>;
     isOwner: boolean;
     isMember: boolean;
+    ownerMember: ClubMemberType | undefined;
     activeTab: ClubTab;
     onSwitchTab: (tab: ClubTab) => void;
 };
@@ -26,6 +28,7 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
 
     const isOwner = currentUser?._id === clubData?.owner;
     const isMember = clubData?.members.some((m) => m._id === (currentUser?._id ?? "")) ?? false;
+    const ownerMember = clubData?.members.find((m) => m._id === clubData.owner);
 
     const onSwitchTab = useCallback((tab: ClubTab) => setActiveTab(tab), []);
 
@@ -54,12 +57,14 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
             isLoading,
             error,
             clubData,
+            setClubData,
             isOwner,
             isMember,
+            ownerMember,
             activeTab,
             onSwitchTab,
         }),
-        [isLoading, error, clubData, isOwner, isMember, activeTab, onSwitchTab],
+        [isLoading, error, clubData, setClubData, isOwner, isMember, ownerMember, activeTab, onSwitchTab],
     );
 
     return <ClubPageContext.Provider value={contextValue}>{children}</ClubPageContext.Provider>;

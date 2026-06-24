@@ -1,4 +1,4 @@
-import { useClubPageContext } from "./useClubPageContext";
+import { useClubPageContext } from "./hooks/useClubPageContext";
 import Modal from "@components/Modal";
 import Form from "@components/Form";
 import Input from "@components/Input";
