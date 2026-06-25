@@ -3,6 +3,7 @@ import { Types } from "mongoose";
 import {
     type CreateClubType,
     type UpdateClubType,
+    type SetClubGameType,
 } from "../../../../packages/types/ClubTypes";
 import { ClubModel } from "./club.mongo";
 
@@ -152,6 +153,42 @@ export const joinGamingClub = async (userId: string, clubId: string) => {
     return await ClubModel.findOneAndUpdate(
         { _id: clubId, "members.user_id": { $ne: userId } },
         { $push: { members: { user_id: userId, joined_at: new Date() } } },
+        { returnDocument: "after" },
+    );
+};
+
+export const setGamingClubGame = async (clubId: string, data: SetClubGameType) => {
+    const club = await ClubModel.findById(clubId);
+    if (!club) return null;
+
+    const newGame = {
+        title: data.title,
+        cover_url: data.cover_url ?? null,
+        start_date: data.start_date ? new Date(data.start_date) : null,
+        end_date: data.end_date ? new Date(data.end_date) : null,
+    };
+
+    if (club.current_game && data.game_status) {
+        return await ClubModel.findOneAndUpdate(
+            { _id: clubId },
+            {
+                $set: { current_game: newGame, updated_at: new Date() },
+                $push: {
+                    past_games: {
+                        title: club.current_game.title,
+                        cover_url: club.current_game.cover_url,
+                        end_date: new Date(),
+                        game_status: data.game_status,
+                    },
+                },
+            },
+            { returnDocument: "after" },
+        );
+    }
+
+    return await ClubModel.findOneAndUpdate(
+        { _id: clubId },
+        { $set: { current_game: newGame, updated_at: new Date() } },
         { returnDocument: "after" },
     );
 };

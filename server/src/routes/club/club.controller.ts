@@ -1,6 +1,6 @@
 import { type Request, type Response, type NextFunction } from "express";
 import { flattenError } from "zod";
-import { UpdateClub, CreateClub } from "../../../../packages/types/ClubTypes";
+import { UpdateClub, CreateClub, SetClubGame } from "../../../../packages/types/ClubTypes";
 import {
     getGamingClubById,
     getAllGamingClubs,
@@ -9,6 +9,7 @@ import {
     deleteGamingClub,
     joinGamingClub,
     leaveGamingClub,
+    setGamingClubGame,
 } from "../../models/club/club.model";
 
 export const getGamingClub = async (
@@ -108,6 +109,40 @@ export const patchJoinGamingClub = async (
         }
         const clubJoined = await joinGamingClub(req.session.userId, req.params.clubId);
         return res.status(200).json(clubJoined);
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const patchSetGamingClubGame = async (
+    req: Request<{ clubId: string }>,
+    res: Response,
+    next: NextFunction,
+) => {
+    try {
+        if (!req.session.userId) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+        const club = await getGamingClubById(req.params.clubId);
+        if (!club) {
+            return res.status(404).json({ message: "Club not found" });
+        }
+        if (club.owner !== req.session.userId) {
+            return res.status(403).json({ message: "Only the club owner can set the game" });
+        }
+        if (club.current_game && !req.body.game_status) {
+            return res
+                .status(400)
+                .json({ message: "game_status is required when changing an existing game" });
+        }
+        const parsed = SetClubGame.safeParse(req.body);
+        if (!parsed.success) {
+            return res
+                .status(400)
+                .json({ message: "Invalid fields", errors: flattenError(parsed.error) });
+        }
+        const updated = await setGamingClubGame(req.params.clubId, parsed.data);
+        return res.status(200).json(updated);
     } catch (error) {
         next(error);
     }

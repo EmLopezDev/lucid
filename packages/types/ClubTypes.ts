@@ -12,6 +12,7 @@ const PastGame = z.object({
     title: z.string(),
     cover_url: z.string().nullable(),
     end_date: z.string(),
+    game_status: z.enum(["completed", "dropped"]),
 });
 
 export const Club = z.object({
@@ -59,6 +60,16 @@ export const CreateClub = Club.pick({
 });
 
 export type CreateClubType = z.infer<typeof CreateClub>;
+
+export const SetClubGame = z.object({
+    title: z.string(),
+    cover_url: z.string().nullable().optional(),
+    start_date: z.string().nullable().optional(),
+    end_date: z.string().nullable().optional(),
+    game_status: z.enum(["completed", "dropped"]).optional(),
+});
+
+export type SetClubGameType = z.infer<typeof SetClubGame>;
 
 export const UpdateClub = Club.pick({
     name: true,

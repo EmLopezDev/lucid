@@ -16,6 +16,7 @@ type ClubDocument = Omit<
         title: string;
         cover_url: string | null;
         end_date: Date;
+        game_status: "completed" | "dropped";
     }>;
     created_at: Date;
     updated_at: Date | null;
@@ -53,6 +54,7 @@ const ClubSchema = new Schema<ClubDocument>(
                     title: { type: String, required: true },
                     cover_url: { type: String, default: null },
                     end_date: { type: Date, required: true },
+                    game_status: { type: String, required: true },
                 },
             },
         ],

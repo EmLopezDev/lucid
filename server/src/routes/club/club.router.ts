@@ -7,6 +7,7 @@ import {
     destroyGamingClub,
     patchJoinGamingClub,
     patchLeaveGamingClub,
+    patchSetGamingClubGame,
 } from "./club.controller";
 
 const ClubRouter = express.Router();
@@ -14,6 +15,7 @@ const ClubRouter = express.Router();
 ClubRouter.get("/", getGamingClubs);
 ClubRouter.get("/:clubId", getGamingClub);
 ClubRouter.post("/", postGamingClub);
+ClubRouter.patch("/:clubId/game", patchSetGamingClubGame);
 ClubRouter.patch("/:clubId/join", patchJoinGamingClub);
 ClubRouter.patch("/:clubId/leave", patchLeaveGamingClub);
 ClubRouter.patch("/:clubId", patchGamingClub);
