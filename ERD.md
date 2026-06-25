@@ -109,4 +109,4 @@ erDiagram
     User ||--o{ GamingClubPost : "authors"
 ```
 
-> **Note:** `PlayedWithClub` is an embedded subdocument within `UserLibrary`. `ClubMember`, `CurrentGame`, and `PastGame` are embedded subdocuments within `GamingClub`. None of these are separate collections.
+> **Note:** A few of these entities (`PlayedWithClub`, `ClubMember`, `CurrentGame`, `PastGame`) aren't their own collections in MongoDB — they live embedded inside their parent documents. They're shown separately here just to keep the diagram readable.
