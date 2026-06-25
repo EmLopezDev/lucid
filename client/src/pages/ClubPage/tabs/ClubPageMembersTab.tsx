@@ -23,8 +23,7 @@ const ClubPageMembersTab = () => {
         >
             <div className="club-page__members-header">
                 <p className="club-page__members-count">
-                    {clubData.members.length}{" "}
-                    {clubData.members.length === 1 ? "member" : "members"}
+                    {clubData.members.length} {clubData.members.length === 1 ? "member" : "members"}
                 </p>
                 <Input
                     placeholder="Search members…"
@@ -45,7 +44,8 @@ const ClubPageMembersTab = () => {
                             className="club-page__member-avatar"
                             aria-hidden="true"
                         >
-                            {member.first_name[0]}{member.last_name[0]}
+                            {member.first_name[0]}
+                            {member.last_name[0]}
                         </div>
                         <div className="club-page__member-info">
                             <div className="club-page__member-name-row">

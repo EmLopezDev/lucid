@@ -1,13 +1,15 @@
-// import { useClubPageContext } from "./useClubPageContext";
+import { useClubPageContext } from "./useClubPageContext";
 
 const useClubSettings = () => {
-    // const { clubData, setClubData } = useClubPageContext();
+    const { onOpenModal } = useClubPageContext();
+
+    const handleOpenEditClubModal = () => onOpenModal("editClub");
 
     const onClubEdit = async () => {};
 
     const onClubDelete = async () => {};
 
-    return { onClubEdit, onClubDelete };
+    return { onClubEdit, onClubDelete, handleOpenEditClubModal };
 };
 
 export default useClubSettings;

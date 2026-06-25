@@ -2,9 +2,14 @@ import { Link } from "react-router";
 import { useClubPageContext } from "./hooks/useClubPageContext";
 import Button from "@components/Button/Button";
 import Icon from "@components/Icon";
+import useClubMembers from "./hooks/useClubMembers";
+import useClubSettings from "./hooks/useClubSettings";
 
 const ClubPageHeader = () => {
     const { clubData, isOwner, isMember } = useClubPageContext();
+
+    const { handleOpenEditClubModal } = useClubSettings();
+    const { handleOpenLeaveClubModal } = useClubMembers();
 
     if (!clubData) return null;
 
@@ -26,7 +31,10 @@ const ClubPageHeader = () => {
                     to="/clubs"
                     className="club-page__back-link"
                 >
-                    <Icon name="arrow-left" size="small" />
+                    <Icon
+                        name="arrow-left"
+                        size="small"
+                    />
                     Clubs
                 </Link>
             </div>
@@ -96,6 +104,7 @@ const ClubPageHeader = () => {
                                 buttonSize="medium"
                                 icon="settings"
                                 iconPosition="left"
+                                onClick={handleOpenEditClubModal}
                             >
                                 Edit Club
                             </Button>
@@ -103,6 +112,7 @@ const ClubPageHeader = () => {
                             <Button
                                 variant="outline"
                                 buttonSize="medium"
+                                onClick={handleOpenLeaveClubModal}
                             >
                                 Leave Club
                             </Button>

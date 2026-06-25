@@ -5,22 +5,22 @@ import Input from "@components/Input";
 import ConfirmModal from "@components/ConfirmModal";
 
 const ClubPageModals = () => {
-    const { clubData, isOwner } = useClubPageContext();
+    const { clubData, activeModal, onCloseModal } = useClubPageContext();
 
-    if (!clubData || !isOwner) return null;
+    if (!clubData) return null;
 
     return (
         <>
             {/* Edit Club */}
             <Modal
-                isOpen={false}
+                isOpen={activeModal === "editClub"}
                 title="Edit Club"
-                onClose={() => {}}
+                onClose={onCloseModal}
             >
                 <Form
                     primaryButtonText="Save Changes"
                     onSubmit={() => {}}
-                    onCancel={() => {}}
+                    onCancel={onCloseModal}
                 >
                     <Input onChange={() => {}} />
                 </Form>
@@ -28,14 +28,28 @@ const ClubPageModals = () => {
 
             {/* Set Game */}
             <Modal
-                isOpen={false}
+                isOpen={activeModal === "setGame"}
                 title="Set Current Game"
-                onClose={() => {}}
+                onClose={onCloseModal}
             >
                 <Form
                     primaryButtonText="Set Game"
                     onSubmit={() => {}}
-                    onCancel={() => {}}
+                    onCancel={onCloseModal}
+                >
+                    <Input onChange={() => {}} />
+                </Form>
+            </Modal>
+
+            <Modal
+                isOpen={activeModal === "changeGame"}
+                title="Change Current Game"
+                onClose={onCloseModal}
+            >
+                <Form
+                    primaryButtonText="Change Game"
+                    onSubmit={() => {}}
+                    onCancel={onCloseModal}
                 >
                     <Input onChange={() => {}} />
                 </Form>
@@ -43,7 +57,7 @@ const ClubPageModals = () => {
 
             {/* Delete Club */}
             <ConfirmModal
-                isOpen={false}
+                isOpen={activeModal === "deleteClub"}
                 title="Delete Club"
                 message={
                     <>
@@ -54,18 +68,28 @@ const ClubPageModals = () => {
                 confirmLabel="Delete Club"
                 variant="danger"
                 onConfirm={() => {}}
-                onCancel={() => {}}
+                onCancel={onCloseModal}
             />
 
             {/* Remove Member */}
             <ConfirmModal
-                isOpen={false}
+                isOpen={activeModal === "deleteClubMember"}
                 title="Remove Member"
                 message={`Remove this member from ${clubData.name}? They can rejoin if the club is public.`}
                 confirmLabel="Remove"
                 variant="danger"
                 onConfirm={() => {}}
-                onCancel={() => {}}
+                onCancel={onCloseModal}
+            />
+            {/* Leave Club */}
+            <ConfirmModal
+                isOpen={activeModal === "leaveClub"}
+                title="Leave club"
+                message={`Are you sure you want to leave ${clubData.name}? You can rejoin if the club is public.`}
+                confirmLabel="Remove"
+                variant="danger"
+                onConfirm={() => {}}
+                onCancel={onCloseModal}
             />
         </>
     );

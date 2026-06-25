@@ -2,9 +2,11 @@ import { useClubPageContext } from "../hooks/useClubPageContext";
 import { formatShortDate, formatMonthYear } from "@lib/date";
 import Button from "@components/Button/Button";
 import Icon from "@components/Icon";
+import useClubGame from "../hooks/useClubGame";
 
 const ClubPageOverviewTab = () => {
     const { clubData, isOwner, ownerMember } = useClubPageContext();
+    const { handleOpenSetGameModal, handleOpenChangeGameModal } = useClubGame();
 
     if (!clubData) return null;
 
@@ -57,7 +59,12 @@ const ClubPageOverviewTab = () => {
                                     </div>
                                     {isOwner && (
                                         <div className="club-page__current-game-action">
-                                            <Button variant="secondary">Change Game</Button>
+                                            <Button
+                                                onClick={handleOpenChangeGameModal}
+                                                variant="secondary"
+                                            >
+                                                Change Game
+                                            </Button>
                                         </div>
                                     )}
                                 </div>
@@ -74,6 +81,7 @@ const ClubPageOverviewTab = () => {
                                     <Button
                                         variant="primary"
                                         buttonSize="small"
+                                        onClick={handleOpenSetGameModal}
                                     >
                                         Set a Game
                                     </Button>

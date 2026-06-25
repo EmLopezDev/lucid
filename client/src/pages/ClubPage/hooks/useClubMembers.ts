@@ -1,11 +1,13 @@
-// import { useClubPageContext } from "./useClubPageContext";
+import { useClubPageContext } from "./useClubPageContext";
 
 const useClubMembers = () => {
-    // const { clubData, setClubData } = useClubPageContext();
+    const { onOpenModal } = useClubPageContext();
+
+    const handleOpenLeaveClubModal = () => onOpenModal("leaveClub");
 
     const onMemberRemove = async () => {};
 
-    return { onMemberRemove };
+    return { onMemberRemove, handleOpenLeaveClubModal };
 };
 
 export default useClubMembers;

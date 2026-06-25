@@ -1,4 +1,12 @@
-import { useState, useEffect, useMemo, useCallback, type ReactNode, type Dispatch, type SetStateAction } from "react";
+import {
+    useState,
+    useEffect,
+    useMemo,
+    useCallback,
+    type ReactNode,
+    type Dispatch,
+    type SetStateAction,
+} from "react";
 import { type ClubDetailType, type ClubMemberType } from "@lucid/types";
 import { API_URL } from "@config/api";
 import { ClubPageContext } from "./hooks/useClubPageContext";
@@ -6,15 +14,27 @@ import { useUserContext } from "@contexts/UserContext/useUserContext";
 
 export type ClubTab = "overview" | "members" | "posts";
 
+type ActiveModalType =
+    | "setGame"
+    | "changeGame"
+    | "editClub"
+    | "deleteClub"
+    | "deleteClubMember"
+    | "leaveClub"
+    | null;
+
 export type ClubPageContextType = {
     isLoading: boolean;
     error: string | null;
     clubData: ClubDetailType | null;
-    setClubData: Dispatch<SetStateAction<ClubDetailType | null>>;
     isOwner: boolean;
     isMember: boolean;
     ownerMember: ClubMemberType | undefined;
     activeTab: ClubTab;
+    activeModal: ActiveModalType;
+    onOpenModal: (modal: Exclude<ActiveModalType, null>) => void;
+    onCloseModal: () => void;
+    setClubData: Dispatch<SetStateAction<ClubDetailType | null>>;
     onSwitchTab: (tab: ClubTab) => void;
 };
 
@@ -23,6 +43,7 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
     const [error, setError] = useState<string | null>(null);
     const [clubData, setClubData] = useState<ClubDetailType | null>(null);
     const [activeTab, setActiveTab] = useState<ClubTab>("overview");
+    const [activeModal, setActiveModal] = useState<ActiveModalType>(null);
 
     const { currentUser } = useUserContext();
 
@@ -31,6 +52,13 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
     const ownerMember = clubData?.members.find((m) => m._id === clubData.owner);
 
     const onSwitchTab = useCallback((tab: ClubTab) => setActiveTab(tab), []);
+
+    const onOpenModal = useCallback((modal: Exclude<ActiveModalType, null>) => {
+        setActiveModal(modal);
+    }, []);
+    const onCloseModal = useCallback(() => {
+        setActiveModal(null);
+    }, []);
 
     useEffect(() => {
         const fetchClubData = async () => {
@@ -57,14 +85,30 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
             isLoading,
             error,
             clubData,
-            setClubData,
             isOwner,
             isMember,
             ownerMember,
             activeTab,
+            activeModal,
+            onOpenModal,
+            onCloseModal,
+            setClubData,
             onSwitchTab,
         }),
-        [isLoading, error, clubData, setClubData, isOwner, isMember, ownerMember, activeTab, onSwitchTab],
+        [
+            isLoading,
+            error,
+            clubData,
+            isOwner,
+            isMember,
+            ownerMember,
+            activeTab,
+            activeModal,
+            onOpenModal,
+            onCloseModal,
+            setClubData,
+            onSwitchTab,
+        ],
     );
 
     return <ClubPageContext.Provider value={contextValue}>{children}</ClubPageContext.Provider>;
