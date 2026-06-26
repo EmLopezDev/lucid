@@ -141,7 +141,8 @@ export const patchSetGamingClubGame = async (
                 .status(400)
                 .json({ message: "Invalid fields", errors: flattenError(parsed.error) });
         }
-        const updated = await setGamingClubGame(req.params.clubId, parsed.data);
+        await setGamingClubGame(req.params.clubId, parsed.data);
+        const updated = await getGamingClubById(req.params.clubId);
         return res.status(200).json(updated);
     } catch (error) {
         next(error);

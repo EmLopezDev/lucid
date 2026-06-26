@@ -26,6 +26,7 @@ type ActiveModalType =
 export type ClubPageContextType = {
     isLoading: boolean;
     error: string | null;
+    clubId: string;
     clubData: ClubDetailType | null;
     isOwner: boolean;
     isMember: boolean;
@@ -84,6 +85,7 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
         () => ({
             isLoading,
             error,
+            clubId,
             clubData,
             isOwner,
             isMember,
@@ -98,6 +100,7 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
         [
             isLoading,
             error,
+            clubId,
             clubData,
             isOwner,
             isMember,

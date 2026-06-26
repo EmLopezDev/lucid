@@ -17,11 +17,8 @@
     }
 
     &__dropdown {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        z-index: 20;
+        position: fixed;
+        z-index: 300;
         background: var(--color-bg-card);
         border: u.em(0.5) solid var(--color-brand);
         border-block-start: none;

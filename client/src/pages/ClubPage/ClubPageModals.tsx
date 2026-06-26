@@ -3,9 +3,12 @@ import Modal from "@components/Modal";
 import Form from "@components/Form";
 import Input from "@components/Input";
 import ConfirmModal from "@components/ConfirmModal";
+import SetGameForm from "./SetGameForm";
+import useClubGame from "./hooks/useClubGame";
 
 const ClubPageModals = () => {
     const { clubData, activeModal, onCloseModal } = useClubPageContext();
+    const { onGameSet } = useClubGame();
 
     if (!clubData) return null;
 
@@ -32,13 +35,10 @@ const ClubPageModals = () => {
                 title="Set Current Game"
                 onClose={onCloseModal}
             >
-                <Form
-                    primaryButtonText="Set Game"
-                    onSubmit={() => {}}
+                <SetGameForm
+                    onSubmit={onGameSet}
                     onCancel={onCloseModal}
-                >
-                    <Input onChange={() => {}} />
-                </Form>
+                />
             </Modal>
 
             <Modal
