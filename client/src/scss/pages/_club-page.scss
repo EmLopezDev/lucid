@@ -879,31 +879,6 @@
     }
 }
 
-.change-game-form {
-    &__archive {
-        display: flex;
-        flex-direction: column;
-        gap: u.em(10);
-    }
-
-    &__archive-label {
-        font-size: u.$font-size-xl;
-        color: var(--color-text-secondary);
-        margin: 0;
-
-        strong {
-            color: var(--color-text-primary);
-            font-weight: 700;
-        }
-    }
-
-    &__divider {
-        border: none;
-        border-block-start: 1px solid var(--color-border);
-        margin: 0;
-    }
-}
-
 @keyframes club-pulse-dot {
     0%,
     100% {
