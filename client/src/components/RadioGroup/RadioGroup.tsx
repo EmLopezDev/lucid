@@ -2,7 +2,7 @@ import { useId } from "react";
 import { type SelectOptionType } from "../../types/SelectOptionsTypes";
 
 type RadioGroupType = {
-    legend: string;
+    legend?: string;
     name: string;
     options: SelectOptionType[];
     direction?: "row" | "column";
@@ -27,17 +27,19 @@ const RadioGroup = ({
             className={`radio-group radio-group--${direction}`}
             aria-required={required}
         >
-            <legend className="radio-group__legend">
-                {legend}
-                {required && (
-                    <span
-                        className="radio-group__required"
-                        aria-hidden="true"
-                    >
-                        *
-                    </span>
-                )}
-            </legend>
+            {legend && (
+                <legend className="radio-group__legend">
+                    {legend}
+                    {required && (
+                        <span
+                            className="radio-group__required"
+                            aria-hidden="true"
+                        >
+                            *
+                        </span>
+                    )}
+                </legend>
+            )}
             {options.map((option) => {
                 const inputId = `${id}-${option.value}`;
                 return (

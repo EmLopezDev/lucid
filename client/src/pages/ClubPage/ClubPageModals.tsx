@@ -4,11 +4,12 @@ import Form from "@components/Form";
 import Input from "@components/Input";
 import ConfirmModal from "@components/ConfirmModal";
 import SetGameForm from "./SetGameForm";
+import ChangeGameForm from "./ChangeGameForm";
 import useClubGame from "./hooks/useClubGame";
 
 const ClubPageModals = () => {
     const { clubData, activeModal, onCloseModal } = useClubPageContext();
-    const { onGameSet } = useClubGame();
+    const { onGameSet, onGameChange } = useClubGame();
 
     if (!clubData) return null;
 
@@ -46,13 +47,11 @@ const ClubPageModals = () => {
                 title="Change Current Game"
                 onClose={onCloseModal}
             >
-                <Form
-                    primaryButtonText="Change Game"
-                    onSubmit={() => {}}
+                <ChangeGameForm
+                    currentGameTitle={clubData.current_game?.title ?? ""}
+                    onSubmit={onGameChange}
                     onCancel={onCloseModal}
-                >
-                    <Input onChange={() => {}} />
-                </Form>
+                />
             </Modal>
 
             {/* Delete Club */}
