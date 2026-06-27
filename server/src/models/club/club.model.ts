@@ -84,6 +84,15 @@ export const getGamingClubById = async (clubId: string) => {
         // Remove temporary fields
         { $project: { _member_ids: 0, _user_profiles: 0 } },
 
+        // Sort past_games newest first by end_date
+        {
+            $addFields: {
+                past_games: {
+                    $sortArray: { input: "$past_games", sortBy: { end_date: -1 } },
+                },
+            },
+        },
+
         // Join posts
         {
             $lookup: {

@@ -3,6 +3,7 @@ import { formatShortDate, formatMonthYear } from "@lib/date";
 import Button from "@components/Button/Button";
 import Icon from "@components/Icon";
 import useClubGame from "../hooks/useClubGame";
+import Badge from "@components/Badge";
 
 const ClubPageOverviewTab = () => {
     const { clubData, isOwner, ownerMember } = useClubPageContext();
@@ -124,6 +125,9 @@ const ClubPageOverviewTab = () => {
                                                 {game.end_date
                                                     ? formatMonthYear(game.end_date)
                                                     : ""}
+                                                {game.game_status && (
+                                                    <Badge label={game.game_status} />
+                                                )}
                                             </span>
                                         </div>
                                     </li>
