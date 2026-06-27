@@ -1,0 +1,56 @@
+@use "../../utils/" as u;
+
+.club-page {
+    &__banner {
+        aspect-ratio: 5 / 1;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+
+        &-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            filter: blur(0.5px);
+            display: block;
+        }
+
+        &-gradient {
+            height: 100%;
+            background: linear-gradient(135deg, rgba(239, 159, 39, 0.3), rgba(239, 159, 39, 0.7));
+        }
+
+        &-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 20%, var(--color-bg-app) 100%);
+        }
+    }
+
+    &__back-link {
+        position: absolute;
+        top: u.em(28);
+        left: u.em(20);
+        display: flex;
+        align-items: center;
+        gap: u.em(6);
+        font-size: u.$font-size-base;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.85);
+        text-decoration: none;
+        z-index: 1;
+        background: rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(6px);
+        padding: u.em(6) u.em(12);
+        border-radius: u.em(100);
+        transition:
+            background 150ms ease,
+            color 150ms ease;
+
+        &:hover {
+            color: white;
+            background: rgba(0, 0, 0, 0.55);
+        }
+    }
+}

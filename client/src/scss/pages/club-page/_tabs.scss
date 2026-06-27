@@ -1,0 +1,47 @@
+@use "../../utils/" as u;
+
+.club-page {
+    &__tabs {
+        display: flex;
+        margin-block-start: u.em(32);
+        padding: 0 u.em(32);
+        border-block-end: 1px solid var(--color-border);
+    }
+
+    &__tab {
+        display: flex;
+        align-items: center;
+        gap: u.em(6);
+        padding: u.em(12) u.em(20);
+        font-size: u.$font-size-lg;
+        font-weight: 500;
+        color: var(--color-text-secondary);
+        background: none;
+        border: none;
+        border-block-end: 2px solid transparent;
+        margin-block-end: -1px;
+        cursor: pointer;
+        font-family: inherit;
+        transition:
+            color 150ms ease,
+            border-color 150ms ease;
+
+        &:hover {
+            color: var(--color-text-primary);
+        }
+
+        &--active {
+            color: var(--color-brand);
+            border-block-end-color: var(--color-brand);
+        }
+
+        &-count {
+            font-size: u.$font-size-xs;
+            font-weight: 600;
+            padding: u.em(2) u.em(6);
+            border-radius: u.em(100);
+            background-color: var(--color-bg-card);
+            color: var(--color-text-tertiary);
+        }
+    }
+}

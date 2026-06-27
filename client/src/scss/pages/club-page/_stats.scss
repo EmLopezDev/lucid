@@ -1,0 +1,41 @@
+@use "../../utils/" as u;
+
+.club-page {
+    &__stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border: 1px solid var(--color-border);
+        border-radius: u.em(12);
+        overflow: hidden;
+    }
+
+    &__stat-item {
+        padding: u.em(16);
+        border-inline-end: 1px solid var(--color-border);
+        border-block-end: 1px solid var(--color-border);
+
+        &:nth-child(2n) {
+            border-inline-end: none;
+        }
+
+        &:nth-last-child(-n + 2) {
+            border-block-end: none;
+        }
+    }
+
+    &__stat-value {
+        display: block;
+        font-size: u.$font-size-3xl;
+        font-weight: 700;
+        color: var(--color-text-primary);
+        margin-block-end: u.em(3);
+    }
+
+    &__stat-label {
+        display: block;
+        font-size: u.$font-size-xs;
+        color: var(--color-text-tertiary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+}
