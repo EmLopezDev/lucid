@@ -1,7 +1,6 @@
 @use "../utils/" as u;
 
 .card {
-    min-height: u.em(200);
     border: u.em(1) solid rgba(var(--color-brand-rgb), 0.2);
     border-radius: u.em(12);
     overflow: hidden;
@@ -79,15 +78,16 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
+        object-position: center top;
         display: block;
     }
 
     &__banner {
-        height: u.em(200);
+        aspect-ratio: 16 / 9;
+        position: relative;
         display: flex;
         align-items: flex-end;
         padding: u.em(12) u.em(12) u.em(10);
-        position: relative;
 
         &--has-image {
             &::after {
