@@ -8,7 +8,7 @@ import ChangeGameForm from "./ChangeGameForm";
 import useClubGame from "./hooks/useClubGame";
 
 const ClubPageModals = () => {
-    const { clubData, activeModal, onCloseModal } = useClubPageContext();
+    const { clubData, clubId, activeModal, onCloseModal, onLeaveClub } = useClubPageContext();
     const { onGameSet, onGameChange } = useClubGame();
 
     if (!clubData) return null;
@@ -87,7 +87,7 @@ const ClubPageModals = () => {
                 message={`Are you sure you want to leave ${clubData.name}? You can rejoin if the club is public.`}
                 confirmLabel="Remove"
                 variant="danger"
-                onConfirm={() => {}}
+                onConfirm={() => onLeaveClub(clubId)}
                 onCancel={onCloseModal}
             />
         </>

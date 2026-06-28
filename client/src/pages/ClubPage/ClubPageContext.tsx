@@ -39,6 +39,7 @@ export type ClubPageContextType = {
     setClubData: Dispatch<SetStateAction<ClubDetailType | null>>;
     onSwitchTab: (tab: ClubTab) => void;
     onJoinClub: (clubId: string) => void;
+    onLeaveClub: (clubId: string) => void;
 };
 
 export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; clubId: string }) => {
@@ -83,6 +84,30 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
         }
     }, []);
 
+    const onLeaveClub = useCallback(
+        async (clubId: string) => {
+            try {
+                const response = await fetch(`${API_URL}/clubs/${clubId}/leave`, {
+                    method: "PATCH",
+                    credentials: "include",
+                });
+                if (!response.ok) throw new Error("Failed to leave club");
+                const leftClub: ClubDetailType = await response.json();
+                setClubData(leftClub);
+                onCloseModal();
+                toast.success(`Left club ${leftClub.name} successfully.`);
+                return true;
+            } catch (error) {
+                if (import.meta.env.DEV) {
+                    console.error(error instanceof Error ? error.message : error);
+                }
+                toast.error("Unable to leave club, try again.");
+                return false;
+            }
+        },
+        [onCloseModal],
+    );
+
     useEffect(() => {
         const fetchClubData = async () => {
             try {
@@ -119,6 +144,7 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
             setClubData,
             onSwitchTab,
             onJoinClub,
+            onLeaveClub,
         }),
         [
             isLoading,
@@ -135,6 +161,7 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
             setClubData,
             onSwitchTab,
             onJoinClub,
+            onLeaveClub,
         ],
     );
 
