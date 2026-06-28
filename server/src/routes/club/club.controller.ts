@@ -107,7 +107,8 @@ export const patchJoinGamingClub = async (
                 return res.status(403).json({ message: "Invalid invite code" });
             }
         }
-        const clubJoined = await joinGamingClub(req.session.userId, req.params.clubId);
+        await joinGamingClub(req.session.userId, req.params.clubId);
+        const clubJoined = await getGamingClubById(req.params.clubId);
         return res.status(200).json(clubJoined);
     } catch (error) {
         next(error);
@@ -158,12 +159,13 @@ export const patchLeaveGamingClub = async (
         if (!req.session.userId) {
             return res.status(401).json({ message: "Unauthorized" });
         }
-        const clubLeft = await leaveGamingClub(req.session.userId, req.params.clubId);
+        const left = await leaveGamingClub(req.session.userId, req.params.clubId);
 
-        if (!clubLeft) {
+        if (!left) {
             return res.status(404).json({ message: "Club not found" });
         }
 
+        const clubLeft = await getGamingClubById(req.params.clubId);
         return res.status(200).json(clubLeft);
     } catch (error) {
         next(error);

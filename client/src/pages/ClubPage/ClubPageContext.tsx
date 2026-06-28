@@ -11,6 +11,7 @@ import { type ClubDetailType, type ClubMemberType } from "@lucid/types";
 import { API_URL } from "@config/api";
 import { ClubPageContext } from "./hooks/useClubPageContext";
 import { useUserContext } from "@contexts/UserContext/useUserContext";
+import { toast } from "sonner";
 
 export type ClubTab = "overview" | "members" | "posts";
 
@@ -37,6 +38,7 @@ export type ClubPageContextType = {
     onCloseModal: () => void;
     setClubData: Dispatch<SetStateAction<ClubDetailType | null>>;
     onSwitchTab: (tab: ClubTab) => void;
+    onJoinClub: (clubId: string) => void;
 };
 
 export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; clubId: string }) => {
@@ -59,6 +61,26 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
     }, []);
     const onCloseModal = useCallback(() => {
         setActiveModal(null);
+    }, []);
+
+    const onJoinClub = useCallback(async (clubId: string) => {
+        try {
+            const response = await fetch(`${API_URL}/clubs/${clubId}/join`, {
+                method: "PATCH",
+                credentials: "include",
+            });
+            if (!response.ok) throw new Error("Failed to join club");
+            const joinedClub: ClubDetailType = await response.json();
+            setClubData(joinedClub);
+            toast.success(`Joined ${joinedClub.name} successfully.`);
+            return true;
+        } catch (error) {
+            if (import.meta.env.DEV) {
+                console.error(error instanceof Error ? error.message : error);
+            }
+            toast.error("Unable to join club, try again.");
+            return false;
+        }
     }, []);
 
     useEffect(() => {
@@ -96,6 +118,7 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
             onCloseModal,
             setClubData,
             onSwitchTab,
+            onJoinClub,
         }),
         [
             isLoading,
@@ -111,6 +134,7 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
             onCloseModal,
             setClubData,
             onSwitchTab,
+            onJoinClub,
         ],
     );
 
