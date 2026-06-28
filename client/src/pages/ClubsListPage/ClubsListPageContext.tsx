@@ -8,7 +8,7 @@ import {
     type SubmitEvent,
 } from "react";
 import { type ClubType, type CreateClubType } from "@lucid/types";
-import { ClubsPageContext } from "./useClubsPageContext";
+import { ClubsListPageContext } from "./useClubsListPageContext";
 import { API_URL } from "@config/api";
 import { filterByName } from "@lib/filter";
 import { isFormDataValid, hasErrors, type FormRules } from "@lib/form";
@@ -45,10 +45,10 @@ const CREATE_CLUB_RULES: FormRules<NewClubFormType> = {
     avatar: [],
 };
 
-export type ClubsPageContextType = {
+export type ClubsListPageContextType = {
     isLoading: boolean;
     error: string | null;
-    filteredClubData: ClubType[];
+    filteredClubsData: ClubType[];
     createClubData: NewClubFormType;
     isCreateClubModalOpen: boolean;
     createClubErrors: NewClubFormErrorsType;
@@ -65,10 +65,10 @@ export type ClubsPageContextType = {
     refetch: () => void;
 };
 
-export const ClubsPageProvider = ({ children }: { children: ReactNode }) => {
+export const ClubsListPageProvider = ({ children }: { children: ReactNode }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [clubData, setClubData] = useState<ClubType[]>([]);
+    const [clubsData, setClubsData] = useState<ClubType[]>([]);
     const [filterData, setFilterData] = useState({ searchName: "" });
     const [createClubData, setCreateClubData] = useState<NewClubFormType>(
         objectCopy(CREATE_CLUB_EMPTY_FORM),
@@ -79,9 +79,9 @@ export const ClubsPageProvider = ({ children }: { children: ReactNode }) => {
     const [isCreateClubModalOpen, setIsCreateClubModalOpen] = useState(false);
     const [fetchTrigger, setFetchTrigger] = useState(0);
 
-    const filteredClubData = useMemo(() => {
-        return filterByName(clubData, filterData.searchName);
-    }, [clubData, filterData]);
+    const filteredClubsData = useMemo(() => {
+        return filterByName(clubsData, filterData.searchName);
+    }, [clubsData, filterData]);
 
     const onClubSearch = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setFilterData((prevState) => ({ ...prevState, searchName: event.target.value }));
@@ -122,7 +122,7 @@ export const ClubsPageProvider = ({ children }: { children: ReactNode }) => {
             });
             if (!response.ok) throw new Error("Failed to create club");
             const newClub: ClubType = await response.json();
-            setClubData((prevState) => [newClub, ...prevState]);
+            setClubsData((prevState) => [newClub, ...prevState]);
             toast.success(`Successfully created the club: ${newClub.name}.`);
             return true;
         } catch (error) {
@@ -142,7 +142,7 @@ export const ClubsPageProvider = ({ children }: { children: ReactNode }) => {
             });
             if (!response.ok) throw new Error("Failed to join club");
             const joinedClub: ClubType = await response.json();
-            setClubData((prevState) =>
+            setClubsData((prevState) =>
                 prevState.map((club) => (club._id === joinedClub._id ? joinedClub : club)),
             );
             toast.success(`Joined ${joinedClub.name} successfully.`);
@@ -164,7 +164,7 @@ export const ClubsPageProvider = ({ children }: { children: ReactNode }) => {
             });
             if (!response.ok) throw new Error("Failed to leave club");
             const leftClub: ClubType = await response.json();
-            setClubData((prevState) =>
+            setClubsData((prevState) =>
                 prevState.map((club) => (club._id === leftClub._id ? leftClub : club)),
             );
             toast.success(`Left club ${leftClub.name} successfully.`);
@@ -218,7 +218,7 @@ export const ClubsPageProvider = ({ children }: { children: ReactNode }) => {
                 const response = await fetch(`${API_URL}/clubs`, { credentials: "include" });
                 if (!response.ok) throw new Error("Failed to fetch clubs");
                 const data = await response.json();
-                setClubData(data);
+                setClubsData(data);
             } catch (error) {
                 if (import.meta.env.DEV) {
                     console.error(error instanceof Error ? error.message : error);
@@ -236,7 +236,7 @@ export const ClubsPageProvider = ({ children }: { children: ReactNode }) => {
             isLoading,
             error,
             isCreateClubModalOpen,
-            filteredClubData,
+            filteredClubsData,
             createClubData,
             createClubErrors,
             onClubSearch,
@@ -255,7 +255,7 @@ export const ClubsPageProvider = ({ children }: { children: ReactNode }) => {
             isLoading,
             error,
             isCreateClubModalOpen,
-            filteredClubData,
+            filteredClubsData,
             createClubData,
             createClubErrors,
             onClubSearch,
@@ -273,8 +273,8 @@ export const ClubsPageProvider = ({ children }: { children: ReactNode }) => {
     );
 
     return (
-        <ClubsPageContext.Provider value={contextValue}>
+        <ClubsListPageContext.Provider value={contextValue}>
             {children}
-        </ClubsPageContext.Provider>
+        </ClubsListPageContext.Provider>
     );
 };

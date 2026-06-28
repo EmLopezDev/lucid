@@ -16,7 +16,7 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage/VerifyEmailPage";
 import ProfilePage from "@pages/ProfilePage/ProfilePage";
-import ClubsPage from "@pages/ClubsPage/ClubsPage";
+import ClubsListPage from "@pages/ClubsListPage/ClubsListPage";
 import ClubPage from "@pages/ClubPage/ClubPage";
 
 function App() {
@@ -59,7 +59,7 @@ function App() {
                 <Route element={<AuthorizedRoutes isAuthenticated={isUserAuthenticated} />}>
                     <Route
                         path="/clubs"
-                        element={<ClubsPage />}
+                        element={<ClubsListPage />}
                     />
                     <Route
                         path="/clubs/:clubId"
