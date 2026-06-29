@@ -103,13 +103,7 @@ export const patchSetGamingClubGame = async (
     next: NextFunction,
 ) => {
     try {
-        const club = await getGamingClubById(req.params.clubId);
-        if (!club) {
-            return res.status(404).json({ message: "Club not found" });
-        }
-        if (club.owner !== res.locals.userId) {
-            return res.status(403).json({ message: "Only the club owner can set the game" });
-        }
+        const { club } = res.locals;
         if (club.current_game && !req.body.game_status) {
             return res
                 .status(400)
@@ -154,13 +148,6 @@ export const patchGamingClubMember = async (
     next: NextFunction,
 ) => {
     try {
-        const club = await getGamingClubById(req.params.clubId);
-        if (!club) {
-            return res.status(404).json({ message: "Club not found" });
-        }
-        if (club.owner !== res.locals.userId) {
-            return res.status(403).json({ message: "Only the club owner can remove members" });
-        }
         await removeGamingClubMember(req.params.memberId, req.params.clubId);
         const removedMemberClub = await getGamingClubById(req.params.clubId);
         return res.status(200).json(removedMemberClub);

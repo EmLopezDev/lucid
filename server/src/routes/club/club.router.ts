@@ -11,17 +11,18 @@ import {
     patchGamingClubMember,
 } from "./club.controller";
 import { requireAuth } from "../../middleware/requireAuth";
+import { requireClubOwner } from "../../middleware/requireClubOwner";
 
 const ClubRouter = express.Router();
 
 ClubRouter.get("/", getGamingClubs);
 ClubRouter.get("/:clubId", getGamingClub);
 ClubRouter.post("/", requireAuth, postGamingClub);
-ClubRouter.patch("/:clubId/game", requireAuth, patchSetGamingClubGame);
+ClubRouter.patch("/:clubId/game", requireAuth, requireClubOwner, patchSetGamingClubGame);
 ClubRouter.patch("/:clubId/join", requireAuth, patchJoinGamingClub);
 ClubRouter.patch("/:clubId/leave", requireAuth, patchLeaveGamingClub);
-ClubRouter.patch("/:clubId/members/:memberId", requireAuth, patchGamingClubMember);
-ClubRouter.patch("/:clubId", requireAuth, patchGamingClub);
-ClubRouter.delete("/:clubId", requireAuth, destroyGamingClub);
+ClubRouter.patch("/:clubId/members/:memberId", requireAuth, requireClubOwner, patchGamingClubMember);
+ClubRouter.patch("/:clubId", requireAuth, requireClubOwner, patchGamingClub);
+ClubRouter.delete("/:clubId", requireAuth, requireClubOwner, destroyGamingClub);
 
 export default ClubRouter;
