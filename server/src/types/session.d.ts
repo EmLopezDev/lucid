@@ -5,3 +5,11 @@ declare module "express-session" {
         userId: string;
     }
 }
+
+declare global {
+    namespace Express {
+        interface Locals {
+            userId: string;
+        }
+    }
+}

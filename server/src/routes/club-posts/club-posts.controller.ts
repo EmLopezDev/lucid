@@ -53,7 +53,7 @@ export const postGamingClubPost = async (
                 .status(400)
                 .json({ message: "Invalid fields", errors: flattenError(parsed.error) });
         }
-        const post = await createGamingClubPost(req.params.clubId, req.session.userId!, parsed.data);
+        const post = await createGamingClubPost(req.params.clubId, res.locals.userId, parsed.data);
         return res.status(201).json(post);
     } catch (error) {
         next(error);

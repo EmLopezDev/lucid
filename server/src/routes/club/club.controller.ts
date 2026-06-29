@@ -46,7 +46,7 @@ export const postGamingClub = async (req: Request, res: Response, next: NextFunc
                 .status(400)
                 .json({ message: "Invalid fields", errors: flattenError(parsed.error) });
         }
-        const club = await createGamingClub(req.session.userId!, parsed.data);
+        const club = await createGamingClub(res.locals.userId, parsed.data);
         return res.status(201).json(club);
     } catch (error) {
         next(error);
@@ -89,7 +89,7 @@ export const patchJoinGamingClub = async (
                 return res.status(403).json({ message: "Invalid invite code" });
             }
         }
-        await joinGamingClub(req.session.userId!, req.params.clubId);
+        await joinGamingClub(res.locals.userId, req.params.clubId);
         const clubJoined = await getGamingClubById(req.params.clubId);
         return res.status(200).json(clubJoined);
     } catch (error) {
@@ -107,7 +107,7 @@ export const patchSetGamingClubGame = async (
         if (!club) {
             return res.status(404).json({ message: "Club not found" });
         }
-        if (club.owner !== req.session.userId!) {
+        if (club.owner !== res.locals.userId) {
             return res.status(403).json({ message: "Only the club owner can set the game" });
         }
         if (club.current_game && !req.body.game_status) {
@@ -135,7 +135,7 @@ export const patchLeaveGamingClub = async (
     next: NextFunction,
 ) => {
     try {
-        const left = await leaveGamingClub(req.session.userId!, req.params.clubId);
+        const left = await leaveGamingClub(res.locals.userId, req.params.clubId);
 
         if (!left) {
             return res.status(404).json({ message: "Club not found" });
@@ -158,7 +158,7 @@ export const patchGamingClubMember = async (
         if (!club) {
             return res.status(404).json({ message: "Club not found" });
         }
-        if (club.owner !== req.session.userId!) {
+        if (club.owner !== res.locals.userId) {
             return res.status(403).json({ message: "Only the club owner can remove members" });
         }
         await removeGamingClubMember(req.params.memberId, req.params.clubId);
