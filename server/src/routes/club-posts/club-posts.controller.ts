@@ -47,16 +47,13 @@ export const postGamingClubPost = async (
     next: NextFunction,
 ) => {
     try {
-        if (!req.session.userId) {
-            return res.status(401).json({ message: "Unauthorized" });
-        }
         const parsed = CreateClubPost.safeParse(req.body);
         if (!parsed.success) {
             return res
                 .status(400)
                 .json({ message: "Invalid fields", errors: flattenError(parsed.error) });
         }
-        const post = await createGamingClubPost(req.params.clubId, req.session.userId, parsed.data);
+        const post = await createGamingClubPost(req.params.clubId, req.session.userId!, parsed.data);
         return res.status(201).json(post);
     } catch (error) {
         next(error);

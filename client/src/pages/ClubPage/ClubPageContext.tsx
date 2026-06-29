@@ -19,7 +19,7 @@ type ActiveModalType =
     | "changeGame"
     | "editClub"
     | "deleteClub"
-    | "deleteClubMember"
+    | "removeClubMember"
     | "leaveClub"
     | null;
 

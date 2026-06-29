@@ -5,10 +5,10 @@ import { toast } from "sonner";
 import { useClubPageContext } from "./useClubPageContext";
 
 const useClubMembers = () => {
-    const { clubId, onOpenModal, onCloseModal, setClubData } = useClubPageContext();
+    const { clubId, clubData, onOpenModal, onCloseModal, setClubData } = useClubPageContext();
 
     const handleOpenLeaveClubModal = () => onOpenModal("leaveClub");
-    const handleOpenDeleteMemberModal = () => onOpenModal("deleteClubMember");
+    const handleOpenDeleteMemberModal = () => onOpenModal("removeClubMember");
 
     const handleJoinClub = useCallback(async () => {
         try {
@@ -51,10 +51,35 @@ const useClubMembers = () => {
         }
     }, [clubId, setClubData, onCloseModal]);
 
-    const onMemberDelete = async () => {};
+    const onRemoveMember = useCallback(
+        async (memberId: string) => {
+            try {
+                const response = await fetch(`${API_URL}/clubs/${clubId}/members/${memberId}`, {
+                    method: "PATCH",
+                    credentials: "include",
+                });
+                if (!response.ok) throw new Error("Failed to remove member");
+                const member = clubData?.members.find((m) => m._id === memberId);
+                const removedMemberClub: ClubDetailType = await response.json();
+                setClubData(removedMemberClub);
+                onCloseModal();
+                toast.success(
+                    `Removed ${member?.first_name} ${member?.last_name} from the club.`,
+                );
+                return true;
+            } catch (error) {
+                if (import.meta.env.DEV) {
+                    console.error(error instanceof Error ? error.message : error);
+                }
+                toast.error("Unable to remove member, try again.");
+                return false;
+            }
+        },
+        [clubId, clubData, setClubData, onCloseModal],
+    );
 
     return {
-        onMemberDelete,
+        onRemoveMember,
         handleJoinClub,
         handleLeaveClub,
         handleOpenLeaveClubModal,

@@ -10,6 +10,7 @@ import {
     joinGamingClub,
     leaveGamingClub,
     setGamingClubGame,
+    removeGamingClubMember,
 } from "../../models/club/club.model";
 
 export const getGamingClub = async (
@@ -39,16 +40,13 @@ export const getGamingClubs = async (_req: Request, res: Response, next: NextFun
 
 export const postGamingClub = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        if (!req.session.userId) {
-            return res.status(401).json({ message: "Unauthorized" });
-        }
         const parsed = CreateClub.safeParse(req.body);
         if (!parsed.success) {
             return res
                 .status(400)
                 .json({ message: "Invalid fields", errors: flattenError(parsed.error) });
         }
-        const club = await createGamingClub(req.session.userId, parsed.data);
+        const club = await createGamingClub(req.session.userId!, parsed.data);
         return res.status(201).json(club);
     } catch (error) {
         next(error);
@@ -74,28 +72,12 @@ export const patchGamingClub = async (
     }
 };
 
-export const destroyGamingClub = async (
-    req: Request<{ clubId: string }>,
-    res: Response,
-    next: NextFunction,
-) => {
-    try {
-        await deleteGamingClub(req.params.clubId);
-        return res.status(204).end();
-    } catch (error) {
-        next(error);
-    }
-};
-
 export const patchJoinGamingClub = async (
     req: Request<{ clubId: string }>,
     res: Response,
     next: NextFunction,
 ) => {
     try {
-        if (!req.session.userId) {
-            return res.status(401).json({ message: "Unauthorized" });
-        }
         const club = await getGamingClubById(req.params.clubId);
 
         if (!club) {
@@ -107,7 +89,7 @@ export const patchJoinGamingClub = async (
                 return res.status(403).json({ message: "Invalid invite code" });
             }
         }
-        await joinGamingClub(req.session.userId, req.params.clubId);
+        await joinGamingClub(req.session.userId!, req.params.clubId);
         const clubJoined = await getGamingClubById(req.params.clubId);
         return res.status(200).json(clubJoined);
     } catch (error) {
@@ -121,14 +103,11 @@ export const patchSetGamingClubGame = async (
     next: NextFunction,
 ) => {
     try {
-        if (!req.session.userId) {
-            return res.status(401).json({ message: "Unauthorized" });
-        }
         const club = await getGamingClubById(req.params.clubId);
         if (!club) {
             return res.status(404).json({ message: "Club not found" });
         }
-        if (club.owner !== req.session.userId) {
+        if (club.owner !== req.session.userId!) {
             return res.status(403).json({ message: "Only the club owner can set the game" });
         }
         if (club.current_game && !req.body.game_status) {
@@ -156,10 +135,7 @@ export const patchLeaveGamingClub = async (
     next: NextFunction,
 ) => {
     try {
-        if (!req.session.userId) {
-            return res.status(401).json({ message: "Unauthorized" });
-        }
-        const left = await leaveGamingClub(req.session.userId, req.params.clubId);
+        const left = await leaveGamingClub(req.session.userId!, req.params.clubId);
 
         if (!left) {
             return res.status(404).json({ message: "Club not found" });
@@ -167,6 +143,40 @@ export const patchLeaveGamingClub = async (
 
         const clubLeft = await getGamingClubById(req.params.clubId);
         return res.status(200).json(clubLeft);
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const patchGamingClubMember = async (
+    req: Request<{ clubId: string; memberId: string }>,
+    res: Response,
+    next: NextFunction,
+) => {
+    try {
+        const club = await getGamingClubById(req.params.clubId);
+        if (!club) {
+            return res.status(404).json({ message: "Club not found" });
+        }
+        if (club.owner !== req.session.userId!) {
+            return res.status(403).json({ message: "Only the club owner can remove members" });
+        }
+        await removeGamingClubMember(req.params.memberId, req.params.clubId);
+        const removedMemberClub = await getGamingClubById(req.params.clubId);
+        return res.status(200).json(removedMemberClub);
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const destroyGamingClub = async (
+    req: Request<{ clubId: string }>,
+    res: Response,
+    next: NextFunction,
+) => {
+    try {
+        await deleteGamingClub(req.params.clubId);
+        return res.status(204).end();
     } catch (error) {
         next(error);
     }

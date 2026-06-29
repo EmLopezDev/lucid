@@ -209,3 +209,11 @@ export const leaveGamingClub = async (userId: string, clubId: string) => {
         { returnDocument: "after" },
     );
 };
+
+export const removeGamingClubMember = async (memberId: string, clubId: string) => {
+    return await ClubModel.findByIdAndUpdate(
+        { _id: clubId },
+        { $pull: { members: { user_id: memberId } } },
+        { returnDocument: "after" },
+    );
+};

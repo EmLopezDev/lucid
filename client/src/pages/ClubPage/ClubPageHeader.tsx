@@ -6,10 +6,10 @@ import useClubMembers from "./hooks/useClubMembers";
 import useClubSettings from "./hooks/useClubSettings";
 
 const ClubPageHeader = () => {
-    const { clubData, clubId, isOwner, isMember, onJoinClub } = useClubPageContext();
+    const { clubData, isOwner, isMember } = useClubPageContext();
 
     const { handleOpenEditClubModal } = useClubSettings();
-    const { handleOpenLeaveClubModal } = useClubMembers();
+    const { handleJoinClub, handleOpenLeaveClubModal } = useClubMembers();
 
     if (!clubData) return null;
 
@@ -120,7 +120,7 @@ const ClubPageHeader = () => {
                             <Button
                                 variant="primary"
                                 buttonSize="medium"
-                                onClick={() => onJoinClub(clubId)}
+                                onClick={handleJoinClub}
                             >
                                 Join Club
                             </Button>

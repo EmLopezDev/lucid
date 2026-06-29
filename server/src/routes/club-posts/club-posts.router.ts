@@ -6,13 +6,14 @@ import {
     patchGamingClubPost,
     destroyGamingClubPost,
 } from "./club-posts.controller";
+import { requireAuth } from "../../middleware/requireAuth";
 
 const ClubPostRouter = express.Router();
 
 ClubPostRouter.get("/posts", getGamingClubPosts);
 ClubPostRouter.get("/posts/:postId", getGamingClubPost);
-ClubPostRouter.post("/posts", postGamingClubPost);
-ClubPostRouter.patch("/posts/:postId", patchGamingClubPost);
-ClubPostRouter.delete("/posts/:postId", destroyGamingClubPost);
+ClubPostRouter.post("/posts", requireAuth, postGamingClubPost);
+ClubPostRouter.patch("/posts/:postId", requireAuth, patchGamingClubPost);
+ClubPostRouter.delete("/posts/:postId", requireAuth, destroyGamingClubPost);
 
 export default ClubPostRouter;

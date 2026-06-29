@@ -6,9 +6,11 @@ import ConfirmModal from "@components/ConfirmModal";
 import SetGameForm from "./SetGameForm";
 import ChangeGameForm from "./ChangeGameForm";
 import useClubGame from "./hooks/useClubGame";
+import useClubMembers from "./hooks/useClubMembers";
 
 const ClubPageModals = () => {
-    const { clubData, clubId, activeModal, onCloseModal, onLeaveClub } = useClubPageContext();
+    const { clubData, activeModal, onCloseModal } = useClubPageContext();
+    const { handleLeaveClub } = useClubMembers();
     const { onGameSet, onGameChange } = useClubGame();
 
     if (!clubData) return null;
@@ -72,7 +74,7 @@ const ClubPageModals = () => {
 
             {/* Remove Member */}
             <ConfirmModal
-                isOpen={activeModal === "deleteClubMember"}
+                isOpen={activeModal === "removeClubMember"}
                 title="Remove Member"
                 message={`Remove this member from ${clubData.name}? They can rejoin if the club is public.`}
                 confirmLabel="Remove"
@@ -87,7 +89,7 @@ const ClubPageModals = () => {
                 message={`Are you sure you want to leave ${clubData.name}? You can rejoin if the club is public.`}
                 confirmLabel="Remove"
                 variant="danger"
-                onConfirm={() => onLeaveClub(clubId)}
+                onConfirm={handleLeaveClub}
                 onCancel={onCloseModal}
             />
         </>
