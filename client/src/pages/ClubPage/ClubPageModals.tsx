@@ -7,11 +7,13 @@ import SetGameForm from "./SetGameForm";
 import ChangeGameForm from "./ChangeGameForm";
 import useClubGame from "./hooks/useClubGame";
 import useClubMembers from "./hooks/useClubMembers";
+import useClubSettings from "./hooks/useClubSettings";
 
 const ClubPageModals = () => {
     const { clubData, activeModal, onCloseModal } = useClubPageContext();
     const { onLeaveClub, onRemoveMember } = useClubMembers();
     const { onGameSet, onGameChange } = useClubGame();
+    const { onClubDelete } = useClubSettings();
 
     if (!clubData) return null;
 
@@ -68,7 +70,7 @@ const ClubPageModals = () => {
                 }
                 confirmLabel="Delete Club"
                 variant="danger"
-                onConfirm={() => {}}
+                onConfirm={onClubDelete}
                 onCancel={onCloseModal}
             />
 

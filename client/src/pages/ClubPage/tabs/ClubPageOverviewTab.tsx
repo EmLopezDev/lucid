@@ -4,10 +4,12 @@ import Button from "@components/Button/Button";
 import Icon from "@components/Icon";
 import useClubGame from "../hooks/useClubGame";
 import Badge from "@components/Badge";
+import useClubSettings from "../hooks/useClubSettings";
 
 const ClubPageOverviewTab = () => {
     const { clubData, isOwner, ownerMember } = useClubPageContext();
     const { handleOpenSetGameModal, handleOpenChangeGameModal } = useClubGame();
+    const { handleOpenDeleteClubModal } = useClubSettings();
 
     if (!clubData) return null;
 
@@ -227,6 +229,7 @@ const ClubPageOverviewTab = () => {
                                     <Button
                                         variant="danger"
                                         buttonSize="small"
+                                        onClick={handleOpenDeleteClubModal}
                                     >
                                         Delete Club
                                     </Button>
