@@ -20,7 +20,4 @@ const ClubPostSchema = new Schema<ClubPostDocument>(
     { versionKey: false },
 );
 
-export const ClubPostModel = model<ClubPostDocument>(
-    "GamingClubPost",
-    ClubPostSchema,
-);
+export const ClubPostModel = model<ClubPostDocument>("ClubPost", ClubPostSchema);

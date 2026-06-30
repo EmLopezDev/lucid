@@ -25,7 +25,7 @@ export const Club = z.object({
     owner: z.string(),
     avatar_url: z.string().nullable().default(null),
     description: z.string().max(160).nullable().default(null),
-    members: z.array(z.object({ user_id: z.string(), joined_at: z.string() })).default([]),
+    members: z.array(z.object({ _id: z.string(), joined_at: z.string() })).default([]),
     visibility: z.enum(["public", "private"]),
     invite_code: z.string().nullable().default(null),
     current_game: CurrentGame.nullable().default(null),

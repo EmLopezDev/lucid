@@ -5,7 +5,7 @@ type ClubDocument = Omit<
     ClubType,
     "current_game" | "past_games" | "created_at" | "updated_at" | "deleted_at" | "members"
 > & {
-    members: Array<{ user_id: string; joined_at: Date }>;
+    members: Array<{ _id: string; joined_at: Date }>;
     current_game: {
         title: string;
         cover_url: string | null;
@@ -31,8 +31,9 @@ const ClubSchema = new Schema<ClubDocument>(
         description: { type: String, default: null },
         members: [
             {
+                _id: false,
                 type: {
-                    user_id: { type: String, required: true },
+                    _id: { type: String, required: true },
                     joined_at: { type: Date, required: true },
                 },
             },
@@ -65,4 +66,4 @@ const ClubSchema = new Schema<ClubDocument>(
     { versionKey: false },
 );
 
-export const ClubModel = model<ClubDocument>("GamingClub", ClubSchema);
+export const ClubModel = model<ClubDocument>("Club", ClubSchema);

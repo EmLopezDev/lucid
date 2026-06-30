@@ -12,7 +12,7 @@ type ClubCardType = {
 
 const ClubCard = ({ club, currentUser, onJoinClub, onLeaveClub }: ClubCardType) => {
     const isOwner = currentUser?._id === club.owner;
-    const isMember = !!currentUser && club.members.some((m) => m.user_id === currentUser._id);
+    const isMember = !!currentUser && club.members.some((m) => m._id === currentUser._id);
 
     const joinButton = isOwner ? (
         <Button

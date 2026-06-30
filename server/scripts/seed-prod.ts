@@ -3,7 +3,7 @@ import { mongoClientPromise, mongoDisconnect } from "../src/services/mongo";
 import { UserModel } from "../src/models/user/user.mongo";
 import { AuthModel } from "../src/models/auth/auth.mongo";
 import { UserLibraryModel } from "../src/models/user-library/user-library.mongo";
-import { GamingClubModel } from "../src/models/gaming-club/gaming-club.mongo";
+import { ClubModel } from "../src/models/club/club.mongo";
 import { libraryGames, clubs } from "./seed-data";
 
 const DEMO_EMAIL = "demo@lucid.com";
@@ -19,7 +19,7 @@ const seedDemo = async () => {
         await Promise.all([
             AuthModel.deleteMany({ user_id: String(existing._id) }),
             UserLibraryModel.deleteMany({ user_id: String(existing._id) }),
-            GamingClubModel.deleteMany({}),
+            ClubModel.deleteMany({}),
         ]);
         await UserModel.deleteOne({ _id: existing._id });
         console.log("Removed existing demo user");
@@ -39,7 +39,7 @@ const seedDemo = async () => {
     await AuthModel.create({ user_id: String(user._id), hash });
 
     await UserLibraryModel.insertMany(libraryGames(String(user._id)));
-    await GamingClubModel.insertMany(clubs(String(user._id)));
+    await ClubModel.insertMany(clubs(String(user._id)));
 
     console.log(`\nDemo seed complete`);
     console.log(`  Email:    ${DEMO_EMAIL}`);

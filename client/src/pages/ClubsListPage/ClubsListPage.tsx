@@ -37,15 +37,13 @@ const ClubsListPageContent = () => {
     const { yourClubs, discoverClubs } = useMemo(() => {
         const userId = currentUser?._id ?? "";
         const yours = filteredClubsData
-            .filter((c) => c.members.some((m) => m.user_id === userId))
+            .filter((c) => c.members.some((m) => m._id === userId))
             .sort((a, b) => {
                 const aOwned = a.owner === userId ? 1 : 0;
                 const bOwned = b.owner === userId ? 1 : 0;
                 return bOwned - aOwned;
             });
-        const discover = filteredClubsData.filter(
-            (c) => !c.members.some((m) => m.user_id === userId),
-        );
+        const discover = filteredClubsData.filter((c) => !c.members.some((m) => m._id === userId));
         return { yourClubs: yours, discoverClubs: discover };
     }, [filteredClubsData, currentUser]);
 
@@ -100,7 +98,9 @@ const ClubsListPageContent = () => {
                     <div className="clubs-list-page__empty-state">
                         <span className="clubs-list-page__empty-state__icon">🎮</span>
                         <span className="clubs-list-page__empty-state__title">No Clubs Yet</span>
-                        <p className="clubs-list-page__empty-state__sub">Be the first to create one</p>
+                        <p className="clubs-list-page__empty-state__sub">
+                            Be the first to create one
+                        </p>
                         <Button
                             icon="plus"
                             iconPosition="left"
@@ -178,7 +178,7 @@ const ClubsListPageContent = () => {
     );
 };
 
-const ClubsListPage =() => {
+const ClubsListPage = () => {
     return (
         <ClubsListPageProvider>
             <ClubsListPageContent />

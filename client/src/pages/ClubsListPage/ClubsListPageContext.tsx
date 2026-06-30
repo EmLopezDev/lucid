@@ -9,7 +9,6 @@ import {
 } from "react";
 import { type ClubType, type CreateClubType } from "@lucid/types";
 import { ClubsListPageContext } from "./useClubsListPageContext";
-import { useUserContext } from "@contexts/UserContext/useUserContext";
 import { API_URL } from "@config/api";
 import { filterByName } from "@lib/filter";
 import { isFormDataValid, hasErrors, type FormRules } from "@lib/form";
@@ -67,7 +66,6 @@ export type ClubsListPageContextType = {
 };
 
 export const ClubsListPageProvider = ({ children }: { children: ReactNode }) => {
-    const { currentUser } = useUserContext();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [clubsData, setClubsData] = useState<ClubType[]>([]);
@@ -145,17 +143,7 @@ export const ClubsListPageProvider = ({ children }: { children: ReactNode }) => 
             if (!response.ok) throw new Error("Failed to join club");
             const joinedClub: ClubType = await response.json();
             setClubsData((prevState) =>
-                prevState.map((club) =>
-                    club._id === clubId
-                        ? {
-                              ...club,
-                              members: [
-                                  ...club.members,
-                                  { user_id: currentUser!._id, joined_at: new Date().toISOString() },
-                              ],
-                          }
-                        : club,
-                ),
+                prevState.map((club) => (club._id === clubId ? joinedClub : club)),
             );
             toast.success(`Joined ${joinedClub.name} successfully.`);
             return true;
@@ -166,7 +154,7 @@ export const ClubsListPageProvider = ({ children }: { children: ReactNode }) => 
             toast.error("Unable to join club, try again.");
             return false;
         }
-    }, [currentUser]);
+    }, []);
 
     const onLeaveClub = useCallback(async (clubId: string) => {
         try {
