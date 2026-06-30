@@ -1,10 +1,9 @@
 import { useClubPageContext } from "./hooks/useClubPageContext";
 import Modal from "@components/Modal";
-import Form from "@components/Form";
-import Input from "@components/Input";
 import ConfirmModal from "@components/ConfirmModal";
 import SetGameForm from "./SetGameForm";
 import ChangeGameForm from "./ChangeGameForm";
+import ClubForm from "./ClubForm";
 import useClubGame from "./hooks/useClubGame";
 import useClubMembers from "./hooks/useClubMembers";
 import useClubSettings from "./hooks/useClubSettings";
@@ -13,7 +12,17 @@ const ClubPageModals = () => {
     const { clubData, activeModal, onCloseModal } = useClubPageContext();
     const { onLeaveClub, onRemoveMember } = useClubMembers();
     const { onGameSet, onGameChange } = useClubGame();
-    const { onClubDelete } = useClubSettings();
+    const {
+        onClubDelete,
+        editFormData,
+        editFormErrors,
+        onEditNameChange,
+        onEditAvatarChange,
+        onEditVisibilityChange,
+        onEditDescriptionChange,
+        onSubmitEditForm,
+        handleCloseEditClubModal,
+    } = useClubSettings();
 
     if (!clubData) return null;
 
@@ -23,38 +32,22 @@ const ClubPageModals = () => {
             <Modal
                 isOpen={activeModal === "editClub"}
                 title="Edit Club"
-                onClose={onCloseModal}
+                onClose={handleCloseEditClubModal}
             >
-                <Form
+                <ClubForm
+                    nameValue={editFormData.name}
+                    nameError={editFormErrors.name}
+                    avatarValue={editFormData.avatar}
+                    visibilityValue={editFormData.visibility}
+                    descriptionValue={editFormData.description}
+                    descriptionError={editFormErrors.description}
+                    onNameChange={onEditNameChange}
+                    onAvatarChange={onEditAvatarChange}
+                    onVisibilityChange={onEditVisibilityChange}
+                    onDescriptionChange={onEditDescriptionChange}
                     primaryButtonText="Save Changes"
-                    onSubmit={() => {}}
-                    onCancel={onCloseModal}
-                >
-                    <Input onChange={() => {}} />
-                </Form>
-            </Modal>
-
-            {/* Set Game */}
-            <Modal
-                isOpen={activeModal === "setGame"}
-                title="Set Current Game"
-                onClose={onCloseModal}
-            >
-                <SetGameForm
-                    onSubmit={onGameSet}
-                    onCancel={onCloseModal}
-                />
-            </Modal>
-
-            <Modal
-                isOpen={activeModal === "changeGame"}
-                title="Change Current Game"
-                onClose={onCloseModal}
-            >
-                <ChangeGameForm
-                    currentGameTitle={clubData.current_game?.title ?? ""}
-                    onSubmit={onGameChange}
-                    onCancel={onCloseModal}
+                    onSubmit={onSubmitEditForm}
+                    onCancel={handleCloseEditClubModal}
                 />
             </Modal>
 
@@ -74,6 +67,31 @@ const ClubPageModals = () => {
                 onCancel={onCloseModal}
             />
 
+            {/* Set Game */}
+            <Modal
+                isOpen={activeModal === "setGame"}
+                title="Set Current Game"
+                onClose={onCloseModal}
+            >
+                <SetGameForm
+                    onSubmit={onGameSet}
+                    onCancel={onCloseModal}
+                />
+            </Modal>
+
+            {/* Change Game */}
+            <Modal
+                isOpen={activeModal === "changeGame"}
+                title="Change Current Game"
+                onClose={onCloseModal}
+            >
+                <ChangeGameForm
+                    currentGameTitle={clubData.current_game?.title ?? ""}
+                    onSubmit={onGameChange}
+                    onCancel={onCloseModal}
+                />
+            </Modal>
+
             {/* Remove Member */}
             <ConfirmModal
                 isOpen={activeModal === "removeClubMember"}
@@ -84,6 +102,7 @@ const ClubPageModals = () => {
                 onConfirm={onRemoveMember}
                 onCancel={onCloseModal}
             />
+
             {/* Leave Club */}
             <ConfirmModal
                 isOpen={activeModal === "leaveClub"}

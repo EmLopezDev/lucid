@@ -77,19 +77,3 @@
         padding-block-end: u.em(8);
     }
 }
-
-.create-club-form {
-    &__identity {
-        display: flex;
-        align-items: flex-end;
-        gap: u.em(12);
-
-        .input__container {
-            flex: 1;
-        }
-
-        .emoji-picker {
-            padding-block-end: calc(u.rem(6) + u.rem(16));
-        }
-    }
-}

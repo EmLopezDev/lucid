@@ -76,7 +76,6 @@ export const UpdateClub = Club.pick({
     avatar_url: true,
     description: true,
     visibility: true,
-    current_game: true,
 }).partial();
 
 export type UpdateClubType = z.infer<typeof UpdateClub>;

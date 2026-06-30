@@ -7,10 +7,7 @@ import Modal from "@components/Modal";
 import Input from "@components/Input/Input";
 import Button from "@components/Button/Button";
 import ClubCard from "@components/ClubCard";
-import Form from "@components/Form";
-import Textarea from "@components/Textarea";
-import RadioGroup from "@components/RadioGroup";
-import EmojiPicker from "@components/EmojiPicker";
+import ClubForm from "../ClubPage/ClubForm";
 
 const ClubsListPageContent = () => {
     const {
@@ -135,44 +132,21 @@ const ClubsListPageContent = () => {
                 title="Create club"
                 onClose={onCloseCreateClubModal}
             >
-                <Form
+                <ClubForm
+                    nameValue={createClubData.clubName}
+                    nameError={createClubErrors.clubName}
+                    avatarValue={createClubData.avatar}
+                    visibilityValue={createClubData.visibility}
+                    descriptionValue={createClubData.description}
+                    descriptionError={createClubErrors.description}
+                    onNameChange={onClubNameChange}
+                    onAvatarChange={onClubAvatarChange}
+                    onVisibilityChange={onClubVisibilityChange}
+                    onDescriptionChange={onClubDescriptionChange}
+                    primaryButtonText="Create"
                     onSubmit={onSubmitCreateClubForm}
                     onCancel={onCloseCreateClubModal}
-                    primaryButtonText="Create"
-                >
-                    <div className="create-club-form__identity">
-                        <Input
-                            label="Club name"
-                            placeholder="Elite RPG"
-                            onChange={onClubNameChange}
-                            errorText={createClubErrors.clubName}
-                            required
-                        />
-                        <EmojiPicker
-                            label="Avatar"
-                            value={createClubData.avatar}
-                            onChange={onClubAvatarChange}
-                        />
-                    </div>
-                    <RadioGroup
-                        legend="Visibility"
-                        name="visibility"
-                        options={[
-                            { value: "public", label: "public" },
-                            { value: "private", label: "private" },
-                        ]}
-                        value={createClubData.visibility}
-                        onChange={onClubVisibilityChange}
-                    />
-                    <Textarea
-                        label="Description"
-                        onChange={onClubDescriptionChange}
-                        required
-                        maxCount={300}
-                        value={createClubData.description}
-                        errorText={createClubErrors.description}
-                    />
-                </Form>
+                />
             </Modal>
         </section>
     );
