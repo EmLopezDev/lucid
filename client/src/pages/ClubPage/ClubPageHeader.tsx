@@ -6,7 +6,7 @@ import useClubMembers from "./hooks/useClubMembers";
 import useClubSettings from "./hooks/useClubSettings";
 
 const ClubPageHeader = () => {
-    const { clubData, isOwner, isMember } = useClubPageContext();
+    const { clubData, isOwner, isMember, completedCount } = useClubPageContext();
 
     const { handleOpenEditClubModal } = useClubSettings();
     const { onJoinClub, handleOpenLeaveClubModal } = useClubMembers();
@@ -91,7 +91,7 @@ const ClubPageHeader = () => {
                                         size="small"
                                         color="muted"
                                     />
-                                    {`${clubData.past_games.length} ${clubData.past_games.length === 1 ? "game" : "games"} completed`}
+                                    {`${completedCount} ${completedCount === 1 ? "game" : "games"} completed`}
                                 </span>
                             </div>
                         </div>

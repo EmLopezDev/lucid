@@ -13,6 +13,7 @@ type ClubCardType = {
 const ClubCard = ({ club, currentUser, onJoinClub, onLeaveClub }: ClubCardType) => {
     const isOwner = currentUser?._id === club.owner;
     const isMember = !!currentUser && club.members.some((m) => m._id === currentUser._id);
+    const completedCount = club.past_games.filter((g) => g.game_status === "completed").length;
 
     const joinButton = isOwner ? (
         <Button
@@ -101,7 +102,7 @@ const ClubCard = ({ club, currentUser, onJoinClub, onLeaveClub }: ClubCardType) 
                             size="small"
                             color="muted"
                         />
-                        <span>{`${club.past_games.length} ${club.past_games.length === 1 ? "game" : "games"} completed`}</span>
+                        <span>{`${completedCount} ${completedCount === 1 ? "game" : "games"} completed`}</span>
                     </div>
                     <div className="club-card__stat">
                         <Icon
