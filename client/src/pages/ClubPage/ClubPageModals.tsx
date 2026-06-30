@@ -10,7 +10,7 @@ import useClubMembers from "./hooks/useClubMembers";
 
 const ClubPageModals = () => {
     const { clubData, activeModal, onCloseModal } = useClubPageContext();
-    const { handleLeaveClub } = useClubMembers();
+    const { onLeaveClub, onRemoveMember } = useClubMembers();
     const { onGameSet, onGameChange } = useClubGame();
 
     if (!clubData) return null;
@@ -79,7 +79,7 @@ const ClubPageModals = () => {
                 message={`Remove this member from ${clubData.name}? They can rejoin if the club is public.`}
                 confirmLabel="Remove"
                 variant="danger"
-                onConfirm={() => {}}
+                onConfirm={onRemoveMember}
                 onCancel={onCloseModal}
             />
             {/* Leave Club */}
@@ -89,7 +89,7 @@ const ClubPageModals = () => {
                 message={`Are you sure you want to leave ${clubData.name}? You can rejoin if the club is public.`}
                 confirmLabel="Remove"
                 variant="danger"
-                onConfirm={handleLeaveClub}
+                onConfirm={onLeaveClub}
                 onCancel={onCloseModal}
             />
         </>

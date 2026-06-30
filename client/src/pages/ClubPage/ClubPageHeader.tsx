@@ -9,7 +9,7 @@ const ClubPageHeader = () => {
     const { clubData, isOwner, isMember } = useClubPageContext();
 
     const { handleOpenEditClubModal } = useClubSettings();
-    const { handleJoinClub, handleOpenLeaveClubModal } = useClubMembers();
+    const { onJoinClub, handleOpenLeaveClubModal } = useClubMembers();
 
     if (!clubData) return null;
 
@@ -120,7 +120,7 @@ const ClubPageHeader = () => {
                             <Button
                                 variant="primary"
                                 buttonSize="medium"
-                                onClick={handleJoinClub}
+                                onClick={onJoinClub}
                             >
                                 Join Club
                             </Button>

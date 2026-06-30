@@ -5,12 +5,23 @@ import { toast } from "sonner";
 import { useClubPageContext } from "./useClubPageContext";
 
 const useClubMembers = () => {
-    const { clubId, clubData, onOpenModal, onCloseModal, setClubData } = useClubPageContext();
+    const {
+        clubId,
+        clubData,
+        pendingMemberId,
+        setPendingMemberId,
+        onOpenModal,
+        onCloseModal,
+        setClubData,
+    } = useClubPageContext();
 
     const handleOpenLeaveClubModal = () => onOpenModal("leaveClub");
-    const handleOpenDeleteMemberModal = () => onOpenModal("removeClubMember");
+    const handleOpenRemoveMemberModal = (memberId: string) => {
+        onOpenModal("removeClubMember");
+        setPendingMemberId(memberId);
+    };
 
-    const handleJoinClub = useCallback(async () => {
+    const onJoinClub = useCallback(async () => {
         try {
             const response = await fetch(`${API_URL}/clubs/${clubId}/join`, {
                 method: "PATCH",
@@ -30,7 +41,7 @@ const useClubMembers = () => {
         }
     }, [clubId, setClubData]);
 
-    const handleLeaveClub = useCallback(async () => {
+    const onLeaveClub = useCallback(async () => {
         try {
             const response = await fetch(`${API_URL}/clubs/${clubId}/leave`, {
                 method: "PATCH",
@@ -51,39 +62,34 @@ const useClubMembers = () => {
         }
     }, [clubId, setClubData, onCloseModal]);
 
-    const onRemoveMember = useCallback(
-        async (memberId: string) => {
-            try {
-                const response = await fetch(`${API_URL}/clubs/${clubId}/members/${memberId}`, {
-                    method: "PATCH",
-                    credentials: "include",
-                });
-                if (!response.ok) throw new Error("Failed to remove member");
-                const member = clubData?.members.find((m) => m._id === memberId);
-                const removedMemberClub: ClubDetailType = await response.json();
-                setClubData(removedMemberClub);
-                onCloseModal();
-                toast.success(
-                    `Removed ${member?.first_name} ${member?.last_name} from the club.`,
-                );
-                return true;
-            } catch (error) {
-                if (import.meta.env.DEV) {
-                    console.error(error instanceof Error ? error.message : error);
-                }
-                toast.error("Unable to remove member, try again.");
-                return false;
+    const onRemoveMember = useCallback(async () => {
+        try {
+            const response = await fetch(`${API_URL}/clubs/${clubId}/members/${pendingMemberId}`, {
+                method: "PATCH",
+                credentials: "include",
+            });
+            if (!response.ok) throw new Error("Failed to remove member");
+            const member = clubData?.members.find((m) => m._id === pendingMemberId);
+            const removedMemberClub: ClubDetailType = await response.json();
+            setClubData(removedMemberClub);
+            onCloseModal();
+            toast.success(`Removed ${member?.first_name} ${member?.last_name} from the club.`);
+            return true;
+        } catch (error) {
+            if (import.meta.env.DEV) {
+                console.error(error instanceof Error ? error.message : error);
             }
-        },
-        [clubId, clubData, setClubData, onCloseModal],
-    );
+            toast.error("Unable to remove member, try again.");
+            return false;
+        }
+    }, [clubId, clubData, pendingMemberId, setClubData, onCloseModal]);
 
     return {
         onRemoveMember,
-        handleJoinClub,
-        handleLeaveClub,
+        onJoinClub,
+        onLeaveClub,
         handleOpenLeaveClubModal,
-        handleOpenDeleteMemberModal,
+        handleOpenRemoveMemberModal,
     };
 };
 

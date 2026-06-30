@@ -33,6 +33,8 @@ export type ClubPageContextType = {
     ownerMember: ClubMemberType | undefined;
     activeTab: ClubTab;
     activeModal: ActiveModalType;
+    pendingMemberId: string | null;
+    setPendingMemberId: Dispatch<SetStateAction<string | null>>;
     onOpenModal: (modal: Exclude<ActiveModalType, null>) => void;
     onCloseModal: () => void;
     setClubData: Dispatch<SetStateAction<ClubDetailType | null>>;
@@ -43,6 +45,7 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [clubData, setClubData] = useState<ClubDetailType | null>(null);
+    const [pendingMemberId, setPendingMemberId] = useState<string | null>(null);
     const [activeTab, setActiveTab] = useState<ClubTab>("overview");
     const [activeModal, setActiveModal] = useState<ActiveModalType>(null);
 
@@ -92,6 +95,8 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
             ownerMember,
             activeTab,
             activeModal,
+            pendingMemberId,
+            setPendingMemberId,
             onOpenModal,
             onCloseModal,
             setClubData,
@@ -107,6 +112,8 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
             ownerMember,
             activeTab,
             activeModal,
+            pendingMemberId,
+            setPendingMemberId,
             onOpenModal,
             onCloseModal,
             setClubData,
