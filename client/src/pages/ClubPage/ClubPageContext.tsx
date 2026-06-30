@@ -62,6 +62,7 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
     }, []);
     const onCloseModal = useCallback(() => {
         setActiveModal(null);
+        setPendingMemberId(null);
     }, []);
 
     useEffect(() => {

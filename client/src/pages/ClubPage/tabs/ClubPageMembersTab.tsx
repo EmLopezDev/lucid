@@ -2,12 +2,14 @@ import { useState } from "react";
 import { useClubPageContext } from "../hooks/useClubPageContext";
 import Button from "@components/Button/Button";
 import Input from "@components/Input/Input";
+import useClubMembers from "../hooks/useClubMembers";
 
 const formatJoinDate = (iso: string) =>
     new Date(iso).toLocaleDateString("en-US", { month: "short", year: "numeric" });
 
 const ClubPageMembersTab = () => {
     const { clubData, isOwner } = useClubPageContext();
+    const { handleOpenRemoveMemberModal } = useClubMembers();
     const [search, setSearch] = useState("");
 
     if (!clubData) return null;
@@ -66,6 +68,7 @@ const ClubPageMembersTab = () => {
                             <Button
                                 variant="danger"
                                 buttonSize="small"
+                                onClick={() => handleOpenRemoveMemberModal(member._id)}
                             >
                                 Remove
                             </Button>

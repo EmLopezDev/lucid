@@ -73,6 +73,7 @@ const useClubMembers = () => {
             const removedMemberClub: ClubDetailType = await response.json();
             setClubData(removedMemberClub);
             onCloseModal();
+            setPendingMemberId(null);
             toast.success(`Removed ${member?.first_name} ${member?.last_name} from the club.`);
             return true;
         } catch (error) {
@@ -82,7 +83,7 @@ const useClubMembers = () => {
             toast.error("Unable to remove member, try again.");
             return false;
         }
-    }, [clubId, clubData, pendingMemberId, setClubData, onCloseModal]);
+    }, [clubId, clubData, pendingMemberId, setPendingMemberId, setClubData, onCloseModal]);
 
     return {
         onRemoveMember,
