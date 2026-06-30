@@ -35,26 +35,23 @@ export type UserProfileType = {
 
 export const useUserProfile = () => {
     const { currentUser } = useUserContext();
+    const userId = currentUser?._id;
     const [profile, setProfile] = useState<UserProfileType | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!currentUser) return;
-
-        const controller = new AbortController();
+        if (!userId) return;
 
         const fetchProfile = async () => {
             try {
-                const res = await fetch(`${API_URL}/user/${currentUser._id}/profile`, {
+                const res = await fetch(`${API_URL}/user/${userId}/profile`, {
                     credentials: "include",
-                    signal: controller.signal,
                 });
                 if (!res.ok) throw new Error("Failed to load profile");
                 const data: UserProfileType = await res.json();
                 setProfile(data);
-            } catch (err) {
-                if (err instanceof DOMException && err.name === "AbortError") return;
+            } catch {
                 setError("Could not load your profile.");
             } finally {
                 setIsLoading(false);
@@ -62,9 +59,7 @@ export const useUserProfile = () => {
         };
 
         fetchProfile();
-
-        return () => controller.abort();
-    }, [currentUser]);
+    }, [userId]);
 
     return { profile, isLoading, error };
 };
