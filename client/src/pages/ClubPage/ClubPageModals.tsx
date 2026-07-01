@@ -4,9 +4,11 @@ import ConfirmModal from "@components/ConfirmModal";
 import SetGameForm from "./SetGameForm";
 import ChangeGameForm from "./ChangeGameForm";
 import ClubForm from "./ClubForm";
+import PostForm from "./PostForm";
 import useClubGame from "./hooks/useClubGame";
 import useClubMembers from "./hooks/useClubMembers";
 import useClubSettings from "./hooks/useClubSettings";
+import useClubPosts from "./hooks/useClubPosts";
 
 const ClubPageModals = () => {
     const { clubData, activeModal, onCloseModal } = useClubPageContext();
@@ -23,6 +25,13 @@ const ClubPageModals = () => {
         onSubmitEditForm,
         handleCloseEditClubModal,
     } = useClubSettings();
+    const {
+        newClubPost,
+        onClubPostContentChange,
+        onClubPostSpoilerChange,
+        onSubmitPostForm,
+        handleCancelPost,
+    } = useClubPosts();
 
     if (!clubData) return null;
 
@@ -113,6 +122,23 @@ const ClubPageModals = () => {
                 onConfirm={onLeaveClub}
                 onCancel={onCloseModal}
             />
+
+            {/* Post */}
+            <Modal
+                isOpen={activeModal === "post"}
+                title="Add Post"
+                onClose={onCloseModal}
+            >
+                <PostForm
+                    onPostChange={onClubPostContentChange}
+                    onSpoilerChange={onClubPostSpoilerChange}
+                    onSubmit={onSubmitPostForm}
+                    onCancel={handleCancelPost}
+                    postValue={newClubPost.content}
+                    isSpoiler={newClubPost.is_spoiler}
+                    postError=""
+                />
+            </Modal>
         </>
     );
 };

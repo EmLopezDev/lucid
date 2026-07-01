@@ -3,6 +3,7 @@ import { useClubPageContext } from "../hooks/useClubPageContext";
 import Button from "@components/Button/Button";
 import Icon from "@components/Icon";
 import useClubMembers from "../hooks/useClubMembers";
+import useClubPosts from "../hooks/useClubPosts";
 
 const formatPostDate = (iso: string) =>
     new Date(iso).toLocaleDateString("en-US", {
@@ -14,6 +15,7 @@ const formatPostDate = (iso: string) =>
 const ClubPagePostsTab = () => {
     const { clubData, isMember } = useClubPageContext();
     const { onJoinClub } = useClubMembers();
+    const { handleOpenPostModal } = useClubPosts();
     const [revealedPosts, setRevealedPosts] = useState<Set<string>>(new Set());
 
     if (!clubData) return null;
@@ -40,6 +42,7 @@ const ClubPagePostsTab = () => {
                             variant="primary"
                             icon="plus"
                             iconPosition="left"
+                            onClick={handleOpenPostModal}
                         >
                             New Post
                         </Button>

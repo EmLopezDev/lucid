@@ -8,7 +8,7 @@ import {
 } from "./club-posts.controller";
 import { requireAuth } from "../../middleware/requireAuth";
 
-const ClubPostRouter = express.Router();
+const ClubPostRouter = express.Router({ mergeParams: true });
 
 ClubPostRouter.get("/posts", getGamingClubPosts);
 ClubPostRouter.get("/posts/:postId", getGamingClubPost);

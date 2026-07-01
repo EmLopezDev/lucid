@@ -21,6 +21,7 @@ type ActiveModalType =
     | "deleteClub"
     | "removeClubMember"
     | "leaveClub"
+    | "post"
     | null;
 
 export type ClubPageContextType = {
@@ -55,7 +56,8 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
     const isOwner = currentUser?._id === clubData?.owner;
     const isMember = clubData?.members.some((m) => m._id === (currentUser?._id ?? "")) ?? false;
     const ownerMember = clubData?.members.find((m) => m._id === clubData.owner);
-    const completedCount = clubData?.past_games.filter((g) => g.game_status === "completed").length ?? 0;
+    const completedCount =
+        clubData?.past_games.filter((g) => g.game_status === "completed").length ?? 0;
 
     const onSwitchTab = useCallback((tab: ClubTab) => setActiveTab(tab), []);
 

@@ -5,7 +5,7 @@ import {
 import { ClubPostModel } from "./club-post.mongo";
 
 export const getAllGamingClubPosts = async (clubId: string) => {
-    return await ClubPostModel.find({ club_id: clubId, deleted_at: null });
+    return await ClubPostModel.find({ club_id: clubId, deleted_at: null }).sort({ created_at: -1 });
 };
 
 export const getGamingClubPostById = async (postId: string) => {
