@@ -128,19 +128,22 @@ const useClubSettings = () => {
 
     const onClubDelete = useCallback(async () => {
         try {
+            const clubName = clubData?.name;
             const response = await fetch(`${API_URL}/clubs/${clubId}`, {
                 method: "DELETE",
                 credentials: "include",
             });
             if (!response.ok) throw new Error("Failed to delete club");
             onCloseModal();
+            toast.success(`Club ${clubName} was deleted.`);
             navigate("/clubs");
         } catch (error) {
             if (import.meta.env.DEV) {
                 console.error(error instanceof Error ? error.message : error);
             }
+            toast.error("Unable to delete club, try again.");
         }
-    }, [clubId, navigate, onCloseModal]);
+    }, [clubId, clubData, navigate, onCloseModal]);
 
     return {
         editFormData,
