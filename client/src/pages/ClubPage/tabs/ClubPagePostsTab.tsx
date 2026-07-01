@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useClubPageContext } from "../hooks/useClubPageContext";
 import Button from "@components/Button/Button";
 import Icon from "@components/Icon";
+import useClubMembers from "../hooks/useClubMembers";
 
 const formatPostDate = (iso: string) =>
     new Date(iso).toLocaleDateString("en-US", {
@@ -12,6 +13,7 @@ const formatPostDate = (iso: string) =>
 
 const ClubPagePostsTab = () => {
     const { clubData, isMember } = useClubPageContext();
+    const { onJoinClub } = useClubMembers();
     const [revealedPosts, setRevealedPosts] = useState<Set<string>>(new Set());
 
     if (!clubData) return null;
@@ -70,40 +72,37 @@ const ClubPagePostsTab = () => {
                                             </span>
                                         </div>
                                     </div>
-                                    <div className={`club-page__post-body-wrapper${post.is_spoiler && !revealedPosts.has(post._id) ? " club-page__post-body-wrapper--spoiler" : ""}`}>
+                                    <div
+                                        className={`club-page__post-body-wrapper${post.is_spoiler && !revealedPosts.has(post._id) ? " club-page__post-body-wrapper--spoiler" : ""}`}
+                                    >
                                         <p
                                             className={`club-page__post-body${post.is_spoiler && !revealedPosts.has(post._id) ? " club-page__post-body--blurred" : ""}`}
                                         >
                                             {post.content}
                                         </p>
-                                        {post.is_spoiler &&
-                                            !revealedPosts.has(post._id) && (
-                                                <div className="club-page__post-spoiler-overlay">
-                                                    <Icon
-                                                        name="eye-off"
-                                                        size="small"
-                                                        color="gold"
-                                                    />
-                                                    <span className="club-page__post-spoiler-label">
-                                                        Spoiler
-                                                    </span>
-                                                    <Button
-                                                        variant="secondary"
-                                                        buttonSize="small"
-                                                        onClick={() =>
-                                                            setRevealedPosts(
-                                                                (prev) =>
-                                                                    new Set([
-                                                                        ...prev,
-                                                                        post._id,
-                                                                    ]),
-                                                            )
-                                                        }
-                                                    >
-                                                        Reveal post
-                                                    </Button>
-                                                </div>
-                                            )}
+                                        {post.is_spoiler && !revealedPosts.has(post._id) && (
+                                            <div className="club-page__post-spoiler-overlay">
+                                                <Icon
+                                                    name="eye-off"
+                                                    size="small"
+                                                    color="gold"
+                                                />
+                                                <span className="club-page__post-spoiler-label">
+                                                    Spoiler
+                                                </span>
+                                                <Button
+                                                    variant="secondary"
+                                                    buttonSize="small"
+                                                    onClick={() =>
+                                                        setRevealedPosts(
+                                                            (prev) => new Set([...prev, post._id]),
+                                                        )
+                                                    }
+                                                >
+                                                    Reveal post
+                                                </Button>
+                                            </div>
+                                        )}
                                     </div>
                                 </li>
                             ))}
@@ -125,6 +124,7 @@ const ClubPagePostsTab = () => {
                     <Button
                         variant="primary"
                         buttonSize="small"
+                        onClick={onJoinClub}
                     >
                         Join Club
                     </Button>

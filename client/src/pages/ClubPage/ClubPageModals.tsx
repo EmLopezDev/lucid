@@ -108,7 +108,7 @@ const ClubPageModals = () => {
                 isOpen={activeModal === "leaveClub"}
                 title="Leave club"
                 message={`Are you sure you want to leave ${clubData.name}? You can rejoin if the club is public.`}
-                confirmLabel="Remove"
+                confirmLabel="Leave club"
                 variant="danger"
                 onConfirm={onLeaveClub}
                 onCancel={onCloseModal}
