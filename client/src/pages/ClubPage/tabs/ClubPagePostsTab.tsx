@@ -4,6 +4,7 @@ import Button from "@components/Button/Button";
 import Icon from "@components/Icon";
 import useClubMembers from "../hooks/useClubMembers";
 import useClubPosts from "../hooks/useClubPosts";
+import { useUserContext } from "@contexts/UserContext/useUserContext";
 
 const formatPostDate = (iso: string) =>
     new Date(iso).toLocaleDateString("en-US", {
@@ -13,9 +14,10 @@ const formatPostDate = (iso: string) =>
     });
 
 const ClubPagePostsTab = () => {
-    const { clubData, isMember } = useClubPageContext();
+    const { clubData, isMember, isOwner } = useClubPageContext();
     const { onJoinClub } = useClubMembers();
     const { handleOpenPostModal } = useClubPosts();
+    const { currentUser } = useUserContext();
     const [revealedPosts, setRevealedPosts] = useState<Set<string>>(new Set());
 
     if (!clubData) return null;
@@ -73,6 +75,13 @@ const ClubPagePostsTab = () => {
                                             <span className="club-page__post-timestamp">
                                                 {formatPostDate(post.created_at)}
                                             </span>
+                                            {(isOwner || post.author === currentUser?._id) && (
+                                                <Button
+                                                    icon="trash"
+                                                    variant="danger"
+                                                    buttonSize="small"
+                                                />
+                                            )}
                                         </div>
                                     </div>
                                     <div
