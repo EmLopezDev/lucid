@@ -27,6 +27,7 @@ const ClubPageModals = () => {
     } = useClubSettings();
     const {
         newClubPost,
+        postError,
         onClubPostContentChange,
         onClubPostSpoilerChange,
         onSubmitPostForm,
@@ -137,7 +138,7 @@ const ClubPageModals = () => {
                     onCancel={handleCancelPost}
                     postValue={newClubPost.content}
                     isSpoiler={newClubPost.is_spoiler}
-                    postError=""
+                    postError={postError}
                 />
             </Modal>
 

@@ -16,6 +16,7 @@ const useClubPosts = () => {
     const [newClubPost, setNewClubPost] = useState<CreateClubPostType>(
         objectCopy(CREATE_EMPTY_POST),
     );
+    const [postError, setPostError] = useState("");
 
     const handleOpenPostModal = useCallback(() => {
         onOpenModal("createPost");
@@ -24,6 +25,7 @@ const useClubPosts = () => {
     const handleCancelPost = useCallback(() => {
         onCloseModal();
         setNewClubPost(objectCopy(CREATE_EMPTY_POST));
+        setPostError("");
     }, [onCloseModal]);
 
     const handleOpenDeletePostModal = useCallback(
@@ -36,6 +38,7 @@ const useClubPosts = () => {
 
     const onClubPostContentChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
         setNewClubPost((prevState) => ({ ...prevState, content: e.target.value }));
+        setPostError("");
     }, []);
 
     const onClubPostSpoilerChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -62,6 +65,7 @@ const useClubPosts = () => {
                 });
                 onCloseModal();
                 setNewClubPost(objectCopy(CREATE_EMPTY_POST));
+                setPostError("");
                 toast.success("Post was added.");
             } catch (error) {
                 if (import.meta.env.DEV) {
@@ -100,7 +104,10 @@ const useClubPosts = () => {
     const onSubmitPostForm = useCallback(
         async (e: SubmitEvent<HTMLFormElement>) => {
             e.preventDefault();
-            if (!newClubPost.content) return;
+            if (!newClubPost.content) {
+                setPostError("Post content is required.");
+                return;
+            }
             onCreatePost(newClubPost);
         },
         [newClubPost, onCreatePost],
@@ -108,6 +115,7 @@ const useClubPosts = () => {
 
     return {
         newClubPost,
+        postError,
         onDeletePost,
         onClubPostContentChange,
         onClubPostSpoilerChange,
