@@ -21,7 +21,8 @@ type ActiveModalType =
     | "deleteClub"
     | "removeClubMember"
     | "leaveClub"
-    | "post"
+    | "createPost"
+    | "deletePost"
     | null;
 
 export type ClubPageContextType = {
@@ -36,7 +37,9 @@ export type ClubPageContextType = {
     activeTab: ClubTab;
     activeModal: ActiveModalType;
     pendingMemberId: string | null;
+    pendingPostId: string | null;
     setPendingMemberId: Dispatch<SetStateAction<string | null>>;
+    setPendingPostId: Dispatch<SetStateAction<string | null>>;
     onOpenModal: (modal: Exclude<ActiveModalType, null>) => void;
     onCloseModal: () => void;
     setClubData: Dispatch<SetStateAction<ClubDetailType | null>>;
@@ -48,6 +51,7 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
     const [error, setError] = useState<string | null>(null);
     const [clubData, setClubData] = useState<ClubDetailType | null>(null);
     const [pendingMemberId, setPendingMemberId] = useState<string | null>(null);
+    const [pendingPostId, setPendingPostId] = useState<string | null>(null);
     const [activeTab, setActiveTab] = useState<ClubTab>("overview");
     const [activeModal, setActiveModal] = useState<ActiveModalType>(null);
 
@@ -67,6 +71,7 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
     const onCloseModal = useCallback(() => {
         setActiveModal(null);
         setPendingMemberId(null);
+        setPendingPostId(null);
     }, []);
 
     useEffect(() => {
@@ -91,9 +96,9 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
 
     const contextValue = useMemo(
         () => ({
+            clubId,
             isLoading,
             error,
-            clubId,
             clubData,
             isOwner,
             isMember,
@@ -102,16 +107,18 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
             activeTab,
             activeModal,
             pendingMemberId,
+            pendingPostId,
             setPendingMemberId,
+            setPendingPostId,
             onOpenModal,
             onCloseModal,
             setClubData,
             onSwitchTab,
         }),
         [
+            clubId,
             isLoading,
             error,
-            clubId,
             clubData,
             isOwner,
             isMember,
@@ -120,7 +127,9 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
             activeTab,
             activeModal,
             pendingMemberId,
+            pendingPostId,
             setPendingMemberId,
+            setPendingPostId,
             onOpenModal,
             onCloseModal,
             setClubData,

@@ -7,7 +7,7 @@ import Badge from "@components/Badge";
 import useClubSettings from "../hooks/useClubSettings";
 
 const ClubPageOverviewTab = () => {
-    const { clubData, isOwner, ownerMember } = useClubPageContext();
+    const { clubData, isOwner, ownerMember, completedCount } = useClubPageContext();
     const { handleOpenSetGameModal, handleOpenChangeGameModal } = useClubGame();
     const { handleOpenDeleteClubModal } = useClubSettings();
 
@@ -197,9 +197,9 @@ const ClubPageOverviewTab = () => {
                             </div>
                             <div className="club-page__stat-item">
                                 <span className="club-page__stat-value">
-                                    {clubData.past_games.length}
+                                    {completedCount}
                                 </span>
-                                <span className="club-page__stat-label">Games</span>
+                                <span className="club-page__stat-label">Games Completed</span>
                             </div>
                             <div className="club-page__stat-item">
                                 <span className="club-page__stat-value">

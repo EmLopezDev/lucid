@@ -11,10 +11,11 @@
     &__overview-layout {
         display: grid;
         grid-template-columns: 1fr;
-        gap: u.em(20);
+        gap: u.em(36);
         align-items: start;
 
         @include u.breakpoint-min("medium") {
+            gap: u.em(20);
             grid-template-columns: 1fr u.em(320);
             grid-template-areas: "main sidebar";
             column-gap: u.em(28);
@@ -24,9 +25,10 @@
     &__main {
         display: flex;
         flex-direction: column;
-        gap: u.em(28);
+        gap: u.em(36);
 
         @include u.breakpoint-min("medium") {
+            gap: u.em(28);
             grid-area: main;
         }
     }
@@ -34,9 +36,10 @@
     &__sidebar {
         display: flex;
         flex-direction: column;
-        gap: u.em(20);
+        gap: u.em(36);
 
         @include u.breakpoint-min("medium") {
+            gap: u.em(20);
             grid-area: sidebar;
         }
     }
@@ -61,15 +64,18 @@
     }
 
     &__section-title {
-        font-size: u.$font-size-sm;
+        font-size: u.$font-size-base;
         font-weight: 700;
-        color: var(--color-text-tertiary);
+        color: var(--color-text-primary);
         text-transform: uppercase;
         letter-spacing: 0.07em;
+        padding-inline-start: u.em(10);
+        border-left: 3px solid var(--color-brand);
         margin-block-end: u.em(14);
 
         &--danger {
             color: var(--color-danger);
+            border-left-color: var(--color-danger);
         }
     }
 

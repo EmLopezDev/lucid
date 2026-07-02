@@ -11,19 +11,28 @@ const CREATE_EMPTY_POST: CreateClubPostType = {
 };
 
 const useClubPosts = () => {
-    const { clubId, setClubData, onOpenModal, onCloseModal } = useClubPageContext();
+    const { clubId, pendingPostId, setPendingPostId, setClubData, onOpenModal, onCloseModal } =
+        useClubPageContext();
     const [newClubPost, setNewClubPost] = useState<CreateClubPostType>(
         objectCopy(CREATE_EMPTY_POST),
     );
 
     const handleOpenPostModal = useCallback(() => {
-        onOpenModal("post");
+        onOpenModal("createPost");
     }, [onOpenModal]);
 
     const handleCancelPost = useCallback(() => {
         onCloseModal();
         setNewClubPost(objectCopy(CREATE_EMPTY_POST));
     }, [onCloseModal]);
+
+    const handleOpenDeletePostModal = useCallback(
+        (postId: string) => {
+            onOpenModal("deletePost");
+            setPendingPostId(postId);
+        },
+        [onOpenModal, setPendingPostId],
+    );
 
     const onClubPostContentChange = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
         setNewClubPost((prevState) => ({ ...prevState, content: e.target.value }));
@@ -53,7 +62,7 @@ const useClubPosts = () => {
                 });
                 onCloseModal();
                 setNewClubPost(objectCopy(CREATE_EMPTY_POST));
-                toast.success("Post added.");
+                toast.success("Post was added.");
             } catch (error) {
                 if (import.meta.env.DEV) {
                     console.error(error instanceof Error ? error.message : error);
@@ -64,7 +73,29 @@ const useClubPosts = () => {
         [clubId, setClubData, onCloseModal],
     );
 
-    const onDeletePost = useCallback(async () => {}, []);
+    const onDeletePost = useCallback(async () => {
+        try {
+            const response = await fetch(`${API_URL}/clubs/${clubId}/posts/${pendingPostId}`, {
+                method: "DELETE",
+                credentials: "include",
+            });
+            if (!response.ok) throw new Error("Failed to delete post");
+            setClubData((prevState) => {
+                if (!prevState) return prevState;
+                return {
+                    ...prevState,
+                    posts: [...prevState.posts.filter((post) => post._id !== pendingPostId)],
+                };
+            });
+            onCloseModal();
+            toast.success("Post was deleted.");
+        } catch (error) {
+            if (import.meta.env.DEV) {
+                console.error(error instanceof Error ? error.message : error);
+            }
+            toast.error("Unable to delete post, try again.");
+        }
+    }, [clubId, pendingPostId, setClubData, onCloseModal]);
 
     const onSubmitPostForm = useCallback(
         async (e: SubmitEvent<HTMLFormElement>) => {
@@ -83,6 +114,7 @@ const useClubPosts = () => {
         onSubmitPostForm,
         handleOpenPostModal,
         handleCancelPost,
+        handleOpenDeletePostModal,
     };
 };
 

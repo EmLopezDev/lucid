@@ -30,6 +30,7 @@ const ClubPageModals = () => {
         onClubPostContentChange,
         onClubPostSpoilerChange,
         onSubmitPostForm,
+        onDeletePost,
         handleCancelPost,
     } = useClubPosts();
 
@@ -123,9 +124,9 @@ const ClubPageModals = () => {
                 onCancel={onCloseModal}
             />
 
-            {/* Post */}
+            {/* Create Post */}
             <Modal
-                isOpen={activeModal === "post"}
+                isOpen={activeModal === "createPost"}
                 title="Add Post"
                 onClose={onCloseModal}
             >
@@ -139,6 +140,17 @@ const ClubPageModals = () => {
                     postError=""
                 />
             </Modal>
+
+            {/* Delete Post*/}
+            <ConfirmModal
+                isOpen={activeModal === "deletePost"}
+                title="Delete Post"
+                message="Are you sure you want to permanently delete this post? This cannot be undone."
+                confirmLabel="Delete"
+                variant="danger"
+                onConfirm={onDeletePost}
+                onCancel={onCloseModal}
+            />
         </>
     );
 };

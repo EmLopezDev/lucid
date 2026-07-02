@@ -16,7 +16,7 @@ const formatPostDate = (iso: string) =>
 const ClubPagePostsTab = () => {
     const { clubData, isMember, isOwner } = useClubPageContext();
     const { onJoinClub } = useClubMembers();
-    const { handleOpenPostModal } = useClubPosts();
+    const { handleOpenPostModal, handleOpenDeletePostModal } = useClubPosts();
     const { currentUser } = useUserContext();
     const [revealedPosts, setRevealedPosts] = useState<Set<string>>(new Set());
 
@@ -80,6 +80,9 @@ const ClubPagePostsTab = () => {
                                                     icon="trash"
                                                     variant="danger"
                                                     buttonSize="small"
+                                                    onClick={() =>
+                                                        handleOpenDeletePostModal(post._id)
+                                                    }
                                                 />
                                             )}
                                         </div>

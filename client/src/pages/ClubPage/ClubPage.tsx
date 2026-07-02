@@ -41,6 +41,7 @@ const ClubPageContent = () => {
                     onClick={() => onSwitchTab("posts")}
                 >
                     Posts
+                    <span className="club-page__tab-count">{clubData.posts.length}</span>
                 </button>
             </div>
 
