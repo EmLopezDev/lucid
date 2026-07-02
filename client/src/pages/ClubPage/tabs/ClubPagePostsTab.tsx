@@ -63,18 +63,21 @@ const ClubPagePostsTab = () => {
                                         >
                                             {resolveInitials(post.author)}
                                         </div>
-                                        <span className="club-page__post-author">
-                                            {resolveAuthor(post.author)}
-                                        </span>
+                                        <div className="club-page__post-author-group">
+                                            <span className="club-page__post-author">
+                                                {resolveAuthor(post.author)}
+                                            </span>
+                                            <span className="club-page__post-dot" aria-hidden="true">·</span>
+                                            <span className="club-page__post-timestamp">
+                                                {formatPostDate(post.created_at)}
+                                            </span>
+                                        </div>
                                         <div className="club-page__post-meta-right">
                                             {post.is_spoiler && (
                                                 <span className="club-page__badge club-page__badge--spoiler">
                                                     Spoiler
                                                 </span>
                                             )}
-                                            <span className="club-page__post-timestamp">
-                                                {formatPostDate(post.created_at)}
-                                            </span>
                                             {(isOwner || post.author === currentUser?._id) && (
                                                 <Button
                                                     icon="trash"

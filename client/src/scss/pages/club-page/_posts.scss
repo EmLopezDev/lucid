@@ -81,16 +81,27 @@
         flex-shrink: 0;
     }
 
+    &__post-author-group {
+        display: flex;
+        align-items: center;
+        gap: u.em(6);
+    }
+
     &__post-author {
         font-size: u.$font-size-base;
         font-weight: 600;
         color: var(--color-text-primary);
     }
 
+    &__post-dot {
+        color: var(--color-text-secondary);
+        font-size: u.$font-size-3xl;
+        line-height: 1;
+    }
+
     &__post-timestamp {
         font-size: u.$font-size-base;
-        color: var(--color-text-tertiary);
-        flex-shrink: 0;
+        color: var(--color-text-secondary);
     }
 
     &__post-body-wrapper {
