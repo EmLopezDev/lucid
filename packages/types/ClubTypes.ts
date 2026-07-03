@@ -28,6 +28,7 @@ export const Club = z.object({
     members: z.array(z.object({ _id: z.string(), joined_at: z.string() })).default([]),
     visibility: z.enum(["public", "private"]),
     invite_code: z.string().nullable().default(null),
+    invite_code_expires_at: z.string().nullable().default(null),
     current_game: CurrentGame.nullable().default(null),
     past_games: z.array(PastGame).default([]),
     created_at: z.string(),
@@ -87,6 +88,7 @@ export const ClubInvitePreview = z.object({
         first_name: z.string(),
         last_name: z.string(),
     }),
+    member_count: z.number(),
     is_member: z.boolean(),
 });
 export type ClubInvitePreviewType = z.infer<typeof ClubInvitePreview>;

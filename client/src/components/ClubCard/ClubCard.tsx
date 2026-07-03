@@ -70,14 +70,19 @@ const ClubCard = ({ club, currentUser, onJoinClub, onLeaveClub }: ClubCardType) 
                 </div>
             </div>
             <div className="club-card__content">
-                <h3 className="club-card__name">
-                    <Link
-                        className="club-card__link"
-                        to={`/clubs/${club._id}`}
-                    >
-                        {club.name}
-                    </Link>
-                </h3>
+                <div className="club-card__name-row">
+                    <h3 className="club-card__name">
+                        <Link
+                            className="club-card__link"
+                            to={`/clubs/${club._id}`}
+                        >
+                            {club.name}
+                        </Link>
+                    </h3>
+                    {club.visibility === "private" && (
+                        <span className="club-card__badge club-card__badge--private">Private</span>
+                    )}
+                </div>
                 <div className="club-card__stats">
                     <div className="club-card__stat">
                         {club.current_game ? (

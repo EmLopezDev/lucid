@@ -185,7 +185,7 @@ export const getGamingClubInvite = async (
         const { code } = req.query;
         if (!code) return res.status(400).json({ message: "Invite code is required" });
 
-        const preview = await getClubInvitePreview(req.params.clubId, res.locals.userId, code);
+        const preview = await getClubInvitePreview(req.params.clubId, req.session.userId ?? "", code);
         if (!preview) return res.status(404).json({ message: "Invalid invite link" });
 
         return res.status(200).json(preview);

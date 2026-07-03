@@ -20,7 +20,7 @@ const ClubRouter = express.Router();
 
 ClubRouter.get("/", getGamingClubs);
 ClubRouter.get("/:clubId", getGamingClub);
-ClubRouter.get("/:clubId/invite", requireAuth, inviteLimiter, getGamingClubInvite);
+ClubRouter.get("/:clubId/invite", inviteLimiter, getGamingClubInvite);
 ClubRouter.post("/", requireAuth, postGamingClub);
 ClubRouter.patch("/:clubId/game", requireAuth, requireClubOwner, patchSetGamingClubGame);
 ClubRouter.patch("/:clubId/join", requireAuth, inviteLimiter, patchJoinGamingClub);

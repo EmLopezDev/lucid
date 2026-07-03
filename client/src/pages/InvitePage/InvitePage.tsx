@@ -4,12 +4,14 @@ import { type ClubInvitePreviewType } from "@lucid/types";
 import { API_URL } from "@config/api";
 import Button from "@components/Button/Button";
 import { toast } from "sonner";
+import { useUserContext } from "@contexts/UserContext/useUserContext";
 
 const InvitePage = () => {
     const { clubId } = useParams<{ clubId: string }>();
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const code = searchParams.get("code");
+    const { isUserAuthenticated } = useUserContext();
 
     const [preview, setPreview] = useState<ClubInvitePreviewType | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -27,18 +29,6 @@ const InvitePage = () => {
                 const response = await fetch(`${API_URL}/clubs/${clubId}/invite?code=${code}`, {
                     credentials: "include",
                 });
-                if (response.status === 401) {
-                    const redirect = encodeURIComponent(
-                        window.location.pathname + window.location.search,
-                    );
-                    navigate(`/signin?redirect=${redirect}`, {
-                        replace: true,
-                        state: {
-                            notice: "You need to sign in or create an account before accepting a club invite.",
-                        },
-                    });
-                    return;
-                }
                 if (!response.ok) {
                     setError("This invite link is invalid or has expired.");
                     return;
@@ -84,18 +74,38 @@ const InvitePage = () => {
     return (
         <div className="invite-page">
             <div className="invite-page__card">
-                <div className="invite-page__avatar">{preview.name[0]}</div>
+                <div className="invite-page__avatar">
+                    {preview.avatar_url ?? preview.name[0]}
+                </div>
                 <h1 className="invite-page__name">{preview.name}</h1>
-                <p className="invite-page__owner">
-                    Invited by {preview.owner.first_name} {preview.owner.last_name}
+                <p className="invite-page__meta">
+                    {preview.member_count} {preview.member_count === 1 ? "member" : "members"} · Invited by {preview.owner.first_name} {preview.owner.last_name}
                 </p>
-                <Button
-                    variant="primary"
-                    onClick={onJoin}
-                    disabled={isJoining}
-                >
-                    {isJoining ? "Joining..." : "Join Club"}
-                </Button>
+                {isUserAuthenticated ? (
+                    <Button
+                        variant="primary"
+                        onClick={onJoin}
+                        disabled={isJoining}
+                    >
+                        {isJoining ? "Joining..." : "Join Club"}
+                    </Button>
+                ) : (
+                    <Button
+                        variant="primary"
+                        onClick={() => {
+                            const redirect = encodeURIComponent(
+                                window.location.pathname + window.location.search,
+                            );
+                            navigate(`/signin?redirect=${redirect}`, {
+                                state: {
+                                    notice: "You need to sign in or create an account before accepting a club invite.",
+                                },
+                            });
+                        }}
+                    >
+                        Sign in to Join
+                    </Button>
+                )}
             </div>
         </div>
     );

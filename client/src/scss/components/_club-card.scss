@@ -77,6 +77,14 @@
         padding: 0 u.em(20) u.em(20);
     }
 
+    &__name-row {
+        display: flex;
+        align-items: center;
+        gap: u.em(8);
+        margin-block-end: u.em(12);
+        min-width: 0;
+    }
+
     &__name {
         font-size: u.$font-size-2xl;
         color: var(--color-text-primary);
@@ -84,8 +92,27 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-        margin-block-end: u.em(12);
         letter-spacing: -0.01em;
+        min-width: 0;
+    }
+
+    &__badge {
+        display: inline-flex;
+        align-items: center;
+        padding: u.em(2) u.em(7);
+        border-radius: u.em(4);
+        font-size: u.$font-size-xs;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        white-space: nowrap;
+        flex-shrink: 0;
+
+        &--private {
+            background: rgba(var(--color-brand-rgb), 0.12);
+            color: var(--color-brand);
+            border: 1px solid var(--color-border);
+        }
     }
 
     &__link {

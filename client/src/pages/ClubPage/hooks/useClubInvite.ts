@@ -3,6 +3,7 @@ import { useClubPageContext } from "./useClubPageContext";
 import { type ClubDetailType } from "@lucid/types";
 import { API_URL } from "@config/api";
 import { toast } from "sonner";
+import { formatInviteExpiry } from "@lib/date";
 
 const useClubInvite = () => {
     const { clubId, clubData, setClubData, onOpenModal, onCloseModal } = useClubPageContext();
@@ -11,6 +12,7 @@ const useClubInvite = () => {
     const inviteUrl = clubData?.invite_code
         ? `${window.location.origin}/clubs/${clubId}/invite?code=${clubData.invite_code}`
         : null;
+    const inviteExpiry = formatInviteExpiry(clubData?.invite_code_expires_at ?? null);
 
     const handleOpenInviteModal = useCallback(() => {
         onOpenModal("inviteCode");
@@ -58,6 +60,7 @@ const useClubInvite = () => {
 
     return {
         inviteUrl,
+        inviteExpiry,
         isConfirmingRegenerate,
         handleOpenInviteModal,
         handleCopyInviteLink,

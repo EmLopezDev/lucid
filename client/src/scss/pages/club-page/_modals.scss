@@ -18,6 +18,12 @@
         margin: 0;
     }
 
+    &__invite-expiry {
+        font-size: u.$font-size-xs;
+        color: var(--color-text-tertiary);
+        margin: u.em(-8) 0 0;
+    }
+
     &__invite-actions {
         display: flex;
         gap: u.em(10);

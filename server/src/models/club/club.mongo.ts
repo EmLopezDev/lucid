@@ -3,7 +3,13 @@ import { type ClubType } from "../../../../packages/types/ClubTypes";
 
 type ClubDocument = Omit<
     ClubType,
-    "current_game" | "past_games" | "created_at" | "updated_at" | "deleted_at" | "members"
+    | "current_game"
+    | "past_games"
+    | "created_at"
+    | "updated_at"
+    | "deleted_at"
+    | "members"
+    | "invite_code_expires_at"
 > & {
     members: Array<{ _id: string; joined_at: Date }>;
     current_game: {
@@ -21,6 +27,7 @@ type ClubDocument = Omit<
     created_at: Date;
     updated_at: Date | null;
     deleted_at: Date | null;
+    invite_code_expires_at: Date | null;
 };
 
 const ClubSchema = new Schema<ClubDocument>(
@@ -40,6 +47,7 @@ const ClubSchema = new Schema<ClubDocument>(
         ],
         visibility: { type: String, required: true },
         invite_code: { type: String, default: null },
+        invite_code_expires_at: { type: Date, default: null },
         current_game: {
             type: {
                 title: { type: String, required: true },

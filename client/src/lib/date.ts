@@ -22,6 +22,15 @@ export const formatShortDate = (iso: string) =>
 export const formatMonthYear = (iso: string) =>
     new Date(iso).toLocaleDateString("en-US", { month: "short", year: "numeric" });
 
+export const formatInviteExpiry = (iso: string | null): string | null => {
+    if (!iso) return null;
+    const diff = new Date(iso).getTime() - Date.now();
+    if (diff <= 0) return "Expired";
+    const days = Math.ceil(diff / 86_400_000);
+    if (days === 1) return "Expires today";
+    return `Expires in ${days} days`;
+};
+
 export const formatRelativeTime = (iso: string): string => {
     const diff = Date.now() - new Date(iso).getTime();
     const minutes = Math.floor(diff / 60_000);

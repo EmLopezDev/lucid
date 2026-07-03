@@ -1,4 +1,6 @@
 import { randomBytes } from "crypto";
+
+const sevenDaysFromNow = () => new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 import { Types } from "mongoose";
 import {
     type ClubDetailType,
@@ -119,11 +121,14 @@ export const getGamingClubById = async (clubId: string, userId: string | undefin
                 as: "posts",
             },
         },
-        // strips invite code for non-owners
+        // strips invite code and expiry for non-owners
         {
             $addFields: {
                 invite_code: {
                     $cond: [{ $eq: ["$owner", userId] }, "$invite_code", null],
+                },
+                invite_code_expires_at: {
+                    $cond: [{ $eq: ["$owner", userId] }, "$invite_code_expires_at", null],
                 },
             },
         },
@@ -146,6 +151,7 @@ export const createGamingClub = async (userId: string, data: CreateClubType) => 
         avatar_url: data.avatar_url ?? null,
         description: data.description ?? null,
         invite_code: data.visibility === "private" ? randomBytes(6).toString("hex") : null,
+        invite_code_expires_at: data.visibility === "private" ? sevenDaysFromNow() : null,
         created_at: new Date(),
         members: [{ _id: userId, joined_at: new Date() }],
     });
@@ -178,6 +184,9 @@ export const joinGamingClub = async (userId: string, clubId: string, inviteCode?
 
     if (club.visibility === "private") {
         if (club.invite_code !== inviteCode) return "invalid_code";
+        if (club.invite_code_expires_at && club.invite_code_expires_at < new Date()) {
+            return "invalid_code";
+        }
     }
 
     return await ClubModel.findOneAndUpdate(
@@ -246,6 +255,10 @@ export const getClubInvitePreview = async (clubId: string, userId: string, invit
                 _id: new Types.ObjectId(clubId),
                 visibility: "private",
                 invite_code: inviteCode,
+                $or: [
+                    { invite_code_expires_at: null },
+                    { invite_code_expires_at: { $gt: new Date() } },
+                ],
             },
         },
         {
@@ -265,6 +278,7 @@ export const getClubInvitePreview = async (clubId: string, userId: string, invit
                 name: 1,
                 avatar_url: 1,
                 owner: { $first: "$_owner" },
+                member_count: { $size: "$members" },
                 is_member: { $in: [userId, "$members._id"] },
             },
         },
@@ -275,7 +289,11 @@ export const getClubInvitePreview = async (clubId: string, userId: string, invit
 export const regenerateClubInviteCode = async (clubId: string) => {
     return await ClubModel.findOneAndUpdate(
         { _id: clubId },
-        { invite_code: randomBytes(6).toString("hex"), updated_at: new Date() },
+        {
+            invite_code: randomBytes(6).toString("hex"),
+            invite_code_expires_at: sevenDaysFromNow(),
+            updated_at: new Date(),
+        },
         { returnDocument: "after" },
     );
 };

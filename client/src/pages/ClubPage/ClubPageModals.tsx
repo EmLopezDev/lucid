@@ -43,6 +43,7 @@ const ClubPageModals = () => {
 
     const {
         inviteUrl,
+        inviteExpiry,
         isConfirmingRegenerate,
         handleCopyInviteLink,
         handleRequestRegenerate,
@@ -134,7 +135,7 @@ const ClubPageModals = () => {
             <ConfirmModal
                 isOpen={activeModal === "leaveClub"}
                 title="Leave club"
-                message={`Are you sure you want to leave ${clubData.name}? You can rejoin if the club is public.`}
+                message={`Are you sure you want to leave ${clubData.name}? ${clubData.visibility === "private" ? "You will need a new invite link to rejoin." : "You can rejoin anytime."}`}
                 confirmLabel="Leave club"
                 variant="danger"
                 onConfirm={onLeaveClub}
@@ -183,6 +184,9 @@ const ClubPageModals = () => {
             >
                 <div className="club-page__invite-modal">
                     <p className="club-page__invite-url">{inviteUrl}</p>
+                    {inviteExpiry && (
+                        <p className="club-page__invite-expiry">{inviteExpiry}</p>
+                    )}
                     <div className="club-page__invite-actions">
                         <Button
                             variant="primary"
