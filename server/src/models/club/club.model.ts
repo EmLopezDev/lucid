@@ -66,7 +66,10 @@ export const getGamingClubById = async (clubId: string, userId: string | undefin
                                                 {
                                                     $mergeObjects: [
                                                         "$$profile",
-                                                        { joined_at: "$$m.joined_at" },
+                                                        {
+                                                            _id: { $toString: "$$profile._id" },
+                                                            joined_at: "$$m.joined_at",
+                                                        },
                                                     ],
                                                 },
                                                 null,
@@ -128,10 +131,11 @@ export const getGamingClubById = async (clubId: string, userId: string | undefin
     return results[0] ?? null;
 };
 
-export const getAllGamingClubs = async () => {
-    return await ClubModel.find({ visibility: "public", deleted_at: null }).sort({
-        created_at: -1,
-    });
+export const getAllGamingClubs = async (userId: string) => {
+    return await ClubModel.find({
+        deleted_at: null,
+        $or: [{ visibility: "public" }, { "members._id": userId }],
+    }).sort({ created_at: -1 });
 };
 
 export const createGamingClub = async (userId: string, data: CreateClubType) => {

@@ -11,6 +11,7 @@ import { type ClubDetailType, type ClubMemberType } from "@lucid/types";
 import { API_URL } from "@config/api";
 import { ClubPageContext } from "./hooks/useClubPageContext";
 import { useUserContext } from "@contexts/UserContext/useUserContext";
+import { useNavigate } from "react-router";
 
 export type ClubTab = "overview" | "members" | "posts";
 
@@ -24,6 +25,7 @@ type ActiveModalType =
     | "createPost"
     | "editPost"
     | "deletePost"
+    | "inviteCode"
     | null;
 
 export type PendingEditPostType = { content: string; is_spoiler: boolean };
@@ -63,6 +65,8 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
 
     const { currentUser } = useUserContext();
 
+    const navigate = useNavigate();
+
     const isOwner = currentUser?._id === clubData?.owner;
     const isMember = clubData?.members.some((m) => m._id === (currentUser?._id ?? "")) ?? false;
     const ownerMember = clubData?.members.find((m) => m._id === clubData.owner);
@@ -85,7 +89,13 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
         const fetchClubData = async () => {
             try {
                 setIsLoading(true);
-                const response = await fetch(`${API_URL}/clubs/${clubId}`);
+                const response = await fetch(`${API_URL}/clubs/${clubId}`, {
+                    credentials: "include",
+                });
+                if (response.status === 403) {
+                    navigate("/clubs");
+                    return;
+                }
                 if (!response.ok) throw new Error("Failed to fetch club data");
                 const club: ClubDetailType = await response.json();
                 setClubData(club);
@@ -99,7 +109,7 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
             }
         };
         fetchClubData();
-    }, [clubId]);
+    }, [clubId, navigate]);
 
     const contextValue = useMemo(
         () => ({

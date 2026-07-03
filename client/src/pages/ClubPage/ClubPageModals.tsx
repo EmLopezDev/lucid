@@ -9,6 +9,8 @@ import useClubGame from "./hooks/useClubGame";
 import useClubMembers from "./hooks/useClubMembers";
 import useClubSettings from "./hooks/useClubSettings";
 import useClubPosts from "./hooks/useClubPosts";
+import useClubInvite from "./hooks/useClubInvite";
+import Button from "@components/Button/Button";
 
 const ClubPageModals = () => {
     const { clubData, activeModal, onCloseModal } = useClubPageContext();
@@ -38,6 +40,9 @@ const ClubPageModals = () => {
         onDeletePost,
         handleCancelPost,
     } = useClubPosts();
+
+    const { inviteUrl, handleCopyInviteLink, handleRegenerateInviteCode, handleCloseInviteModal } =
+        useClubInvite();
 
     if (!clubData) return null;
 
@@ -161,6 +166,30 @@ const ClubPageModals = () => {
                     postError={postError}
                     primaryButtonText="Save Changes"
                 />
+            </Modal>
+
+            {/* Invite Code */}
+            <Modal
+                isOpen={activeModal === "inviteCode"}
+                title="Share Invite"
+                onClose={handleCloseInviteModal}
+            >
+                <div className="club-page__invite-modal">
+                    <p className="club-page__invite-url">{inviteUrl}</p>
+                    <div className="club-page__invite-actions">
+                        <Button
+                            variant="primary"
+                            icon="copy"
+                            iconPosition="left"
+                            onClick={handleCopyInviteLink}
+                        >
+                            Copy Link
+                        </Button>
+                        <Button variant="outline" onClick={handleRegenerateInviteCode}>
+                            Regenerate
+                        </Button>
+                    </div>
+                </div>
             </Modal>
 
             {/* Delete Post*/}

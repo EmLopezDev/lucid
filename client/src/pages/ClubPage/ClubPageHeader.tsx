@@ -4,12 +4,14 @@ import Button from "@components/Button/Button";
 import Icon from "@components/Icon";
 import useClubMembers from "./hooks/useClubMembers";
 import useClubSettings from "./hooks/useClubSettings";
+import useClubInvite from "./hooks/useClubInvite";
 
 const ClubPageHeader = () => {
     const { clubData, isOwner, isMember, completedCount } = useClubPageContext();
 
     const { handleOpenEditClubModal } = useClubSettings();
     const { onJoinClub, handleOpenLeaveClubModal } = useClubMembers();
+    const { handleOpenInviteModal } = useClubInvite();
 
     if (!clubData) return null;
 
@@ -99,15 +101,28 @@ const ClubPageHeader = () => {
 
                     <div className="club-page__actions">
                         {isOwner ? (
-                            <Button
-                                variant="secondary"
-                                buttonSize="medium"
-                                icon="settings"
-                                iconPosition="left"
-                                onClick={handleOpenEditClubModal}
-                            >
-                                Edit Club
-                            </Button>
+                            <>
+                                {clubData.visibility === "private" && (
+                                    <Button
+                                        variant="outline"
+                                        buttonSize="medium"
+                                        icon="link"
+                                        iconPosition="left"
+                                        onClick={handleOpenInviteModal}
+                                    >
+                                        Share Invite
+                                    </Button>
+                                )}
+                                <Button
+                                    variant="secondary"
+                                    buttonSize="medium"
+                                    icon="settings"
+                                    iconPosition="left"
+                                    onClick={handleOpenEditClubModal}
+                                >
+                                    Edit Club
+                                </Button>
+                            </>
                         ) : isMember ? (
                             <Button
                                 variant="outline"

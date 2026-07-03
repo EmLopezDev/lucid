@@ -6,7 +6,7 @@ import {
     type ChangeEvent,
     type SubmitEvent,
 } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { type UserSigninType } from "@lucid/types";
 import { SignInPageContext } from "./useSignInPageContext";
 import { emailCheck } from "@lib/string";
@@ -56,6 +56,7 @@ export const SignInPageProvider = ({
 }) => {
     const { setUser } = useUserContext();
     const navigation = useNavigate();
+    const [searchParams] = useSearchParams();
 
     const [formData, setFormData] = useState<UserSigninType>(
         objectCopy(initialValues ?? SIGNIN_EMPTY_FORM),
@@ -94,7 +95,8 @@ export const SignInPageProvider = ({
                     const data = await response.json();
                     setUser(data);
                     toast.success(`Welcome back, ${data.first_name}`);
-                    navigation("/");
+                    const redirect = searchParams.get("redirect") ?? "/";
+                    navigation(redirect);
                 } else {
                     if (response.status === 403) setUnverified(true);
                     const error = await response.json();
@@ -108,7 +110,7 @@ export const SignInPageProvider = ({
                 setIsSubmitting(false);
             }
         },
-        [navigation, setUser],
+        [navigation, searchParams, setUser],
     );
 
     const onSubmitForm = useCallback(

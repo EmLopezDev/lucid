@@ -21,12 +21,12 @@ export const getGamingClub = async (
     next: NextFunction,
 ) => {
     try {
-        const club = await getGamingClubById(req.params.clubId, res.locals.userId);
+        const userId = req.session.userId;
+        const club = await getGamingClubById(req.params.clubId, userId);
         if (!club) {
             return res.status(404).json({ message: "Club not found" });
         }
         if (club.visibility === "private") {
-            const userId = req.session.userId;
             const isMember = club.members.some((m) => m._id === userId);
             if (!isMember) return res.status(403).json({ message: "This club is private" });
         }
@@ -37,9 +37,10 @@ export const getGamingClub = async (
     }
 };
 
-export const getGamingClubs = async (_req: Request, res: Response, next: NextFunction) => {
+export const getGamingClubs = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const clubs = await getAllGamingClubs();
+        const userId = req.session.userId ?? "";
+        const clubs = await getAllGamingClubs(userId);
         return res.status(200).json(clubs);
     } catch (error) {
         next(error);
