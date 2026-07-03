@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useClubPageContext } from "./useClubPageContext";
 import { type ClubDetailType } from "@lucid/types";
 import { API_URL } from "@config/api";
@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 const useClubInvite = () => {
     const { clubId, clubData, setClubData, onOpenModal, onCloseModal } = useClubPageContext();
+    const [isConfirmingRegenerate, setIsConfirmingRegenerate] = useState(false);
 
     const inviteUrl = clubData?.invite_code
         ? `${window.location.origin}/clubs/${clubId}/invite?code=${clubData.invite_code}`
@@ -21,7 +22,18 @@ const useClubInvite = () => {
         toast.success("Invite link copied.");
     }, [inviteUrl]);
 
-    const handleRegenerateInviteCode = useCallback(async () => {
+    const handleRequestRegenerate = useCallback(() => {
+        onCloseModal();
+        setIsConfirmingRegenerate(true);
+    }, [onCloseModal]);
+
+    const handleCancelRegenerate = useCallback(() => {
+        setIsConfirmingRegenerate(false);
+        onOpenModal("inviteCode");
+    }, [onOpenModal]);
+
+    const handleConfirmRegenerate = useCallback(async () => {
+        setIsConfirmingRegenerate(false);
         try {
             const response = await fetch(`${API_URL}/clubs/${clubId}/invite/regenerate`, {
                 method: "PATCH",
@@ -30,6 +42,7 @@ const useClubInvite = () => {
             if (!response.ok) throw new Error("Failed to regenerate invite code");
             const updated: ClubDetailType = await response.json();
             setClubData(updated);
+            onOpenModal("inviteCode");
             toast.success("Invite link regenerated.");
         } catch (error) {
             if (import.meta.env.DEV) {
@@ -37,7 +50,7 @@ const useClubInvite = () => {
             }
             toast.error("Unable to regenerate invite link, try again.");
         }
-    }, [clubId, setClubData]);
+    }, [clubId, setClubData, onOpenModal]);
 
     const handleCloseInviteModal = useCallback(() => {
         onCloseModal();
@@ -45,9 +58,12 @@ const useClubInvite = () => {
 
     return {
         inviteUrl,
+        isConfirmingRegenerate,
         handleOpenInviteModal,
         handleCopyInviteLink,
-        handleRegenerateInviteCode,
+        handleRequestRegenerate,
+        handleCancelRegenerate,
+        handleConfirmRegenerate,
         handleCloseInviteModal,
     };
 };

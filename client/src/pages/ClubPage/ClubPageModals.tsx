@@ -41,8 +41,15 @@ const ClubPageModals = () => {
         handleCancelPost,
     } = useClubPosts();
 
-    const { inviteUrl, handleCopyInviteLink, handleRegenerateInviteCode, handleCloseInviteModal } =
-        useClubInvite();
+    const {
+        inviteUrl,
+        isConfirmingRegenerate,
+        handleCopyInviteLink,
+        handleRequestRegenerate,
+        handleCancelRegenerate,
+        handleConfirmRegenerate,
+        handleCloseInviteModal,
+    } = useClubInvite();
 
     if (!clubData) return null;
 
@@ -185,12 +192,23 @@ const ClubPageModals = () => {
                         >
                             Copy Link
                         </Button>
-                        <Button variant="outline" onClick={handleRegenerateInviteCode}>
+                        <Button variant="outline" onClick={handleRequestRegenerate}>
                             Regenerate
                         </Button>
                     </div>
                 </div>
             </Modal>
+
+            {/* Regenerate Invite Code */}
+            <ConfirmModal
+                isOpen={isConfirmingRegenerate}
+                title="Regenerate Invite Link"
+                message="This will invalidate all previously shared invite links. Anyone with the old link will no longer be able to join."
+                confirmLabel="Regenerate"
+                variant="danger"
+                onConfirm={handleConfirmRegenerate}
+                onCancel={handleCancelRegenerate}
+            />
 
             {/* Delete Post*/}
             <ConfirmModal
