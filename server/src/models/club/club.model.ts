@@ -1,14 +1,16 @@
 import { randomBytes } from "crypto";
 import { Types } from "mongoose";
 import {
+    type ClubDetailType,
     type CreateClubType,
     type UpdateClubType,
     type SetClubGameType,
+    type ClubInvitePreviewType,
 } from "../../../../packages/types/ClubTypes";
 import { ClubModel } from "./club.mongo";
 
-export const getGamingClubById = async (clubId: string) => {
-    const results = await ClubModel.aggregate([
+export const getGamingClubById = async (clubId: string, userId: string | undefined) => {
+    const results = await ClubModel.aggregate<ClubDetailType>([
         { $match: { _id: new Types.ObjectId(clubId) } },
 
         // Extract member _ids for the lookup
@@ -114,6 +116,14 @@ export const getGamingClubById = async (clubId: string) => {
                 as: "posts",
             },
         },
+        // strips invite code for non-owners
+        {
+            $addFields: {
+                invite_code: {
+                    $cond: [{ $eq: ["$owner", userId] }, "$invite_code", null],
+                },
+            },
+        },
     ]);
     return results[0] ?? null;
 };
@@ -158,7 +168,14 @@ export const deleteGamingClub = async (clubId: string) => {
     return await ClubModel.findOneAndUpdate({ _id: clubId }, { deleted_at: new Date() });
 };
 
-export const joinGamingClub = async (userId: string, clubId: string) => {
+export const joinGamingClub = async (userId: string, clubId: string, inviteCode?: string) => {
+    const club = await ClubModel.findOne({ _id: clubId, deleted_at: null }).lean();
+    if (!club) return null;
+
+    if (club.visibility === "private") {
+        if (club.invite_code !== inviteCode) return "invalid_code";
+    }
+
     return await ClubModel.findOneAndUpdate(
         { _id: clubId, "members._id": { $ne: userId } },
         { $push: { members: { _id: userId, joined_at: new Date() } } },
@@ -214,6 +231,47 @@ export const removeGamingClubMember = async (memberId: string, clubId: string) =
     return await ClubModel.findByIdAndUpdate(
         { _id: clubId },
         { $pull: { members: { _id: memberId } } },
+        { returnDocument: "after" },
+    );
+};
+
+export const getClubInvitePreview = async (clubId: string, userId: string, inviteCode: string) => {
+    const results = await ClubModel.aggregate<ClubInvitePreviewType>([
+        {
+            $match: {
+                _id: new Types.ObjectId(clubId),
+                visibility: "private",
+                invite_code: inviteCode,
+            },
+        },
+        {
+            $lookup: {
+                from: "users",
+                let: { ownerId: "$owner" },
+                pipeline: [
+                    { $match: { $expr: { $eq: [{ $toString: "$_id" }, "$$ownerId"] } } },
+                    { $project: { _id: 0, first_name: 1, last_name: 1 } },
+                ],
+                as: "_owner",
+            },
+        },
+        {
+            $project: {
+                _id: 0,
+                name: 1,
+                avatar_url: 1,
+                owner: { $first: "$_owner" },
+                is_member: { $in: [userId, "$members._id"] },
+            },
+        },
+    ]);
+    return results[0] ?? null;
+};
+
+export const regenerateClubInviteCode = async (clubId: string) => {
+    return await ClubModel.findOneAndUpdate(
+        { _id: clubId },
+        { invite_code: randomBytes(6).toString("hex"), updated_at: new Date() },
         { returnDocument: "after" },
     );
 };

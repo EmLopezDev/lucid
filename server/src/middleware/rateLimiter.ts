@@ -12,3 +12,9 @@ export const generalLimiter = rateLimit({
     max: isDev ? 10000 : 100,
     message: { message: "Too many requests. Please try again later." },
 });
+
+export const inviteLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: isDev ? 1000 : 20,
+    message: { message: "Too many attempts. Please try again in 15 minutes." },
+});

@@ -79,3 +79,14 @@ export const UpdateClub = Club.pick({
 }).partial();
 
 export type UpdateClubType = z.infer<typeof UpdateClub>;
+
+export const ClubInvitePreview = z.object({
+    name: z.string(),
+    avatar_url: z.string().nullable(),
+    owner: z.object({
+        first_name: z.string(),
+        last_name: z.string(),
+    }),
+    is_member: z.boolean(),
+});
+export type ClubInvitePreviewType = z.infer<typeof ClubInvitePreview>;

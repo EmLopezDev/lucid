@@ -11,6 +11,8 @@ import {
     leaveGamingClub,
     setGamingClubGame,
     removeGamingClubMember,
+    getClubInvitePreview,
+    regenerateClubInviteCode,
 } from "../../models/club/club.model";
 
 export const getGamingClub = async (
@@ -19,10 +21,16 @@ export const getGamingClub = async (
     next: NextFunction,
 ) => {
     try {
-        const club = await getGamingClubById(req.params.clubId);
+        const club = await getGamingClubById(req.params.clubId, res.locals.userId);
         if (!club) {
             return res.status(404).json({ message: "Club not found" });
         }
+        if (club.visibility === "private") {
+            const userId = req.session.userId;
+            const isMember = club.members.some((m) => m._id === userId);
+            if (!isMember) return res.status(403).json({ message: "This club is private" });
+        }
+
         return res.status(200).json(club);
     } catch (error) {
         next(error);
@@ -66,7 +74,7 @@ export const patchGamingClub = async (
                 .json({ message: "Invalid fields", errors: flattenError(parsed.error) });
         }
         await updateGamingClub(req.params.clubId, parsed.data);
-        const club = await getGamingClubById(req.params.clubId);
+        const club = await getGamingClubById(req.params.clubId, res.locals.userId);
         return res.status(200).json(club);
     } catch (error) {
         next(error);
@@ -79,19 +87,16 @@ export const patchJoinGamingClub = async (
     next: NextFunction,
 ) => {
     try {
-        const club = await getGamingClubById(req.params.clubId);
+        const result = await joinGamingClub(
+            res.locals.userId,
+            req.params.clubId,
+            req.body.invite_code,
+        );
+        if (!result) return res.status(404).json({ message: "Club not found" });
+        if (result === "invalid_code")
+            return res.status(403).json({ message: "Invalid invite code" });
 
-        if (!club) {
-            return res.status(404).json({ message: "Club not found" });
-        }
-
-        if (club.visibility === "private") {
-            if (req.body.invite_code !== club.invite_code) {
-                return res.status(403).json({ message: "Invalid invite code" });
-            }
-        }
-        await joinGamingClub(res.locals.userId, req.params.clubId);
-        const clubJoined = await getGamingClubById(req.params.clubId);
+        const clubJoined = await getGamingClubById(req.params.clubId, res.locals.userId);
         return res.status(200).json(clubJoined);
     } catch (error) {
         next(error);
@@ -117,7 +122,7 @@ export const patchSetGamingClubGame = async (
                 .json({ message: "Invalid fields", errors: flattenError(parsed.error) });
         }
         await setGamingClubGame(req.params.clubId, parsed.data);
-        const updated = await getGamingClubById(req.params.clubId);
+        const updated = await getGamingClubById(req.params.clubId, res.locals.userId);
         return res.status(200).json(updated);
     } catch (error) {
         next(error);
@@ -136,7 +141,7 @@ export const patchLeaveGamingClub = async (
             return res.status(404).json({ message: "Club not found" });
         }
 
-        const clubLeft = await getGamingClubById(req.params.clubId);
+        const clubLeft = await getGamingClubById(req.params.clubId, res.locals.userId);
         return res.status(200).json(clubLeft);
     } catch (error) {
         next(error);
@@ -150,7 +155,7 @@ export const patchGamingClubMember = async (
 ) => {
     try {
         await removeGamingClubMember(req.params.memberId, req.params.clubId);
-        const removedMemberClub = await getGamingClubById(req.params.clubId);
+        const removedMemberClub = await getGamingClubById(req.params.clubId, res.locals.userId);
         return res.status(200).json(removedMemberClub);
     } catch (error) {
         next(error);
@@ -165,6 +170,38 @@ export const destroyGamingClub = async (
     try {
         await deleteGamingClub(req.params.clubId);
         return res.status(204).end();
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getGamingClubInvite = async (
+    req: Request<{ clubId: string }, unknown, unknown, { code?: string }>,
+    res: Response,
+    next: NextFunction,
+) => {
+    try {
+        const { code } = req.query;
+        if (!code) return res.status(400).json({ message: "Invite code is required" });
+
+        const preview = await getClubInvitePreview(req.params.clubId, res.locals.userId, code);
+        if (!preview) return res.status(404).json({ message: "Invalid invite link" });
+
+        return res.status(200).json(preview);
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const patchRegenerateClubInviteCode = async (
+    req: Request<{ clubId: string }>,
+    res: Response,
+    next: NextFunction,
+) => {
+    try {
+        await regenerateClubInviteCode(req.params.clubId);
+        const club = await getGamingClubById(req.params.clubId, res.locals.userId);
+        return res.status(200).json(club);
     } catch (error) {
         next(error);
     }
