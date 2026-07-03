@@ -16,7 +16,8 @@ const formatPostDate = (iso: string) =>
 const ClubPagePostsTab = () => {
     const { clubData, isMember, isOwner } = useClubPageContext();
     const { onJoinClub } = useClubMembers();
-    const { handleOpenPostModal, handleOpenDeletePostModal } = useClubPosts();
+    const { handleOpenPostModal, handleOpenEditPostModal, handleOpenDeletePostModal } =
+        useClubPosts();
     const { currentUser } = useUserContext();
     const [revealedPosts, setRevealedPosts] = useState<Set<string>>(new Set());
 
@@ -67,7 +68,12 @@ const ClubPagePostsTab = () => {
                                             <span className="club-page__post-author">
                                                 {resolveAuthor(post.author)}
                                             </span>
-                                            <span className="club-page__post-dot" aria-hidden="true">·</span>
+                                            <span
+                                                className="club-page__post-dot"
+                                                aria-hidden="true"
+                                            >
+                                                ·
+                                            </span>
                                             <span className="club-page__post-timestamp">
                                                 {formatPostDate(post.created_at)}
                                             </span>
@@ -77,6 +83,16 @@ const ClubPagePostsTab = () => {
                                                 <span className="club-page__badge club-page__badge--spoiler">
                                                     Spoiler
                                                 </span>
+                                            )}
+                                            {post.author === currentUser?._id && (
+                                                <Button
+                                                    icon="edit"
+                                                    variant="secondary"
+                                                    buttonSize="small"
+                                                    onClick={() =>
+                                                        handleOpenEditPostModal(post._id)
+                                                    }
+                                                />
                                             )}
                                             {(isOwner || post.author === currentUser?._id) && (
                                                 <Button

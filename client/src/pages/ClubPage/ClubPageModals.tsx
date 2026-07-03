@@ -27,10 +27,14 @@ const ClubPageModals = () => {
     } = useClubSettings();
     const {
         newClubPost,
+        pendingEditPost,
         postError,
         onClubPostContentChange,
         onClubPostSpoilerChange,
+        onEditPostContentChange,
+        onEditPostSpoilerChange,
         onSubmitPostForm,
+        onSubmitEditPostForm,
         onDeletePost,
         handleCancelPost,
     } = useClubPosts();
@@ -139,6 +143,23 @@ const ClubPageModals = () => {
                     postValue={newClubPost.content}
                     isSpoiler={newClubPost.is_spoiler}
                     postError={postError}
+                />
+            </Modal>
+
+            <Modal
+                isOpen={activeModal === "editPost"}
+                title="Edit Post"
+                onClose={onCloseModal}
+            >
+                <PostForm
+                    onPostChange={onEditPostContentChange}
+                    onSpoilerChange={onEditPostSpoilerChange}
+                    onSubmit={onSubmitEditPostForm}
+                    onCancel={handleCancelPost}
+                    postValue={pendingEditPost?.content ?? ""}
+                    isSpoiler={pendingEditPost?.is_spoiler ?? false}
+                    postError={postError}
+                    primaryButtonText="Save Changes"
                 />
             </Modal>
 

@@ -22,8 +22,11 @@ type ActiveModalType =
     | "removeClubMember"
     | "leaveClub"
     | "createPost"
+    | "editPost"
     | "deletePost"
     | null;
+
+export type PendingEditPostType = { content: string; is_spoiler: boolean };
 
 export type ClubPageContextType = {
     isLoading: boolean;
@@ -38,8 +41,10 @@ export type ClubPageContextType = {
     activeModal: ActiveModalType;
     pendingMemberId: string | null;
     pendingPostId: string | null;
+    pendingEditPost: PendingEditPostType | null;
     setPendingMemberId: Dispatch<SetStateAction<string | null>>;
     setPendingPostId: Dispatch<SetStateAction<string | null>>;
+    setPendingEditPost: Dispatch<SetStateAction<PendingEditPostType | null>>;
     onOpenModal: (modal: Exclude<ActiveModalType, null>) => void;
     onCloseModal: () => void;
     setClubData: Dispatch<SetStateAction<ClubDetailType | null>>;
@@ -52,6 +57,7 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
     const [clubData, setClubData] = useState<ClubDetailType | null>(null);
     const [pendingMemberId, setPendingMemberId] = useState<string | null>(null);
     const [pendingPostId, setPendingPostId] = useState<string | null>(null);
+    const [pendingEditPost, setPendingEditPost] = useState<PendingEditPostType | null>(null);
     const [activeTab, setActiveTab] = useState<ClubTab>("overview");
     const [activeModal, setActiveModal] = useState<ActiveModalType>(null);
 
@@ -72,6 +78,7 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
         setActiveModal(null);
         setPendingMemberId(null);
         setPendingPostId(null);
+        setPendingEditPost(null);
     }, []);
 
     useEffect(() => {
@@ -108,8 +115,10 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
             activeModal,
             pendingMemberId,
             pendingPostId,
+            pendingEditPost,
             setPendingMemberId,
             setPendingPostId,
+            setPendingEditPost,
             onOpenModal,
             onCloseModal,
             setClubData,
@@ -128,8 +137,10 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
             activeModal,
             pendingMemberId,
             pendingPostId,
+            pendingEditPost,
             setPendingMemberId,
             setPendingPostId,
+            setPendingEditPost,
             onOpenModal,
             onCloseModal,
             setClubData,
