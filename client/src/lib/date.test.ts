@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { formatDate, toInputDate, formatShortDate, formatMonthYear } from "./date";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { formatDate, toInputDate, formatShortDate, formatMonthYear, formatRelativeTime } from "./date";
 
 describe("formatDate", () => {
     it("formats an ISO date string to a readable date", () => {
@@ -54,5 +54,48 @@ describe("formatMonthYear", () => {
 
     it("formats January correctly", () => {
         expect(formatMonthYear("2025-01-20T12:00:00.000Z")).toBe("Jan 2025");
+    });
+});
+
+describe("formatRelativeTime", () => {
+    const NOW = new Date("2025-06-15T12:00:00.000Z").getTime();
+
+    beforeEach(() => vi.setSystemTime(NOW));
+    afterEach(() => vi.useRealTimers());
+
+    it("returns 'just now' for posts under a minute old", () => {
+        expect(formatRelativeTime(new Date(NOW - 30_000).toISOString())).toBe("just now");
+    });
+
+    it("returns singular 'minute ago' for exactly 1 minute", () => {
+        expect(formatRelativeTime(new Date(NOW - 60_000).toISOString())).toBe("1 minute ago");
+    });
+
+    it("returns plural 'minutes ago' for multiple minutes", () => {
+        expect(formatRelativeTime(new Date(NOW - 5 * 60_000).toISOString())).toBe("5 minutes ago");
+    });
+
+    it("returns singular 'hour ago' for exactly 1 hour", () => {
+        expect(formatRelativeTime(new Date(NOW - 3_600_000).toISOString())).toBe("1 hour ago");
+    });
+
+    it("returns plural 'hours ago' for multiple hours", () => {
+        expect(formatRelativeTime(new Date(NOW - 3 * 3_600_000).toISOString())).toBe("3 hours ago");
+    });
+
+    it("returns singular 'day ago' for exactly 1 day", () => {
+        expect(formatRelativeTime(new Date(NOW - 86_400_000).toISOString())).toBe("1 day ago");
+    });
+
+    it("returns plural 'days ago' within the 7-day window", () => {
+        expect(formatRelativeTime(new Date(NOW - 4 * 86_400_000).toISOString())).toBe("4 days ago");
+    });
+
+    it("returns an absolute date for posts 7 or more days old", () => {
+        expect(formatRelativeTime(new Date(NOW - 7 * 86_400_000).toISOString())).toBe("Jun 8, 2025");
+    });
+
+    it("returns an absolute date for much older posts", () => {
+        expect(formatRelativeTime("2024-01-10T12:00:00.000Z")).toBe("Jan 10, 2024");
     });
 });

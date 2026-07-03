@@ -5,13 +5,7 @@ import Icon from "@components/Icon";
 import useClubMembers from "../hooks/useClubMembers";
 import useClubPosts from "../hooks/useClubPosts";
 import { useUserContext } from "@contexts/UserContext/useUserContext";
-
-const formatPostDate = (iso: string) =>
-    new Date(iso).toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-    });
+import { formatRelativeTime } from "@lib/date";
 
 const ClubPagePostsTab = () => {
     const { clubData, isMember, isOwner } = useClubPageContext();
@@ -75,7 +69,7 @@ const ClubPagePostsTab = () => {
                                                 ·
                                             </span>
                                             <span className="club-page__post-timestamp">
-                                                {formatPostDate(post.created_at)}
+                                                {formatRelativeTime(post.created_at)}
                                             </span>
                                         </div>
                                         <div className="club-page__post-meta-right">
@@ -106,9 +100,7 @@ const ClubPagePostsTab = () => {
                                             )}
                                         </div>
                                     </div>
-                                    <div
-                                        className={`club-page__post-body-wrapper${post.is_spoiler && !revealedPosts.has(post._id) ? " club-page__post-body-wrapper--spoiler" : ""}`}
-                                    >
+                                    <div className="club-page__post-body-wrapper">
                                         <p
                                             className={`club-page__post-body${post.is_spoiler && !revealedPosts.has(post._id) ? " club-page__post-body--blurred" : ""}`}
                                         >
@@ -116,25 +108,16 @@ const ClubPagePostsTab = () => {
                                         </p>
                                         {post.is_spoiler && !revealedPosts.has(post._id) && (
                                             <div className="club-page__post-spoiler-overlay">
-                                                <Icon
-                                                    name="eye-off"
-                                                    size="small"
-                                                    color="gold"
-                                                />
-                                                <span className="club-page__post-spoiler-label">
-                                                    Spoiler
-                                                </span>
-                                                <Button
-                                                    variant="secondary"
-                                                    buttonSize="small"
+                                                <button
+                                                    className="club-page__post-spoiler-pill"
                                                     onClick={() =>
                                                         setRevealedPosts(
                                                             (prev) => new Set([...prev, post._id]),
                                                         )
                                                     }
                                                 >
-                                                    Reveal post
-                                                </Button>
+                                                    Spoiler — tap to reveal
+                                                </button>
                                             </div>
                                         )}
                                     </div>
