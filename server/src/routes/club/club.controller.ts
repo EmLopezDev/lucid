@@ -91,14 +91,14 @@ export const patchJoinGamingClub = async (
         const result = await joinGamingClub(
             res.locals.userId,
             req.params.clubId,
-            req.body.invite_code,
+            req.body?.invite_code,
         );
         if (!result) return res.status(404).json({ message: "Club not found" });
         if (result === "invalid_code")
             return res.status(403).json({ message: "Invalid invite code" });
 
         const clubJoined = await getGamingClubById(req.params.clubId, res.locals.userId);
-        return res.status(200).json(clubJoined);
+        return res.status(200).json(clubJoined); // covers both new join and already_member
     } catch (error) {
         next(error);
     }

@@ -13,7 +13,7 @@ import { ClubModel } from "./club.mongo";
 
 export const getGamingClubById = async (clubId: string, userId: string | undefined) => {
     const results = await ClubModel.aggregate<ClubDetailType>([
-        { $match: { _id: new Types.ObjectId(clubId) } },
+        { $match: { _id: new Types.ObjectId(clubId), deleted_at: null } },
 
         // Extract member _ids for the lookup
         {
@@ -193,6 +193,9 @@ export const joinGamingClub = async (userId: string, clubId: string, inviteCode?
             return "invalid_code";
         }
     }
+
+    const alreadyMember = club.members.some((m) => m._id === userId);
+    if (alreadyMember) return "already_member" as const;
 
     return await ClubModel.findOneAndUpdate(
         { _id: clubId, "members._id": { $ne: userId } },
