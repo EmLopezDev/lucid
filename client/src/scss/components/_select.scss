@@ -72,9 +72,9 @@
         max-width: 90vw;
         z-index: 10;
         border: u.em(0.5) solid var(--color-brand);
-        border-top: none;
-        border-bottom-left-radius: u.em(8);
-        border-bottom-right-radius: u.em(8);
+        border-block-start: none;
+        border-end-start-radius: u.em(8);
+        border-end-end-radius: u.em(8);
         overflow: hidden;
         animation: slide-down 0.15s ease;
 

@@ -121,19 +121,21 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
         setFilters((prevState) => ({ ...prevState, sortValue: option }));
     }, []);
 
-    const handleOnDeleteGameById = useCallback(
-        async (id: string) => {
-            await onDeleteGameById(id);
-            setSelectedCard(null);
-            setIsDetailClosing(false);
-        },
-        [onDeleteGameById],
-    );
-
     const onCloseCardDetail = useCallback(() => {
         setSelectedCard(null);
         setIsDetailClosing(false);
     }, []);
+
+    const onOpenAddGameModal = useCallback(() => setIsAddGameModalOpen(true), []);
+    const onCloseAddGameModal = useCallback(() => setIsAddGameModalOpen(false), []);
+
+    const handleOnAddGame = useCallback(
+        async (data: PostUserLibraryGameBodyType) => {
+            await onAddGame(data);
+            setIsAddGameModalOpen(false);
+        },
+        [onAddGame],
+    );
 
     const handleOnPatchGame = useCallback(
         async (
@@ -147,15 +149,13 @@ export const UserLibraryPageProvider = ({ children }: { children: ReactNode }) =
         [onPatchGame],
     );
 
-    const onOpenAddGameModal = useCallback(() => setIsAddGameModalOpen(true), []);
-    const onCloseAddGameModal = useCallback(() => setIsAddGameModalOpen(false), []);
-
-    const handleOnAddGame = useCallback(
-        async (data: PostUserLibraryGameBodyType) => {
-            await onAddGame(data);
-            setIsAddGameModalOpen(false);
+    const handleOnDeleteGameById = useCallback(
+        async (id: string) => {
+            await onDeleteGameById(id);
+            setSelectedCard(null);
+            setIsDetailClosing(false);
         },
-        [onAddGame],
+        [onDeleteGameById],
     );
 
     const contextValue = useMemo(

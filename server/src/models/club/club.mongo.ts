@@ -1,0 +1,77 @@
+import { Schema, model } from "mongoose";
+import { type ClubType } from "../../../../packages/types/ClubTypes";
+
+type ClubDocument = Omit<
+    ClubType,
+    | "current_game"
+    | "past_games"
+    | "created_at"
+    | "updated_at"
+    | "deleted_at"
+    | "members"
+    | "invite_code_expires_at"
+> & {
+    members: Array<{ _id: string; joined_at: Date }>;
+    current_game: {
+        title: string;
+        cover_url: string | null;
+        start_date: Date | null;
+        end_date: Date | null;
+    } | null;
+    past_games: Array<{
+        title: string;
+        cover_url: string | null;
+        end_date: Date;
+        game_status: "completed" | "dropped";
+    }>;
+    created_at: Date;
+    updated_at: Date | null;
+    deleted_at: Date | null;
+    invite_code_expires_at: Date | null;
+};
+
+const ClubSchema = new Schema<ClubDocument>(
+    {
+        name: { type: String, required: true },
+        owner: { type: String, required: true },
+        avatar_url: { type: String, default: null },
+        description: { type: String, default: null },
+        members: [
+            {
+                _id: false,
+                type: {
+                    _id: { type: String, required: true },
+                    joined_at: { type: Date, required: true },
+                },
+            },
+        ],
+        visibility: { type: String, required: true },
+        invite_code: { type: String, default: null },
+        invite_code_expires_at: { type: Date, default: null },
+        current_game: {
+            type: {
+                title: { type: String, required: true },
+                cover_url: { type: String, default: null },
+                start_date: { type: Date, default: null },
+                end_date: { type: Date, default: null },
+            },
+            default: null,
+        },
+        past_games: [
+            {
+                type: {
+                    title: { type: String, required: true },
+                    cover_url: { type: String, default: null },
+                    end_date: { type: Date, required: true },
+                    game_status: { type: String, required: true },
+                },
+            },
+        ],
+        created_at: { type: Date, required: true },
+        updated_at: { type: Date, default: null },
+        deleted_at: { type: Date, default: null },
+    },
+    { versionKey: false },
+);
+
+export const ClubModel = model<ClubDocument>("Club", ClubSchema);

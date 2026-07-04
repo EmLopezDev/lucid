@@ -1,0 +1,79 @@
+@use "../utils/" as u;
+
+.clubs-list-page {
+    width: 100%;
+    padding: u.em(32) u.em(24);
+    max-width: u.em(1100);
+    margin: 0 auto;
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        margin-block-end: u.em(24);
+    }
+
+    &__title {
+        font-size: u.$font-size-3xl;
+        font-weight: 700;
+        color: var(--color-text-primary);
+    }
+
+    &__empty-state {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: u.em(12);
+        padding: u.em(48) u.em(24);
+
+        &__icon {
+            font-size: u.rem(48);
+            opacity: 0.4;
+            margin-block-end: u.em(8);
+        }
+
+        &__title {
+            font-size: u.$font-size-2xl;
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+
+        &__sub {
+            font-size: u.$font-size-xl;
+            color: var(--color-text-tertiary);
+            margin-block-end: u.em(8);
+        }
+    }
+
+    &__search {
+        width: 100%;
+        margin-block-end: u.em(32);
+    }
+
+    &__sections {
+        display: flex;
+        flex-direction: column;
+        gap: u.em(36);
+    }
+
+    &__section {
+        display: flex;
+        flex-direction: column;
+        gap: u.em(16);
+    }
+
+    &__section-heading {
+        font-size: u.$font-size-sm;
+        font-weight: 700;
+        color: var(--color-text-tertiary);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+    }
+
+    &__cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: u.em(20);
+        padding-block-end: u.em(8);
+    }
+}

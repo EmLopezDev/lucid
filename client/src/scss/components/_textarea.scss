@@ -58,7 +58,7 @@
 
     &__required {
         color: var(--color-brand);
-        margin-left: u.em(4);
+        margin-inline-start: u.em(4);
     }
 
     &__footer {
@@ -76,7 +76,7 @@
     &__counter {
         font-size: u.$font-size-base;
         color: var(--color-text-secondary);
-        margin-left: auto; // pushes counter right even when no error
+        margin-inline-start: auto; // pushes counter right even when no error
 
         &--warn {
             color: var(--color-danger);

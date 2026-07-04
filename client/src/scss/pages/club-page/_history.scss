@@ -1,0 +1,89 @@
+@use "../../utils/" as u;
+
+.club-page {
+    &__history-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: u.em(10);
+    }
+
+    &__history-item {
+        background: var(--color-bg-card);
+        border: 1px solid rgba(var(--color-brand-rgb), 0.2);
+        border-radius: u.em(12);
+        overflow: hidden;
+        display: flex;
+        align-items: stretch;
+        transition:
+            background-color 0.2s,
+            box-shadow 0.2s;
+
+        &:hover {
+            background-color: var(--color-bg-card-hover);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+    }
+
+    &__history-cover {
+        width: u.rem(90);
+        flex-shrink: 0;
+        position: relative;
+        overflow: hidden;
+        background-color: rgba(var(--color-brand-rgb), 0.06);
+
+        img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            display: block;
+        }
+    }
+
+    &__history-body {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: u.em(6);
+        padding: u.em(14) u.em(16);
+    }
+
+    &__history-title {
+        display: block;
+        font-size: u.$font-size-lg;
+        font-weight: 600;
+        color: var(--color-text-primary);
+        margin-block-end: u.em(3);
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    &__history-date {
+        display: flex;
+        align-items: center;
+        gap: u.em(4);
+        font-size: u.$font-size-base;
+        color: var(--color-text-tertiary);
+    }
+
+    &__history-empty {
+        padding: u.em(24);
+        background: var(--color-bg-card);
+        border: 1px solid var(--color-border);
+        border-radius: u.em(12);
+        font-size: u.$font-size-lg;
+        color: var(--color-text-tertiary);
+
+        p {
+            margin: 0;
+        }
+    }
+}

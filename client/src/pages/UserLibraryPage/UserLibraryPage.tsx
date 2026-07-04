@@ -1,18 +1,22 @@
 import { useState, useCallback } from "react";
 import { cx } from "css-variants";
-import Card from "@components/Card";
-import CardDetail from "@components/CardDetail";
-import Input from "@components/Input";
-import Button from "@components/Button";
-import Select from "@components/Select";
-import Badge from "@components/Badge";
-import Icon from "@components/Icon";
-import Modal from "@components/Modal";
-import ConfirmModal from "@components/ConfirmModal";
-import AddGameForm from "@components/AddGameForm";
+import GameCard from "@components/GameCard/GameCard";
+import CardDetail from "@components/CardDetail/CardDetail";
+import Input from "@components/Input/Input";
+import Button from "@components/Button/Button";
+import Select from "@components/Select/Select";
+import Badge from "@components/Badge/Badge";
+import Icon from "@components/Icon/Icon";
+import Modal from "@components/Modal/Modal";
+import ConfirmModal from "@components/ConfirmModal/ConfirmModal";
+import AddGameForm from "@components/AddGameForm/AddGameForm";
 import { UserLibraryPageProvider } from "./UserLibraryPageContext";
 import { useUserLibraryPageContext } from "./useUserLibraryPageContext";
-import { type StatusFilterType, type SortValueType, type SortLabelType } from "../../types/SelectOptionsTypes";
+import {
+    type StatusFilterType,
+    type SortValueType,
+    type SortLabelType,
+} from "../../types/SelectOptionsTypes";
 import { SkeletonLoader, SkeletonCard, SkeletonCardDetail } from "@components/Skeleton";
 
 const UserLibraryPageContent = () => {
@@ -108,7 +112,7 @@ const UserLibraryPageContent = () => {
         (filters.sortValue.value !== "recently" ? 1 : 0);
 
     return (
-        <div className="user-library-page">
+        <section className="user-library-page">
             <div className="user-library-page__controls">
                 <div className="user-library-page__controls-right">
                     <Input
@@ -178,7 +182,7 @@ const UserLibraryPageContent = () => {
                         <div className="user-library-page__content--main-col">
                             <div className="user-library-page__games">
                                 {filteredData.map((data) => (
-                                    <Card
+                                    <GameCard
                                         key={data._id}
                                         data={data}
                                         selectedId={selectedCard?._id || ""}
@@ -239,7 +243,7 @@ const UserLibraryPageContent = () => {
                 onCancel={onCancelDelete}
                 onConfirm={onConfirmDelete}
             />
-        </div>
+        </section>
     );
 };
 

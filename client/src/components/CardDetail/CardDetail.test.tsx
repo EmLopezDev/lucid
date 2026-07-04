@@ -22,6 +22,7 @@ const mockGame: UserLibraryDataType = {
     updated_at: null,
     deleted_at: null,
     cover_url: null,
+    played_with_club: null,
 };
 
 const renderCardDetail = (overrides: Partial<Parameters<typeof CardDetail>[0]> = {}) =>

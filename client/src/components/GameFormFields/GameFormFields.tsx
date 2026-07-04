@@ -4,7 +4,11 @@ import Select from "@components/Select";
 import DatePicker from "@components/DatePicker";
 import Textarea from "@components/Textarea";
 import { type GenreType, type StatusType, type PlatformType } from "@lucid/types";
-import { type GenreOptionType, type PlatformOptionType, type StatusOptionType } from "../../types/SelectOptionsTypes";
+import {
+    type GenreOptionType,
+    type PlatformOptionType,
+    type StatusOptionType,
+} from "../../types/SelectOptionsTypes";
 import { genreOptions, platformOptions, statusOptions } from "@lib/form";
 
 export type GameFormData = {
@@ -110,6 +114,7 @@ const GameFormFields = ({
                     value={value.datePurchased}
                     onChange={(date) => update({ datePurchased: date })}
                     inputSize={inputSize}
+                    maxDate={new Date()}
                 />
                 <Input
                     id="hours-input"

@@ -6,12 +6,13 @@ import {
     type ChangeEvent,
     type KeyboardEvent,
 } from "react";
+import { createPortal } from "react-dom";
 import Input from "@components/Input";
 
 type SearchInputType<T> = {
     label?: string;
     placeholder?: string;
-    inputSize: "small" | "medium" | "large";
+    inputSize?: "small" | "medium" | "large";
     query: string;
     results: T[];
     minQueryLength?: number;
@@ -42,26 +43,47 @@ const SearchInput = <T,>({
     const [isOpen, setIsOpen] = useState(false);
     const [hasSelected, setHasSelected] = useState(false);
     const [focusedIndex, setFocusedIndex] = useState(-1);
-
+    const [position, setPosition] = useState<{ top: number; left: number; width: number } | null>(
+        null,
+    );
+    const dropdownRef = useRef<HTMLUListElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
-    const listboxRef = useRef<HTMLUListElement>(null);
+    // Scroll the focused item into view when navigating with arrow keys
+    useEffect(() => {
+        if (focusedIndex < 0 || !dropdownRef.current) return;
+        const options = dropdownRef.current.querySelectorAll('[role="option"]');
+        options[focusedIndex]?.scrollIntoView({ block: "nearest" });
+    }, [focusedIndex]);
+
+    useEffect(() => {
+        if (!isOpen || !containerRef.current) return;
+        const rect = containerRef.current.getBoundingClientRect();
+        setPosition({ top: rect.bottom, left: rect.left, width: rect.width });
+    }, [isOpen]);
+
+    useEffect(() => {
+        if (!isOpen) return;
+        const handleResize = () => {
+            setIsOpen(false);
+            setPosition(null);
+        };
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, [isOpen]);
 
     useEffect(() => {
         const handleOutsideClick = (e: MouseEvent) => {
-            if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+            const target = e.target as Node;
+            const insideContainer = containerRef.current?.contains(target);
+            const insideDropdown = dropdownRef.current?.contains(target);
+            if (!insideContainer && !insideDropdown) {
                 setIsOpen(false);
+                setPosition(null);
             }
         };
         document.addEventListener("mousedown", handleOutsideClick);
         return () => document.removeEventListener("mousedown", handleOutsideClick);
     }, []);
-
-    // Scroll the focused item into view when navigating with arrow keys
-    useEffect(() => {
-        if (focusedIndex < 0 || !listboxRef.current) return;
-        const options = listboxRef.current.querySelectorAll('[role="option"]');
-        options[focusedIndex]?.scrollIntoView({ block: "nearest" });
-    }, [focusedIndex]);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         onQueryChange(e.target.value);
@@ -120,39 +142,48 @@ const SearchInput = <T,>({
                 placeholder={placeholder}
                 autoComplete="off"
             />
-            {showDropdown && (
-                <ul
-                    className="search-input__dropdown"
-                    role="listbox"
-                    ref={listboxRef}
-                >
-                    {isLoading && (
-                        <li className="search-input__status search-input__status--loading">
-                            Searching...
-                        </li>
-                    )}
-                    {!isLoading && !results.length && (
-                        <li className="search-input__status">No results found</li>
-                    )}
-                    {!isLoading &&
-                        results.map((result, index) => (
-                            <li
-                                key={getKey(result)}
-                                role="option"
-                                aria-selected={index === focusedIndex}
-                                className={`search-input__result${index === focusedIndex ? " search-input__result--focused" : ""}`}
-                                onMouseDown={(e) => {
-                                    e.preventDefault();
-                                    handleSelect(result);
-                                }}
-                                onMouseEnter={() => setFocusedIndex(index)}
-                                onMouseLeave={() => setFocusedIndex(-1)}
-                            >
-                                {renderResult(result)}
+            {showDropdown &&
+                position &&
+                createPortal(
+                    <ul
+                        className="search-input__dropdown"
+                        role="listbox"
+                        ref={dropdownRef}
+                        style={{
+                            position: "fixed",
+                            top: position.top,
+                            left: position.left,
+                            width: position.width,
+                        }}
+                    >
+                        {isLoading && (
+                            <li className="search-input__status search-input__status--loading">
+                                Searching...
                             </li>
-                        ))}
-                </ul>
-            )}
+                        )}
+                        {!isLoading && !results.length && (
+                            <li className="search-input__status">No results found</li>
+                        )}
+                        {!isLoading &&
+                            results.map((result, index) => (
+                                <li
+                                    key={getKey(result)}
+                                    role="option"
+                                    aria-selected={index === focusedIndex}
+                                    className={`search-input__result${index === focusedIndex ? " search-input__result--focused" : ""}`}
+                                    onMouseDown={(e) => {
+                                        e.preventDefault();
+                                        handleSelect(result);
+                                    }}
+                                    onMouseEnter={() => setFocusedIndex(index)}
+                                    onMouseLeave={() => setFocusedIndex(-1)}
+                                >
+                                    {renderResult(result)}
+                                </li>
+                            ))}
+                    </ul>,
+                    document.body,
+                )}
         </div>
     );
 };

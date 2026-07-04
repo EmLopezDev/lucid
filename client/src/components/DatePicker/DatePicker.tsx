@@ -12,6 +12,7 @@ type DatePickerProps = {
     value?: string;
     onChange: (value: string) => void;
     inputSize?: "small" | "medium" | "large";
+    maxDate?: Date;
 };
 
 // Coordinates used to position the popup with position:fixed
@@ -47,7 +48,14 @@ function displayDate(date: Date): string {
 const POPUP_OFFSET = 4; // px gap between trigger and popup
 const EDGE_MARGIN = 8; // minimum px gap between popup and viewport edge
 
-const DatePicker = ({ id, label, value, onChange, inputSize = "small" }: DatePickerProps) => {
+const DatePicker = ({
+    id,
+    label,
+    value,
+    onChange,
+    inputSize = "medium",
+    maxDate,
+}: DatePickerProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState<Date | undefined>(parseDate(value));
 
@@ -110,16 +118,21 @@ const DatePicker = ({ id, label, value, onChange, inputSize = "small" }: DatePic
         setPosition((prev) => {
             const next = { ...prev };
 
-            // If the right edge overflows: drop left, anchor to trigger's right edge instead
             if (popup.right > vw - EDGE_MARGIN) {
                 next.left = undefined;
                 next.right = vw - trigger.right;
             }
 
-            // If the bottom edge overflows: drop top, anchor above the trigger instead
             if (popup.bottom > vh - EDGE_MARGIN) {
                 next.top = undefined;
                 next.bottom = vh - trigger.top + POPUP_OFFSET;
+
+                // If flipping above would also overflow the top, pin to edge margin
+                const topAfterFlip = trigger.top - POPUP_OFFSET - popup.height;
+                if (topAfterFlip < EDGE_MARGIN) {
+                    next.top = EDGE_MARGIN;
+                    next.bottom = undefined;
+                }
             }
 
             return next;
@@ -205,7 +218,7 @@ const DatePicker = ({ id, label, value, onChange, inputSize = "small" }: DatePic
                 onSelect={handleSelect}
                 defaultMonth={selected ?? new Date()}
                 startMonth={new Date(1980, 0)}
-                endMonth={new Date()}
+                endMonth={maxDate}
                 captionLayout="dropdown"
                 fixedWeeks
             />

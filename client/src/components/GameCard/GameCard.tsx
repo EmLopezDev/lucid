@@ -7,14 +7,14 @@ import StarRating from "@components/StarRating";
 import { capitalizeString } from "@lib/string";
 import { useCoverImage } from "@hooks/useCoverImage";
 
-type CardType = {
+type GameCardType = {
     data: UserLibraryDataType;
     selectedId: string;
     handleCardSelect: (id: string) => void;
     handleDelete: (id: string) => void;
 };
 
-const Card = ({ data, selectedId, handleCardSelect, handleDelete }: CardType) => {
+const GameCard = ({ data, selectedId, handleCardSelect, handleDelete }: GameCardType) => {
     const { hasImage, handleError } = useCoverImage(data.cover_url);
     const isSelected = selectedId === data._id;
     return (
@@ -42,7 +42,12 @@ const Card = ({ data, selectedId, handleCardSelect, handleDelete }: CardType) =>
                             onError={handleError}
                         />
                     )}
-                    {data.status && <Badge size="medium" label={data.status} />}
+                    {data.status && (
+                        <Badge
+                            size="medium"
+                            label={data.status}
+                        />
+                    )}
                 </div>
                 <div className="card__content">
                     <h4 className="card__title">{data.title}</h4>
@@ -85,4 +90,4 @@ const Card = ({ data, selectedId, handleCardSelect, handleDelete }: CardType) =>
     );
 };
 
-export default Card;
+export default GameCard;

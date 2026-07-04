@@ -1,0 +1,104 @@
+// Lucid — Database Schema
+// Paste into https://dbdiagram.io to view
+
+// ─── Collections ──────────────────────────────────────────────────────────────
+
+Table User {
+  _id       ObjectId  [pk]
+  first_name string   [not null]
+  last_name  string   [not null]
+  email      string   [not null, unique]
+  email_verified boolean [not null, default: false]
+  bio        string
+  created_at datetime [not null]
+  updated_at datetime
+  deleted_at datetime
+}
+
+Table Auth {
+  _id                              ObjectId  [pk]
+  user_id                          string    [not null, ref: - User._id]
+  hash                             string    [not null]
+  reset_token_hash                 string
+  reset_token_expires              datetime
+  email_verification_token_hash    string
+  email_verification_token_expires datetime
+  created_at                       datetime  [not null]
+  updated_at                       datetime
+  deleted_at                       datetime
+}
+
+Table UserLibrary {
+  _id            ObjectId [pk]
+  user_id        string   [not null, ref: > User._id]
+  title          string   [not null]
+  genre          string
+  platform       string
+  status         string
+  favorite       boolean  [not null, default: false]
+  date_played    datetime
+  date_purchased datetime
+  hours_played   number
+  rating         number
+  comment        string
+  price          string
+  cover_url      string
+  // embedded: played_with_club (PlayedWithClub)
+  created_at     datetime [not null]
+  updated_at     datetime
+  deleted_at     datetime
+}
+
+Table GamingClub {
+  _id         ObjectId [pk]
+  name        string   [not null]
+  owner       string   [not null, ref: > User._id]
+  avatar_url  string
+  description string
+  visibility  string   [not null, note: '"public" | "private"']
+  invite_code string
+  // embedded: current_game (CurrentGame)
+  // embedded array: members (ClubMember)
+  // embedded array: past_games (PastGame)
+  created_at  datetime [not null]
+  updated_at  datetime
+  deleted_at  datetime
+}
+
+Table GamingClubPost {
+  _id        ObjectId [pk]
+  club_id    string   [not null, ref: > GamingClub._id]
+  author     string   [not null, ref: > User._id]
+  content    string   [not null]
+  is_spoiler boolean  [not null, default: false]
+  created_at datetime [not null]
+  updated_at datetime
+  deleted_at datetime
+}
+
+// ─── Embedded Subdocuments (not separate collections) ─────────────────────────
+
+Table PlayedWithClub [note: 'Embedded in UserLibrary'] {
+  name     string   [not null]
+  end_date datetime [not null]
+}
+
+Table ClubMember [note: 'Embedded array in GamingClub'] {
+  user_id   string   [not null, ref: > User._id]
+  joined_at datetime [not null]
+}
+
+Table CurrentGame [note: 'Embedded in GamingClub'] {
+  title      string   [not null]
+  cover_url  string
+  start_date datetime
+  end_date   datetime
+}
+
+Table PastGame [note: 'Embedded array in GamingClub'] {
+  title       string   [not null]
+  cover_url   string
+  end_date    datetime [not null]
+  game_status string   [not null, note: '"completed" | "dropped"']
+}
+

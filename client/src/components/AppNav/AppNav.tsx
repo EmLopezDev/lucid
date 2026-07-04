@@ -82,6 +82,12 @@ function AppNav({ isUserAuthenticated }: { isUserAuthenticated: boolean }) {
                         <>
                             <NavLink
                                 className="app-layout__nav-link"
+                                to="/clubs"
+                            >
+                                Clubs
+                            </NavLink>
+                            <NavLink
+                                className="app-layout__nav-link"
                                 to="/user/library"
                             >
                                 Library
@@ -167,6 +173,12 @@ function AppNav({ isUserAuthenticated }: { isUserAuthenticated: boolean }) {
                         </>
                     ) : (
                         <>
+                            <NavLink
+                                className="app-layout__nav-link"
+                                to="/clubs"
+                            >
+                                Clubs
+                            </NavLink>
                             <NavLink
                                 className="app-layout__nav-link"
                                 to="/user/library"

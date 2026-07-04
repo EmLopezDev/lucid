@@ -90,9 +90,11 @@ const SignInPage = () => {
     const initialValues = location.state?.demo
         ? { email: "demo@lucid.com", password: "lucid-demo" }
         : undefined;
+    const notice: string | undefined = location.state?.notice;
 
     return (
         <SignInPageProvider initialValues={initialValues}>
+            {notice && <p className="signin-page__notice">{notice}</p>}
             <SignInPageContent />
         </SignInPageProvider>
     );

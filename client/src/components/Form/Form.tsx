@@ -6,6 +6,7 @@ type FormType = {
     children: ReactNode;
     buttonSize?: "small" | "medium" | "large";
     primaryButtonText?: string;
+    primaryButtonDisabled?: boolean;
     secondaryButtonText?: string;
     onSubmit: (e: SubmitEvent<HTMLFormElement>) => void;
     onCancel?: () => void;
@@ -16,6 +17,7 @@ const Form = ({
     children,
     buttonSize = "medium",
     primaryButtonText = "Submit",
+    primaryButtonDisabled,
     secondaryButtonText = "Cancel",
     onSubmit,
     onCancel,
@@ -39,6 +41,7 @@ const Form = ({
                 <Button
                     type="submit"
                     buttonSize={buttonSize}
+                    disabled={primaryButtonDisabled}
                 >
                     {primaryButtonText}
                 </Button>

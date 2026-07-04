@@ -43,11 +43,11 @@
         outline-offset: u.rem(-2);
     }
 
-    &--playing   { border-top: u.em(2) solid var(--color-badge-playing); }
-    &--completed { border-top: u.em(2) solid var(--color-badge-completed); }
-    &--wishlist  { border-top: u.em(2) solid var(--color-badge-wishlist); }
-    &--paused    { border-top: u.em(2) solid var(--color-badge-paused); }
-    &--dropped   { border-top: u.em(2) solid var(--color-badge-dropped); }
+    &--playing   { border-block-start: u.em(2) solid var(--color-badge-playing); }
+    &--completed { border-block-start: u.em(2) solid var(--color-badge-completed); }
+    &--wishlist  { border-block-start: u.em(2) solid var(--color-badge-wishlist); }
+    &--paused    { border-block-start: u.em(2) solid var(--color-badge-paused); }
+    &--dropped   { border-block-start: u.em(2) solid var(--color-badge-dropped); }
 
     &__cover {
         width: u.em(130);

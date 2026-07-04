@@ -57,6 +57,13 @@ export const UserLibraryData = z.object({
     status: Status.default(null),
     price: z.string().nullable().default(null),
     cover_url: z.string().nullable().default(null),
+    played_with_club: z
+        .object({
+            name: z.string(),
+            end_date: z.date(),
+        })
+        .nullable()
+        .default(null),
     created_at: z.string(),
     updated_at: z.string().nullable().default(null),
     deleted_at: z.string().nullable().default(null),

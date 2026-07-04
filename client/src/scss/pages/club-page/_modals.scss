@@ -1,0 +1,35 @@
+@use "../../utils/" as u;
+
+.club-page {
+    &__invite-modal {
+        display: flex;
+        flex-direction: column;
+        gap: u.em(16);
+    }
+
+    &__invite-url {
+        font-size: u.$font-size-base;
+        color: var(--color-text-secondary);
+        background: var(--color-bg-input);
+        border: 1px solid var(--color-border);
+        border-radius: u.em(8);
+        padding: u.em(10) u.em(12);
+        word-break: break-all;
+        margin: 0;
+    }
+
+    &__invite-expiry {
+        font-size: u.$font-size-xs;
+        color: var(--color-text-tertiary);
+        margin: u.em(-8) 0 0;
+    }
+
+    &__invite-actions {
+        display: flex;
+        gap: u.em(10);
+
+        .button {
+            flex: 1;
+        }
+    }
+}

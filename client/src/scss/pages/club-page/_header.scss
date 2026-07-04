@@ -1,0 +1,122 @@
+@use "../../utils/" as u;
+
+.club-page {
+    &__header {
+        padding: 0 u.em(32);
+        margin-block-start: u.em(-52);
+        position: relative;
+    }
+
+    &__header-inner {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: u.em(16);
+        flex-wrap: wrap;
+    }
+
+    &__identity-group {
+        display: flex;
+        align-items: flex-end;
+        gap: u.em(16);
+        min-width: 0;
+    }
+
+    &__avatar {
+        width: u.rem(88);
+        height: u.rem(88);
+        border-radius: 50%;
+        border: u.rem(3) solid var(--color-bg-app);
+        background: var(--color-bg-card);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: u.rem(36);
+        flex-shrink: 0;
+    }
+
+    &__identity {
+        flex: 1;
+        min-width: 0;
+        padding-block-end: u.em(6);
+    }
+
+    &__name-row {
+        display: flex;
+        align-items: flex-start;
+        gap: u.em(10);
+        margin-block-end: u.em(8);
+        overflow: hidden;
+    }
+
+    &__badge {
+        display: inline-flex;
+        align-items: center;
+        gap: u.em(4);
+        padding: u.em(3) u.em(8);
+        border-radius: u.em(4);
+        font-size: u.$font-size-xs;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+
+        &--owner {
+            background: rgba(var(--color-gold-rgb), 0.12);
+            color: var(--color-gold);
+            border: 1px solid rgba(var(--color-gold-rgb), 0.3);
+        }
+
+        &--member,
+        &--public {
+            background: rgba(var(--color-green-rgb), 0.12);
+            color: var(--color-green);
+            border: 1px solid rgba(var(--color-green-rgb), 0.3);
+        }
+
+        &--private {
+            background: rgba(var(--color-brand-rgb), 0.12);
+            color: var(--color-brand);
+            border: 1px solid var(--color-border);
+        }
+
+        &--spoiler {
+            background: rgba(var(--color-gold-rgb), 0.12);
+            color: var(--color-gold);
+            border: 1px solid rgba(var(--color-gold-rgb), 0.3);
+        }
+    }
+
+    &__name {
+        font-size: u.$font-size-3xl;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--color-text-primary);
+        margin-block-end: u.em(8);
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    &__meta {
+        display: flex;
+        align-items: center;
+        gap: u.em(16);
+        color: var(--color-text-secondary);
+        font-size: u.$font-size-lg;
+        flex-wrap: wrap;
+    }
+
+    &__meta-item {
+        display: flex;
+        align-items: center;
+        gap: u.em(6);
+    }
+
+    &__actions {
+        display: flex;
+        align-items: center;
+        gap: u.em(8);
+        padding-block-end: u.em(6);
+        flex-shrink: 0;
+    }
+}

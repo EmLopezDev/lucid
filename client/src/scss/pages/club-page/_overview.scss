@@ -1,0 +1,172 @@
+@use "../../utils/" as u;
+
+.club-page {
+    &__about-card {
+        background: var(--color-bg-card);
+        border: 1px solid var(--color-border);
+        border-radius: u.em(12);
+        padding: u.em(20);
+        display: flex;
+        flex-direction: column;
+        gap: u.em(12);
+    }
+
+    &__about-row {
+        display: flex;
+        align-items: flex-start;
+        gap: u.em(10);
+        font-size: u.$font-size-base;
+    }
+
+    &__about-label {
+        color: var(--color-text-tertiary);
+        min-width: u.em(70);
+        flex-shrink: 0;
+    }
+
+    &__about-value {
+        color: var(--color-text-primary);
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    &__current-game {
+        background: var(--color-bg-card);
+        border: 1px solid rgba(var(--color-brand-rgb), 0.2);
+        border-radius: u.em(12);
+        overflow: hidden;
+        transition:
+            background-color 0.2s,
+            box-shadow 0.2s;
+
+        &:hover {
+            background-color: var(--color-bg-card-hover);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        &-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+
+            @include u.breakpoint-min("large") {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
+
+        &-action {
+            display: flex;
+            justify-content: flex-end;
+            padding: 0 u.em(16) u.em(16);
+
+            @include u.breakpoint-min("large") {
+                padding: u.em(16) u.em(16) u.em(16) 0;
+                flex-shrink: 0;
+            }
+        }
+
+        &-cover {
+            width: 100%;
+            height: u.rem(160);
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+            background-color: rgba(var(--color-brand-rgb), 0.06);
+
+            @include u.breakpoint-min("large") {
+                width: u.rem(180);
+                height: auto;
+                min-height: u.rem(120);
+                align-self: stretch;
+            }
+
+            img {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center top;
+                display: block;
+            }
+        }
+
+        &-body {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: u.em(8);
+            padding: u.em(16);
+        }
+
+        &-title {
+            font-size: u.$font-size-2xl;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin: 0;
+        }
+
+        &-date {
+            font-size: u.$font-size-base;
+            color: var(--color-text-tertiary);
+            margin: 0;
+        }
+    }
+
+    &__now-playing {
+        display: flex;
+        align-items: center;
+        gap: u.em(6);
+        font-size: u.$font-size-xs;
+        font-weight: 700;
+        color: var(--color-gold);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }
+
+    &__divider {
+        height: 1px;
+        background: var(--color-border);
+        margin: u.em(4) 0;
+    }
+
+    &__pulse-dot {
+        display: inline-block;
+        width: u.em(8);
+        height: u.em(8);
+        border-radius: 50%;
+        background: var(--color-green);
+        flex-shrink: 0;
+        animation: club-pulse-dot 2s ease-in-out infinite;
+    }
+
+    &__cover-placeholder {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(239, 159, 39, 0.3), rgba(239, 159, 39, 0.7));
+    }
+
+    &__no-game {
+        background: var(--color-bg-card);
+        border: 1px solid var(--color-border);
+        border-radius: u.em(12);
+        padding: u.em(36);
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: u.em(10);
+
+        &-text {
+            font-size: u.$font-size-xl;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin: 0;
+        }
+    }
+}

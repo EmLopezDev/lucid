@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import Card from "./Card";
+import GameCard from "./GameCard";
 
 const mockGame = {
     _id: "507f1f77bcf86cd799439011",
@@ -21,6 +21,7 @@ const mockGame = {
     updated_at: null,
     deleted_at: null,
     cover_url: null,
+    played_with_club: null,
 };
 
 const defaultProps = {
@@ -33,22 +34,22 @@ const defaultProps = {
 describe("Card", () => {
     describe("rendering", () => {
         it("renders the game title", () => {
-            render(<Card {...defaultProps} />);
+            render(<GameCard {...defaultProps} />);
             expect(screen.getByText("The Last of Us")).toBeInTheDocument();
         });
 
         it("renders the genre capitalized", () => {
-            render(<Card {...defaultProps} />);
+            render(<GameCard {...defaultProps} />);
             expect(screen.getByText("Action")).toBeInTheDocument();
         });
 
         it("renders the platform capitalized", () => {
-            render(<Card {...defaultProps} />);
+            render(<GameCard {...defaultProps} />);
             expect(screen.getByText("PlayStation 5")).toBeInTheDocument();
         });
 
         it("renders the select button with the correct aria-label", () => {
-            render(<Card {...defaultProps} />);
+            render(<GameCard {...defaultProps} />);
             expect(
                 screen.getByRole("button", {
                     name: "The Last of Us, Playing, Action, PlayStation 5",
@@ -57,20 +58,20 @@ describe("Card", () => {
         });
 
         it("renders the delete button with the correct aria-label", () => {
-            render(<Card {...defaultProps} />);
+            render(<GameCard {...defaultProps} />);
             expect(
                 screen.getByRole("button", { name: "Delete The Last of Us" }),
             ).toBeInTheDocument();
         });
 
         it("shows price with $ prefix", () => {
-            render(<Card {...defaultProps} />);
+            render(<GameCard {...defaultProps} />);
             expect(screen.getByText("$59.99")).toBeInTheDocument();
         });
 
         it("shows 'Free' when price is '0.00'", () => {
             render(
-                <Card
+                <GameCard
                     {...defaultProps}
                     data={{ ...mockGame, price: "0.00" }}
                 />,
@@ -80,7 +81,7 @@ describe("Card", () => {
 
         it("does not render price when price is null", () => {
             render(
-                <Card
+                <GameCard
                     {...defaultProps}
                     data={{ ...mockGame, price: null }}
                 />,
@@ -93,7 +94,7 @@ describe("Card", () => {
     describe("selected state", () => {
         it("select button has aria-pressed false when not selected", () => {
             render(
-                <Card
+                <GameCard
                     {...defaultProps}
                     selectedId="other-id"
                 />,
@@ -107,7 +108,7 @@ describe("Card", () => {
 
         it("select button has aria-pressed true when selected", () => {
             render(
-                <Card
+                <GameCard
                     {...defaultProps}
                     selectedId={mockGame._id}
                 />,
@@ -121,7 +122,7 @@ describe("Card", () => {
 
         it("applies card__selected class when selected", () => {
             const { container } = render(
-                <Card
+                <GameCard
                     {...defaultProps}
                     selectedId={mockGame._id}
                 />,
@@ -131,7 +132,7 @@ describe("Card", () => {
 
         it("does not apply card__selected class when not selected", () => {
             const { container } = render(
-                <Card
+                <GameCard
                     {...defaultProps}
                     selectedId="other-id"
                 />,
@@ -144,7 +145,7 @@ describe("Card", () => {
         it("calls handleCardSelect with data._id when select button is clicked", async () => {
             const handleCardSelect = vi.fn();
             render(
-                <Card
+                <GameCard
                     {...defaultProps}
                     handleCardSelect={handleCardSelect}
                 />,
@@ -160,7 +161,7 @@ describe("Card", () => {
         it("calls handleDelete with data._id when delete button is clicked", async () => {
             const handleDelete = vi.fn();
             render(
-                <Card
+                <GameCard
                     {...defaultProps}
                     handleDelete={handleDelete}
                 />,

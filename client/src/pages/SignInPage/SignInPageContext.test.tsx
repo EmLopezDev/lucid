@@ -9,7 +9,11 @@ const mockSetUser = vi.hoisted(() => vi.fn());
 
 vi.mock("react-router", async (importOriginal) => {
     const actual = await importOriginal<typeof import("react-router")>();
-    return { ...actual, useNavigate: () => mockNavigate };
+    return {
+        ...actual,
+        useNavigate: () => mockNavigate,
+        useSearchParams: () => [new URLSearchParams(), vi.fn()],
+    };
 });
 
 vi.mock("../../contexts/UserContext/useUserContext", () => ({

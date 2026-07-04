@@ -37,6 +37,7 @@ function makeGame(overrides: Partial<UserLibraryDataType> = {}): UserLibraryData
         updated_at: null,
         deleted_at: null,
         cover_url: null,
+        played_with_club: null,
         ...overrides,
     };
 }
