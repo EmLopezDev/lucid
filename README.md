@@ -2,13 +2,15 @@
 
 **Live:** https://lucid-beta-seven.vercel.app
 
-A personal game library tracker. Log the games you're playing, completed, paused, dropped, or want to play — with ratings, hours, price, and notes for each entry.
+A personal game library tracker. Log the games you're playing, completed, paused, dropped, or want to play — with ratings, hours, price, and notes for each entry. Play together with gaming clubs, share your progress through posts, and invite friends to private clubs.
 
 ## Features
 
 - Track games across five statuses: Playing, Completed, Paused, Dropped, Wishlist
 - Rate games, log hours played, purchase price, and personal notes
-- Dashboard with library stats and recent activity
+- Profile page with library stats, genre breakdown, and spending charts
+- Create and join gaming clubs — public or invite-only private clubs
+- Club posts with optional spoiler tags for discussing games with members
 - Secure authentication with email verification and password reset
 - Account management: update profile, change password, delete account
 
@@ -168,6 +170,34 @@ All library endpoints require authentication and ownership.
 | `POST`   | `/user/:userId/library`         | Add a game to the library           |
 | `PATCH`  | `/user/:userId/library/:gameId` | Update a game entry                 |
 | `DELETE` | `/user/:userId/library/:gameId` | Remove a game from the library      |
+
+### Clubs
+
+Public club endpoints are open. Owner-only endpoints require the session user to be the club owner.
+
+| Method   | Endpoint                            | Protected    | Description                                      |
+| -------- | ----------------------------------- | ------------ | ------------------------------------------------ |
+| `GET`    | `/clubs`                            | No           | List all public clubs (+ member's private clubs) |
+| `GET`    | `/clubs/:clubId`                    | No           | Get a club by ID (403 if private and not member) |
+| `POST`   | `/clubs`                            | Yes          | Create a club                                    |
+| `PATCH`  | `/clubs/:clubId`                    | Owner only   | Update club name, description, avatar, visibility |
+| `DELETE` | `/clubs/:clubId`                    | Owner only   | Soft-delete a club                               |
+| `PATCH`  | `/clubs/:clubId/join`               | Yes          | Join a club (invite code required for private)   |
+| `PATCH`  | `/clubs/:clubId/leave`              | Yes          | Leave a club                                     |
+| `PATCH`  | `/clubs/:clubId/members/:memberId`  | Owner only   | Remove a member                                  |
+| `PATCH`  | `/clubs/:clubId/game`               | Owner only   | Set the club's current game                      |
+| `GET`    | `/clubs/:clubId/invite`             | No           | Get invite preview by code                       |
+| `PATCH`  | `/clubs/:clubId/invite/regenerate`  | Owner only   | Regenerate the invite code                       |
+
+### Club Posts
+
+| Method   | Endpoint                              | Protected | Description              |
+| -------- | ------------------------------------- | --------- | ------------------------ |
+| `GET`    | `/clubs/:clubId/posts`                | No        | List posts for a club    |
+| `GET`    | `/clubs/:clubId/posts/:postId`        | No        | Get a single post        |
+| `POST`   | `/clubs/:clubId/posts`                | Yes       | Create a post            |
+| `PATCH`  | `/clubs/:clubId/posts/:postId`        | Yes       | Edit a post (author only)|
+| `DELETE` | `/clubs/:clubId/posts/:postId`        | Yes       | Delete a post (author only)|
 
 ## Deployment
 

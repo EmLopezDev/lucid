@@ -1,5 +1,62 @@
 # Changelog
 
+## [1.8.0] - 2026-07-04
+
+### Features
+
+#### Gaming Clubs
+
+- New **Clubs** section in the app — create and join gaming clubs to track games and share posts with other players
+- Clubs have a name, emoji avatar, description, and visibility (public or private)
+- Club page with three tabs: **Overview** (current game, members preview, about), **Members** (searchable list with join dates), and **Posts** (discussion feed)
+- Club card on the clubs list shows the club avatar, name, member count, current game, and a **Private** badge for private clubs
+- Clubs are grouped into **Your Clubs** and **Discover** sections on the clubs list page
+
+#### Private Clubs & Invite Flow
+
+- Clubs can be set to **private** — only members can view the club page; non-members receive a 403
+- Private clubs generate a unique invite code on creation with a 7-day rolling expiry
+- Club owners get a **Share Invite** button that opens a modal with the full invite URL, expiry countdown, and a one-click copy button
+- Owners can regenerate the invite link (with a confirm dialog) — all previously shared links are immediately invalidated
+- `/clubs/:clubId/invite` page shows a preview card (club name, avatar, owner, member count) to anyone with the link, authenticated or not
+- Unauthenticated users clicking an invite link are redirected to sign-in with a notice; the original invite URL is preserved via a `?redirect` query param so they land back on the invite page after signing in
+- Switching a club from private to public clears the invite code; switching back generates a fresh one; editing a private club without changing visibility preserves the existing code
+
+#### Club Posts
+
+- Members can post text updates in a club — posts appear in the Posts tab in reverse-chronological order
+- Posts support an optional **spoiler** toggle — spoiler content is hidden behind a tap-to-reveal pill
+- Authors can edit or delete their own posts inline
+
+#### Club Game Tracking
+
+- Owners can set the club's **current game** via a searchable game picker
+- When changing games, the previous game is archived to **Past Games** with its completion status (completed / dropped / paused)
+- Past games appear in the Overview tab sorted by most recent, each with a status badge
+
+### Improvements
+
+- Private clubs are visible to owners and members in the **Your Clubs** list; hidden from everyone else
+- Leave club confirmation message is context-aware — private clubs warn that a new invite is required to rejoin
+- Club member removal available to owners from the Members tab
+- `GET /clubs` accepts an optional session and returns private clubs the requester belongs to
+- `GET /clubs/:clubId` accepts an optional session — no `requireAuth` needed, but returns 403 for private clubs when the requester is not a member
+- Invite preview endpoint (`GET /clubs/:clubId/invite`) is fully public — no authentication required to view the club card
+- Rate limiting applied to invite preview and join endpoints (20 req / 15 min in production)
+- Soft delete on clubs — deleted clubs are filtered out at the aggregation layer, not removed from the database
+
+### Backend
+
+- `GamingClub` model with `name`, `owner`, `avatar_url`, `description`, `visibility`, `invite_code`, `invite_code_expires_at`, embedded `members` array, `current_game`, and `past_games`
+- `GamingClubPost` model with `club_id`, `author`, `content`, `is_spoiler`, and soft-delete timestamps
+- `getGamingClubById` uses a single aggregation pipeline — member `_id` strings are joined to user profiles in one `$lookup` pass; `invite_code` and `invite_code_expires_at` are stripped from the response for non-owners
+- `getAllGamingClubs` filters by `deleted_at: null` and `$or: [{ visibility: "public" }, { "members._id": userId }]`
+- `requireClubOwner` middleware enforces ownership on all owner-only routes
+
+### Testing
+
+- 149 server integration tests (+76 covering the full clubs domain: private invite flow, get club, get clubs list, create club, update club, delete club, join/leave public clubs)
+
 ## [1.7.1] - 2026-06-03
 
 ### Improvements
@@ -314,6 +371,7 @@
 
 ---
 
+[1.8.0]: https://github.com/EmLopezDev/lucid/releases/tag/v1.8.0
 [1.7.1]: https://github.com/EmLopezDev/lucid/releases/tag/v1.7.1
 [1.7.0]: https://github.com/EmLopezDev/lucid/releases/tag/v1.7.0
 [1.6.0]: https://github.com/EmLopezDev/lucid/releases/tag/v1.6.0

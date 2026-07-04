@@ -60,6 +60,7 @@ erDiagram
         string description
         string visibility
         string invite_code
+        date invite_code_expires_at
         array members
         array past_games
         date created_at
