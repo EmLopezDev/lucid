@@ -1,6 +1,7 @@
 import * as Sentry from "@sentry/react";
 
 Sentry.init({
+    enabled: import.meta.env.PROD,
     dsn: import.meta.env.VITE_SENTRY_DSN,
     environment: import.meta.env.MODE,
     tracesSampleRate: import.meta.env.PROD ? 0.2 : 1.0,
