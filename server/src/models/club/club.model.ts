@@ -164,9 +164,14 @@ export const updateGamingClub = async (clubId: string, data: UpdateClubType) => 
     };
 
     if (data.visibility === "private") {
-        updateData.invite_code = randomBytes(6).toString("hex");
+        const current = await ClubModel.findOne({ _id: clubId }, { invite_code: 1 }).lean();
+        if (!current?.invite_code) {
+            updateData.invite_code = randomBytes(6).toString("hex");
+            updateData.invite_code_expires_at = sevenDaysFromNow();
+        }
     } else if (data.visibility === "public") {
         updateData.invite_code = null;
+        updateData.invite_code_expires_at = null;
     }
 
     return await ClubModel.findOneAndUpdate({ _id: clubId }, updateData, {
