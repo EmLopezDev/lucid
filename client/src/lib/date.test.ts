@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { formatDate, toInputDate, formatShortDate, formatMonthYear, formatRelativeTime } from "./date";
+import { formatDate, toInputDate, formatShortDate, formatMonthYear, formatRelativeTime, formatInviteExpiry } from "./date";
 
 describe("formatDate", () => {
     it("formats an ISO date string to a readable date", () => {
@@ -97,5 +97,40 @@ describe("formatRelativeTime", () => {
 
     it("returns an absolute date for much older posts", () => {
         expect(formatRelativeTime("2024-01-10T12:00:00.000Z")).toBe("Jan 10, 2024");
+    });
+});
+
+describe("formatInviteExpiry", () => {
+    const NOW = new Date("2025-06-15T12:00:00.000Z").getTime();
+
+    beforeEach(() => vi.setSystemTime(NOW));
+    afterEach(() => vi.useRealTimers());
+
+    it("returns null when date is null", () => {
+        expect(formatInviteExpiry(null)).toBeNull();
+    });
+
+    it("returns 'Expired' when date is in the past", () => {
+        expect(formatInviteExpiry(new Date(NOW - 1000).toISOString())).toBe("Expired");
+    });
+
+    it("returns 'Expires today' when less than 1 day remains", () => {
+        const almostOneDay = new Date(NOW + 23 * 60 * 60 * 1000).toISOString();
+        expect(formatInviteExpiry(almostOneDay)).toBe("Expires today");
+    });
+
+    it("returns 'Expires today' when exactly 1 day remains", () => {
+        const oneDay = new Date(NOW + 24 * 60 * 60 * 1000).toISOString();
+        expect(formatInviteExpiry(oneDay)).toBe("Expires today");
+    });
+
+    it("returns 'Expires in 3 days' for 3 days remaining", () => {
+        const threeDays = new Date(NOW + 3 * 24 * 60 * 60 * 1000).toISOString();
+        expect(formatInviteExpiry(threeDays)).toBe("Expires in 3 days");
+    });
+
+    it("returns 'Expires in 7 days' for a freshly generated code", () => {
+        const sevenDays = new Date(NOW + 7 * 24 * 60 * 60 * 1000).toISOString();
+        expect(formatInviteExpiry(sevenDays)).toBe("Expires in 7 days");
     });
 });
