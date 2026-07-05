@@ -50,4 +50,6 @@ const UserLibrarySchema = new Schema<UserLibraryDocument>(
     { versionKey: false },
 );
 
+UserLibrarySchema.index({ user_id: 1, deleted_at: 1 });
+
 export const UserLibraryModel = model<UserLibraryDocument>("UserLibrary", UserLibrarySchema);

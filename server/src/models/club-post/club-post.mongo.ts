@@ -20,4 +20,6 @@ const ClubPostSchema = new Schema<ClubPostDocument>(
     { versionKey: false },
 );
 
+ClubPostSchema.index({ club_id: 1, deleted_at: 1, created_at: -1 });
+
 export const ClubPostModel = model<ClubPostDocument>("ClubPost", ClubPostSchema);

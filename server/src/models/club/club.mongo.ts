@@ -74,4 +74,7 @@ const ClubSchema = new Schema<ClubDocument>(
     { versionKey: false },
 );
 
+ClubSchema.index({ deleted_at: 1, visibility: 1 });
+ClubSchema.index({ "members._id": 1, deleted_at: 1 });
+
 export const ClubModel = model<ClubDocument>("Club", ClubSchema);

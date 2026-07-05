@@ -16,4 +16,6 @@ const AuthSchema = new Schema<AuthType>(
     { versionKey: false },
 );
 
+AuthSchema.index({ user_id: 1 });
+
 export const AuthModel = model<AuthType>("Auth", AuthSchema);
