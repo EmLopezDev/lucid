@@ -1,4 +1,5 @@
 import { Outlet } from "react-router";
+import { ProgressBar } from "@components/ProgressBar";
 import AppNav from "@components/AppNav";
 
 type AppLayoutType = {
@@ -8,6 +9,7 @@ type AppLayoutType = {
 function AppLayout({ isUserAuthenticated }: AppLayoutType) {
     return (
         <div className="app-layout">
+            <ProgressBar />
             <AppNav isUserAuthenticated={isUserAuthenticated} />
             <main className="app-layout__outlet">
                 <Outlet />

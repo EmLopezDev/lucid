@@ -21,7 +21,6 @@ const RegisterPageContent = () => {
         onResendVerification,
     } = useRegisterPageContext();
 
-
     const showFormDataError = useCallback(() => {
         if (formDataError === "User already exists") {
             return (
@@ -52,7 +51,7 @@ const RegisterPageContent = () => {
                         className="register-page__resend-button"
                         onClick={onResendVerification}
                     >
-                        Didn&apos;t receive it? Resend verification email
+                        {"Didn't receive it? Resend verification email"}
                     </button>
                 )}
                 {resendSuccess && (
