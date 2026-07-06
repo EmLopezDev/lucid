@@ -1,24 +1,27 @@
+import { lazy } from "react";
 import { Routes, Route, Navigate } from "react-router";
-import HomePage from "./pages/HomePage/HomePage";
-import RegisterPage from "./pages/RegisterPage/RegisterPage";
-import SignInPage from "./pages/SignInPage/SignInPage";
-import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
+import { useUserContext } from "./contexts/UserContext/useUserContext";
+import { LazyRoute } from "@components/ProgressBar";
 import AppLayout from "./layouts/AppLayout";
 import AppAuthLayout from "./layouts/AppAuthLayout";
-import UserLibraryPage from "./pages/UserLibraryPage/UserLibraryPage";
 import AuthorizedRoutes from "./routes/AuthorizedRoutes";
-import { useUserContext } from "./contexts/UserContext/useUserContext";
 import AppSkeleton from "./components/Skeleton/AppSkeleton";
-import AccountSettingsPage from "./pages/AccountSettingsPage/AccountSettingsPage";
-import ProfileView from "./pages/AccountSettingsPage/ProfileView/ProfileView";
-import PasswordView from "./pages/AccountSettingsPage/PasswordView/PasswordView";
-import ForgotPasswordPage from "./pages/ForgotPasswordPage/ForgotPasswordPage";
-import ResetPasswordPage from "./pages/ResetPasswordPage/ResetPasswordPage";
-import VerifyEmailPage from "./pages/VerifyEmailPage/VerifyEmailPage";
-import ProfilePage from "@pages/ProfilePage/ProfilePage";
-import ClubsListPage from "@pages/ClubsListPage/ClubsListPage";
-import ClubPage from "@pages/ClubPage/ClubPage";
-import InvitePage from "@pages/InvitePage";
+
+const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
+const RegisterPage = lazy(() => import("./pages/RegisterPage/RegisterPage"));
+const SignInPage = lazy(() => import("./pages/SignInPage/SignInPage"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage/NotFoundPage"));
+const UserLibraryPage = lazy(() => import("./pages/UserLibraryPage/UserLibraryPage"));
+const AccountSettingsPage = lazy(() => import("./pages/AccountSettingsPage/AccountSettingsPage"));
+const ProfileView = lazy(() => import("./pages/AccountSettingsPage/ProfileView/ProfileView"));
+const PasswordView = lazy(() => import("./pages/AccountSettingsPage/PasswordView/PasswordView"));
+const ForgotPasswordPage = lazy(() => import("./pages/ForgotPasswordPage/ForgotPasswordPage"));
+const ResetPasswordPage = lazy(() => import("./pages/ResetPasswordPage/ResetPasswordPage"));
+const VerifyEmailPage = lazy(() => import("./pages/VerifyEmailPage/VerifyEmailPage"));
+const ProfilePage = lazy(() => import("@pages/ProfilePage/ProfilePage"));
+const ClubsListPage = lazy(() => import("@pages/ClubsListPage/ClubsListPage"));
+const ClubPage = lazy(() => import("@pages/ClubPage/ClubPage"));
+const InvitePage = lazy(() => import("@pages/InvitePage"));
 
 function App() {
     const { isUserAuthenticated, isSessionLoading } = useUserContext();
@@ -33,54 +36,102 @@ function App() {
                 <Route
                     path="/"
                     index
-                    element={<HomePage />}
+                    element={
+                        <LazyRoute>
+                            <HomePage />
+                        </LazyRoute>
+                    }
                 />
                 <Route element={<AppAuthLayout isAuthenticated={isUserAuthenticated} />}>
                     <Route
                         path="/register"
-                        element={<RegisterPage />}
+                        element={
+                            <LazyRoute>
+                                <RegisterPage />
+                            </LazyRoute>
+                        }
                     />
                     <Route
                         path="/signin"
-                        element={<SignInPage />}
+                        element={
+                            <LazyRoute>
+                                <SignInPage />
+                            </LazyRoute>
+                        }
                     />
                     <Route
                         path="/forgot-password"
-                        element={<ForgotPasswordPage />}
+                        element={
+                            <LazyRoute>
+                                <ForgotPasswordPage />
+                            </LazyRoute>
+                        }
                     />
                     <Route
                         path="reset-password"
-                        element={<ResetPasswordPage />}
+                        element={
+                            <LazyRoute>
+                                <ResetPasswordPage />
+                            </LazyRoute>
+                        }
                     />
                     <Route
                         path="verify-email"
-                        element={<VerifyEmailPage />}
+                        element={
+                            <LazyRoute>
+                                <VerifyEmailPage />
+                            </LazyRoute>
+                        }
                     />
                 </Route>
                 <Route
                     path="/clubs/:clubId/invite"
-                    element={<InvitePage />}
+                    element={
+                        <LazyRoute>
+                            <InvitePage />
+                        </LazyRoute>
+                    }
                 />
                 <Route element={<AuthorizedRoutes isAuthenticated={isUserAuthenticated} />}>
                     <Route
                         path="/clubs"
-                        element={<ClubsListPage />}
+                        element={
+                            <LazyRoute>
+                                <ClubsListPage />
+                            </LazyRoute>
+                        }
                     />
                     <Route
                         path="/clubs/:clubId"
-                        element={<ClubPage />}
+                        element={
+                            <LazyRoute>
+                                <ClubPage />
+                            </LazyRoute>
+                        }
                     />
                     <Route
                         path="/user/library"
-                        element={<UserLibraryPage />}
+                        element={
+                            <LazyRoute>
+                                <UserLibraryPage />
+                            </LazyRoute>
+                        }
                     />
                     <Route
                         path="/user/profile"
-                        element={<ProfilePage />}
+                        element={
+                            <LazyRoute>
+                                <ProfilePage />
+                            </LazyRoute>
+                        }
                     />
                     <Route
                         path="/user/settings"
-                        element={<AccountSettingsPage />}
+                        element={
+                            <LazyRoute>
+                                <AccountSettingsPage />
+                            </LazyRoute>
+                        }
                     >
                         <Route
                             index
@@ -93,17 +144,29 @@ function App() {
                         />
                         <Route
                             path="account"
-                            element={<ProfileView />}
+                            element={
+                                <LazyRoute>
+                                    <ProfileView />
+                                </LazyRoute>
+                            }
                         />
                         <Route
                             path="security"
-                            element={<PasswordView />}
+                            element={
+                                <LazyRoute>
+                                    <PasswordView />
+                                </LazyRoute>
+                            }
                         />
                     </Route>
                 </Route>
                 <Route
                     path="*"
-                    element={<NotFoundPage />}
+                    element={
+                        <LazyRoute>
+                            <NotFoundPage />
+                        </LazyRoute>
+                    }
                 />
             </Route>
         </Routes>
