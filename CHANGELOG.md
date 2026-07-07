@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.9.0] - 2026-07-07
+
+### Performance
+
+- **Lazy-load routes** — every page is now its own JS chunk loaded on demand via `React.lazy()` + `Suspense`. The initial bundle contains only the app shell, reducing first-load download size
+- **Top progress bar** — a module-level progress store drives a fixed 3px bar at the top of the viewport during chunk downloads. Built without any third-party library using the observer pattern (`ProgressBarContext`, `ProgressBar`, `PageLoaderTrigger`, `LazyRoute`)
+- **Split posts fetch** — `GET /clubs/:clubId` no longer fetches all post documents. A lightweight `$lookup` now returns `post_count` only; full posts are fetched separately via `GET /clubs/:clubId/posts` when the Posts tab is first opened. Subsequent tab visits use cached state — no re-fetch
+- **Posts loading skeleton** — Posts tab shows a shimmer skeleton while the fetch is in flight, consistent with the rest of the app's loading states
+- **MongoDB indexes** — added compound indexes to `user_library`, `clubs`, `club_posts`, and `auth` collections to eliminate full collection scans on the most common queries
+
+### Testing
+
+- 164 server integration tests (+15 covering club post CRUD: get posts, create, edit, delete, soft-delete verification)
+- `GET /clubs/:clubId` shape test updated to assert `post_count` is present and `posts` is absent
+
 ## [1.8.0] - 2026-07-04
 
 ### Features
