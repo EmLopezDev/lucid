@@ -1,6 +1,13 @@
 @use "../../utils/" as u;
 
 .club-page {
+    &__posts-skeleton {
+        display: flex;
+        flex-direction: column;
+        gap: u.em(12);
+        padding: u.em(32);
+    }
+
     &__posts-header {
         display: flex;
         align-items: center;
@@ -141,7 +148,9 @@
         padding: u.em(8) u.em(20);
         border-radius: u.em(999);
         cursor: pointer;
-        transition: background 150ms ease, transform 150ms ease;
+        transition:
+            background 150ms ease,
+            transform 150ms ease;
 
         &:hover {
             background: rgba(var(--color-gold-rgb), 0.2);

@@ -1,5 +1,4 @@
 import * as z from "zod";
-import { ClubPost } from "./ClubPostTypes";
 
 const CurrentGame = z.object({
     title: z.string(),
@@ -48,7 +47,7 @@ export type ClubMemberType = z.infer<typeof ClubMember>;
 
 export const ClubDetail = Club.omit({ members: true }).extend({
     members: z.array(ClubMember),
-    posts: z.array(ClubPost),
+    post_count: z.number(),
 });
 export type ClubDetailType = z.infer<typeof ClubDetail>;
 

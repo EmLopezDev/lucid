@@ -8,9 +8,12 @@ import ClubPagePostsTab from "./tabs/ClubPagePostsTab";
 import ClubPageModals from "./ClubPageModals";
 
 const ClubPageContent = () => {
-    const { clubData, activeTab, onSwitchTab } = useClubPageContext();
+    const { clubData, activeTab, clubPostsData, handlePostSwitchTab, onSwitchTab } =
+        useClubPageContext();
 
     if (!clubData) return null;
+
+    const postCount = clubPostsData.length > 0 ? clubPostsData.length : clubData.post_count;
 
     return (
         <div className="club-page">
@@ -38,10 +41,10 @@ const ClubPageContent = () => {
                 <button
                     className={`club-page__tab${activeTab === "posts" ? " club-page__tab--active" : ""}`}
                     role="tab"
-                    onClick={() => onSwitchTab("posts")}
+                    onClick={handlePostSwitchTab}
                 >
                     Posts
-                    <span className="club-page__tab-count">{clubData.posts.length}</span>
+                    <span className="club-page__tab-count">{postCount}</span>
                 </button>
             </div>
 
