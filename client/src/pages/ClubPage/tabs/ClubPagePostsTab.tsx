@@ -6,9 +6,10 @@ import useClubMembers from "../hooks/useClubMembers";
 import useClubPosts from "../hooks/useClubPosts";
 import { useUserContext } from "@contexts/UserContext/useUserContext";
 import { formatRelativeTime } from "@lib/date";
+import { SkeletonLoader, Skeleton } from "@components/Skeleton";
 
 const ClubPagePostsTab = () => {
-    const { clubData, isMember, isOwner } = useClubPageContext();
+    const { clubData, clubPostsData, clubPostsLoading, isMember, isOwner } = useClubPageContext();
     const { onJoinClub } = useClubMembers();
     const { handleOpenPostModal, handleOpenEditPostModal, handleOpenDeletePostModal } =
         useClubPosts();
@@ -16,6 +17,47 @@ const ClubPagePostsTab = () => {
     const [revealedPosts, setRevealedPosts] = useState<Set<string>>(new Set());
 
     if (!clubData) return null;
+
+    if (clubPostsLoading) {
+        return (
+            <SkeletonLoader label="Loading posts">
+                <div className="club-page__posts-skeleton">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                        <div
+                            key={i}
+                            className="club-page__post-item"
+                        >
+                            <div className="club-page__post-header">
+                                <Skeleton
+                                    height="36px"
+                                    width="36px"
+                                    borderRadius="50%"
+                                />
+                                <div className="club-page__post-author-group">
+                                    <Skeleton
+                                        height="12px"
+                                        width="120px"
+                                    />
+                                    <Skeleton
+                                        height="12px"
+                                        width="60px"
+                                    />
+                                </div>
+                            </div>
+                            <Skeleton
+                                height="14px"
+                                width="100%"
+                            />
+                            <Skeleton
+                                height="14px"
+                                width="75%"
+                            />
+                        </div>
+                    ))}
+                </div>
+            </SkeletonLoader>
+        );
+    }
 
     const resolveAuthor = (authorId: string) => {
         const member = clubData.members.find((m) => m._id === authorId);
@@ -44,9 +86,9 @@ const ClubPagePostsTab = () => {
                             New Post
                         </Button>
                     </div>
-                    {clubData.posts.length > 0 ? (
+                    {clubPostsData.length > 0 ? (
                         <ul className="club-page__posts-list">
-                            {clubData.posts.map((post) => (
+                            {clubPostsData.map((post) => (
                                 <li
                                     key={post._id}
                                     className="club-page__post-item"

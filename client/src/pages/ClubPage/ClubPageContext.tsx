@@ -7,11 +7,12 @@ import {
     type Dispatch,
     type SetStateAction,
 } from "react";
-import { type ClubDetailType, type ClubMemberType } from "@lucid/types";
+import { type ClubDetailType, type ClubMemberType, type ClubPostType } from "@lucid/types";
 import { API_URL } from "@config/api";
 import { ClubPageContext } from "./hooks/useClubPageContext";
 import { useUserContext } from "@contexts/UserContext/useUserContext";
 import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 export type ClubTab = "overview" | "members" | "posts";
 
@@ -44,13 +45,18 @@ export type ClubPageContextType = {
     pendingMemberId: string | null;
     pendingPostId: string | null;
     pendingEditPost: PendingEditPostType | null;
+    clubPostsData: ClubPostType[];
+    clubPostsLoading: boolean;
     setPendingMemberId: Dispatch<SetStateAction<string | null>>;
     setPendingPostId: Dispatch<SetStateAction<string | null>>;
     setPendingEditPost: Dispatch<SetStateAction<PendingEditPostType | null>>;
+    setClubPostsData: Dispatch<SetStateAction<ClubPostType[]>>;
+    fetchClubPosts: () => Promise<void>;
     onOpenModal: (modal: Exclude<ActiveModalType, null>) => void;
     onCloseModal: () => void;
     setClubData: Dispatch<SetStateAction<ClubDetailType | null>>;
     onSwitchTab: (tab: ClubTab) => void;
+    handlePostSwitchTab: () => void;
 };
 
 export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; clubId: string }) => {
@@ -62,6 +68,9 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
     const [pendingEditPost, setPendingEditPost] = useState<PendingEditPostType | null>(null);
     const [activeTab, setActiveTab] = useState<ClubTab>("overview");
     const [activeModal, setActiveModal] = useState<ActiveModalType>(null);
+    const [clubPostsData, setClubPostsData] = useState<ClubPostType[]>([]);
+    const [clubPostsLoading, setClubPostsLoading] = useState(false);
+    const [clubPostsFetched, setClubPostsFetched] = useState(false);
 
     const { currentUser } = useUserContext();
 
@@ -84,6 +93,32 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
         setPendingPostId(null);
         setPendingEditPost(null);
     }, []);
+
+    const fetchClubPosts = useCallback(async () => {
+        if (clubPostsFetched) return;
+        try {
+            setClubPostsLoading(true);
+            const response = await fetch(`${API_URL}/clubs/${clubId}/posts`, {
+                credentials: "include",
+            });
+            if (!response.ok) throw new Error("Failed to fetch posts");
+            const posts: ClubPostType[] = await response.json();
+            setClubPostsData(posts);
+            setClubPostsFetched(true);
+        } catch (error) {
+            if (import.meta.env.DEV) {
+                console.error(error instanceof Error ? error.message : error);
+            }
+            toast.error("Unable to load posts, try again.");
+        } finally {
+            setClubPostsLoading(false);
+        }
+    }, [clubId, clubPostsFetched]);
+
+    const handlePostSwitchTab = useCallback(() => {
+        onSwitchTab("posts");
+        fetchClubPosts();
+    }, [fetchClubPosts, onSwitchTab]);
 
     useEffect(() => {
         const fetchClubData = async () => {
@@ -126,6 +161,10 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
             pendingMemberId,
             pendingPostId,
             pendingEditPost,
+            clubPostsData,
+            clubPostsLoading,
+            fetchClubPosts,
+            setClubPostsData,
             setPendingMemberId,
             setPendingPostId,
             setPendingEditPost,
@@ -133,6 +172,7 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
             onCloseModal,
             setClubData,
             onSwitchTab,
+            handlePostSwitchTab,
         }),
         [
             clubId,
@@ -148,6 +188,10 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
             pendingMemberId,
             pendingPostId,
             pendingEditPost,
+            clubPostsData,
+            clubPostsLoading,
+            fetchClubPosts,
+            setClubPostsData,
             setPendingMemberId,
             setPendingPostId,
             setPendingEditPost,
@@ -155,6 +199,7 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
             onCloseModal,
             setClubData,
             onSwitchTab,
+            handlePostSwitchTab,
         ],
     );
 

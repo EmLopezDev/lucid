@@ -196,15 +196,11 @@ const ClubPageOverviewTab = () => {
                                 <span className="club-page__stat-label">Members</span>
                             </div>
                             <div className="club-page__stat-item">
-                                <span className="club-page__stat-value">
-                                    {completedCount}
-                                </span>
+                                <span className="club-page__stat-value">{completedCount}</span>
                                 <span className="club-page__stat-label">Games Completed</span>
                             </div>
                             <div className="club-page__stat-item">
-                                <span className="club-page__stat-value">
-                                    {clubData.posts.length}
-                                </span>
+                                <span className="club-page__stat-value">{clubData.post_count}</span>
                                 <span className="club-page__stat-label">Posts</span>
                             </div>
                             <div className="club-page__stat-item">

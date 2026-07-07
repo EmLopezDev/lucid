@@ -13,12 +13,12 @@ const EMPTY_POST: CreateClubPostType = {
 const useClubPosts = () => {
     const {
         clubId,
-        clubData,
+        clubPostsData,
         pendingPostId,
-        setPendingPostId,
         pendingEditPost,
+        setPendingPostId,
         setPendingEditPost,
-        setClubData,
+        setClubPostsData,
         onOpenModal,
         onCloseModal,
     } = useClubPageContext();
@@ -38,13 +38,13 @@ const useClubPosts = () => {
 
     const handleOpenEditPostModal = useCallback(
         (postId: string) => {
-            const post = clubData?.posts.find((p) => p._id === postId);
+            const post = clubPostsData.find((p) => p._id === postId);
             if (!post) return;
             setPendingEditPost({ content: post.content, is_spoiler: post.is_spoiler });
             setPendingPostId(postId);
             onOpenModal("editPost");
         },
-        [clubData, setPendingEditPost, setPendingPostId, onOpenModal],
+        [clubPostsData, setPendingEditPost, setPendingPostId, onOpenModal],
     );
 
     const handleOpenDeletePostModal = useCallback(
@@ -96,10 +96,7 @@ const useClubPosts = () => {
                 });
                 if (!response.ok) throw new Error("Failed to add post");
                 const newPost: ClubPostType = await response.json();
-                setClubData((prevState) => {
-                    if (!prevState) return prevState;
-                    return { ...prevState, posts: [newPost, ...prevState.posts] };
-                });
+                setClubPostsData((prevState) => [newPost, ...prevState]);
                 onCloseModal();
                 setNewClubPost(objectCopy(EMPTY_POST));
                 setPostError("");
@@ -111,7 +108,7 @@ const useClubPosts = () => {
                 toast.error("Unable to add post, try again.");
             }
         },
-        [clubId, setClubData, onCloseModal],
+        [clubId, setClubPostsData, onCloseModal],
     );
 
     const onUpdatePost = useCallback(
@@ -125,15 +122,9 @@ const useClubPosts = () => {
                 });
                 if (!response.ok) throw new Error("Failed to update post");
                 const updatedPost: ClubPostType = await response.json();
-                setClubData((prevState) => {
-                    if (!prevState) return prevState;
-                    return {
-                        ...prevState,
-                        posts: prevState.posts.map((p) =>
-                            p._id === pendingPostId ? updatedPost : p,
-                        ),
-                    };
-                });
+                setClubPostsData((prevState) =>
+                    prevState.map((p) => (p._id === pendingPostId ? updatedPost : p)),
+                );
                 onCloseModal();
                 setPostError("");
                 toast.success("Post was updated.");
@@ -144,7 +135,7 @@ const useClubPosts = () => {
                 toast.error("Unable to update post, try again.");
             }
         },
-        [clubId, pendingPostId, setClubData, onCloseModal],
+        [clubId, pendingPostId, setClubPostsData, onCloseModal],
     );
 
     const onDeletePost = useCallback(async () => {
@@ -154,13 +145,7 @@ const useClubPosts = () => {
                 credentials: "include",
             });
             if (!response.ok) throw new Error("Failed to delete post");
-            setClubData((prevState) => {
-                if (!prevState) return prevState;
-                return {
-                    ...prevState,
-                    posts: prevState.posts.filter((post) => post._id !== pendingPostId),
-                };
-            });
+            setClubPostsData((prevState) => prevState.filter((p) => p._id !== pendingPostId));
             onCloseModal();
             toast.success("Post was deleted.");
         } catch (error) {
@@ -169,7 +154,7 @@ const useClubPosts = () => {
             }
             toast.error("Unable to delete post, try again.");
         }
-    }, [clubId, pendingPostId, setClubData, onCloseModal]);
+    }, [clubId, pendingPostId, setClubPostsData, onCloseModal]);
 
     const onSubmitPostForm = useCallback(
         async (e: SubmitEvent<HTMLFormElement>) => {

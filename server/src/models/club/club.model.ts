@@ -99,8 +99,7 @@ export const getGamingClubById = async (clubId: string, userId: string | undefin
                 },
             },
         },
-
-        // Join posts
+        // look up posts for count
         {
             $lookup: {
                 from: "clubposts",
@@ -116,11 +115,19 @@ export const getGamingClubById = async (clubId: string, userId: string | undefin
                             },
                         },
                     },
-                    { $sort: { created_at: -1 } },
+                    { $project: { _id: 1 } },
                 ],
-                as: "posts",
+                as: "_posts_for_count",
             },
         },
+        // merges post count to the document
+        {
+            $addFields: {
+                post_count: { $size: "$_posts_for_count" },
+            },
+        },
+        // removes _posts_for_count once used
+        { $unset: "_posts_for_count" },
         // strips invite code and expiry for non-owners
         {
             $addFields: {

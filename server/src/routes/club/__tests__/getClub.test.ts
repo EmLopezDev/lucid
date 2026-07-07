@@ -41,6 +41,8 @@ describe("GET /api/v1/clubs/:clubId", () => {
 
         expect(res.status).toBe(200);
         expect(res.body.name).toBe("Public Club");
+        expect(res.body.post_count).toBe(0);
+        expect(res.body.posts).toBeUndefined();
     });
 
     it("returns 200 for a private club for the owner", async () => {
