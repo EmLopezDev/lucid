@@ -178,7 +178,7 @@ Public club endpoints are open. Owner-only endpoints require the session user to
 | Method   | Endpoint                            | Protected    | Description                                      |
 | -------- | ----------------------------------- | ------------ | ------------------------------------------------ |
 | `GET`    | `/clubs`                            | No           | List all public clubs (+ member's private clubs) |
-| `GET`    | `/clubs/:clubId`                    | No           | Get a club by ID (403 if private and not member) |
+| `GET`    | `/clubs/:clubId`                    | No           | Get a club by ID (403 if private and not member) — includes `post_count`, not full posts |
 | `POST`   | `/clubs`                            | Yes          | Create a club                                    |
 | `PATCH`  | `/clubs/:clubId`                    | Owner only   | Update club name, description, avatar, visibility |
 | `DELETE` | `/clubs/:clubId`                    | Owner only   | Soft-delete a club                               |
