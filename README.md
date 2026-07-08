@@ -193,11 +193,13 @@ Public club endpoints are open. Owner-only endpoints require the session user to
 
 | Method   | Endpoint                              | Protected | Description              |
 | -------- | ------------------------------------- | --------- | ------------------------ |
-| `GET`    | `/clubs/:clubId/posts`                | No        | List posts for a club    |
+| `GET`    | `/clubs/:clubId/posts`                | No        | List posts for a club, paginated |
 | `GET`    | `/clubs/:clubId/posts/:postId`        | No        | Get a single post        |
 | `POST`   | `/clubs/:clubId/posts`                | Yes       | Create a post            |
 | `PATCH`  | `/clubs/:clubId/posts/:postId`        | Yes       | Edit a post (author only)|
 | `DELETE` | `/clubs/:clubId/posts/:postId`        | Yes       | Delete a post (author only)|
+
+`GET /clubs/:clubId/posts` supports cursor-based pagination via `?before=<postId>&limit=<n>` (default 20, max 50) and returns `{ posts, nextCursor }` instead of a bare array. Pass the previous response's `nextCursor` as the next request's `before` to fetch older posts; `nextCursor` is `null` once there are no more posts left.
 
 ## Deployment
 

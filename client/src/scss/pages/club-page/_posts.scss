@@ -44,6 +44,17 @@
         gap: u.em(12);
     }
 
+    &__posts-load-more {
+        display: flex;
+        justify-content: center;
+        margin-block-start: u.em(20);
+
+        .button {
+            flex: none;
+            min-width: u.em(160);
+        }
+    }
+
     &__post-item {
         background: var(--color-bg-card);
         border: 1px solid var(--color-border);
