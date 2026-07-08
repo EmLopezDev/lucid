@@ -676,6 +676,26 @@ export const FAKE_OWNERS = {
     olivia: "999999999999999999999999",
 };
 
+export const FAKE_USER_NAMES: Record<keyof typeof FAKE_OWNERS, [string, string]> = {
+    alice:  ["Alice",  "Chen"],
+    bob:    ["Bob",    "Torres"],
+    carol:  ["Carol",  "Nguyen"],
+    dave:   ["Dave",   "Patel"],
+    eve:    ["Eve",    "Johnson"],
+    frank:  ["Frank",  "Kim"],
+    grace:  ["Grace",  "Williams"],
+    henry:  ["Henry",  "Martinez"],
+    iris:   ["Iris",   "Robinson"],
+    jack:   ["Jack",   "Lee"],
+    kate:   ["Kate",   "Brown"],
+    liam:   ["Liam",   "Davis"],
+    mia:    ["Mia",    "Garcia"],
+    noah:   ["Noah",   "Wilson"],
+    olivia: ["Olivia", "Anderson"],
+};
+
+export const FAKE_EMAILS = Object.keys(FAKE_USER_NAMES).map((k) => `${k}@lucid.fake`);
+
 export const clubPosts = (userId: string, clubIdMap: Record<string, string>) => {
     const o = FAKE_OWNERS;
     const p = (
