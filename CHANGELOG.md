@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.10.0] - 2026-07-08
+
+### Performance
+
+- **Cursor-based post pagination** — `GET /clubs/:clubId/posts` now paginates via `?before=<postId>&limit=<n>` (default 20, max 50) instead of returning every post for a club in one response. Returns `{ posts, nextCursor }`; `nextCursor` is `null` once there are no more posts
+- **Load more UI** — the Posts tab appends the next page in place via a "Load more" button, with its own loading state kept separate from the initial skeleton load
+
+### Testing
+
+- 167 server integration tests (+3 covering `limit`, `before` cursor pagination across pages, and invalid `limit` fallback)
+
 ## [1.9.0] - 2026-07-07
 
 ### Performance

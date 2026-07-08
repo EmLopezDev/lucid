@@ -694,8 +694,26 @@ export const clubPosts = (userId: string, clubIdMap: Record<string, string>) => 
         deleted_at: null,
     });
 
+    // Generates extra posts older than `anchorDate` so a club has enough history
+    // to exercise "load more" pagination locally (default page size is 20).
+    // `authors` must be members of `clubName`, or resolveAuthor() shows "Unknown" in the UI.
+    const genFillerPosts = (clubName: string, count: number, anchorDate: string, authors: string[]) => {
+        const anchor = new Date(anchorDate);
+        return Array.from({ length: count }, (_, i) => {
+            const date = new Date(anchor);
+            date.setDate(date.getDate() - (i + 1));
+            return p(
+                clubName,
+                authors[i % authors.length],
+                `Pagination test post #${i + 1} — filler content for load-more QA.`,
+                false,
+                date.toISOString(),
+            );
+        });
+    };
+
     return [
-        // ── Souls Collective (20) — Elden Ring ────────────────────────────
+        // ── Souls Collective (45) — Elden Ring ────────────────────────────
         p(
             "Souls Collective",
             userId,
@@ -836,8 +854,15 @@ export const clubPosts = (userId: string, clubIdMap: Record<string, string>) => 
             false,
             "2026-05-30T18:00:00",
         ),
+        ...genFillerPosts("Souls Collective", 25, "2026-05-30T18:00:00", [
+            userId,
+            o.alice,
+            o.bob,
+            o.grace,
+            o.iris,
+        ]),
 
-        // ── RPG Fellowship (10) — Baldur's Gate 3 ────────────────────────
+        // ── RPG Fellowship (22) — Baldur's Gate 3 ────────────────────────
         p(
             "RPG Fellowship",
             o.alice,
@@ -908,6 +933,12 @@ export const clubPosts = (userId: string, clubIdMap: Record<string, string>) => 
             false,
             "2026-06-06T21:00:00",
         ),
+        ...genFillerPosts("RPG Fellowship", 12, "2026-06-06T21:00:00", [
+            o.alice,
+            o.bob,
+            o.carol,
+            userId,
+        ]),
 
         // ── Action RPG Alliance (10) — Monster Hunter Wilds ──────────────
         p(
