@@ -47,11 +47,14 @@ export type ClubPageContextType = {
     pendingEditPost: PendingEditPostType | null;
     clubPostsData: ClubPostType[];
     clubPostsLoading: boolean;
+    clubPostsLoadingMore: boolean;
+    clubPostsHasMore: boolean;
     setPendingMemberId: Dispatch<SetStateAction<string | null>>;
     setPendingPostId: Dispatch<SetStateAction<string | null>>;
     setPendingEditPost: Dispatch<SetStateAction<PendingEditPostType | null>>;
     setClubPostsData: Dispatch<SetStateAction<ClubPostType[]>>;
     fetchClubPosts: () => Promise<void>;
+    fetchMoreClubPosts: () => Promise<void>;
     onOpenModal: (modal: Exclude<ActiveModalType, null>) => void;
     onCloseModal: () => void;
     setClubData: Dispatch<SetStateAction<ClubDetailType | null>>;
@@ -71,6 +74,9 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
     const [clubPostsData, setClubPostsData] = useState<ClubPostType[]>([]);
     const [clubPostsLoading, setClubPostsLoading] = useState(false);
     const [clubPostsFetched, setClubPostsFetched] = useState(false);
+    const [clubPostsCursor, setClubPostsCursor] = useState<string | null>(null);
+    const [clubPostsHasMore, setClubPostsHasMore] = useState(false);
+    const [clubPostsLoadingMore, setClubPostsLoadingMore] = useState(false);
 
     const { currentUser } = useUserContext();
 
@@ -102,8 +108,11 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
                 credentials: "include",
             });
             if (!response.ok) throw new Error("Failed to fetch posts");
-            const posts: ClubPostType[] = await response.json();
-            setClubPostsData(posts);
+            const data: { posts: ClubPostType[]; nextCursor: string | null } =
+                await response.json();
+            setClubPostsData(data.posts);
+            setClubPostsCursor(data.nextCursor);
+            setClubPostsHasMore(data.nextCursor !== null);
             setClubPostsFetched(true);
         } catch (error) {
             if (import.meta.env.DEV) {
@@ -114,6 +123,30 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
             setClubPostsLoading(false);
         }
     }, [clubId, clubPostsFetched]);
+
+    const fetchMoreClubPosts = useCallback(async () => {
+        if (!clubPostsCursor || clubPostsLoadingMore) return;
+        try {
+            setClubPostsLoadingMore(true);
+            const response = await fetch(
+                `${API_URL}/clubs/${clubId}/posts?before=${clubPostsCursor}`,
+                { credentials: "include" },
+            );
+            if (!response.ok) throw new Error("Failed to fetch posts");
+            const data: { posts: ClubPostType[]; nextCursor: string | null } =
+                await response.json();
+            setClubPostsData((prevState) => [...prevState, ...data.posts]);
+            setClubPostsCursor(data.nextCursor);
+            setClubPostsHasMore(data.nextCursor !== null);
+        } catch (error) {
+            if (import.meta.env.DEV) {
+                console.error(error instanceof Error ? error.message : error);
+            }
+            toast.error("Unable to load more posts, try again.");
+        } finally {
+            setClubPostsLoadingMore(false);
+        }
+    }, [clubId, clubPostsCursor, clubPostsLoadingMore]);
 
     const handlePostSwitchTab = useCallback(() => {
         onSwitchTab("posts");
@@ -163,7 +196,10 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
             pendingEditPost,
             clubPostsData,
             clubPostsLoading,
+            clubPostsLoadingMore,
+            clubPostsHasMore,
             fetchClubPosts,
+            fetchMoreClubPosts,
             setClubPostsData,
             setPendingMemberId,
             setPendingPostId,
@@ -190,7 +226,10 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
             pendingEditPost,
             clubPostsData,
             clubPostsLoading,
+            clubPostsLoadingMore,
+            clubPostsHasMore,
             fetchClubPosts,
+            fetchMoreClubPosts,
             setClubPostsData,
             setPendingMemberId,
             setPendingPostId,

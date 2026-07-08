@@ -9,7 +9,16 @@ import { formatRelativeTime } from "@lib/date";
 import { SkeletonLoader, Skeleton } from "@components/Skeleton";
 
 const ClubPagePostsTab = () => {
-    const { clubData, clubPostsData, clubPostsLoading, isMember, isOwner } = useClubPageContext();
+    const {
+        clubData,
+        clubPostsData,
+        clubPostsLoading,
+        clubPostsHasMore,
+        clubPostsLoadingMore,
+        isMember,
+        isOwner,
+        fetchMoreClubPosts,
+    } = useClubPageContext();
     const { onJoinClub } = useClubMembers();
     const { handleOpenPostModal, handleOpenEditPostModal, handleOpenDeletePostModal } =
         useClubPosts();
@@ -87,85 +96,100 @@ const ClubPagePostsTab = () => {
                         </Button>
                     </div>
                     {clubPostsData.length > 0 ? (
-                        <ul className="club-page__posts-list">
-                            {clubPostsData.map((post) => (
-                                <li
-                                    key={post._id}
-                                    className="club-page__post-item"
-                                >
-                                    <div className="club-page__post-header">
-                                        <div
-                                            className="club-page__post-avatar"
-                                            aria-hidden="true"
-                                        >
-                                            {resolveInitials(post.author)}
-                                        </div>
-                                        <div className="club-page__post-author-group">
-                                            <span className="club-page__post-author">
-                                                {resolveAuthor(post.author)}
-                                            </span>
-                                            <span
-                                                className="club-page__post-dot"
+                        <>
+                            <ul className="club-page__posts-list">
+                                {clubPostsData.map((post) => (
+                                    <li
+                                        key={post._id}
+                                        className="club-page__post-item"
+                                    >
+                                        <div className="club-page__post-header">
+                                            <div
+                                                className="club-page__post-avatar"
                                                 aria-hidden="true"
                                             >
-                                                ·
-                                            </span>
-                                            <span className="club-page__post-timestamp">
-                                                {formatRelativeTime(post.created_at)}
-                                            </span>
-                                        </div>
-                                        <div className="club-page__post-meta-right">
-                                            {post.is_spoiler && (
-                                                <span className="club-page__badge club-page__badge--spoiler">
-                                                    Spoiler
-                                                </span>
-                                            )}
-                                            {post.author === currentUser?._id && (
-                                                <Button
-                                                    icon="edit"
-                                                    variant="secondary"
-                                                    buttonSize="small"
-                                                    onClick={() =>
-                                                        handleOpenEditPostModal(post._id)
-                                                    }
-                                                />
-                                            )}
-                                            {(isOwner || post.author === currentUser?._id) && (
-                                                <Button
-                                                    icon="trash"
-                                                    variant="danger"
-                                                    buttonSize="small"
-                                                    onClick={() =>
-                                                        handleOpenDeletePostModal(post._id)
-                                                    }
-                                                />
-                                            )}
-                                        </div>
-                                    </div>
-                                    <div className="club-page__post-body-wrapper">
-                                        <p
-                                            className={`club-page__post-body${post.is_spoiler && !revealedPosts.has(post._id) ? " club-page__post-body--blurred" : ""}`}
-                                        >
-                                            {post.content}
-                                        </p>
-                                        {post.is_spoiler && !revealedPosts.has(post._id) && (
-                                            <div className="club-page__post-spoiler-overlay">
-                                                <button
-                                                    className="club-page__post-spoiler-pill"
-                                                    onClick={() =>
-                                                        setRevealedPosts(
-                                                            (prev) => new Set([...prev, post._id]),
-                                                        )
-                                                    }
-                                                >
-                                                    Spoiler — tap to reveal
-                                                </button>
+                                                {resolveInitials(post.author)}
                                             </div>
-                                        )}
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
+                                            <div className="club-page__post-author-group">
+                                                <span className="club-page__post-author">
+                                                    {resolveAuthor(post.author)}
+                                                </span>
+                                                <span
+                                                    className="club-page__post-dot"
+                                                    aria-hidden="true"
+                                                >
+                                                    ·
+                                                </span>
+                                                <span className="club-page__post-timestamp">
+                                                    {formatRelativeTime(post.created_at)}
+                                                </span>
+                                            </div>
+                                            <div className="club-page__post-meta-right">
+                                                {post.is_spoiler && (
+                                                    <span className="club-page__badge club-page__badge--spoiler">
+                                                        Spoiler
+                                                    </span>
+                                                )}
+                                                {post.author === currentUser?._id && (
+                                                    <Button
+                                                        icon="edit"
+                                                        variant="secondary"
+                                                        buttonSize="small"
+                                                        onClick={() =>
+                                                            handleOpenEditPostModal(post._id)
+                                                        }
+                                                    />
+                                                )}
+                                                {(isOwner || post.author === currentUser?._id) && (
+                                                    <Button
+                                                        icon="trash"
+                                                        variant="danger"
+                                                        buttonSize="small"
+                                                        onClick={() =>
+                                                            handleOpenDeletePostModal(post._id)
+                                                        }
+                                                    />
+                                                )}
+                                            </div>
+                                        </div>
+                                        <div className="club-page__post-body-wrapper">
+                                            <p
+                                                className={`club-page__post-body${post.is_spoiler && !revealedPosts.has(post._id) ? " club-page__post-body--blurred" : ""}`}
+                                            >
+                                                {post.content}
+                                            </p>
+                                            {post.is_spoiler && !revealedPosts.has(post._id) && (
+                                                <div className="club-page__post-spoiler-overlay">
+                                                    <button
+                                                        className="club-page__post-spoiler-pill"
+                                                        onClick={() =>
+                                                            setRevealedPosts(
+                                                                (prev) =>
+                                                                    new Set([...prev, post._id]),
+                                                            )
+                                                        }
+                                                    >
+                                                        Spoiler — tap to reveal
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                            {clubPostsHasMore && (
+                                <div className="club-page__posts-load-more">
+                                    <Button
+                                        variant="outline"
+                                        buttonSize="medium"
+                                        onClick={fetchMoreClubPosts}
+                                        disabled={clubPostsLoadingMore}
+                                    >
+                                        {clubPostsLoadingMore ? "Loading..." : "Load more"}
+                                    </Button>
+                                </div>
+                            )}
+                        </>
                     ) : (
                         <div className="club-page__posts-placeholder">
                             <p>No posts yet. Start the conversation.</p>
