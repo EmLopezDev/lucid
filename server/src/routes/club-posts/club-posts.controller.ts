@@ -7,10 +7,7 @@ import {
     updateGamingClubPost,
     deleteGamingClubPost,
 } from "../../models/club-post/club-post.model";
-import {
-    CreateClubPost,
-    UpdateClubPost,
-} from "../../../../packages/types/ClubPostTypes";
+import { CreateClubPost, UpdateClubPost } from "../../../../packages/types/ClubPostTypes";
 
 export const getGamingClubPost = async (
     req: Request<{ postId: string }>,
@@ -29,13 +26,18 @@ export const getGamingClubPost = async (
 };
 
 export const getGamingClubPosts = async (
-    req: Request<{ clubId: string }>,
+    req: Request<{ clubId: string }, unknown, unknown, { before?: string; limit?: string }>,
     res: Response,
     next: NextFunction,
 ) => {
     try {
-        const posts = await getAllGamingClubPosts(req.params.clubId);
-        return res.status(200).json(posts);
+        const parsedLimit = Number(req.query.limit);
+        const limit = Number.isFinite(parsedLimit) && parsedLimit > 0 ? parsedLimit : undefined;
+        const result = await getAllGamingClubPosts(req.params.clubId, {
+            before: req.query.before,
+            limit,
+        });
+        return res.status(200).json(result);
     } catch (error) {
         next(error);
     }

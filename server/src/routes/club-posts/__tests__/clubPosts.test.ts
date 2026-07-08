@@ -37,7 +37,7 @@ describe("GET /api/v1/clubs/:clubId/posts", () => {
         const res = await request(app).get(`/api/v1/clubs/${clubId}/posts`);
 
         expect(res.status).toBe(200);
-        expect(Array.isArray(res.body)).toBe(true);
+        expect(Array.isArray(res.body.posts)).toBe(true);
     });
 
     it("returns posts sorted newest first", async () => {
@@ -48,9 +48,9 @@ describe("GET /api/v1/clubs/:clubId/posts", () => {
         const res = await memberAgent.get(`/api/v1/clubs/${clubId}/posts`);
 
         expect(res.status).toBe(200);
-        expect(res.body.length).toBe(2);
-        expect(res.body[0].content).toBe("Second post");
-        expect(res.body[1].content).toBe("Initial post");
+        expect(res.body.posts.length).toBe(2);
+        expect(res.body.posts[0].content).toBe("Second post");
+        expect(res.body.posts[1].content).toBe("Initial post");
     });
 
     it("excludes soft-deleted posts", async () => {
@@ -59,7 +59,7 @@ describe("GET /api/v1/clubs/:clubId/posts", () => {
         const res = await memberAgent.get(`/api/v1/clubs/${clubId}/posts`);
 
         expect(res.status).toBe(200);
-        expect(res.body.length).toBe(0);
+        expect(res.body.posts.length).toBe(0);
     });
 
     it("returns empty array when club has no posts", async () => {
@@ -68,7 +68,56 @@ describe("GET /api/v1/clubs/:clubId/posts", () => {
         const res = await request(app).get(`/api/v1/clubs/${clubId}/posts`);
 
         expect(res.status).toBe(200);
-        expect(res.body).toEqual([]);
+        expect(res.body.posts).toEqual([]);
+        expect(res.body.nextCursor).toBeNull();
+    });
+
+    it("respects the limit query param and returns a nextCursor when more posts remain", async () => {
+        await memberAgent
+            .post(`/api/v1/clubs/${clubId}/posts`)
+            .send({ content: "Second post", is_spoiler: false });
+        await memberAgent
+            .post(`/api/v1/clubs/${clubId}/posts`)
+            .send({ content: "Third post", is_spoiler: false });
+
+        const res = await memberAgent.get(`/api/v1/clubs/${clubId}/posts?limit=2`);
+
+        expect(res.status).toBe(200);
+        expect(res.body.posts.length).toBe(2);
+        expect(res.body.posts[0].content).toBe("Third post");
+        expect(res.body.posts[1].content).toBe("Second post");
+        expect(res.body.nextCursor).toBe(res.body.posts[1]._id);
+    });
+
+    it("paginates through all posts using the before cursor with no duplicates or gaps", async () => {
+        await memberAgent
+            .post(`/api/v1/clubs/${clubId}/posts`)
+            .send({ content: "Second post", is_spoiler: false });
+        await memberAgent
+            .post(`/api/v1/clubs/${clubId}/posts`)
+            .send({ content: "Third post", is_spoiler: false });
+
+        const firstPage = await memberAgent.get(`/api/v1/clubs/${clubId}/posts?limit=2`);
+        expect(firstPage.body.posts.map((p: { content: string }) => p.content)).toEqual([
+            "Third post",
+            "Second post",
+        ]);
+        expect(firstPage.body.nextCursor).not.toBeNull();
+
+        const secondPage = await memberAgent.get(
+            `/api/v1/clubs/${clubId}/posts?limit=2&before=${firstPage.body.nextCursor}`,
+        );
+        expect(secondPage.body.posts.map((p: { content: string }) => p.content)).toEqual([
+            "Initial post",
+        ]);
+        expect(secondPage.body.nextCursor).toBeNull();
+    });
+
+    it("falls back to the default limit when an invalid limit is given", async () => {
+        const res = await memberAgent.get(`/api/v1/clubs/${clubId}/posts?limit=not-a-number`);
+
+        expect(res.status).toBe(200);
+        expect(res.body.posts.length).toBe(1);
     });
 });
 
@@ -167,6 +216,6 @@ describe("DELETE /api/v1/clubs/:clubId/posts/:postId", () => {
 
         const res = await memberAgent.get(`/api/v1/clubs/${clubId}/posts`);
 
-        expect(res.body.length).toBe(0);
+        expect(res.body.posts.length).toBe(0);
     });
 });
