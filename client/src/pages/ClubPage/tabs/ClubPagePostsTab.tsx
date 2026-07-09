@@ -183,9 +183,9 @@ const ClubPagePostsTab = () => {
                                         variant="outline"
                                         buttonSize="medium"
                                         onClick={fetchMoreClubPosts}
-                                        disabled={clubPostsLoadingMore}
+                                        isLoading={clubPostsLoadingMore}
                                     >
-                                        {clubPostsLoadingMore ? "Loading..." : "Load more"}
+                                        Load more
                                     </Button>
                                 </div>
                             )}

@@ -87,5 +87,78 @@ describe("Button", () => {
             render(<Button disabled>Save</Button>);
             expect(screen.getByRole("button")).toBeDisabled();
         });
+
+        it("is not disabled by default", () => {
+            render(<Button>Save</Button>);
+            expect(screen.getByRole("button")).not.toBeDisabled();
+        });
+    });
+
+    describe("loading state", () => {
+        it("does not render a spinner by default", () => {
+            render(<Button>Save</Button>);
+            expect(document.querySelector(".button__spinner")).not.toBeInTheDocument();
+        });
+
+        it("does not hide the content by default", () => {
+            render(<Button>Save</Button>);
+            expect(document.querySelector(".button__content")).not.toHaveClass(
+                "button__content--hidden",
+            );
+        });
+
+        it("does not set aria-busy by default", () => {
+            render(<Button>Save</Button>);
+            expect(screen.getByRole("button")).toHaveAttribute("aria-busy", "false");
+        });
+
+        it("renders a spinner when isLoading is true", () => {
+            render(<Button isLoading>Save</Button>);
+            expect(document.querySelector(".button__spinner")).toBeInTheDocument();
+        });
+
+        it("hides the content without removing it when isLoading is true", () => {
+            render(<Button isLoading>Save</Button>);
+            expect(screen.getByText("Save")).toBeInTheDocument();
+            expect(document.querySelector(".button__content")).toHaveClass(
+                "button__content--hidden",
+            );
+        });
+
+        it("is disabled when isLoading is true", () => {
+            render(<Button isLoading>Save</Button>);
+            expect(screen.getByRole("button")).toBeDisabled();
+        });
+
+        it("sets aria-busy when isLoading is true", () => {
+            render(<Button isLoading>Save</Button>);
+            expect(screen.getByRole("button")).toHaveAttribute("aria-busy", "true");
+        });
+
+        it("does not call onClick when isLoading is true", async () => {
+            const handleClick = vi.fn();
+            render(
+                <Button
+                    isLoading
+                    onClick={handleClick}
+                >
+                    Save
+                </Button>,
+            );
+            await userEvent.click(screen.getByRole("button"));
+            expect(handleClick).not.toHaveBeenCalled();
+        });
+
+        it("is disabled when disabled is false but isLoading is true", () => {
+            render(
+                <Button
+                    disabled={false}
+                    isLoading
+                >
+                    Save
+                </Button>,
+            );
+            expect(screen.getByRole("button")).toBeDisabled();
+        });
     });
 });
