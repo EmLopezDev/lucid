@@ -25,6 +25,9 @@ const useClubPosts = () => {
 
     const [newClubPost, setNewClubPost] = useState<CreateClubPostType>(objectCopy(EMPTY_POST));
     const [postError, setPostError] = useState("");
+    const [isCreatingPost, setIsCreatingPost] = useState(false);
+    const [isUpdatingPost, setIsUpdatingPost] = useState(false);
+    const [isDeletingPost, setIsDeletingPost] = useState(false);
 
     const handleOpenPostModal = useCallback(() => {
         onOpenModal("createPost");
@@ -88,6 +91,7 @@ const useClubPosts = () => {
     const onCreatePost = useCallback(
         async (data: CreateClubPostType) => {
             try {
+                setIsCreatingPost(true);
                 const response = await fetch(`${API_URL}/clubs/${clubId}/posts`, {
                     method: "POST",
                     credentials: "include",
@@ -106,6 +110,8 @@ const useClubPosts = () => {
                     console.error(error instanceof Error ? error.message : error);
                 }
                 toast.error("Unable to add post, try again.");
+            } finally {
+                setIsCreatingPost(false);
             }
         },
         [clubId, setClubPostsData, onCloseModal],
@@ -114,6 +120,7 @@ const useClubPosts = () => {
     const onUpdatePost = useCallback(
         async (data: UpdateClubPostType) => {
             try {
+                setIsUpdatingPost(true);
                 const response = await fetch(`${API_URL}/clubs/${clubId}/posts/${pendingPostId}`, {
                     method: "PATCH",
                     credentials: "include",
@@ -133,6 +140,8 @@ const useClubPosts = () => {
                     console.error(error instanceof Error ? error.message : error);
                 }
                 toast.error("Unable to update post, try again.");
+            } finally {
+                setIsUpdatingPost(false);
             }
         },
         [clubId, pendingPostId, setClubPostsData, onCloseModal],
@@ -140,6 +149,7 @@ const useClubPosts = () => {
 
     const onDeletePost = useCallback(async () => {
         try {
+            setIsDeletingPost(true);
             const response = await fetch(`${API_URL}/clubs/${clubId}/posts/${pendingPostId}`, {
                 method: "DELETE",
                 credentials: "include",
@@ -153,6 +163,8 @@ const useClubPosts = () => {
                 console.error(error instanceof Error ? error.message : error);
             }
             toast.error("Unable to delete post, try again.");
+        } finally {
+            setIsDeletingPost(false);
         }
     }, [clubId, pendingPostId, setClubPostsData, onCloseModal]);
 
@@ -184,6 +196,9 @@ const useClubPosts = () => {
         newClubPost,
         pendingEditPost,
         postError,
+        isCreatingPost,
+        isUpdatingPost,
+        isDeletingPost,
         onDeletePost,
         onClubPostContentChange,
         onClubPostSpoilerChange,

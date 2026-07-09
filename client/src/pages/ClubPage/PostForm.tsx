@@ -8,6 +8,7 @@ type PostFormType = {
     postError: string;
     isSpoiler: boolean;
     primaryButtonText?: string;
+    isLoading?: boolean;
     onPostChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
     onSpoilerChange: (e: ChangeEvent<HTMLInputElement>) => void;
     onSubmit: (e: SubmitEvent<HTMLFormElement>) => void;
@@ -19,6 +20,7 @@ const PostForm = ({
     postError,
     isSpoiler,
     primaryButtonText = "Add Post",
+    isLoading,
     onPostChange,
     onSpoilerChange,
     onSubmit,
@@ -29,6 +31,7 @@ const PostForm = ({
             onSubmit={onSubmit}
             onCancel={onCancel}
             primaryButtonText={primaryButtonText}
+            isLoading={isLoading}
         >
             <Textarea
                 label="Post"
