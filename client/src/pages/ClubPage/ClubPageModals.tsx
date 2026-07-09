@@ -33,6 +33,9 @@ const ClubPageModals = () => {
         newClubPost,
         pendingEditPost,
         postError,
+        isCreatingPost,
+        isUpdatingPost,
+        isDeletingPost,
         onClubPostContentChange,
         onClubPostSpoilerChange,
         onEditPostContentChange,
@@ -156,6 +159,7 @@ const ClubPageModals = () => {
                 isOpen={activeModal === "createPost"}
                 title="Add Post"
                 onClose={onCloseModal}
+                preventClose={isCreatingPost}
             >
                 <PostForm
                     onPostChange={onClubPostContentChange}
@@ -165,6 +169,7 @@ const ClubPageModals = () => {
                     postValue={newClubPost.content}
                     isSpoiler={newClubPost.is_spoiler}
                     postError={postError}
+                    isLoading={isCreatingPost}
                 />
             </Modal>
 
@@ -172,6 +177,7 @@ const ClubPageModals = () => {
                 isOpen={activeModal === "editPost"}
                 title="Edit Post"
                 onClose={onCloseModal}
+                preventClose={isUpdatingPost}
             >
                 <PostForm
                     onPostChange={onEditPostContentChange}
@@ -182,6 +188,7 @@ const ClubPageModals = () => {
                     isSpoiler={pendingEditPost?.is_spoiler ?? false}
                     postError={postError}
                     primaryButtonText="Save Changes"
+                    isLoading={isUpdatingPost}
                 />
             </Modal>
 
@@ -230,6 +237,7 @@ const ClubPageModals = () => {
                 message="Are you sure you want to permanently delete this post? This cannot be undone."
                 confirmLabel="Delete"
                 variant="danger"
+                isLoading={isDeletingPost}
                 onConfirm={onDeletePost}
                 onCancel={onCloseModal}
             />
