@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
-import EmojiPickerReact, { type EmojiClickData, Theme } from "emoji-picker-react";
+import EmojiPickerReact, { type EmojiClickData, EmojiStyle, Theme } from "emoji-picker-react";
 
 const DEFAULT_EMOJI = "🎮";
 const PICKER_HEIGHT = 450;
@@ -136,6 +136,7 @@ const EmojiPicker = ({ label, value, onChange }: EmojiPickerType) => {
                             searchPlaceholder="Search emoji..."
                             height={popoverPosition.height}
                             width="100%"
+                            emojiStyle={EmojiStyle.NATIVE}
                         />
                     </div>,
                     document.body,
