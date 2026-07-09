@@ -30,7 +30,12 @@ const Form = ({
             noValidate
             onSubmit={onSubmit}
         >
-            {children}
+            <fieldset
+                className="form__fieldset"
+                disabled={isLoading}
+            >
+                {children}
+            </fieldset>
             <div className="form-buttons">
                 <Button
                     type="reset"

@@ -117,5 +117,29 @@ describe("Form", () => {
             expect(screen.getByRole("button", { name: "Submit" })).not.toBeDisabled();
             expect(screen.getByRole("button", { name: "Cancel" })).not.toBeDisabled();
         });
+
+        it("disables form fields when isLoading is true", () => {
+            render(
+                <Form onSubmit={vi.fn()} isLoading>
+                    <input
+                        aria-label="Name"
+                        type="text"
+                    />
+                </Form>,
+            );
+            expect(screen.getByLabelText("Name")).toBeDisabled();
+        });
+
+        it("does not disable form fields by default", () => {
+            render(
+                <Form onSubmit={vi.fn()}>
+                    <input
+                        aria-label="Name"
+                        type="text"
+                    />
+                </Form>,
+            );
+            expect(screen.getByLabelText("Name")).not.toBeDisabled();
+        });
     });
 });
