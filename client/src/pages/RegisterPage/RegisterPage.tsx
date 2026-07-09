@@ -12,6 +12,7 @@ const RegisterPageContent = () => {
         canResend,
         resendSuccess,
         formDataError,
+        isSubmitting,
         onFirstNameChange,
         onLastNameChange,
         onEmailChange,
@@ -70,6 +71,7 @@ const RegisterPageContent = () => {
             onCancel={onResetForm}
             primaryButtonText="Register"
             secondaryButtonText="Clear"
+            isLoading={isSubmitting}
         >
             <Input
                 type="text"

@@ -12,6 +12,7 @@ const ProfileView = () => {
         formData,
         errors,
         formError,
+        isSubmitting,
         onChange,
         onBioChange,
         onSubmit,
@@ -42,6 +43,7 @@ const ProfileView = () => {
                 primaryButtonText="Save"
                 secondaryButtonText="Reset"
                 errorText={formError ? () => formError : undefined}
+                isLoading={isSubmitting}
             >
                 <Input
                     type="text"

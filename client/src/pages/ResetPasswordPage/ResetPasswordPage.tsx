@@ -6,8 +6,15 @@ import Form from "@components/Form";
 import Input from "@components/Input";
 
 const ResetPasswordPageContent = () => {
-    const { errors, formDataError, isSuccess, onPasswordChange, onSubmitForm, onResetForm } =
-        useResetPasswordPageContext();
+    const {
+        errors,
+        formDataError,
+        isSuccess,
+        isSubmitting,
+        onPasswordChange,
+        onSubmitForm,
+        onResetForm,
+    } = useResetPasswordPageContext();
     const navigate = useNavigate();
 
     const [countdown, setCountdown] = useState(3);
@@ -40,6 +47,7 @@ const ResetPasswordPageContent = () => {
             onSubmit={onSubmitForm}
             onCancel={onResetForm}
             errorText={formDataError ? () => formDataError : undefined}
+            isLoading={isSubmitting}
         >
             <Input
                 label="Password"
