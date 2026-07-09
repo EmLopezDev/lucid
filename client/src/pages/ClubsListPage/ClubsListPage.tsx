@@ -15,6 +15,7 @@ const ClubsListPageContent = () => {
         error,
         filteredClubsData,
         isCreateClubModalOpen,
+        isCreatingClub,
         createClubData,
         createClubErrors,
         onClubSearch,
@@ -131,6 +132,7 @@ const ClubsListPageContent = () => {
                 isOpen={isCreateClubModalOpen}
                 title="Create club"
                 onClose={onCloseCreateClubModal}
+                preventClose={isCreatingClub}
             >
                 <ClubForm
                     nameValue={createClubData.clubName}
@@ -144,6 +146,7 @@ const ClubsListPageContent = () => {
                     onVisibilityChange={onClubVisibilityChange}
                     onDescriptionChange={onClubDescriptionChange}
                     primaryButtonText="Create"
+                    isLoading={isCreatingClub}
                     onSubmit={onSubmitCreateClubForm}
                     onCancel={onCloseCreateClubModal}
                 />
