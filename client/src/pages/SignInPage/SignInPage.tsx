@@ -13,6 +13,7 @@ const SignInPageContent = () => {
         password,
         unverified,
         resendSuccess,
+        isSubmitting,
         onEmailChange,
         onPasswordChange,
         onSubmitForm,
@@ -58,6 +59,7 @@ const SignInPageContent = () => {
             primaryButtonText="Sign In"
             secondaryButtonText="Clear"
             buttonSize="large"
+            isLoading={isSubmitting}
         >
             <Input
                 label="Email"

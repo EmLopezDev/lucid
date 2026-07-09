@@ -10,6 +10,7 @@ const ForgotPasswordPageContent = () => {
         isSuccess,
         canResend,
         resendSuccess,
+        isSubmitting,
         onEmailChange,
         onResetForm,
         onSubmitForm,
@@ -47,6 +48,7 @@ const ForgotPasswordPageContent = () => {
             secondaryButtonText="Clear"
             onSubmit={onSubmitForm}
             onCancel={onResetForm}
+            isLoading={isSubmitting}
         >
             <Input
                 label="Email"
