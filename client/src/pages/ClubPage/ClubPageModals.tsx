@@ -14,7 +14,7 @@ import Button from "@components/Button/Button";
 
 const ClubPageModals = () => {
     const { clubData, activeModal, onCloseModal } = useClubPageContext();
-    const { onLeaveClub, onRemoveMember } = useClubMembers();
+    const { onLeaveClub, onRemoveMember, isLeavingClub, isRemovingMember } = useClubMembers();
     const { onGameSet, onGameChange, isSettingGame, isChangingGame } = useClubGame();
     const {
         onClubDelete,
@@ -139,6 +139,7 @@ const ClubPageModals = () => {
                 message={`Remove this member from ${clubData.name}? They can rejoin if the club is public.`}
                 confirmLabel="Remove"
                 variant="danger"
+                isLoading={isRemovingMember}
                 onConfirm={onRemoveMember}
                 onCancel={onCloseModal}
             />
@@ -150,6 +151,7 @@ const ClubPageModals = () => {
                 message={`Are you sure you want to leave ${clubData.name}? ${clubData.visibility === "private" ? "You will need a new invite link to rejoin." : "You can rejoin anytime."}`}
                 confirmLabel="Leave club"
                 variant="danger"
+                isLoading={isLeavingClub}
                 onConfirm={onLeaveClub}
                 onCancel={onCloseModal}
             />
