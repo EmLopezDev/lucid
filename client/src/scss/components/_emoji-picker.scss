@@ -40,6 +40,10 @@
     &__emoji {
         font-size: u.$font-size-lg;
         line-height: 1;
+        // Explicit emoji-capable fallback — the app's base font-family (Roboto)
+        // has no emoji glyphs, and some environments (e.g. iOS Simulator) don't
+        // fall back to the system color-emoji font reliably without this listed.
+        font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
     }
 
     &__popover {
@@ -65,6 +69,13 @@
 
             border: 1px solid var(--color-border);
             border-radius: u.em(12);
+
+            // iOS Safari auto-zooms the page when a focused input has
+            // font-size < 16px. The search field autofocuses on open by
+            // default (autoFocusSearch), so this must be >= 16px.
+            input[type="text"] {
+                font-size: u.rem(16);
+            }
         }
     }
 }

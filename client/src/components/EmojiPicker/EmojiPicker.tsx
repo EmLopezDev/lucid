@@ -4,12 +4,14 @@ import EmojiPickerReact, { type EmojiClickData, Theme } from "emoji-picker-react
 
 const DEFAULT_EMOJI = "🎮";
 const PICKER_HEIGHT = 450;
+const PICKER_WIDTH = 350;
 const GAP = 8;
 
 type PopoverPosition = {
     top: number;
     left: number;
     height: number;
+    width: number;
 };
 
 type EmojiPickerType = {
@@ -24,6 +26,7 @@ const EmojiPicker = ({ label, value, onChange }: EmojiPickerType) => {
         top: 0,
         left: 0,
         height: PICKER_HEIGHT,
+        width: PICKER_WIDTH,
     });
     const triggerRef = useRef<HTMLButtonElement>(null);
     const popoverRef = useRef<HTMLDivElement>(null);
@@ -36,30 +39,41 @@ const EmojiPicker = ({ label, value, onChange }: EmojiPickerType) => {
         [onChange],
     );
 
-    const handleTriggerClick = useCallback(() => {
-        if (triggerRef.current) {
-            const rect = triggerRef.current.getBoundingClientRect();
-            const spaceBelow = window.innerHeight - rect.bottom - GAP;
-            const spaceAbove = rect.top - GAP;
+    const calculatePosition = useCallback(() => {
+        if (!triggerRef.current) return;
 
-            let top: number;
-            let height: number;
+        // visualViewport reflects what's actually visible on mobile (it shrinks
+        // when the on-screen keyboard opens); window.innerHeight/innerWidth don't.
+        const viewportWidth = window.visualViewport?.width ?? window.innerWidth;
+        const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+        const rect = triggerRef.current.getBoundingClientRect();
+        const spaceBelow = viewportHeight - rect.bottom - GAP;
+        const spaceAbove = rect.top - GAP;
 
-            if (spaceBelow >= PICKER_HEIGHT) {
-                top = rect.bottom + GAP;
-                height = PICKER_HEIGHT;
-            } else if (spaceAbove > spaceBelow) {
-                height = Math.min(spaceAbove, PICKER_HEIGHT);
-                top = rect.top - height - GAP;
-            } else {
-                top = rect.bottom + GAP;
-                height = spaceBelow;
-            }
+        let top: number;
+        let height: number;
 
-            setPopoverPosition({ top, left: rect.left, height });
+        if (spaceBelow >= PICKER_HEIGHT) {
+            top = rect.bottom + GAP;
+            height = PICKER_HEIGHT;
+        } else if (spaceAbove > spaceBelow) {
+            height = Math.min(spaceAbove, PICKER_HEIGHT);
+            top = rect.top - height - GAP;
+        } else {
+            top = rect.bottom + GAP;
+            height = Math.max(spaceBelow, 0);
         }
-        setIsOpen((prev) => !prev);
+
+        const width = Math.min(PICKER_WIDTH, viewportWidth - GAP * 2);
+        const left = Math.min(Math.max(rect.left, GAP), viewportWidth - width - GAP);
+
+        setPopoverPosition({ top, left, height, width });
     }, []);
+
+    const handleTriggerClick = useCallback(() => {
+        calculatePosition();
+        setIsOpen((prev) => !prev);
+    }, [calculatePosition]);
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -71,6 +85,17 @@ const EmojiPicker = ({ label, value, onChange }: EmojiPickerType) => {
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
+
+    useEffect(() => {
+        if (!isOpen) return;
+
+        window.addEventListener("resize", calculatePosition);
+        window.visualViewport?.addEventListener("resize", calculatePosition);
+        return () => {
+            window.removeEventListener("resize", calculatePosition);
+            window.visualViewport?.removeEventListener("resize", calculatePosition);
+        };
+    }, [isOpen, calculatePosition]);
 
     return (
         <div className="emoji-picker">
@@ -98,7 +123,11 @@ const EmojiPicker = ({ label, value, onChange }: EmojiPickerType) => {
                         className="emoji-picker__popover"
                         role="dialog"
                         aria-label="Emoji picker"
-                        style={{ top: popoverPosition.top, left: popoverPosition.left }}
+                        style={{
+                            top: popoverPosition.top,
+                            left: popoverPosition.left,
+                            width: popoverPosition.width,
+                        }}
                     >
                         <EmojiPickerReact
                             onEmojiClick={handleEmojiClick}
@@ -106,6 +135,7 @@ const EmojiPicker = ({ label, value, onChange }: EmojiPickerType) => {
                             skinTonesDisabled
                             searchPlaceholder="Search emoji..."
                             height={popoverPosition.height}
+                            width="100%"
                         />
                     </div>,
                     document.body,
