@@ -10,7 +10,7 @@ const ClubPageHeader = () => {
     const { clubData, isOwner, isMember, completedCount } = useClubPageContext();
 
     const { handleOpenEditClubModal } = useClubSettings();
-    const { onJoinClub, handleOpenLeaveClubModal } = useClubMembers();
+    const { onJoinClub, isJoiningClub, handleOpenLeaveClubModal } = useClubMembers();
     const { handleOpenInviteModal } = useClubInvite();
 
     if (!clubData) return null;
@@ -136,6 +136,7 @@ const ClubPageHeader = () => {
                                 variant="primary"
                                 buttonSize="medium"
                                 onClick={onJoinClub}
+                                isLoading={isJoiningClub}
                             >
                                 Join Club
                             </Button>

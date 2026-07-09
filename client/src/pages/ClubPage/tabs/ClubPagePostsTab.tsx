@@ -19,7 +19,7 @@ const ClubPagePostsTab = () => {
         isOwner,
         fetchMoreClubPosts,
     } = useClubPageContext();
-    const { onJoinClub } = useClubMembers();
+    const { onJoinClub, isJoiningClub } = useClubMembers();
     const { handleOpenPostModal, handleOpenEditPostModal, handleOpenDeletePostModal } =
         useClubPosts();
     const { currentUser } = useUserContext();
@@ -208,6 +208,7 @@ const ClubPagePostsTab = () => {
                         variant="primary"
                         buttonSize="small"
                         onClick={onJoinClub}
+                        isLoading={isJoiningClub}
                     >
                         Join Club
                     </Button>
