@@ -6,30 +6,10 @@ import { AuthModel } from "../src/models/auth/auth.mongo";
 import { UserLibraryModel } from "../src/models/user-library/user-library.mongo";
 import { ClubModel } from "../src/models/club/club.mongo";
 import { ClubPostModel } from "../src/models/club-post/club-post.mongo";
-import { libraryGames, clubs, clubPosts, FAKE_OWNERS } from "./seed-data";
+import { libraryGames, clubs, clubPosts, FAKE_OWNERS, FAKE_USER_NAMES, FAKE_EMAILS } from "./seed-data";
 
 const SEED_EMAIL = "dev@lucid.com";
 const SEED_PASSWORD = "password123";
-
-const FAKE_USER_NAMES: Record<keyof typeof FAKE_OWNERS, [string, string]> = {
-    alice:  ["Alice",  "Chen"],
-    bob:    ["Bob",    "Torres"],
-    carol:  ["Carol",  "Nguyen"],
-    dave:   ["Dave",   "Patel"],
-    eve:    ["Eve",    "Johnson"],
-    frank:  ["Frank",  "Kim"],
-    grace:  ["Grace",  "Williams"],
-    henry:  ["Henry",  "Martinez"],
-    iris:   ["Iris",   "Robinson"],
-    jack:   ["Jack",   "Lee"],
-    kate:   ["Kate",   "Brown"],
-    liam:   ["Liam",   "Davis"],
-    mia:    ["Mia",    "Garcia"],
-    noah:   ["Noah",   "Wilson"],
-    olivia: ["Olivia", "Anderson"],
-};
-
-const FAKE_EMAILS = Object.keys(FAKE_USER_NAMES).map((k) => `${k}@lucid.fake`);
 
 const seed = async () => {
     await mongoClientPromise;
