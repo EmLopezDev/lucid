@@ -5,6 +5,16 @@
     flex-direction: column;
     gap: u.rem(12);
 
+    &__fieldset {
+        display: flex;
+        flex-direction: column;
+        gap: inherit;
+        border: none;
+        padding: 0;
+        margin: 0;
+        min-width: 0;
+    }
+
     &-buttons {
         width: 100%;
         display: flex;

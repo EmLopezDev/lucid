@@ -5,11 +5,12 @@ import Button from "@components/Button";
 type ModalProps = {
     isOpen: boolean;
     title: string;
-    onClose: () => void;
     children: ReactNode;
+    preventClose?: boolean;
+    onClose: () => void;
 };
 
-const Modal = ({ isOpen, title, onClose, children }: ModalProps) => {
+const Modal = ({ isOpen, title, children, preventClose = false, onClose }: ModalProps) => {
     const [shouldRender, setShouldRender] = useState(isOpen);
     const [isClosing, setIsClosing] = useState(false);
     const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
@@ -25,8 +26,9 @@ const Modal = ({ isOpen, title, onClose, children }: ModalProps) => {
     }
 
     const startClose = useCallback(() => {
+        if (preventClose) return;
         setIsClosing(true);
-    }, []);
+    }, [preventClose]);
 
     const handleAnimationEnd = useCallback(
         (e: React.AnimationEvent<HTMLDivElement>) => {
@@ -72,6 +74,7 @@ const Modal = ({ isOpen, title, onClose, children }: ModalProps) => {
                             buttonSize="small"
                             aria-label="close modal"
                             onClick={startClose}
+                            disabled={preventClose}
                         />
                     </span>
                 </div>

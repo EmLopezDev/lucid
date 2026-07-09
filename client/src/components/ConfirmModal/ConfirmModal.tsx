@@ -9,6 +9,7 @@ type ConfirmModalType = {
     confirmLabel?: string;
     cancelLabel?: string;
     variant?: "danger" | "primary";
+    isLoading?: boolean;
     onConfirm: () => void;
     onCancel: () => void;
 };
@@ -20,6 +21,7 @@ const ConfirmModal = ({
     confirmLabel = "Confirm",
     cancelLabel = "Cancel",
     variant = "danger",
+    isLoading = false,
     onConfirm,
     onCancel,
 }: ConfirmModalType) => {
@@ -28,6 +30,7 @@ const ConfirmModal = ({
             isOpen={isOpen}
             title={title}
             onClose={onCancel}
+            preventClose={isLoading}
         >
             <div className="confirm-modal__message">
                 <p>{message}</p>
@@ -35,12 +38,14 @@ const ConfirmModal = ({
                     <Button
                         variant="secondary"
                         onClick={onCancel}
+                        disabled={isLoading}
                     >
                         {cancelLabel}
                     </Button>
                     <Button
                         variant={variant}
                         onClick={onConfirm}
+                        isLoading={isLoading}
                     >
                         {confirmLabel}
                     </Button>
