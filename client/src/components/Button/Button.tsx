@@ -7,6 +7,7 @@ type ButtonBase = {
     type?: "submit" | "button" | "reset";
     variant?: "primary" | "secondary" | "danger" | "success" | "transparent" | "outline";
     buttonSize?: "x-small" | "small" | "medium" | "large";
+    isLoading?: boolean;
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 
 type ButtonIconOnly = ButtonBase & {
@@ -37,6 +38,8 @@ const Button = ({
     iconPosition = "left",
     children,
     className: externalClassName,
+    isLoading = false,
+    disabled,
     ...props
 }: ButtonProps) => {
     const isIconOnly = !!icon && !children;
@@ -46,6 +49,11 @@ const Button = ({
         [`button--${buttonSize}`]: true,
         [`button--${variant}`]: true,
         "button--icon-only": isIconOnly,
+    });
+
+    const contentClassName = cx({
+        button__content: true,
+        "button__content--hidden": isLoading,
     });
 
     const iconElement = icon ? (
@@ -59,24 +67,34 @@ const Button = ({
         <button
             className={[className, externalClassName].filter(Boolean).join(" ")}
             type={type}
+            disabled={disabled || isLoading}
+            aria-busy={isLoading}
             {...props}
         >
-            {isIconOnly && iconElement}
+            <span className={contentClassName}>
+                {isIconOnly && iconElement}
 
-            {!icon && children}
+                {!icon && children}
 
-            {icon && children && iconPosition === "left" && (
-                <>
-                    {iconElement}
-                    {children}
-                </>
-            )}
+                {icon && children && iconPosition === "left" && (
+                    <>
+                        {iconElement}
+                        {children}
+                    </>
+                )}
 
-            {icon && children && iconPosition === "right" && (
-                <>
-                    {children}
-                    {iconElement}
-                </>
+                {icon && children && iconPosition === "right" && (
+                    <>
+                        {children}
+                        {iconElement}
+                    </>
+                )}
+            </span>
+            {isLoading && (
+                <span
+                    className="button__spinner"
+                    aria-hidden="true"
+                />
             )}
         </button>
     );

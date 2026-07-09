@@ -85,9 +85,9 @@ const InvitePage = () => {
                     <Button
                         variant="primary"
                         onClick={onJoin}
-                        disabled={isJoining}
+                        isLoading={isJoining}
                     >
-                        {isJoining ? "Joining..." : "Join Club"}
+                        Join Club
                     </Button>
                 ) : (
                     <Button
