@@ -50,6 +50,7 @@ const ClubPageModals = () => {
         inviteUrl,
         inviteExpiry,
         isConfirmingRegenerate,
+        isRegeneratingInvite,
         handleCopyInviteLink,
         handleRequestRegenerate,
         handleCancelRegenerate,
@@ -228,6 +229,7 @@ const ClubPageModals = () => {
                 message="This will invalidate all previously shared invite links. Anyone with the old link will no longer be able to join."
                 confirmLabel="Regenerate"
                 variant="danger"
+                isLoading={isRegeneratingInvite}
                 onConfirm={handleConfirmRegenerate}
                 onCancel={handleCancelRegenerate}
             />

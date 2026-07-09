@@ -8,6 +8,7 @@ import { formatInviteExpiry } from "@lib/date";
 const useClubInvite = () => {
     const { clubId, clubData, setClubData, onOpenModal, onCloseModal } = useClubPageContext();
     const [isConfirmingRegenerate, setIsConfirmingRegenerate] = useState(false);
+    const [isRegeneratingInvite, setIsRegeneratingInvite] = useState(false);
 
     const inviteUrl = clubData?.invite_code
         ? `${window.location.origin}/clubs/${clubId}/invite?code=${clubData.invite_code}`
@@ -35,8 +36,8 @@ const useClubInvite = () => {
     }, [onOpenModal]);
 
     const handleConfirmRegenerate = useCallback(async () => {
-        setIsConfirmingRegenerate(false);
         try {
+            setIsRegeneratingInvite(true);
             const response = await fetch(`${API_URL}/clubs/${clubId}/invite/regenerate`, {
                 method: "PATCH",
                 credentials: "include",
@@ -44,6 +45,7 @@ const useClubInvite = () => {
             if (!response.ok) throw new Error("Failed to regenerate invite code");
             const updated: ClubDetailType = await response.json();
             setClubData(updated);
+            setIsConfirmingRegenerate(false);
             onOpenModal("inviteCode");
             toast.success("Invite link regenerated.");
         } catch (error) {
@@ -51,6 +53,8 @@ const useClubInvite = () => {
                 console.error(error instanceof Error ? error.message : error);
             }
             toast.error("Unable to regenerate invite link, try again.");
+        } finally {
+            setIsRegeneratingInvite(false);
         }
     }, [clubId, setClubData, onOpenModal]);
 
@@ -62,6 +66,7 @@ const useClubInvite = () => {
         inviteUrl,
         inviteExpiry,
         isConfirmingRegenerate,
+        isRegeneratingInvite,
         handleOpenInviteModal,
         handleCopyInviteLink,
         handleRequestRegenerate,
