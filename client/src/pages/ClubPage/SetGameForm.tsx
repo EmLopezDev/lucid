@@ -8,9 +8,10 @@ import DatePicker from "@components/DatePicker";
 type SetGameFormType = {
     onSubmit: (game: GameSearchResult, startDate: string | null, endDate: string | null) => void;
     onCancel: () => void;
+    isSubmitting?: boolean;
 };
 
-const SetGameForm = ({ onSubmit, onCancel }: SetGameFormType) => {
+const SetGameForm = ({ onSubmit, onCancel, isSubmitting }: SetGameFormType) => {
     const [query, setQuery] = useState("");
     const [selectedGame, setSelectedGame] = useState<GameSearchResult | null>(null);
     const [startDate, setStartDate] = useState("");
@@ -45,6 +46,7 @@ const SetGameForm = ({ onSubmit, onCancel }: SetGameFormType) => {
             primaryButtonDisabled={!selectedGame}
             onSubmit={handleSubmit}
             onCancel={onCancel}
+            isLoading={isSubmitting}
         >
             <SearchInput<GameSearchResult>
                 label="Game"
