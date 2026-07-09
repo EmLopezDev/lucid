@@ -3,9 +3,14 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Modal from "./Modal";
 
-const renderModal = (isOpen: boolean, onClose = vi.fn()) =>
+const renderModal = (isOpen: boolean, onClose = vi.fn(), preventClose = false) =>
     render(
-        <Modal isOpen={isOpen} title="Test Modal" onClose={onClose}>
+        <Modal
+            isOpen={isOpen}
+            title="Test Modal"
+            onClose={onClose}
+            preventClose={preventClose}
+        >
             <p>Modal body</p>
         </Modal>,
     );
@@ -56,6 +61,31 @@ describe("Modal", () => {
             renderModal(true);
             await userEvent.keyboard("{Escape}");
             expect(document.querySelector(".modal--closing")).toBeInTheDocument();
+        });
+    });
+
+    describe("preventClose", () => {
+        it("disables the close button when preventClose is true", () => {
+            renderModal(true, vi.fn(), true);
+            expect(screen.getByRole("button", { name: "close modal" })).toBeDisabled();
+        });
+
+        it("does not start closing when the close button is clicked", async () => {
+            renderModal(true, vi.fn(), true);
+            await userEvent.click(screen.getByRole("button", { name: "close modal" }));
+            expect(document.querySelector(".modal--closing")).not.toBeInTheDocument();
+        });
+
+        it("does not start closing when the overlay is clicked", async () => {
+            renderModal(true, vi.fn(), true);
+            await userEvent.click(document.querySelector(".modal__overlay")!);
+            expect(document.querySelector(".modal--closing")).not.toBeInTheDocument();
+        });
+
+        it("does not start closing on Escape key", async () => {
+            renderModal(true, vi.fn(), true);
+            await userEvent.keyboard("{Escape}");
+            expect(document.querySelector(".modal--closing")).not.toBeInTheDocument();
         });
     });
 

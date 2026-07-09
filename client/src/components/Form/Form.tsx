@@ -8,6 +8,7 @@ type FormType = {
     primaryButtonText?: string;
     primaryButtonDisabled?: boolean;
     secondaryButtonText?: string;
+    isLoading?: boolean;
     onSubmit: (e: SubmitEvent<HTMLFormElement>) => void;
     onCancel?: () => void;
 };
@@ -19,6 +20,7 @@ const Form = ({
     primaryButtonText = "Submit",
     primaryButtonDisabled,
     secondaryButtonText = "Cancel",
+    isLoading = false,
     onSubmit,
     onCancel,
 }: FormType) => {
@@ -35,6 +37,7 @@ const Form = ({
                     onClick={onCancel}
                     buttonSize={buttonSize}
                     variant="secondary"
+                    disabled={isLoading}
                 >
                     {secondaryButtonText}
                 </Button>
@@ -42,6 +45,7 @@ const Form = ({
                     type="submit"
                     buttonSize={buttonSize}
                     disabled={primaryButtonDisabled}
+                    isLoading={isLoading}
                 >
                     {primaryButtonText}
                 </Button>

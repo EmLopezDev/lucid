@@ -9,12 +9,14 @@ const renderConfirmModal = ({
     onCancel = vi.fn(),
     confirmLabel,
     cancelLabel,
+    isLoading,
 }: {
     isOpen?: boolean;
     onConfirm?: () => void;
     onCancel?: () => void;
     confirmLabel?: string;
     cancelLabel?: string;
+    isLoading?: boolean;
 } = {}) =>
     render(
         <ConfirmModal
@@ -25,6 +27,7 @@ const renderConfirmModal = ({
             onCancel={onCancel}
             confirmLabel={confirmLabel}
             cancelLabel={cancelLabel}
+            isLoading={isLoading}
         />,
     );
 
@@ -79,6 +82,36 @@ describe("ConfirmModal", () => {
             renderConfirmModal();
             await userEvent.click(document.querySelector(".modal__overlay")!);
             expect(document.querySelector(".modal--closing")).toBeInTheDocument();
+        });
+    });
+
+    describe("loading state", () => {
+        it("disables the confirm button when isLoading is true", () => {
+            renderConfirmModal({ isLoading: true });
+            expect(screen.getByRole("button", { name: "Confirm" })).toBeDisabled();
+        });
+
+        it("disables the cancel button when isLoading is true", () => {
+            renderConfirmModal({ isLoading: true });
+            expect(screen.getByRole("button", { name: "Cancel" })).toBeDisabled();
+        });
+
+        it("does not disable either button by default", () => {
+            renderConfirmModal();
+            expect(screen.getByRole("button", { name: "Confirm" })).not.toBeDisabled();
+            expect(screen.getByRole("button", { name: "Cancel" })).not.toBeDisabled();
+        });
+
+        it("does not start closing when the close button is clicked while isLoading is true", async () => {
+            renderConfirmModal({ isLoading: true });
+            await userEvent.click(screen.getByRole("button", { name: "close modal" }));
+            expect(document.querySelector(".modal--closing")).not.toBeInTheDocument();
+        });
+
+        it("does not start closing when the overlay is clicked while isLoading is true", async () => {
+            renderConfirmModal({ isLoading: true });
+            await userEvent.click(document.querySelector(".modal__overlay")!);
+            expect(document.querySelector(".modal--closing")).not.toBeInTheDocument();
         });
     });
 });

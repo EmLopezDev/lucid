@@ -76,4 +76,46 @@ describe("Form", () => {
             expect(handleCancel).toHaveBeenCalledOnce();
         });
     });
+
+    describe("primaryButtonDisabled", () => {
+        it("disables the submit button when primaryButtonDisabled is true", () => {
+            render(
+                <Form onSubmit={vi.fn()} primaryButtonDisabled>
+                    content
+                </Form>,
+            );
+            expect(screen.getByRole("button", { name: "Submit" })).toBeDisabled();
+        });
+
+        it("does not disable the submit button by default", () => {
+            render(<Form onSubmit={vi.fn()}>content</Form>);
+            expect(screen.getByRole("button", { name: "Submit" })).not.toBeDisabled();
+        });
+    });
+
+    describe("loading state", () => {
+        it("disables the submit button when isLoading is true", () => {
+            render(
+                <Form onSubmit={vi.fn()} isLoading>
+                    content
+                </Form>,
+            );
+            expect(screen.getByRole("button", { name: "Submit" })).toBeDisabled();
+        });
+
+        it("disables the cancel button when isLoading is true", () => {
+            render(
+                <Form onSubmit={vi.fn()} isLoading>
+                    content
+                </Form>,
+            );
+            expect(screen.getByRole("button", { name: "Cancel" })).toBeDisabled();
+        });
+
+        it("does not disable either button by default", () => {
+            render(<Form onSubmit={vi.fn()}>content</Form>);
+            expect(screen.getByRole("button", { name: "Submit" })).not.toBeDisabled();
+            expect(screen.getByRole("button", { name: "Cancel" })).not.toBeDisabled();
+        });
+    });
 });
