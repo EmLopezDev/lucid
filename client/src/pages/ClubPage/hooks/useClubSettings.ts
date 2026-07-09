@@ -43,6 +43,8 @@ const useClubSettings = () => {
     const [editFormErrors, setEditFormErrors] = useState<EditFormErrorsType>(
         objectCopy(EMPTY_ERRORS),
     );
+    const [isSavingClub, setIsSavingClub] = useState(false);
+    const [isDeletingClub, setIsDeletingClub] = useState(false);
 
     const handleOpenEditClubModal = () => {
         setEditFormData({
@@ -87,6 +89,7 @@ const useClubSettings = () => {
     const onClubEdit = useCallback(
         async (data: UpdateClubType) => {
             try {
+                setIsSavingClub(true);
                 const response = await fetch(`${API_URL}/clubs/${clubId}`, {
                     method: "PATCH",
                     credentials: "include",
@@ -103,6 +106,8 @@ const useClubSettings = () => {
                     console.error(error instanceof Error ? error.message : error);
                 }
                 toast.error("Unable to update club, try again.");
+            } finally {
+                setIsSavingClub(false);
             }
         },
         [clubId, setClubData, onCloseModal],
@@ -128,6 +133,7 @@ const useClubSettings = () => {
 
     const onClubDelete = useCallback(async () => {
         try {
+            setIsDeletingClub(true);
             const clubName = clubData?.name;
             const response = await fetch(`${API_URL}/clubs/${clubId}`, {
                 method: "DELETE",
@@ -142,12 +148,16 @@ const useClubSettings = () => {
                 console.error(error instanceof Error ? error.message : error);
             }
             toast.error("Unable to delete club, try again.");
+        } finally {
+            setIsDeletingClub(false);
         }
     }, [clubId, clubData, navigate, onCloseModal]);
 
     return {
         editFormData,
         editFormErrors,
+        isSavingClub,
+        isDeletingClub,
         onEditNameChange,
         onEditAvatarChange,
         onEditVisibilityChange,

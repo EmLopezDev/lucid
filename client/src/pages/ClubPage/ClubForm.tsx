@@ -13,6 +13,7 @@ type ClubFormProps = {
     descriptionValue: string;
     descriptionError?: string;
     primaryButtonText: string;
+    isLoading?: boolean;
     onNameChange: (e: ChangeEvent<HTMLInputElement>) => void;
     onAvatarChange: (value: string) => void;
     onVisibilityChange: (value: string) => void;
@@ -33,6 +34,7 @@ const ClubForm = ({
     onVisibilityChange,
     onDescriptionChange,
     primaryButtonText,
+    isLoading,
     onSubmit,
     onCancel,
 }: ClubFormProps) => {
@@ -41,6 +43,7 @@ const ClubForm = ({
             onSubmit={onSubmit}
             onCancel={onCancel}
             primaryButtonText={primaryButtonText}
+            isLoading={isLoading}
         >
             <div className="club-form__identity">
                 <Input

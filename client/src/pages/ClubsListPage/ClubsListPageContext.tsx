@@ -51,6 +51,7 @@ export type ClubsListPageContextType = {
     filteredClubsData: ClubType[];
     createClubData: NewClubFormType;
     isCreateClubModalOpen: boolean;
+    isCreatingClub: boolean;
     createClubErrors: NewClubFormErrorsType;
     onClubSearch: (event: ChangeEvent<HTMLInputElement>) => void;
     onClubNameChange: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -77,6 +78,7 @@ export const ClubsListPageProvider = ({ children }: { children: ReactNode }) => 
         objectCopy(CREATE_CLUB_EMPTY_ERRORS),
     );
     const [isCreateClubModalOpen, setIsCreateClubModalOpen] = useState(false);
+    const [isCreatingClub, setIsCreatingClub] = useState(false);
     const [fetchTrigger, setFetchTrigger] = useState(0);
 
     const filteredClubsData = useMemo(() => {
@@ -114,6 +116,7 @@ export const ClubsListPageProvider = ({ children }: { children: ReactNode }) => 
 
     const onCreateClub = useCallback(async (data: CreateClubType) => {
         try {
+            setIsCreatingClub(true);
             const response = await fetch(`${API_URL}/clubs`, {
                 method: "POST",
                 credentials: "include",
@@ -131,6 +134,8 @@ export const ClubsListPageProvider = ({ children }: { children: ReactNode }) => 
             }
             toast.error("Unable to create club, try again.");
             return false;
+        } finally {
+            setIsCreatingClub(false);
         }
     }, []);
 
@@ -236,6 +241,7 @@ export const ClubsListPageProvider = ({ children }: { children: ReactNode }) => 
             isLoading,
             error,
             isCreateClubModalOpen,
+            isCreatingClub,
             filteredClubsData,
             createClubData,
             createClubErrors,
@@ -255,6 +261,7 @@ export const ClubsListPageProvider = ({ children }: { children: ReactNode }) => 
             isLoading,
             error,
             isCreateClubModalOpen,
+            isCreatingClub,
             filteredClubsData,
             createClubData,
             createClubErrors,

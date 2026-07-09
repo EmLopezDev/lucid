@@ -20,6 +20,8 @@ const ClubPageModals = () => {
         onClubDelete,
         editFormData,
         editFormErrors,
+        isSavingClub,
+        isDeletingClub,
         onEditNameChange,
         onEditAvatarChange,
         onEditVisibilityChange,
@@ -61,6 +63,7 @@ const ClubPageModals = () => {
                 isOpen={activeModal === "editClub"}
                 title="Edit Club"
                 onClose={handleCloseEditClubModal}
+                preventClose={isSavingClub}
             >
                 <ClubForm
                     nameValue={editFormData.name}
@@ -74,6 +77,7 @@ const ClubPageModals = () => {
                     onVisibilityChange={onEditVisibilityChange}
                     onDescriptionChange={onEditDescriptionChange}
                     primaryButtonText="Save Changes"
+                    isLoading={isSavingClub}
                     onSubmit={onSubmitEditForm}
                     onCancel={handleCloseEditClubModal}
                 />
@@ -91,6 +95,7 @@ const ClubPageModals = () => {
                 }
                 confirmLabel="Delete Club"
                 variant="danger"
+                isLoading={isDeletingClub}
                 onConfirm={onClubDelete}
                 onCancel={onCloseModal}
             />
