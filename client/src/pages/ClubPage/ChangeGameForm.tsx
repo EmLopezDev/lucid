@@ -17,9 +17,15 @@ type ChangeGameFormType = {
         gameStatus: GameStatus,
     ) => void;
     onCancel: () => void;
+    isSubmitting?: boolean;
 };
 
-const ChangeGameForm = ({ currentGameTitle, onSubmit, onCancel }: ChangeGameFormType) => {
+const ChangeGameForm = ({
+    currentGameTitle,
+    onSubmit,
+    onCancel,
+    isSubmitting,
+}: ChangeGameFormType) => {
     const [query, setQuery] = useState("");
     const [selectedGame, setSelectedGame] = useState<GameSearchResult | null>(null);
     const [startDate, setStartDate] = useState("");
@@ -47,6 +53,7 @@ const ChangeGameForm = ({ currentGameTitle, onSubmit, onCancel }: ChangeGameForm
             primaryButtonDisabled={!selectedGame}
             onSubmit={handleSubmit}
             onCancel={onCancel}
+            isLoading={isSubmitting}
         >
             <div className="change-game-form__archive">
                 <p className="change-game-form__archive-label">

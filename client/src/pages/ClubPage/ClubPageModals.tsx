@@ -15,7 +15,7 @@ import Button from "@components/Button/Button";
 const ClubPageModals = () => {
     const { clubData, activeModal, onCloseModal } = useClubPageContext();
     const { onLeaveClub, onRemoveMember } = useClubMembers();
-    const { onGameSet, onGameChange } = useClubGame();
+    const { onGameSet, onGameChange, isSettingGame, isChangingGame } = useClubGame();
     const {
         onClubDelete,
         editFormData,
@@ -105,10 +105,12 @@ const ClubPageModals = () => {
                 isOpen={activeModal === "setGame"}
                 title="Set Current Game"
                 onClose={onCloseModal}
+                preventClose={isSettingGame}
             >
                 <SetGameForm
                     onSubmit={onGameSet}
                     onCancel={onCloseModal}
+                    isSubmitting={isSettingGame}
                 />
             </Modal>
 
@@ -117,11 +119,13 @@ const ClubPageModals = () => {
                 isOpen={activeModal === "changeGame"}
                 title="Change Current Game"
                 onClose={onCloseModal}
+                preventClose={isChangingGame}
             >
                 <ChangeGameForm
                     currentGameTitle={clubData.current_game?.title ?? ""}
                     onSubmit={onGameChange}
                     onCancel={onCloseModal}
+                    isSubmitting={isChangingGame}
                 />
             </Modal>
 
