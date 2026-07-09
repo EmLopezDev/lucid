@@ -49,6 +49,7 @@ export const useProfileView = () => {
     const [errors, setErrors] = useState<ProfileFormType>(objectCopy(EMPTY_ERRORS));
     const [formError, setFormError] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isDeletingAccount, setIsDeletingAccount] = useState(false);
 
     const navigate = useNavigate();
 
@@ -110,6 +111,7 @@ export const useProfileView = () => {
 
     const onDeleteProfile = useCallback(async () => {
         try {
+            setIsDeletingAccount(true);
             const response = await fetch(`${API_URL}/user/${currentUser?._id}`, {
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },
@@ -125,6 +127,8 @@ export const useProfileView = () => {
             }
         } catch {
             setFormError("Something went wrong");
+        } finally {
+            setIsDeletingAccount(false);
         }
     }, [currentUser, setUser, navigate]);
 
@@ -133,6 +137,7 @@ export const useProfileView = () => {
         errors,
         formError,
         isSubmitting,
+        isDeletingAccount,
         onChange,
         onBioChange,
         onSubmit,
