@@ -76,6 +76,13 @@
             input[type="text"] {
                 font-size: u.rem(16);
             }
+
+            // NATIVE emojiStyle renders emoji as text glyphs (no CDN image
+            // dependency), so the same emoji-capable font fallback as the
+            // trigger button applies here too.
+            .epr-emoji {
+                font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+            }
         }
     }
 }
