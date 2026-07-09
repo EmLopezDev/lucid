@@ -13,6 +13,7 @@ const ProfileView = () => {
         errors,
         formError,
         isSubmitting,
+        isDeletingAccount,
         onChange,
         onBioChange,
         onSubmit,
@@ -99,6 +100,7 @@ const ProfileView = () => {
                 title="Delete Account"
                 message="Are you sure you want to delete your account?"
                 confirmLabel="Delete"
+                isLoading={isDeletingAccount}
                 onCancel={onCancelDelete}
                 onConfirm={onConfirmDelete}
             />
