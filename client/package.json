@@ -14,6 +14,8 @@
     },
     "dependencies": {
         "@sentry/react": "^10.52.0",
+        "@tanstack/react-query": "^5.101.2",
+        "@tanstack/react-query-devtools": "^5.101.2",
         "css-variants": "^2.3.5",
         "emoji-picker-react": "^4.19.1",
         "lucide-react": "^1.14.0",
