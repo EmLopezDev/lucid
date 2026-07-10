@@ -117,16 +117,17 @@ export const useProfileView = () => {
                 headers: { "Content-Type": "application/json" },
                 method: "DELETE",
             });
-            if (response.ok) {
-                toast.success("Account deleted");
-                setUser(null);
-                navigate("/");
-            } else {
-                const error = await response.json();
-                setFormError(error.message ?? "Something went wrong");
+            if (!response.ok) throw new Error("Failed to delete account");
+            toast.success("Account deleted");
+            setUser(null);
+            navigate("/");
+            return true;
+        } catch (error) {
+            if (import.meta.env.DEV) {
+                console.error(error instanceof Error ? error.message : error);
             }
-        } catch {
-            setFormError("Something went wrong");
+            toast.error("Unable to delete account, try again.");
+            return false;
         } finally {
             setIsDeletingAccount(false);
         }
