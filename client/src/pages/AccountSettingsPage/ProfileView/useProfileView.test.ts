@@ -200,24 +200,45 @@ describe("useProfileView", () => {
             expect(mockNavigate).toHaveBeenCalledWith("/");
         });
 
-        it("sets formError from the server message on failure", async () => {
+        it("shows an error toast and returns false on failure", async () => {
             (globalThis.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
                 ok: false,
                 json: async () => ({ message: "This account cannot be deleted" }),
             });
             const { result } = renderHook(() => useProfileView());
-            await act(async () => result.current.onDeleteProfile());
-            expect(result.current.formError).toBe("This account cannot be deleted");
+            let success;
+            await act(async () => {
+                success = await result.current.onDeleteProfile();
+            });
+            expect(success).toBe(false);
+            expect(toast.error).toHaveBeenCalledWith("Unable to delete account, try again.");
             expect(mockSetUser).not.toHaveBeenCalled();
         });
 
-        it("sets formError when fetch throws", async () => {
+        it("shows an error toast and returns false when fetch throws", async () => {
             (globalThis.fetch as ReturnType<typeof vi.fn>).mockRejectedValueOnce(
                 new Error("Network error"),
             );
             const { result } = renderHook(() => useProfileView());
-            await act(async () => result.current.onDeleteProfile());
-            expect(result.current.formError).toBe("Something went wrong");
+            let success;
+            await act(async () => {
+                success = await result.current.onDeleteProfile();
+            });
+            expect(success).toBe(false);
+            expect(toast.error).toHaveBeenCalledWith("Unable to delete account, try again.");
+        });
+
+        it("returns true on success", async () => {
+            (globalThis.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({}),
+            });
+            const { result } = renderHook(() => useProfileView());
+            let success;
+            await act(async () => {
+                success = await result.current.onDeleteProfile();
+            });
+            expect(success).toBe(true);
         });
     });
 });

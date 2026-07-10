@@ -27,8 +27,8 @@ const ProfileView = () => {
 
     const onConfirmDelete = useCallback(async () => {
         if (!pendingDeleteAccount) return;
-        await onDeleteProfile();
-        setPendingDeleteAccount(false);
+        const success = await onDeleteProfile();
+        if (success) setPendingDeleteAccount(false);
     }, [pendingDeleteAccount, onDeleteProfile]);
 
     const onCancelDelete = useCallback(() => {
