@@ -1,67 +1,66 @@
-import { useState, useMemo, useCallback, useEffect, type ReactNode } from "react";
+import { useMemo, useCallback, type ReactNode } from "react";
 import { UserContext } from "./useUserContext";
 import { type UserType } from "@lucid/types";
 import { API_URL } from "@config/api";
 import { toast } from "sonner";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export interface UserContextType {
     currentUser: UserType | null;
     isSessionLoading: boolean;
+    isUserAuthenticated: boolean;
     setUser: (user: UserType | null) => void;
     signOut: () => Promise<void>;
-    isUserAuthenticated: boolean;
 }
 
+const checkSession = async ({ signal }: { signal: AbortSignal }) => {
+    const res = await fetch(`${API_URL}/auth/session`, {
+        credentials: "include",
+        signal: AbortSignal.any([signal, AbortSignal.timeout(5000)]),
+    });
+    if (!res.ok) return null;
+    return (await res.json()) as UserType;
+};
+
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-    const [currentUser, setCurrentUser] = useState<UserType | null>(null);
-    const [isSessionLoading, setIsSessionLoading] = useState(true);
+    const queryClient = useQueryClient();
 
-    useEffect(() => {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 5000);
+    const { data: currentUser = null, isLoading } = useQuery({
+        queryKey: ["session"],
+        queryFn: checkSession,
+        retry: false,
+    });
 
-        const checkSession = async () => {
-            try {
-                const res = await fetch(`${API_URL}/auth/session`, {
-                    credentials: "include",
-                    signal: controller.signal,
-                });
-                const user: UserType | null = res.ok ? await res.json() : null;
-                setCurrentUser(user);
-            } catch {
-                setCurrentUser(null);
-            } finally {
-                clearTimeout(timeout);
-                setIsSessionLoading(false);
-            }
-        };
-        checkSession();
+    const setUser = useCallback(
+        (user: UserType | null) => {
+            queryClient.setQueryData(["session"], user);
+        },
+        [queryClient],
+    );
 
-        return () => {
-            controller.abort();
-            clearTimeout(timeout);
-        };
-    }, []);
-
-    const setUser = useCallback((user: UserType | null) => {
-        setCurrentUser(user);
-    }, []);
+    const signOutMutation = useMutation({
+        mutationFn: async () => {
+            await fetch(`${API_URL}/auth/signout`, { method: "POST", credentials: "include" });
+        },
+        onSuccess: () => {
+            toast.success("Signed out. Your save file is safe.");
+            queryClient.setQueryData(["session"], null);
+        },
+    });
 
     const signOut = useCallback(async () => {
-        await fetch(`${API_URL}/auth/signout`, { method: "POST", credentials: "include" });
-        toast.success("Signed out. Your save file is safe.");
-        setCurrentUser(null);
-    }, []);
+        await signOutMutation.mutateAsync();
+    }, [signOutMutation]);
 
     const contextValue = useMemo(
         () => ({
             currentUser,
-            isSessionLoading,
+            isSessionLoading: isLoading,
+            isUserAuthenticated: !!currentUser,
             setUser,
             signOut,
-            isUserAuthenticated: !!currentUser,
         }),
-        [currentUser, isSessionLoading, setUser, signOut],
+        [currentUser, isLoading, setUser, signOut],
     );
 
     return <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>;
