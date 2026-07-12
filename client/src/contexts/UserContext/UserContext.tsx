@@ -2,7 +2,6 @@ import { useMemo, useCallback, type ReactNode } from "react";
 import { UserContext } from "./useUserContext";
 import { type UserType } from "@lucid/types";
 import { API_URL } from "@config/api";
-import { toast } from "sonner";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export interface UserContextType {
@@ -42,8 +41,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         mutationFn: async () => {
             await fetch(`${API_URL}/auth/signout`, { method: "POST", credentials: "include" });
         },
+        meta: { successMessage: "Signed out. Your save file is safe." },
         onSuccess: () => {
-            toast.success("Signed out. Your save file is safe.");
             queryClient.setQueryData(["session"], null);
         },
     });
