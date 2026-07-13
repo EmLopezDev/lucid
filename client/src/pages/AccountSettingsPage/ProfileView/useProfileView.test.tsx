@@ -2,8 +2,11 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook, act, waitFor } from "@testing-library/react";
 import { useProfileView } from "./useProfileView.js";
 import { toast } from "sonner";
+import { createQueryWrapper } from "../../../tests/createQueryWrapper";
 
 vi.mock("sonner", () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
+
+const wrapper = createQueryWrapper(({ children }) => children);
 
 const mockSetUser = vi.hoisted(() => vi.fn());
 const mockNavigate = vi.hoisted(() => vi.fn());
@@ -39,30 +42,31 @@ describe("useProfileView", () => {
     beforeEach(() => {
         mockSetUser.mockReset();
         mockNavigate.mockReset();
+        (toast.success as ReturnType<typeof vi.fn>).mockReset();
+        (toast.error as ReturnType<typeof vi.fn>).mockReset();
         globalThis.fetch = vi.fn();
     });
 
     it("starts with form pre-filled from currentUser", () => {
-        const { result } = renderHook(() => useProfileView());
+        const { result } = renderHook(() => useProfileView(), { wrapper });
         expect(result.current.formData.first_name).toBe("Test");
         expect(result.current.formData.last_name).toBe("User");
         expect(result.current.formData.email).toBe("test@example.com");
     });
 
     it("starts with no errors", () => {
-        const { result } = renderHook(() => useProfileView());
+        const { result } = renderHook(() => useProfileView(), { wrapper });
         expect(result.current.errors).toEqual({
             first_name: "",
             last_name: "",
             email: "",
             bio: "",
         });
-        expect(result.current.formError).toBe("");
     });
 
     describe("validation", () => {
         it("shows required errors when submitting an empty form", async () => {
-            const { result } = renderHook(() => useProfileView());
+            const { result } = renderHook(() => useProfileView(), { wrapper });
             act(() => {
                 result.current.onChange(inputEvent("first_name", ""));
                 result.current.onChange(inputEvent("last_name", ""));
@@ -75,21 +79,21 @@ describe("useProfileView", () => {
         });
 
         it("shows a name format error for an invalid first name", async () => {
-            const { result } = renderHook(() => useProfileView());
+            const { result } = renderHook(() => useProfileView(), { wrapper });
             act(() => result.current.onChange(inputEvent("first_name", "John123")));
             await act(async () => result.current.onSubmit(submitEvent()));
             expect(result.current.errors.first_name).toBe("First name should only be letters");
         });
 
         it("shows an email format error for an invalid email", async () => {
-            const { result } = renderHook(() => useProfileView());
+            const { result } = renderHook(() => useProfileView(), { wrapper });
             act(() => result.current.onChange(inputEvent("email", "not-an-email")));
             await act(async () => result.current.onSubmit(submitEvent()));
             expect(result.current.errors.email).toBe("Email format is invalid");
         });
 
         it("does not call fetch when there are validation errors", async () => {
-            const { result } = renderHook(() => useProfileView());
+            const { result } = renderHook(() => useProfileView(), { wrapper });
             act(() => result.current.onChange(inputEvent("first_name", "")));
             await act(async () => result.current.onSubmit(submitEvent()));
             expect(globalThis.fetch).not.toHaveBeenCalled();
@@ -105,7 +109,7 @@ describe("useProfileView", () => {
         });
 
         it("calls the user endpoint with updated data", async () => {
-            const { result } = renderHook(() => useProfileView());
+            const { result } = renderHook(() => useProfileView(), { wrapper });
             act(() => result.current.onChange(inputEvent("first_name", "Jane")));
             await act(async () => result.current.onSubmit(submitEvent()));
             await waitFor(() => expect(globalThis.fetch).toHaveBeenCalled());
@@ -116,7 +120,7 @@ describe("useProfileView", () => {
         });
 
         it("calls setUser with the updated user", async () => {
-            const { result } = renderHook(() => useProfileView());
+            const { result } = renderHook(() => useProfileView(), { wrapper });
             act(() => result.current.onChange(inputEvent("first_name", "Jane")));
             await act(async () => result.current.onSubmit(submitEvent()));
             await waitFor(() => expect(mockSetUser).toHaveBeenCalled());
@@ -126,36 +130,40 @@ describe("useProfileView", () => {
         });
 
         it("fires a success toast", async () => {
-            const { result } = renderHook(() => useProfileView());
+            const { result } = renderHook(() => useProfileView(), { wrapper });
             await act(async () => result.current.onSubmit(submitEvent()));
             await waitFor(() => expect(toast.success).toHaveBeenCalledWith("Profile updated"));
         });
     });
 
     describe("failed update", () => {
-        it("sets formError from the server message", async () => {
+        it("shows an error toast with the server message", async () => {
             (globalThis.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
                 ok: false,
                 json: async () => ({ message: "Something went wrong" }),
             });
-            const { result } = renderHook(() => useProfileView());
+            const { result } = renderHook(() => useProfileView(), { wrapper });
             await act(async () => result.current.onSubmit(submitEvent()));
-            await waitFor(() => expect(result.current.formError).toBe("Something went wrong"));
+            await waitFor(() =>
+                expect(toast.error).toHaveBeenCalledWith("Something went wrong"),
+            );
         });
 
-        it("sets formError when fetch throws", async () => {
+        it("shows a generic error toast when fetch throws", async () => {
             (globalThis.fetch as ReturnType<typeof vi.fn>).mockRejectedValueOnce(
                 new Error("Network error"),
             );
-            const { result } = renderHook(() => useProfileView());
+            const { result } = renderHook(() => useProfileView(), { wrapper });
             await act(async () => result.current.onSubmit(submitEvent()));
-            await waitFor(() => expect(result.current.formError).toBe("Something went wrong"));
+            await waitFor(() =>
+                expect(toast.error).toHaveBeenCalledWith("Something went wrong"),
+            );
         });
     });
 
     describe("onReset", () => {
         it("restores form to currentUser data and clears errors", async () => {
-            const { result } = renderHook(() => useProfileView());
+            const { result } = renderHook(() => useProfileView(), { wrapper });
             act(() => {
                 result.current.onChange(inputEvent("first_name", ""));
                 result.current.onChange(inputEvent("last_name", ""));
@@ -170,7 +178,6 @@ describe("useProfileView", () => {
                 email: "",
                 bio: "",
             });
-            expect(result.current.formError).toBe("");
         });
     });
 
@@ -180,7 +187,7 @@ describe("useProfileView", () => {
                 ok: true,
                 json: async () => ({}),
             });
-            const { result } = renderHook(() => useProfileView());
+            const { result } = renderHook(() => useProfileView(), { wrapper });
             await act(async () => result.current.onDeleteProfile());
             expect(globalThis.fetch).toHaveBeenCalledWith(
                 expect.stringContaining(`/user/${mockCurrentUser._id}`),
@@ -193,7 +200,7 @@ describe("useProfileView", () => {
                 ok: true,
                 json: async () => ({}),
             });
-            const { result } = renderHook(() => useProfileView());
+            const { result } = renderHook(() => useProfileView(), { wrapper });
             await act(async () => result.current.onDeleteProfile());
             expect(toast.success).toHaveBeenCalledWith("Account deleted");
             expect(mockSetUser).toHaveBeenCalledWith(null);
@@ -205,7 +212,7 @@ describe("useProfileView", () => {
                 ok: false,
                 json: async () => ({ message: "This account cannot be deleted" }),
             });
-            const { result } = renderHook(() => useProfileView());
+            const { result } = renderHook(() => useProfileView(), { wrapper });
             let success;
             await act(async () => {
                 success = await result.current.onDeleteProfile();
@@ -219,7 +226,7 @@ describe("useProfileView", () => {
             (globalThis.fetch as ReturnType<typeof vi.fn>).mockRejectedValueOnce(
                 new Error("Network error"),
             );
-            const { result } = renderHook(() => useProfileView());
+            const { result } = renderHook(() => useProfileView(), { wrapper });
             let success;
             await act(async () => {
                 success = await result.current.onDeleteProfile();
@@ -233,7 +240,7 @@ describe("useProfileView", () => {
                 ok: true,
                 json: async () => ({}),
             });
-            const { result } = renderHook(() => useProfileView());
+            const { result } = renderHook(() => useProfileView(), { wrapper });
             let success;
             await act(async () => {
                 success = await result.current.onDeleteProfile();

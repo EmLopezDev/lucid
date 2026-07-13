@@ -11,7 +11,6 @@ const ProfileView = () => {
     const {
         formData,
         errors,
-        formError,
         isSubmitting,
         isDeletingAccount,
         onChange,
@@ -43,7 +42,6 @@ const ProfileView = () => {
                 onCancel={onReset}
                 primaryButtonText="Save"
                 secondaryButtonText="Reset"
-                errorText={formError ? () => formError : undefined}
                 isLoading={isSubmitting}
             >
                 <Input

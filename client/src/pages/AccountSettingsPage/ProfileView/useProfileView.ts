@@ -6,6 +6,7 @@ import { objectCopy } from "@lib/generic";
 import { API_URL } from "@config/api";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
+import { useMutation } from "@tanstack/react-query";
 
 type ProfileFormType = {
     first_name: string;
@@ -47,9 +48,6 @@ export const useProfileView = () => {
         bio: currentUser?.bio ?? "",
     });
     const [errors, setErrors] = useState<ProfileFormType>(objectCopy(EMPTY_ERRORS));
-    const [formError, setFormError] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isDeletingAccount, setIsDeletingAccount] = useState(false);
 
     const navigate = useNavigate();
 
@@ -63,39 +61,49 @@ export const useProfileView = () => {
         setFormData((prev) => ({ ...prev, bio: value }));
     }, []);
 
+    const updateProfileMutation = useMutation({
+        mutationFn: async (data: ProfileFormType) => {
+            let res: Response;
+            try {
+                res = await fetch(`${API_URL}/user/${currentUser?._id}`, {
+                    method: "PATCH",
+                    credentials: "include",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data),
+                });
+            } catch {
+                throw new Error("Something went wrong");
+            }
+            if (!res.ok) {
+                const error = await res.json();
+                throw new Error(error.message ?? "Something went wrong");
+            }
+            return res.json();
+        },
+        // The server's error message is validation-specific (e.g. "Email
+        // already in use"), so this opts out of the generic error toast and
+        // fires its own with the real reason instead.
+        meta: { successMessage: "Profile updated", skipErrorToast: true },
+        onSuccess: (updated) => {
+            setUser({ ...currentUser!, ...updated });
+            setErrors(objectCopy(EMPTY_ERRORS));
+        },
+        onError: (error) => {
+            toast.error(error.message);
+        },
+    });
+
     const onSubmit = useCallback(
-        async (e: SubmitEvent<HTMLFormElement>) => {
+        (e: SubmitEvent<HTMLFormElement>) => {
             e.preventDefault();
             const validationErrors = isFormDataValid(formData, PROFILE_RULES, EMPTY_ERRORS);
             if (hasErrors(validationErrors)) {
                 setErrors(validationErrors);
                 return;
             }
-            setIsSubmitting(true);
-            setFormError("");
-            try {
-                const res = await fetch(`${API_URL}/user/${currentUser?._id}`, {
-                    method: "PATCH",
-                    credentials: "include",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(formData),
-                });
-                if (res.ok) {
-                    const updated = await res.json();
-                    setUser({ ...currentUser!, ...updated });
-                    setErrors(objectCopy(EMPTY_ERRORS));
-                    toast.success("Profile updated");
-                } else {
-                    const error = await res.json();
-                    setFormError(error.message ?? "Something went wrong");
-                }
-            } catch {
-                setFormError("Something went wrong");
-            } finally {
-                setIsSubmitting(false);
-            }
+            updateProfileMutation.mutate(formData);
         },
-        [formData, currentUser, setUser],
+        [formData, updateProfileMutation],
     );
 
     const onReset = useCallback(() => {
@@ -106,39 +114,41 @@ export const useProfileView = () => {
             bio: currentUser?.bio ?? "",
         });
         setErrors(objectCopy(EMPTY_ERRORS));
-        setFormError("");
     }, [currentUser]);
 
-    const onDeleteProfile = useCallback(async () => {
-        try {
-            setIsDeletingAccount(true);
+    const deleteAccountMutation = useMutation({
+        mutationFn: async () => {
             const response = await fetch(`${API_URL}/user/${currentUser?._id}`, {
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },
                 method: "DELETE",
             });
             if (!response.ok) throw new Error("Failed to delete account");
-            toast.success("Account deleted");
+        },
+        meta: {
+            successMessage: "Account deleted",
+            errorMessage: "Unable to delete account, try again.",
+        },
+        onSuccess: () => {
             setUser(null);
             navigate("/");
+        },
+    });
+
+    const onDeleteProfile = useCallback(async () => {
+        try {
+            await deleteAccountMutation.mutateAsync();
             return true;
-        } catch (error) {
-            if (import.meta.env.DEV) {
-                console.error(error instanceof Error ? error.message : error);
-            }
-            toast.error("Unable to delete account, try again.");
+        } catch {
             return false;
-        } finally {
-            setIsDeletingAccount(false);
         }
-    }, [currentUser, setUser, navigate]);
+    }, [deleteAccountMutation]);
 
     return {
         formData,
         errors,
-        formError,
-        isSubmitting,
-        isDeletingAccount,
+        isSubmitting: updateProfileMutation.isPending,
+        isDeletingAccount: deleteAccountMutation.isPending,
         onChange,
         onBioChange,
         onSubmit,
