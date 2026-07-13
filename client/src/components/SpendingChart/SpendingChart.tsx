@@ -8,7 +8,10 @@ import {
     ResponsiveContainer,
     CartesianGrid,
 } from "recharts";
-import { type TimePeriodType, type SpendingDataType } from "@pages/ProfilePage/useSpendingChart";
+import {
+    type TimePeriodType,
+    type SpendingDataType,
+} from "@pages/ProfilePage/hooks/useSpendingChart";
 import { useReducedMotion } from "@hooks/useReduceMotion";
 
 const PERIODS: { label: string; value: TimePeriodType }[] = [

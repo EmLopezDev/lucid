@@ -1,5 +1,5 @@
 import { PieChart, Pie, Tooltip, ResponsiveContainer } from "recharts";
-import { type StatusDataType } from "@pages/ProfilePage/useStatusBreakdown";
+import { type StatusDataType } from "@pages/ProfilePage/hooks/useStatusBreakdown";
 import { capitalizeString } from "@lib/string";
 
 type CustomTooltipType = {

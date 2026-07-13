@@ -1,19 +1,14 @@
 import { useState } from "react";
-import { cx } from "css-variants";
 import { SkeletonLoader, Skeleton } from "@components/Skeleton";
-import { useUserProfile, type ProfileGame } from "./useUserProfile";
+import { useUserProfile } from "./hooks/useUserProfile";
 import { useUserContext } from "@contexts/UserContext/useUserContext";
 import { NavLink } from "react-router";
-import { useCoverImage } from "@hooks/useCoverImage";
-import { useGenreBreakdown } from "./useGenreBreakdown";
-import { useSpendingChart } from "./useSpendingChart";
-import { useStatusBreakdown } from "./useStatusBreakdown";
 import Icon from "@components/Icon";
-import Badge from "@components/Badge";
-import GenreBreakdownChart from "@components/GenreBreakdownChart";
-import StatusBreakdownChart from "@components/StatusBreakdownChart";
-import SpendingChart from "@components/SpendingChart";
-import HeroStats from "@components/HeroStats";
+import ProfilePageStatsTab from "./tabs/ProfilePageStatsTab";
+import ProfilePagePlayingTab from "./tabs/ProfilePagePlayingTab";
+import ProfilePageCompletedTab from "./tabs/ProfilePageCompletedTab";
+import ProfilePageRecentTab from "./tabs/ProfilePageRecentTab";
+import ProfilePageExpenditureTab from "./tabs/ProfilePageExpenditureTab";
 
 type TabIdType = "stats" | "playing" | "completed" | "recent" | "expenditure";
 
@@ -25,41 +20,10 @@ const tabs: { id: TabIdType; label: string }[] = [
     { id: "expenditure", label: "Expenditure" },
 ];
 
-const ProfileGameItem = ({ game }: { game: ProfileGame }) => {
-    const { hasImage, handleError } = useCoverImage(game.cover_url);
-
-    return (
-        <li
-            className={cx({
-                "profile-page__game-item": true,
-                [`profile-page__game-item--${game.status}`]: !!game.status,
-            })}
-        >
-            <div className="profile-page__game-cover">
-                {hasImage && (
-                    <img
-                        src={game.cover_url!}
-                        alt=""
-                        aria-hidden="true"
-                        onError={handleError}
-                    />
-                )}
-            </div>
-            <div className="profile-page__game-info">
-                <span className="profile-page__game-title">{game.title}</span>
-                {game.status && <Badge label={game.status} size="small" />}
-            </div>
-        </li>
-    );
-};
-
 const ProfilePage = () => {
     const [activeTab, setActiveTab] = useState<TabIdType>("stats");
     const { currentUser } = useUserContext();
     const { profile, isLoading, error } = useUserProfile();
-    const { data: genreData } = useGenreBreakdown();
-    const { data: statusData } = useStatusBreakdown();
-    const { data, period, setPeriod } = useSpendingChart();
 
     if (isLoading) {
         return (
@@ -174,111 +138,15 @@ const ProfilePage = () => {
             </div>
 
             <div className="profile-page__tab-panel">
-                {activeTab === "stats" && (
-                    <>
-                        <section className="profile-page__stats">
-                            <HeroStats
-                                iconName="gamepad"
-                                statValue={profile.stats.totalGames}
-                                text="Games"
-                            />
-                            <HeroStats
-                                iconName="clock"
-                                statValue={profile.stats.totalHoursPlayed}
-                                text="Hours Played"
-                            />
-                            <HeroStats
-                                iconName="check"
-                                statValue={profile.stats.completionRate}
-                                text="Completion Rate"
-                            />
-                            <HeroStats
-                                iconName="star"
-                                statValue={profile.stats.averageRating ?? 0}
-                                text="Avg Rating"
-                            />
-                            <HeroStats
-                                iconName="tag"
-                                statValue={profile.stats.mostPlayedGenre ?? "-"}
-                                text="Most Played Genre"
-                            />
-                        </section>
-                        <div className="profile-page__charts">
-                            <GenreBreakdownChart data={genreData} />
-                            <StatusBreakdownChart data={statusData} />
-                        </div>
-                    </>
-                )}
+                {activeTab === "stats" && <ProfilePageStatsTab />}
 
-                {activeTab === "playing" && (
-                    <section className="profile-page__section">
-                        {profile.currentlyPlaying.length === 0 ? (
-                            <p className="profile-page__empty">No games currently playing.</p>
-                        ) : (
-                            <ul className="profile-page__game-list">
-                                {profile.currentlyPlaying.map((game) => (
-                                    <ProfileGameItem
-                                        key={game._id}
-                                        game={game}
-                                    />
-                                ))}
-                            </ul>
-                        )}
-                    </section>
-                )}
+                {activeTab === "playing" && <ProfilePagePlayingTab />}
 
-                {activeTab === "completed" && (
-                    <section className="profile-page__section">
-                        {profile.completed.length === 0 ? (
-                            <p className="profile-page__empty">No completed games yet.</p>
-                        ) : (
-                            <ul className="profile-page__game-list">
-                                {profile.completed.map((game) => (
-                                    <ProfileGameItem
-                                        key={game._id}
-                                        game={game}
-                                    />
-                                ))}
-                            </ul>
-                        )}
-                    </section>
-                )}
+                {activeTab === "completed" && <ProfilePageCompletedTab />}
 
-                {activeTab === "recent" && (
-                    <section className="profile-page__section">
-                        {profile.recentlyAdded.length === 0 ? (
-                            <p className="profile-page__empty">No games added yet.</p>
-                        ) : (
-                            <ul className="profile-page__game-list">
-                                {profile.recentlyAdded.map((game) => (
-                                    <ProfileGameItem
-                                        key={game._id}
-                                        game={game}
-                                    />
-                                ))}
-                            </ul>
-                        )}
-                    </section>
-                )}
+                {activeTab === "recent" && <ProfilePageRecentTab />}
 
-                {activeTab === "expenditure" && (
-                    <>
-                        <section className="profile-page__stats">
-                            <HeroStats
-                                iconName="dollar"
-                                statValue={profile.stats.totalSpent ?? 0}
-                                text="Total Spent"
-                            />
-                        </section>
-                        <div className="profile-page__spending-chart">
-                            <SpendingChart
-                                data={data}
-                                period={period}
-                                onPeriodChange={setPeriod}
-                            />
-                        </div>
-                    </>
-                )}
+                {activeTab === "expenditure" && <ProfilePageExpenditureTab />}
             </div>
         </div>
     );

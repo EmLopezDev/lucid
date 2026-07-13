@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
 import { useUserContext } from "@contexts/UserContext/useUserContext";
 import { API_URL } from "@config/api";
 import { type StatusType } from "@lucid/types";
+import { useQuery } from "@tanstack/react-query";
 
 export type ProfileStats = {
     totalGames: number;
@@ -36,30 +36,24 @@ export type UserProfileType = {
 export const useUserProfile = () => {
     const { currentUser } = useUserContext();
     const userId = currentUser?._id;
-    const [profile, setProfile] = useState<UserProfileType | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        if (!userId) return;
+    const fetchProfile = async () => {
+        const res = await fetch(`${API_URL}/user/${userId}/profile`, {
+            credentials: "include",
+        });
+        if (!res.ok) throw new Error("Failed to load profile");
+        return (await res.json()) as UserProfileType;
+    };
 
-        const fetchProfile = async () => {
-            try {
-                const res = await fetch(`${API_URL}/user/${userId}/profile`, {
-                    credentials: "include",
-                });
-                if (!res.ok) throw new Error("Failed to load profile");
-                const data: UserProfileType = await res.json();
-                setProfile(data);
-            } catch {
-                setError("Could not load your profile.");
-            } finally {
-                setIsLoading(false);
-            }
-        };
+    const { data, isLoading, error } = useQuery({
+        queryKey: ["user-profile", userId],
+        queryFn: fetchProfile,
+        enabled: !!userId,
+    });
 
-        fetchProfile();
-    }, [userId]);
-
-    return { profile, isLoading, error };
+    return {
+        profile: data,
+        isLoading,
+        error: error ? "Could not load your profile." : null,
+    };
 };
