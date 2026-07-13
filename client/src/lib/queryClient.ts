@@ -10,6 +10,11 @@ export const createAppMutationCache = () =>
             if (import.meta.env.DEV) {
                 console.error(error instanceof Error ? error.message : error);
             }
+            // Mirrors the successMessage opt-in below - mutations whose error
+            // message needs the response body (e.g. a validation reason from
+            // the server) set skipErrorToast and fire their own toast.error
+            // from their local onError callback instead.
+            if (mutation.meta?.skipErrorToast) return;
             toast.error(mutation.meta?.errorMessage ?? "Something went wrong, try again.");
         },
         onSuccess: (_data, _variables, _context, mutation) => {
