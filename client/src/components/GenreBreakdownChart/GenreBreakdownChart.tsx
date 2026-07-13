@@ -1,5 +1,5 @@
 import { PieChart, Pie, Tooltip, ResponsiveContainer } from "recharts";
-import { type GenreDataType } from "@pages/ProfilePage/useGenreBreakdown";
+import { type GenreDataType } from "@pages/ProfilePage/hooks/useGenreBreakdown";
 import { capitalizeString } from "@lib/string";
 
 type CustomTooltipType = {
@@ -16,9 +16,7 @@ const CustomTooltip = ({ active, payload }: CustomTooltipType) => {
                 className="genre-breakdown-chart__tooltip-dot"
                 style={{ backgroundColor: fill }}
             />
-            <span className="genre-breakdown-chart__tooltip-label">
-                {capitalizeString(genre)}
-            </span>
+            <span className="genre-breakdown-chart__tooltip-label">{capitalizeString(genre)}</span>
             <span className="genre-breakdown-chart__tooltip-count">
                 {count} {count === 1 ? "game" : "games"}
             </span>
