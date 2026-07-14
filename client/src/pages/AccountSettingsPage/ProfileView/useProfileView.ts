@@ -118,20 +118,31 @@ export const useProfileView = () => {
 
     const deleteAccountMutation = useMutation({
         mutationFn: async () => {
-            const response = await fetch(`${API_URL}/user/${currentUser?._id}`, {
-                credentials: "include",
-                headers: { "Content-Type": "application/json" },
-                method: "DELETE",
-            });
-            if (!response.ok) throw new Error("Failed to delete account");
+            let response: Response;
+            try {
+                response = await fetch(`${API_URL}/user/${currentUser?._id}`, {
+                    credentials: "include",
+                    headers: { "Content-Type": "application/json" },
+                    method: "DELETE",
+                });
+            } catch {
+                throw new Error("Unable to delete account, try again.");
+            }
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message ?? "Unable to delete account, try again.");
+            }
         },
-        meta: {
-            successMessage: "Account deleted",
-            errorMessage: "Unable to delete account, try again.",
-        },
+        // Some failures are permanent (e.g. protected demo accounts), so this
+        // opts out of the generic error toast and shows the server's real
+        // reason instead of implying a retry might work.
+        meta: { successMessage: "Account deleted", skipErrorToast: true },
         onSuccess: () => {
             setUser(null);
             navigate("/");
+        },
+        onError: (error) => {
+            toast.error(error.message);
         },
     });
 
