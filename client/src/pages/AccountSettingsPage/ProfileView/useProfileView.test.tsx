@@ -207,7 +207,7 @@ describe("useProfileView", () => {
             expect(mockNavigate).toHaveBeenCalledWith("/");
         });
 
-        it("shows an error toast and returns false on failure", async () => {
+        it("shows an error toast with the server message and returns false on failure", async () => {
             (globalThis.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
                 ok: false,
                 json: async () => ({ message: "This account cannot be deleted" }),
@@ -218,7 +218,7 @@ describe("useProfileView", () => {
                 success = await result.current.onDeleteProfile();
             });
             expect(success).toBe(false);
-            expect(toast.error).toHaveBeenCalledWith("Unable to delete account, try again.");
+            expect(toast.error).toHaveBeenCalledWith("This account cannot be deleted");
             expect(mockSetUser).not.toHaveBeenCalled();
         });
 
