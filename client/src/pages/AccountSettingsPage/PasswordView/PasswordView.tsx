@@ -3,8 +3,7 @@ import Input from "@components/Input";
 import { usePasswordView } from "./usePasswordView.js";
 
 const PasswordView = () => {
-    const { formData, errors, formError, isSubmitting, onChange, onSubmit, onReset } =
-        usePasswordView();
+    const { formData, errors, isSubmitting, onChange, onSubmit, onReset } = usePasswordView();
 
     return (
         <div className="password-view">
@@ -14,7 +13,6 @@ const PasswordView = () => {
                 onCancel={onReset}
                 primaryButtonText="Update Password"
                 secondaryButtonText="Clear"
-                errorText={formError ? () => formError : undefined}
                 isLoading={isSubmitting}
             >
                 <Input

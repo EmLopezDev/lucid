@@ -1,9 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook, act, waitFor } from "@testing-library/react";
 import { usePasswordView } from "./usePasswordView.js";
+import { createQueryWrapper } from "../../../tests/createQueryWrapper.js";
 import { toast } from "sonner";
 
 vi.mock("sonner", () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
+
+const wrapper = createQueryWrapper(({ children }) => children);
 
 const mockCurrentUser = { _id: "user-1" };
 
@@ -26,26 +29,27 @@ const validForm = {
 
 describe("usePasswordView", () => {
     beforeEach(() => {
+        (toast.success as ReturnType<typeof vi.fn>).mockReset();
+        (toast.error as ReturnType<typeof vi.fn>).mockReset();
         globalThis.fetch = vi.fn();
     });
 
     it("starts with empty form and no errors", () => {
-        const { result } = renderHook(() => usePasswordView());
+        const { result } = renderHook(() => usePasswordView(), { wrapper });
         expect(result.current.formData).toEqual({ current_password: "", new_password: "" });
         expect(result.current.errors).toEqual({ current_password: "", new_password: "" });
-        expect(result.current.formError).toBe("");
     });
 
     describe("validation", () => {
         it("shows required errors when submitting an empty form", async () => {
-            const { result } = renderHook(() => usePasswordView());
+            const { result } = renderHook(() => usePasswordView(), { wrapper });
             await act(async () => result.current.onSubmit(submitEvent()));
             expect(result.current.errors.current_password).toBe("Current password is required");
             expect(result.current.errors.new_password).toBe("New password is required");
         });
 
         it("shows an error when new password is too short", async () => {
-            const { result } = renderHook(() => usePasswordView());
+            const { result } = renderHook(() => usePasswordView(), { wrapper });
             act(() => {
                 result.current.onChange(inputEvent("current_password", "oldpassword123"));
                 result.current.onChange(inputEvent("new_password", "short"));
@@ -55,7 +59,7 @@ describe("usePasswordView", () => {
         });
 
         it("does not call fetch when there are validation errors", async () => {
-            const { result } = renderHook(() => usePasswordView());
+            const { result } = renderHook(() => usePasswordView(), { wrapper });
             await act(async () => result.current.onSubmit(submitEvent()));
             expect(globalThis.fetch).not.toHaveBeenCalled();
         });
@@ -67,7 +71,7 @@ describe("usePasswordView", () => {
         });
 
         it("calls the password endpoint with form data", async () => {
-            const { result } = renderHook(() => usePasswordView());
+            const { result } = renderHook(() => usePasswordView(), { wrapper });
             act(() => {
                 result.current.onChange(inputEvent("current_password", validForm.current_password));
                 result.current.onChange(inputEvent("new_password", validForm.new_password));
@@ -81,7 +85,7 @@ describe("usePasswordView", () => {
         });
 
         it("clears the form and fires a success toast", async () => {
-            const { result } = renderHook(() => usePasswordView());
+            const { result } = renderHook(() => usePasswordView(), { wrapper });
             act(() => {
                 result.current.onChange(inputEvent("current_password", validForm.current_password));
                 result.current.onChange(inputEvent("new_password", validForm.new_password));
@@ -98,38 +102,37 @@ describe("usePasswordView", () => {
                 ok: false,
                 json: async () => ({ message: "One or more credentials is incorrect" }),
             });
-            const { result } = renderHook(() => usePasswordView());
+            const { result } = renderHook(() => usePasswordView(), { wrapper });
             act(() => {
                 result.current.onChange(inputEvent("current_password", validForm.current_password));
                 result.current.onChange(inputEvent("new_password", validForm.new_password));
             });
             await act(async () => result.current.onSubmit(submitEvent()));
             await waitFor(() =>
-                expect(result.current.formError).toBe("One or more credentials is incorrect"),
+                expect(toast.error).toHaveBeenCalledWith("One or more credentials is incorrect"),
             );
         });
 
-        it("sets formError when fetch throws", async () => {
+        it("shows a generic error toast when fetch throws", async () => {
             (globalThis.fetch as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error());
-            const { result } = renderHook(() => usePasswordView());
+            const { result } = renderHook(() => usePasswordView(), { wrapper });
             act(() => {
                 result.current.onChange(inputEvent("current_password", validForm.current_password));
                 result.current.onChange(inputEvent("new_password", validForm.new_password));
             });
             await act(async () => result.current.onSubmit(submitEvent()));
-            await waitFor(() => expect(result.current.formError).toBe("Something went wrong"));
+            await waitFor(() => expect(toast.error).toHaveBeenCalledWith("Something went wrong"));
         });
     });
 
     describe("onReset", () => {
         it("clears the form, errors, and success state", async () => {
-            const { result } = renderHook(() => usePasswordView());
+            const { result } = renderHook(() => usePasswordView(), { wrapper });
             await act(async () => result.current.onSubmit(submitEvent()));
             expect(result.current.errors.current_password).toBe("Current password is required");
             act(() => result.current.onReset());
             expect(result.current.formData).toEqual({ current_password: "", new_password: "" });
             expect(result.current.errors).toEqual({ current_password: "", new_password: "" });
-            expect(result.current.formError).toBe("");
         });
     });
 });
