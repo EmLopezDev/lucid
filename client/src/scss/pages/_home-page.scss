@@ -10,6 +10,21 @@
     to   { transform: translateX(0); }
 }
 
+@keyframes glow-pulse {
+    0%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    50%      { opacity: 0.7; transform: translate(-50%, -50%) scale(1.08); }
+}
+
+@keyframes icon-float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+}
+
+@keyframes headline-shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+}
+
 .home-page {
     display: flow-root;
     height: 100%;
@@ -23,7 +38,7 @@
         justify-content: center;
         position: relative;
         overflow: hidden;
-        padding-block-end: u.rem(48);
+        padding-block-end: u.rem(12);
     }
 
     &__glow {
@@ -35,6 +50,7 @@
         height: u.rem(800);
         background: radial-gradient(circle, rgba(var(--color-brand-rgb), 0.13) 0%, transparent 65%);
         pointer-events: none;
+        animation: glow-pulse 6s ease-in-out infinite;
     }
 
     &__hero-content {
@@ -65,10 +81,17 @@
     }
 
     &__headline-accent {
-        background: linear-gradient(135deg, var(--color-brand) 0%, hsl(270, 70%, 78%) 100%);
+        background: linear-gradient(
+            135deg,
+            var(--color-brand) 0%,
+            hsl(270, 70%, 78%) 50%,
+            var(--color-brand) 100%
+        );
+        background-size: 200% 200%;
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+        animation: headline-shimmer 4s ease-in-out infinite;
     }
 
     &__subtitle {
@@ -123,6 +146,11 @@
         display: flex;
         width: max-content;
         animation: marquee-left 55s linear infinite;
+        pointer-events: auto;
+
+        &:hover {
+            animation-play-state: paused;
+        }
 
         &--reverse {
             animation: marquee-right 55s linear infinite;
@@ -139,16 +167,141 @@
         display: block;
         user-select: none;
         margin-inline-end: u.rem(12);
+        transition:
+            transform 0.2s ease,
+            border-color 0.2s ease;
+
+        &:hover {
+            transform: scale(1.06);
+            border-color: rgba(var(--color-brand-rgb), 0.6);
+        }
     }
 
     // Features
     &__features {
+        display: flex;
+        flex-direction: column;
+        gap: u.rem(16);
+        padding: u.rem(16) u.rem(24) u.rem(80);
+        max-width: u.rem(900);
+        margin: 0 auto;
+    }
+
+    // Clubs — featured banner card
+    &__clubs-card {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: u.rem(24);
+        padding: u.rem(32);
+        border-radius: u.rem(16);
+        overflow: hidden;
+        background: linear-gradient(
+            135deg,
+            rgba(167, 139, 250, 0.14) 0%,
+            var(--color-bg-card) 65%
+        );
+        border: 0.5px solid rgba(167, 139, 250, 0.35);
+        opacity: 0;
+        transform: translateY(24px);
+        transition:
+            border-color 0.2s,
+            opacity 0.6s ease,
+            transform 0.6s ease;
+
+        &.is-revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        &:hover {
+            border-color: rgba(167, 139, 250, 0.6);
+            transform: translateY(-2px);
+        }
+
+        &:hover .home-page__clubs-icon .icon {
+            transform: scale(1.15) rotate(-4deg);
+        }
+
+        .button .icon {
+            transition: transform 0.2s ease;
+        }
+
+        &:hover .button .icon {
+            transform: translateX(3px);
+        }
+
+        @include u.breakpoint-max("small") {
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+        }
+    }
+
+    &__clubs-glow {
+        position: absolute;
+        top: 50%;
+        right: u.rem(-60);
+        transform: translateY(-50%);
+        width: u.rem(280);
+        height: u.rem(280);
+        background: radial-gradient(circle, rgba(167, 139, 250, 0.25) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    &__clubs-icon {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: u.rem(64);
+        height: u.rem(64);
+        border-radius: u.rem(14);
+        background: rgba(167, 139, 250, 0.15);
+        position: relative;
+        z-index: 1;
+        animation: icon-float 3s ease-in-out infinite;
+
+        .icon {
+            transition: transform 0.2s ease;
+        }
+    }
+
+    &__clubs-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: u.rem(6);
+        position: relative;
+        z-index: 1;
+    }
+
+    &__clubs-eyebrow {
+        font-size: u.rem(11);
+        font-weight: 700;
+        color: #a78bfa;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+    &__clubs-title {
+        font-size: u.rem(20);
+        font-weight: 700;
+        color: var(--color-text-primary);
+    }
+
+    &__clubs-text {
+        font-size: u.rem(13.5);
+        color: var(--color-text-secondary);
+        line-height: 1.6;
+        max-width: u.rem(440);
+    }
+
+    // Secondary feature cards
+    &__feature-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: u.rem(16);
-        padding: u.rem(48) u.rem(24) u.rem(80);
-        max-width: u.rem(900);
-        margin: 0 auto;
 
         @include u.breakpoint-max("small") {
             grid-template-columns: 1fr;
@@ -159,23 +312,41 @@
         background: var(--color-bg-card);
         border: 0.5px solid var(--color-border);
         border-radius: u.rem(12);
-        padding: u.rem(28);
+        padding: u.rem(24);
         display: flex;
         flex-direction: column;
-        gap: u.rem(8);
-        transition: border-color 0.2s;
+        gap: u.rem(12);
+        opacity: 0;
+        transform: translateY(24px);
+        transition:
+            border-color 0.2s,
+            opacity 0.6s ease,
+            transform 0.6s ease;
+
+        &.is-revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
         &:hover {
             border-color: rgba(var(--color-brand-rgb), 0.5);
+            transform: translateY(-2px);
+        }
+
+        &:hover .home-page__feature-icon {
+            transform: scale(1.1) rotate(-4deg);
         }
     }
 
-    &__feature-number {
-        font-size: u.rem(11);
-        font-weight: 700;
-        color: var(--color-brand);
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
+    &__feature-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: u.rem(44);
+        height: u.rem(44);
+        border-radius: u.rem(10);
+        background: var(--color-bg-surface);
+        transition: transform 0.2s ease;
     }
 
     &__feature-title {
@@ -188,5 +359,25 @@
         font-size: u.rem(13);
         color: var(--color-text-secondary);
         line-height: 1.65;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .home-page__glow,
+        .home-page__headline-accent,
+        .home-page__clubs-icon,
+        .home-page__marquee-row,
+        .home-page__marquee-row--reverse {
+            animation: none;
+        }
+
+        .home-page__clubs-card,
+        .home-page__feature {
+            transition: none;
+
+            &.is-revealed {
+                opacity: 1;
+                transform: none;
+            }
+        }
     }
 }
