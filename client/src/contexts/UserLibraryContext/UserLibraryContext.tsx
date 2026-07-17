@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
+import { useCallback, useMemo, type ReactNode } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserLibraryContext } from "./useUserLibraryContext";
 import type {
     PatchUserLibraryGameBodyType,
@@ -20,104 +21,107 @@ export interface UserLibraryContextType {
     onDeleteGameById: (id: string) => Promise<void>;
 }
 
-export const UserLibraryProvider = ({ children }: { children: ReactNode }) => {
-    const [isLoading, setIsLoading] = useState(true);
-    const [libraryData, setLibraryData] = useState<UserLibraryDataType[]>([]);
+const fetchLibrary = async (userId: string): Promise<UserLibraryDataType[]> => {
+    const res = await fetch(`${API_URL}/user/${userId}/library`, { credentials: "include" });
+    if (!res.ok) throw new Error("Failed to fetch library");
+    return res.json();
+};
 
+export const UserLibraryProvider = ({ children }: { children: ReactNode }) => {
     const { currentUser } = useUserContext();
+    const queryClient = useQueryClient();
+    const queryKey = useMemo(() => ["user-library", currentUser?._id], [currentUser?._id]);
+
+    const { data: libraryData = [], isLoading } = useQuery({
+        queryKey,
+        queryFn: () => fetchLibrary(currentUser!._id),
+        enabled: !!currentUser,
+    });
+
+    const addGameMutation = useMutation({
+        mutationFn: async (data: PostUserLibraryGameBodyType) => {
+            const res = await fetch(`${API_URL}/user/${currentUser?._id}/library`, {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+            if (!res.ok) throw new Error("Failed to add game");
+            return (await res.json()) as UserLibraryDataType;
+        },
+        meta: { errorMessage: "Failed to add game. Please try again." },
+        onSuccess: (newGame) => {
+            queryClient.setQueryData<UserLibraryDataType[]>(queryKey, (prev = []) => [
+                newGame,
+                ...prev,
+            ]);
+            toast.success(`${newGame.title} added to your library`);
+        },
+    });
+
+    const patchGameMutation = useMutation({
+        mutationFn: async ({ id, data }: { id: string; data: PatchUserLibraryGameBodyType }) => {
+            const res = await fetch(`${API_URL}/user/${currentUser?._id}/library/${id}`, {
+                method: "PATCH",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+            if (!res.ok) throw new Error("Failed to update game");
+            return (await res.json()) as UserLibraryDataType;
+        },
+        meta: { errorMessage: "Failed to update game. Please try again." },
+        onSuccess: (updatedGame) => {
+            queryClient.setQueryData<UserLibraryDataType[]>(queryKey, (prev = []) =>
+                prev.map((d) => (d._id === updatedGame._id ? updatedGame : d)),
+            );
+            toast.success(`Changes to ${updatedGame.title} have been saved`);
+        },
+    });
+
+    const deleteGameMutation = useMutation({
+        mutationFn: async (id: string) => {
+            const res = await fetch(`${API_URL}/user/${currentUser?._id}/library/${id}`, {
+                method: "DELETE",
+                credentials: "include",
+            });
+            if (!res.ok) throw new Error("Failed to delete game");
+            return id;
+        },
+        meta: { errorMessage: "Failed to delete game. Please try again." },
+        onSuccess: (id) => {
+            const game = libraryData.find((d) => d._id === id);
+            queryClient.setQueryData<UserLibraryDataType[]>(queryKey, (prev = []) =>
+                prev.filter((d) => d._id !== id),
+            );
+            toast.success(`${game?.title ?? "Game"} removed from library`);
+        },
+    });
 
     const onAddGame = useCallback(
         async (data: PostUserLibraryGameBodyType) => {
-            try {
-                const response = await fetch(`${API_URL}/user/${currentUser?._id}/library`, {
-                    method: "POST",
-                    credentials: "include",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(data),
-                });
-                if (!response.ok) throw new Error("Failed to add game");
-                const newGame: UserLibraryDataType = await response.json();
-                setLibraryData((prev) => [newGame, ...prev]);
-                toast.success(`${newGame.title} added to your library`);
-            } catch (error) {
-                if (import.meta.env.DEV) {
-                    console.error(error instanceof Error ? error.message : error);
-                }
-
-                toast.error("Failed to add game. Please try again.");
-            }
+            await addGameMutation.mutateAsync(data).catch(() => {});
         },
-        [currentUser],
+        [addGameMutation],
     );
 
     const onPatchGame = useCallback(
-        async (
-            id: string,
-            data: PatchUserLibraryGameBodyType,
-        ): Promise<UserLibraryDataType | null> => {
+        async (id: string, data: PatchUserLibraryGameBodyType) => {
             try {
-                const response = await fetch(`${API_URL}/user/${currentUser?._id}/library/${id}`, {
-                    method: "PATCH",
-                    credentials: "include",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(data),
-                });
-                if (!response.ok) throw new Error("Failed to update game");
-                const updatedGame: UserLibraryDataType = await response.json();
-                setLibraryData((prev) => prev.map((d) => (d._id === id ? updatedGame : d)));
-                toast.success(`Changes to ${updatedGame.title} have been saved`);
-                return updatedGame;
-            } catch (error) {
-                if (import.meta.env.DEV) {
-                    console.error(error instanceof Error ? error.message : error);
-                }
-
-                toast.error("Failed to update game. Please try again.");
+                return await patchGameMutation.mutateAsync({ id, data });
+            } catch {
                 return null;
             }
         },
-        [currentUser],
+        [patchGameMutation],
     );
 
     const onDeleteGameById = useCallback(
         async (id: string) => {
-            try {
-                const game = libraryData.find((d) => d._id === id);
-                const response = await fetch(`${API_URL}/user/${currentUser?._id}/library/${id}`, {
-                    method: "DELETE",
-                    credentials: "include",
-                });
-                if (!response.ok) throw new Error("Failed to delete game");
-                setLibraryData((prev) => prev.filter((d) => d._id !== id));
-                toast.success(`${game?.title ?? "Game"} removed from library`);
-            } catch (error) {
-                if (import.meta.env.DEV) {
-                    console.error(error instanceof Error ? error.message : error);
-                }
-                toast.error("Failed to delete game. Please try again.");
-            }
+            await deleteGameMutation.mutateAsync(id).catch(() => {});
         },
-        [currentUser, libraryData],
+        [deleteGameMutation],
     );
-
-    useEffect(() => {
-        const fetchUserLibraryGames = async () => {
-            setIsLoading(true);
-            try {
-                const response = await fetch(`${API_URL}/user/${currentUser?._id}/library`, {
-                    credentials: "include",
-                });
-                const data = await response.json();
-                setLibraryData(data);
-            } catch (error) {
-                if (import.meta.env.DEV)
-                    console.error(error instanceof Error ? error.message : error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchUserLibraryGames();
-    }, [currentUser]);
 
     const contextValue = useMemo(
         () => ({
