@@ -5,6 +5,7 @@ import { UserLibraryPageProvider } from "./UserLibraryPageContext";
 import { useUserLibraryPageContext } from "./useUserLibraryPageContext";
 import { UserLibraryProvider } from "@contexts/UserLibraryContext/UserLibraryContext";
 import { type UserLibraryDataType } from "@lucid/types";
+import { createQueryWrapper } from "../../tests/createQueryWrapper";
 
 const mockCurrentUser = { _id: "user-1", first_name: "John", last_name: "Doe" };
 
@@ -12,11 +13,13 @@ vi.mock("../../contexts/UserContext/useUserContext", () => ({
     useUserContext: () => ({ currentUser: mockCurrentUser }),
 }));
 
-const wrapper = ({ children }: { children: ReactNode }) => (
+const ComposedProvider = ({ children }: { children: ReactNode }) => (
     <UserLibraryProvider>
         <UserLibraryPageProvider>{children}</UserLibraryPageProvider>
     </UserLibraryProvider>
 );
+
+const wrapper = createQueryWrapper(ComposedProvider);
 
 function makeGame(overrides: Partial<UserLibraryDataType> = {}): UserLibraryDataType {
     return {
@@ -200,8 +203,8 @@ describe("UserLibraryPageContext", () => {
                 json: async () => ({}),
             });
             await act(async () => result.current.handleOnDeleteGameById("1"));
+            await waitFor(() => expect(result.current.filteredData).toHaveLength(2));
             expect(result.current.filteredData.find((g) => g._id === "1")).toBeUndefined();
-            expect(result.current.filteredData).toHaveLength(2);
         });
 
         it("clears selectedCard after deletion", async () => {
@@ -257,8 +260,8 @@ describe("UserLibraryPageContext", () => {
                     cover_url: null,
                 }),
             );
+            await waitFor(() => expect(result.current.filteredData).toHaveLength(4));
             expect(result.current.filteredData[0]._id).toBe("99");
-            expect(result.current.filteredData).toHaveLength(4);
         });
 
         it("closes the add game modal after adding", async () => {
@@ -302,8 +305,11 @@ describe("UserLibraryPageContext", () => {
             await act(async () =>
                 result.current.handleOnPatchGame("1", { title: "Zelda Updated" }),
             );
-            const patched = result.current.filteredData.find((g) => g._id === "1");
-            expect(patched?.title).toBe("Zelda Updated");
+            await waitFor(() =>
+                expect(result.current.filteredData.find((g) => g._id === "1")?.title).toBe(
+                    "Zelda Updated",
+                ),
+            );
             expect(result.current.selectedCard?.title).toBe("Zelda Updated");
         });
 
