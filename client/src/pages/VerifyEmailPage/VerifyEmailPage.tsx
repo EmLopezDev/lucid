@@ -3,7 +3,7 @@ import { VerifyEmailPageProvider } from "./VerifyEmailPageContext";
 import { useVerifyEmailPageContext } from "./useVerifyEmailPageContext";
 
 const VerifyEmailPageContent = () => {
-    const { status } = useVerifyEmailPageContext();
+    const { status, errorMessage } = useVerifyEmailPageContext();
 
     if (status === "loading") {
         return (
@@ -29,7 +29,7 @@ const VerifyEmailPageContent = () => {
         <div className="verify-email-page verify-email-page--error">
             <p className="verify-email-page__title">Invalid link</p>
             <p className="verify-email-page__message">
-                This verification link is invalid or has expired.
+                {errorMessage ?? "This verification link is invalid or has expired."}
             </p>
         </div>
     );
