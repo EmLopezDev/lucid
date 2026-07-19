@@ -1,12 +1,12 @@
 import {
     useState,
-    useRef,
     useCallback,
     useMemo,
     type ReactNode,
     type ChangeEvent,
     type SubmitEvent,
 } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { emailCheck } from "@lib/string";
 import { objectCopy } from "@lib/generic";
 import { isFormDataValid, type FormRules, hasErrors } from "@lib/form";
@@ -39,6 +39,19 @@ export interface ForgotPasswordPageContextType {
     onResend: () => Promise<void>;
 }
 
+const postForgotPassword = async (email: string) => {
+    const res = await fetch(`${API_URL}/auth/forgot-password`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+    });
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+    }
+};
+
 export const ForgotPasswordPageProvider = ({ children }: { children: ReactNode }) => {
     const [formData, setFormData] = useState<UserForgotPasswordType>(
         objectCopy(FORGOT_PASSWORD_EMPTY_FORM),
@@ -46,12 +59,7 @@ export const ForgotPasswordPageProvider = ({ children }: { children: ReactNode }
     const [errors, setErrors] = useState<UserForgotPasswordType>(
         objectCopy(FORGOT_PASSWORD_EMPTY_FORM),
     );
-    const [formDataError, setFormDataError] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
     const [canResend, setCanResend] = useState(false);
-    const [resendSuccess, setResendSuccess] = useState(false);
-    const submittedEmail = useRef("");
 
     const onEmailChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setFormData((prevState: UserForgotPasswordType) => {
@@ -59,39 +67,21 @@ export const ForgotPasswordPageProvider = ({ children }: { children: ReactNode }
         });
     }, []);
 
-    const postForgotPassword = useCallback(
-        async (d: UserForgotPasswordType) => {
-            try {
-                setIsSubmitting(true);
-                const response = await fetch(`${API_URL}/auth/forgot-password`, {
-                    method: "POST",
-                    credentials: "include",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(d),
-                });
-                if (response.ok) {
-                    submittedEmail.current = d.email;
-                    setIsSuccess(true);
-                    setTimeout(() => setCanResend(true), 60_000);
-                } else {
-                    const error = await response.json();
-                    setFormDataError(error.message);
-                }
-            } catch (error) {
-                if (error instanceof Error) {
-                    setFormDataError(error.message);
-                }
-            } finally {
-                setIsSubmitting(false);
-            }
+    const forgotPasswordMutation = useMutation({
+        mutationFn: postForgotPassword,
+        meta: { skipErrorToast: true },
+        onSuccess: () => {
+            setTimeout(() => setCanResend(true), 60_000);
         },
-        [],
-    );
+    });
+
+    const resendMutation = useMutation({
+        mutationFn: postForgotPassword,
+        meta: { skipErrorToast: true },
+    });
 
     const onSubmitForm = useCallback(
-        async (e: React.SubmitEvent<HTMLFormElement>) => {
+        (e: React.SubmitEvent<HTMLFormElement>) => {
             e.preventDefault();
 
             const validationErrors = isFormDataValid(
@@ -105,40 +95,31 @@ export const ForgotPasswordPageProvider = ({ children }: { children: ReactNode }
                 return;
             }
 
-            await postForgotPassword(formData);
+            forgotPasswordMutation.mutate(formData.email);
         },
-        [formData, postForgotPassword],
+        [formData, forgotPasswordMutation],
     );
 
     const onResend = useCallback(async () => {
-        try {
-            const response = await fetch(`${API_URL}/auth/forgot-password`, {
-                method: "POST",
-                credentials: "include",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email: submittedEmail.current }),
-            });
-            if (response.ok) {
-                setResendSuccess(true);
-            }
-        } catch {
-            // silently ignore — the endpoint never exposes whether the email exists
-        }
-    }, []);
+        await resendMutation.mutateAsync(forgotPasswordMutation.variables ?? "").catch(() => {});
+    }, [resendMutation, forgotPasswordMutation.variables]);
 
     const onResetForm = useCallback(() => {
         setFormData(objectCopy(FORGOT_PASSWORD_EMPTY_FORM));
         setErrors(objectCopy(FORGOT_PASSWORD_EMPTY_FORM));
-        setFormDataError("");
-    }, []);
+        forgotPasswordMutation.reset();
+    }, [forgotPasswordMutation]);
 
     const contextValue = useMemo(
         () => ({
-            isSubmitting,
-            isSuccess,
+            isSubmitting: forgotPasswordMutation.isPending,
+            isSuccess: forgotPasswordMutation.isSuccess,
             canResend,
-            resendSuccess,
-            formDataError,
+            resendSuccess: resendMutation.isSuccess,
+            formDataError:
+                forgotPasswordMutation.error instanceof Error
+                    ? forgotPasswordMutation.error.message
+                    : "",
             errors,
             email: formData.email,
             onEmailChange,
@@ -147,12 +128,12 @@ export const ForgotPasswordPageProvider = ({ children }: { children: ReactNode }
             onResend,
         }),
         [
-            isSubmitting,
-            isSuccess,
+            forgotPasswordMutation.isPending,
+            forgotPasswordMutation.isSuccess,
+            forgotPasswordMutation.error,
             canResend,
-            resendSuccess,
+            resendMutation.isSuccess,
             errors,
-            formDataError,
             formData.email,
             onEmailChange,
             onSubmitForm,
