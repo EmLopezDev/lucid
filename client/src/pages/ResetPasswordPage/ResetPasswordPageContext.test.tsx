@@ -3,12 +3,15 @@ import { renderHook, act, waitFor } from "@testing-library/react";
 import { type ReactNode } from "react";
 import { ResetPasswordPageProvider } from "./ResetPasswordPageContext";
 import { useResetPasswordPageContext } from "./useResetPasswordContext";
+import { createQueryWrapper } from "../../tests/createQueryWrapper";
 
 const TEST_TOKEN = "test-reset-token";
 
-const wrapper = ({ children }: { children: ReactNode }) => (
+const ProviderWithToken = ({ children }: { children: ReactNode }) => (
     <ResetPasswordPageProvider token={TEST_TOKEN}>{children}</ResetPasswordPageProvider>
 );
+
+const wrapper = createQueryWrapper(ProviderWithToken);
 
 function inputEvent(value: string) {
     return { target: { value } } as React.ChangeEvent<HTMLInputElement>;
@@ -76,7 +79,7 @@ describe("ResetPasswordPageContext", () => {
             const { result } = renderHook(() => useResetPasswordPageContext(), { wrapper });
             act(() => result.current.onPasswordChange(inputEvent("newpassword123")));
             await act(async () => result.current.onSubmitForm(submitEvent()));
-            expect(result.current.isSuccess).toBe(true);
+            await waitFor(() => expect(result.current.isSuccess).toBe(true));
         });
     });
 
@@ -89,7 +92,9 @@ describe("ResetPasswordPageContext", () => {
             const { result } = renderHook(() => useResetPasswordPageContext(), { wrapper });
             act(() => result.current.onPasswordChange(inputEvent("newpassword123")));
             await act(async () => result.current.onSubmitForm(submitEvent()));
-            expect(result.current.formDataError).toBe("Invalid or expired token");
+            await waitFor(() =>
+                expect(result.current.formDataError).toBe("Invalid or expired token"),
+            );
         });
 
         it("sets formDataError when fetch throws", async () => {
@@ -99,7 +104,7 @@ describe("ResetPasswordPageContext", () => {
             const { result } = renderHook(() => useResetPasswordPageContext(), { wrapper });
             act(() => result.current.onPasswordChange(inputEvent("newpassword123")));
             await act(async () => result.current.onSubmitForm(submitEvent()));
-            expect(result.current.formDataError).toBe("Network error");
+            await waitFor(() => expect(result.current.formDataError).toBe("Network error"));
         });
     });
 
@@ -118,7 +123,7 @@ describe("ResetPasswordPageContext", () => {
             await act(async () => {
                 settle({ ok: false, json: async () => ({ message: "err" }) });
             });
-            expect(result.current.isSubmitting).toBe(false);
+            await waitFor(() => expect(result.current.isSubmitting).toBe(false));
         });
     });
 
