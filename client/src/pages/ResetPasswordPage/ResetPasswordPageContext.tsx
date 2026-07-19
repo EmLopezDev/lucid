@@ -6,6 +6,7 @@ import {
     type ChangeEvent,
     type SubmitEvent,
 } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { objectCopy } from "@lib/generic";
 import { isFormDataValid, type FormRules, hasErrors } from "@lib/form";
 import { API_URL } from "@config/api";
@@ -36,6 +37,19 @@ export interface ResetPasswordPageContextType {
     onResetForm: () => void;
 }
 
+const resetPassword = async (data: UserResetPasswordType) => {
+    const res = await fetch(`${API_URL}/auth/reset-password`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+    }
+};
+
 export const ResetPasswordPageProvider = ({
     children,
     token,
@@ -49,9 +63,6 @@ export const ResetPasswordPageProvider = ({
     const [errors, setErrors] = useState<UserResetPasswordType>(
         objectCopy(RESET_PASSWORD_EMPTY_FORM),
     );
-    const [formDataError, setFormDataError] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
 
     const onPasswordChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setFormData((prevState: UserResetPasswordType) => {
@@ -59,34 +70,13 @@ export const ResetPasswordPageProvider = ({
         });
     }, []);
 
-    const postResetPassword = useCallback(async (d: UserResetPasswordType) => {
-        try {
-            setIsSubmitting(true);
-            const response = await fetch(`${API_URL}/auth/reset-password`, {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(d),
-            });
-            if (response.ok) {
-                setIsSuccess(true);
-            } else {
-                const error = await response.json();
-                setFormDataError(error.message);
-            }
-        } catch (error) {
-            if (error instanceof Error) {
-                setFormDataError(error.message);
-            }
-        } finally {
-            setIsSubmitting(false);
-        }
-    }, []);
+    const resetPasswordMutation = useMutation({
+        mutationFn: resetPassword,
+        meta: { skipErrorToast: true },
+    });
 
     const onSubmitForm = useCallback(
-        async (e: React.SubmitEvent<HTMLFormElement>) => {
+        (e: React.SubmitEvent<HTMLFormElement>) => {
             e.preventDefault();
 
             const validationErrors = isFormDataValid(
@@ -100,22 +90,25 @@ export const ResetPasswordPageProvider = ({
                 return;
             }
 
-            await postResetPassword({ hash: token, new_password: formData.new_password });
+            resetPasswordMutation.mutate({ hash: token, new_password: formData.new_password });
         },
-        [token, formData, postResetPassword],
+        [token, formData, resetPasswordMutation],
     );
 
     const onResetForm = useCallback(() => {
         setFormData(objectCopy(RESET_PASSWORD_EMPTY_FORM));
         setErrors(objectCopy(RESET_PASSWORD_EMPTY_FORM));
-        setFormDataError("");
-    }, []);
+        resetPasswordMutation.reset();
+    }, [resetPasswordMutation]);
 
     const contextValue = useMemo(
         () => ({
-            isSubmitting,
-            isSuccess,
-            formDataError,
+            isSubmitting: resetPasswordMutation.isPending,
+            isSuccess: resetPasswordMutation.isSuccess,
+            formDataError:
+                resetPasswordMutation.error instanceof Error
+                    ? resetPasswordMutation.error.message
+                    : "",
             errors,
             password: formData.new_password,
             onPasswordChange,
@@ -123,10 +116,10 @@ export const ResetPasswordPageProvider = ({
             onResetForm,
         }),
         [
-            isSubmitting,
-            isSuccess,
+            resetPasswordMutation.isPending,
+            resetPasswordMutation.isSuccess,
+            resetPasswordMutation.error,
             errors,
-            formDataError,
             formData.new_password,
             onPasswordChange,
             onSubmitForm,
