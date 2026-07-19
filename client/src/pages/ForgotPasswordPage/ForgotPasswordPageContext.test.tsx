@@ -1,12 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, act, waitFor } from "@testing-library/react";
-import { type ReactNode } from "react";
 import { ForgotPasswordPageProvider } from "./ForgotPasswordPageContext";
 import { useForgotPasswordPageContext } from "./useForgotPasswordPageContext";
+import { createQueryWrapper } from "../../tests/createQueryWrapper";
 
-const wrapper = ({ children }: { children: ReactNode }) => (
-    <ForgotPasswordPageProvider>{children}</ForgotPasswordPageProvider>
-);
+const wrapper = createQueryWrapper(ForgotPasswordPageProvider);
 
 function inputEvent(value: string) {
     return { target: { value } } as React.ChangeEvent<HTMLInputElement>;
@@ -69,7 +67,7 @@ describe("ForgotPasswordPageContext", () => {
             const { result } = renderHook(() => useForgotPasswordPageContext(), { wrapper });
             act(() => result.current.onEmailChange(inputEvent("test@example.com")));
             await act(async () => result.current.onSubmitForm(submitEvent()));
-            expect(result.current.isSuccess).toBe(true);
+            await waitFor(() => expect(result.current.isSuccess).toBe(true));
         });
     });
 
@@ -82,7 +80,9 @@ describe("ForgotPasswordPageContext", () => {
             const { result } = renderHook(() => useForgotPasswordPageContext(), { wrapper });
             act(() => result.current.onEmailChange(inputEvent("test@example.com")));
             await act(async () => result.current.onSubmitForm(submitEvent()));
-            expect(result.current.formDataError).toBe("Something went wrong");
+            await waitFor(() =>
+                expect(result.current.formDataError).toBe("Something went wrong"),
+            );
         });
 
         it("sets formDataError when fetch throws", async () => {
@@ -92,7 +92,7 @@ describe("ForgotPasswordPageContext", () => {
             const { result } = renderHook(() => useForgotPasswordPageContext(), { wrapper });
             act(() => result.current.onEmailChange(inputEvent("test@example.com")));
             await act(async () => result.current.onSubmitForm(submitEvent()));
-            expect(result.current.formDataError).toBe("Network error");
+            await waitFor(() => expect(result.current.formDataError).toBe("Network error"));
         });
     });
 
@@ -111,7 +111,7 @@ describe("ForgotPasswordPageContext", () => {
             await act(async () => {
                 settle({ ok: false, json: async () => ({ message: "err" }) });
             });
-            expect(result.current.isSubmitting).toBe(false);
+            await waitFor(() => expect(result.current.isSubmitting).toBe(false));
         });
     });
 
@@ -128,7 +128,7 @@ describe("ForgotPasswordPageContext", () => {
 
     describe("resend reset email", () => {
         beforeEach(() => {
-            vi.useFakeTimers();
+            vi.useFakeTimers({ shouldAdvanceTime: true });
         });
 
         afterEach(() => {
@@ -167,6 +167,7 @@ describe("ForgotPasswordPageContext", () => {
             const { result } = renderHook(() => useForgotPasswordPageContext(), { wrapper });
             act(() => result.current.onEmailChange(inputEvent("test@example.com")));
             await act(async () => result.current.onSubmitForm(submitEvent()));
+            await waitFor(() => expect(result.current.isSuccess).toBe(true));
             await act(async () => result.current.onResend());
             expect(globalThis.fetch).toHaveBeenLastCalledWith(
                 expect.stringContaining("/auth/forgot-password"),
@@ -184,8 +185,9 @@ describe("ForgotPasswordPageContext", () => {
             const { result } = renderHook(() => useForgotPasswordPageContext(), { wrapper });
             act(() => result.current.onEmailChange(inputEvent("test@example.com")));
             await act(async () => result.current.onSubmitForm(submitEvent()));
+            await waitFor(() => expect(result.current.isSuccess).toBe(true));
             await act(async () => result.current.onResend());
-            expect(result.current.resendSuccess).toBe(true);
+            await waitFor(() => expect(result.current.resendSuccess).toBe(true));
         });
 
         it("silently ignores a server error on resend", async () => {
@@ -195,6 +197,7 @@ describe("ForgotPasswordPageContext", () => {
             const { result } = renderHook(() => useForgotPasswordPageContext(), { wrapper });
             act(() => result.current.onEmailChange(inputEvent("test@example.com")));
             await act(async () => result.current.onSubmitForm(submitEvent()));
+            await waitFor(() => expect(result.current.isSuccess).toBe(true));
             await act(async () => result.current.onResend());
             expect(result.current.formDataError).toBe("");
             expect(result.current.resendSuccess).toBe(false);
@@ -207,6 +210,7 @@ describe("ForgotPasswordPageContext", () => {
             const { result } = renderHook(() => useForgotPasswordPageContext(), { wrapper });
             act(() => result.current.onEmailChange(inputEvent("test@example.com")));
             await act(async () => result.current.onSubmitForm(submitEvent()));
+            await waitFor(() => expect(result.current.isSuccess).toBe(true));
             await act(async () => result.current.onResend());
             expect(result.current.formDataError).toBe("");
         });
