@@ -6,8 +6,9 @@ import {
     type ChangeEvent,
     type SubmitEvent,
 } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useSearchParams } from "react-router";
-import { type UserSigninType } from "@lucid/types";
+import { type UserSigninType, type UserType } from "@lucid/types";
 import { SignInPageContext } from "./useSignInPageContext";
 import { emailCheck } from "@lib/string";
 import { useUserContext } from "@contexts/UserContext/useUserContext";
@@ -47,6 +48,46 @@ export interface SignInPageContextType {
     onResetForm: () => void;
 }
 
+class SignInError extends Error {
+    status: number;
+
+    constructor(message: string, status: number) {
+        super(message);
+        this.status = status;
+    }
+}
+
+const signIn = async (data: UserSigninType): Promise<UserType> => {
+    const res = await fetch(`${API_URL}/auth/signin`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+        const error = await res.json();
+        throw new SignInError(error.message, res.status);
+    }
+    return res.json();
+};
+
+const resendVerification = async (email: string) => {
+    let res: Response;
+    try {
+        res = await fetch(`${API_URL}/auth/resend-verification`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email }),
+        });
+    } catch {
+        throw new Error("Something went wrong. Please try again.");
+    }
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+    }
+};
+
 export const SignInPageProvider = ({
     children,
     initialValues,
@@ -63,7 +104,6 @@ export const SignInPageProvider = ({
     );
     const [errors, setErrors] = useState<UserSigninType>(objectCopy(SIGNIN_EMPTY_FORM));
     const [formDataError, setFormDataError] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
     const [unverified, setUnverified] = useState(false);
     const [resendSuccess, setResendSuccess] = useState(false);
 
@@ -79,42 +119,30 @@ export const SignInPageProvider = ({
         });
     }, []);
 
-    const signInUser = useCallback(
-        async (d: UserSigninType) => {
-            setIsSubmitting(true);
-            try {
-                const response = await fetch(`${API_URL}/auth/signin`, {
-                    method: "POST",
-                    credentials: "include",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(d),
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    setUser(data);
-                    toast.success(`Welcome back, ${data.first_name}`);
-                    const redirect = searchParams.get("redirect") ?? "/";
-                    navigation(redirect);
-                } else {
-                    if (response.status === 403) setUnverified(true);
-                    const error = await response.json();
-                    setFormDataError(error.message);
-                }
-            } catch (error) {
-                if (error instanceof Error) {
-                    setFormDataError(error.message);
-                }
-            } finally {
-                setIsSubmitting(false);
-            }
+    const signInMutation = useMutation({
+        mutationFn: signIn,
+        meta: { skipErrorToast: true },
+        onSuccess: (user) => {
+            setUser(user);
+            toast.success(`Welcome back, ${user.first_name}`);
+            const redirect = searchParams.get("redirect") ?? "/";
+            navigation(redirect);
         },
-        [navigation, searchParams, setUser],
-    );
+        onError: (error) => {
+            if (error instanceof SignInError && error.status === 403) setUnverified(true);
+            setFormDataError(error.message);
+        },
+    });
+
+    const resendVerificationMutation = useMutation({
+        mutationFn: resendVerification,
+        meta: { skipErrorToast: true },
+        onSuccess: () => setResendSuccess(true),
+        onError: (error) => setFormDataError(error.message),
+    });
 
     const onSubmitForm = useCallback(
-        async (e: React.SubmitEvent<HTMLFormElement>) => {
+        (e: React.SubmitEvent<HTMLFormElement>) => {
             e.preventDefault();
 
             const validationErrors = isFormDataValid(formData, SIGNIN_RULES, SIGNIN_EMPTY_FORM);
@@ -124,9 +152,9 @@ export const SignInPageProvider = ({
                 return;
             }
 
-            await signInUser(formData);
+            signInMutation.mutate(formData);
         },
-        [formData, signInUser],
+        [formData, signInMutation],
     );
 
     const onResetForm = useCallback(() => {
@@ -138,28 +166,12 @@ export const SignInPageProvider = ({
     }, []);
 
     const onResendVerification = useCallback(async () => {
-        try {
-            const response = await fetch(`${API_URL}/auth/resend-verification`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ email: formData.email }),
-            });
-            if (response.ok) {
-                setResendSuccess(true);
-            } else {
-                const error = await response.json();
-                setFormDataError(error.message);
-            }
-        } catch {
-            setFormDataError("Something went wrong. Please try again.");
-        }
-    }, [formData.email]);
+        await resendVerificationMutation.mutateAsync(formData.email).catch(() => {});
+    }, [resendVerificationMutation, formData.email]);
 
     const contextValue = useMemo(
         () => ({
-            isSubmitting,
+            isSubmitting: signInMutation.isPending,
             formDataError,
             errors,
             unverified,
@@ -173,7 +185,7 @@ export const SignInPageProvider = ({
             onResendVerification,
         }),
         [
-            isSubmitting,
+            signInMutation.isPending,
             errors,
             formDataError,
             unverified,

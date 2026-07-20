@@ -3,6 +3,8 @@ import { renderHook, act, waitFor } from "@testing-library/react";
 import { type ReactNode } from "react";
 import { SignInPageProvider } from "./SignInPageContext";
 import { useSignInPageContext } from "./useSignInPageContext";
+import { createQueryWrapper } from "../../tests/createQueryWrapper";
+import { type UserSigninType } from "@lucid/types";
 
 const mockNavigate = vi.hoisted(() => vi.fn());
 const mockSetUser = vi.hoisted(() => vi.fn());
@@ -20,9 +22,12 @@ vi.mock("../../contexts/UserContext/useUserContext", () => ({
     useUserContext: () => ({ setUser: mockSetUser }),
 }));
 
-const wrapper = ({ children }: { children: ReactNode }) => (
-    <SignInPageProvider>{children}</SignInPageProvider>
-);
+const wrapper = createQueryWrapper(SignInPageProvider);
+
+const wrapperWithInitialValues = (initialValues: UserSigninType) =>
+    createQueryWrapper(({ children }: { children: ReactNode }) => (
+        <SignInPageProvider initialValues={initialValues}>{children}</SignInPageProvider>
+    ));
 
 function inputEvent(value: string) {
     return { target: { value } } as React.ChangeEvent<HTMLInputElement>;
@@ -51,9 +56,7 @@ describe("SignInPageContext", () => {
     it("pre-fills form when initialValues are provided", () => {
         const initialValues = { email: "demo@lucid.com", password: "lucid-demo" };
         const { result } = renderHook(() => useSignInPageContext(), {
-            wrapper: ({ children }: { children: ReactNode }) => (
-                <SignInPageProvider initialValues={initialValues}>{children}</SignInPageProvider>
-            ),
+            wrapper: wrapperWithInitialValues(initialValues),
         });
         expect(result.current.email).toBe("demo@lucid.com");
         expect(result.current.password).toBe("lucid-demo");
