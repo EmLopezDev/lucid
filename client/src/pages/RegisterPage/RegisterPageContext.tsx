@@ -1,12 +1,12 @@
 import {
     useState,
-    useRef,
     useMemo,
     useCallback,
     type ReactNode,
     type ChangeEvent,
     type SubmitEvent,
 } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { nameCheck, emailCheck } from "@lib/string";
 import { RegisterPageContext } from "./useRegisterPageContext";
 import { type UserRegisterType } from "@lucid/types";
@@ -56,15 +56,40 @@ export interface RegisterPageContextType {
     onResendVerification: () => Promise<void>;
 }
 
+const registerUser = async (data: UserRegisterType) => {
+    const res = await fetch(`${API_URL}/auth/register`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+    }
+};
+
+const resendVerification = async (email: string) => {
+    let res: Response;
+    try {
+        res = await fetch(`${API_URL}/auth/resend-verification`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email }),
+        });
+    } catch {
+        throw new Error("Something went wrong. Please try again.");
+    }
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+    }
+};
+
 export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
     const [formData, setFormData] = useState<UserRegisterType>(objectCopy(REGISTER_EMPTY_FORM));
     const [errors, setErrors] = useState<UserRegisterType>(objectCopy(REGISTER_EMPTY_FORM));
-    const [formDataError, setFormDataError] = useState("");
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
     const [canResend, setCanResend] = useState(false);
-    const [resendSuccess, setResendSuccess] = useState(false);
-    const registeredEmail = useRef("");
 
     const onFirstNameChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         setFormData((prevState: UserRegisterType) => {
@@ -90,33 +115,18 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
         });
     }, []);
 
-    const registerUser = useCallback(async (d: UserRegisterType) => {
-        setIsSubmitting(true);
-        try {
-            const response = await fetch(`${API_URL}/auth/register`, {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(d),
-            });
-            if (response.ok) {
-                registeredEmail.current = d.email;
-                setIsSuccess(true);
-                setTimeout(() => setCanResend(true), 60_000);
-            } else {
-                const error = await response.json();
-                setFormDataError(error.message);
-            }
-        } catch (error) {
-            if (error instanceof Error) {
-                setFormDataError(error.message);
-            }
-        } finally {
-            setIsSubmitting(false);
-        }
-    }, []);
+    const registerMutation = useMutation({
+        mutationFn: registerUser,
+        meta: { skipErrorToast: true },
+        onSuccess: () => {
+            setTimeout(() => setCanResend(true), 60_000);
+        },
+    });
+
+    const resendMutation = useMutation({
+        mutationFn: resendVerification,
+        meta: { skipErrorToast: true },
+    });
 
     const onSubmitForm = useCallback(
         (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -126,42 +136,32 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
                 setErrors(validationErrors);
                 return;
             }
-            registerUser(formData);
+            registerMutation.mutate(formData);
         },
-        [formData, registerUser],
+        [formData, registerMutation],
     );
 
     const onResendVerification = useCallback(async () => {
-        try {
-            const response = await fetch(`${API_URL}/auth/resend-verification`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email: registeredEmail.current }),
-            });
-            if (response.ok) {
-                setResendSuccess(true);
-            } else {
-                const error = await response.json();
-                setFormDataError(error.message);
-            }
-        } catch {
-            setFormDataError("Something went wrong. Please try again.");
-        }
-    }, []);
+        await resendMutation.mutateAsync(registerMutation.variables?.email ?? "").catch(() => {});
+    }, [resendMutation, registerMutation.variables]);
 
     const onResetForm = useCallback(() => {
         setFormData(objectCopy(REGISTER_EMPTY_FORM));
         setErrors(objectCopy(REGISTER_EMPTY_FORM));
-        setFormDataError("");
-    }, []);
+        registerMutation.reset();
+        resendMutation.reset();
+    }, [registerMutation, resendMutation]);
 
     const contextValue = useMemo(
         () => ({
-            isSubmitting,
-            isSuccess,
+            isSubmitting: registerMutation.isPending,
+            isSuccess: registerMutation.isSuccess,
             canResend,
-            resendSuccess,
-            formDataError,
+            resendSuccess: resendMutation.isSuccess,
+            formDataError:
+                (registerMutation.error instanceof Error && registerMutation.error.message) ||
+                (resendMutation.error instanceof Error && resendMutation.error.message) ||
+                "",
             errors,
             onFirstNameChange,
             onLastNameChange,
@@ -172,11 +172,12 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
             onResendVerification,
         }),
         [
-            isSubmitting,
-            isSuccess,
+            registerMutation.isPending,
+            registerMutation.isSuccess,
+            registerMutation.error,
             canResend,
-            resendSuccess,
-            formDataError,
+            resendMutation.isSuccess,
+            resendMutation.error,
             errors,
             onFirstNameChange,
             onLastNameChange,
