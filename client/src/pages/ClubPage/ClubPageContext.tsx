@@ -7,6 +7,7 @@ import {
     type Dispatch,
     type SetStateAction,
 } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { type ClubDetailType, type ClubMemberType, type ClubPostType } from "@lucid/types";
 import { API_URL } from "@config/api";
 import { ClubPageContext } from "./hooks/useClubPageContext";
@@ -30,6 +31,15 @@ type ActiveModalType =
     | null;
 
 export type PendingEditPostType = { content: string; is_spoiler: boolean };
+
+class ClubForbiddenError extends Error {}
+
+const fetchClub = async (clubId: string): Promise<ClubDetailType> => {
+    const response = await fetch(`${API_URL}/clubs/${clubId}`, { credentials: "include" });
+    if (response.status === 403) throw new ClubForbiddenError();
+    if (!response.ok) throw new Error("Failed to fetch club data");
+    return response.json();
+};
 
 export type ClubPageContextType = {
     isLoading: boolean;
@@ -57,15 +67,12 @@ export type ClubPageContextType = {
     fetchMoreClubPosts: () => Promise<void>;
     onOpenModal: (modal: Exclude<ActiveModalType, null>) => void;
     onCloseModal: () => void;
-    setClubData: Dispatch<SetStateAction<ClubDetailType | null>>;
+    setClubData: (data: ClubDetailType) => void;
     onSwitchTab: (tab: ClubTab) => void;
     handlePostSwitchTab: () => void;
 };
 
 export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; clubId: string }) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [clubData, setClubData] = useState<ClubDetailType | null>(null);
     const [pendingMemberId, setPendingMemberId] = useState<string | null>(null);
     const [pendingPostId, setPendingPostId] = useState<string | null>(null);
     const [pendingEditPost, setPendingEditPost] = useState<PendingEditPostType | null>(null);
@@ -81,6 +88,34 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
     const { currentUser } = useUserContext();
 
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
+    const queryKey = useMemo(() => ["club", clubId], [clubId]);
+
+    const {
+        data: clubData = null,
+        isLoading,
+        error: queryError,
+    } = useQuery({
+        queryKey,
+        queryFn: () => fetchClub(clubId),
+        retry: false,
+    });
+
+    useEffect(() => {
+        if (queryError instanceof ClubForbiddenError) navigate("/clubs");
+    }, [queryError, navigate]);
+
+    const error =
+        queryError && !(queryError instanceof ClubForbiddenError)
+            ? (queryError.message ?? "Something went wrong")
+            : null;
+
+    const setClubData = useCallback(
+        (data: ClubDetailType) => {
+            queryClient.setQueryData(queryKey, data);
+        },
+        [queryClient, queryKey],
+    );
 
     const isOwner = currentUser?._id === clubData?.owner;
     const isMember = clubData?.members.some((m) => m._id === (currentUser?._id ?? "")) ?? false;
@@ -152,32 +187,6 @@ export const ClubPageProvider = ({ children, clubId }: { children: ReactNode; cl
         onSwitchTab("posts");
         fetchClubPosts();
     }, [fetchClubPosts, onSwitchTab]);
-
-    useEffect(() => {
-        const fetchClubData = async () => {
-            try {
-                setIsLoading(true);
-                const response = await fetch(`${API_URL}/clubs/${clubId}`, {
-                    credentials: "include",
-                });
-                if (response.status === 403) {
-                    navigate("/clubs");
-                    return;
-                }
-                if (!response.ok) throw new Error("Failed to fetch club data");
-                const club: ClubDetailType = await response.json();
-                setClubData(club);
-            } catch (error) {
-                if (import.meta.env.DEV) {
-                    console.error(error instanceof Error ? error.message : error);
-                }
-                setError(error instanceof Error ? error.message : "Something went wrong");
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchClubData();
-    }, [clubId, navigate]);
 
     const contextValue = useMemo(
         () => ({
