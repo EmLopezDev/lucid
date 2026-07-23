@@ -1,26 +1,29 @@
-import { useState } from "react";
+import { useCallback } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { API_URL } from "@config/api";
 import type { GameSearchResult } from "../../../types/GameSearch";
 import { useClubPageContext } from "./useClubPageContext";
+import { type ClubDetailType } from "@lucid/types";
 import { toast } from "sonner";
 import { capitalizeString } from "@lib/string";
 
+type SetGameVariables = {
+    game: GameSearchResult;
+    startDate: string | null;
+    endDate: string | null;
+};
+
+type ChangeGameVariables = SetGameVariables & { gameStatus: "completed" | "dropped" };
+
 const useClubGame = () => {
     const { clubId, onOpenModal, onCloseModal, setClubData } = useClubPageContext();
-    const [isSettingGame, setIsSettingGame] = useState(false);
-    const [isChangingGame, setIsChangingGame] = useState(false);
 
     const handleOpenSetGameModal = () => onOpenModal("setGame");
 
     const handleOpenChangeGameModal = () => onOpenModal("changeGame");
 
-    const onGameSet = async (
-        game: GameSearchResult,
-        startDate: string | null,
-        endDate: string | null,
-    ) => {
-        try {
-            setIsSettingGame(true);
+    const setGameMutation = useMutation({
+        mutationFn: async ({ game, startDate, endDate }: SetGameVariables) => {
             const response = await fetch(`${API_URL}/clubs/${clubId}/game`, {
                 method: "PATCH",
                 credentials: "include",
@@ -33,28 +36,18 @@ const useClubGame = () => {
                 }),
             });
             if (!response.ok) throw new Error("Failed to set game");
-            const updatedClub = await response.json();
+            return (await response.json()) as ClubDetailType;
+        },
+        meta: { errorMessage: "Unable to set game, try again." },
+        onSuccess: (updatedClub, { game }) => {
             setClubData(updatedClub);
             onCloseModal();
             toast.success(`${capitalizeString(game.title)} has been set as current game`);
-        } catch (error) {
-            if (import.meta.env.DEV) {
-                console.error(error instanceof Error ? error.message : error);
-            }
-            toast.error("Unable to set game, try again.");
-        } finally {
-            setIsSettingGame(false);
-        }
-    };
+        },
+    });
 
-    const onGameChange = async (
-        game: GameSearchResult,
-        startDate: string | null,
-        endDate: string | null,
-        gameStatus: "completed" | "dropped",
-    ) => {
-        try {
-            setIsChangingGame(true);
+    const changeGameMutation = useMutation({
+        mutationFn: async ({ game, startDate, endDate, gameStatus }: ChangeGameVariables) => {
             const response = await fetch(`${API_URL}/clubs/${clubId}/game`, {
                 method: "PATCH",
                 credentials: "include",
@@ -68,25 +61,40 @@ const useClubGame = () => {
                 }),
             });
             if (!response.ok) throw new Error("Failed to change game");
-            const updatedClub = await response.json();
+            return (await response.json()) as ClubDetailType;
+        },
+        meta: { errorMessage: "Unable to change game, try again." },
+        onSuccess: (updatedClub, { game }) => {
             setClubData(updatedClub);
             onCloseModal();
             toast.success(`Current game was changed to ${capitalizeString(game.title)}`);
-        } catch (error) {
-            if (import.meta.env.DEV) {
-                console.error(error instanceof Error ? error.message : error);
-            }
-            toast.error("Unable to change game, try again.");
-        } finally {
-            setIsChangingGame(false);
-        }
-    };
+        },
+    });
+
+    const onGameSet = useCallback(
+        (game: GameSearchResult, startDate: string | null, endDate: string | null) => {
+            setGameMutation.mutate({ game, startDate, endDate });
+        },
+        [setGameMutation],
+    );
+
+    const onGameChange = useCallback(
+        (
+            game: GameSearchResult,
+            startDate: string | null,
+            endDate: string | null,
+            gameStatus: "completed" | "dropped",
+        ) => {
+            changeGameMutation.mutate({ game, startDate, endDate, gameStatus });
+        },
+        [changeGameMutation],
+    );
 
     return {
         onGameSet,
         onGameChange,
-        isSettingGame,
-        isChangingGame,
+        isSettingGame: setGameMutation.isPending,
+        isChangingGame: changeGameMutation.isPending,
         handleOpenSetGameModal,
         handleOpenChangeGameModal,
     };
