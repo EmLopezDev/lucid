@@ -1,12 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, act, waitFor } from "@testing-library/react";
-import { type ReactNode } from "react";
 import { RegisterPageProvider } from "./RegisterPageContext";
 import { useRegisterPageContext } from "./useRegisterPageContext";
+import { createQueryWrapper } from "../../tests/createQueryWrapper";
 
-const wrapper = ({ children }: { children: ReactNode }) => (
-    <RegisterPageProvider>{children}</RegisterPageProvider>
-);
+const wrapper = createQueryWrapper(RegisterPageProvider);
 
 function inputEvent(value: string) {
     return { target: { value } } as React.ChangeEvent<HTMLInputElement>;
@@ -14,6 +12,18 @@ function inputEvent(value: string) {
 
 function submitEvent() {
     return { preventDefault: vi.fn() } as unknown as React.SubmitEvent<HTMLFormElement>;
+}
+
+// Flushes react-query's internal promise chain deterministically so its
+// post-mutate state (isSuccess, variables) propagates to a re-render.
+// Testing-library's waitFor won't work here — it polls via real timers,
+// which are frozen under vi.useFakeTimers(), and shouldAdvanceTime just
+// trades that hang for wall-clock drift that throws off the 60s boundary
+// assertions below.
+async function flushMutation() {
+    await act(async () => {
+        await vi.advanceTimersByTimeAsync(0);
+    });
 }
 
 const validForm = {
@@ -185,7 +195,7 @@ describe("RegisterPageContext", () => {
             await act(async () => {
                 settle({ ok: false, json: async () => ({ message: "err" }) });
             });
-            expect(result.current.isSubmitting).toBe(false);
+            await waitFor(() => expect(result.current.isSubmitting).toBe(false));
         });
     });
 
@@ -222,6 +232,7 @@ describe("RegisterPageContext", () => {
                 result.current.onPasswordChange(inputEvent(validForm.password));
             });
             await act(async () => result.current.onSubmitForm(submitEvent()));
+            await flushMutation();
         }
 
         it("starts with canResend and resendSuccess as false", () => {
@@ -270,6 +281,7 @@ describe("RegisterPageContext", () => {
             const { result } = renderHook(() => useRegisterPageContext(), { wrapper });
             await registerSuccessfully(result);
             await act(async () => result.current.onResendVerification());
+            await flushMutation();
             expect(result.current.resendSuccess).toBe(true);
         });
 
@@ -283,6 +295,7 @@ describe("RegisterPageContext", () => {
             const { result } = renderHook(() => useRegisterPageContext(), { wrapper });
             await registerSuccessfully(result);
             await act(async () => result.current.onResendVerification());
+            await flushMutation();
             expect(result.current.formDataError).toBe("Too many requests");
         });
 
@@ -293,6 +306,7 @@ describe("RegisterPageContext", () => {
             const { result } = renderHook(() => useRegisterPageContext(), { wrapper });
             await registerSuccessfully(result);
             await act(async () => result.current.onResendVerification());
+            await flushMutation();
             expect(result.current.formDataError).toBe("Something went wrong. Please try again.");
         });
     });
