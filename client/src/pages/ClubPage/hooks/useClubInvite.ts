@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { useClubPageContext } from "./useClubPageContext";
 import { type ClubDetailType } from "@lucid/types";
 import { API_URL } from "@config/api";
@@ -8,7 +9,6 @@ import { formatInviteExpiry } from "@lib/date";
 const useClubInvite = () => {
     const { clubId, clubData, setClubData, onOpenModal, onCloseModal } = useClubPageContext();
     const [isConfirmingRegenerate, setIsConfirmingRegenerate] = useState(false);
-    const [isRegeneratingInvite, setIsRegeneratingInvite] = useState(false);
 
     const inviteUrl = clubData?.invite_code
         ? `${window.location.origin}/clubs/${clubId}/invite?code=${clubData.invite_code}`
@@ -35,28 +35,29 @@ const useClubInvite = () => {
         onOpenModal("inviteCode");
     }, [onOpenModal]);
 
-    const handleConfirmRegenerate = useCallback(async () => {
-        try {
-            setIsRegeneratingInvite(true);
+    const regenerateInviteMutation = useMutation({
+        mutationFn: async () => {
             const response = await fetch(`${API_URL}/clubs/${clubId}/invite/regenerate`, {
                 method: "PATCH",
                 credentials: "include",
             });
             if (!response.ok) throw new Error("Failed to regenerate invite code");
-            const updated: ClubDetailType = await response.json();
+            return (await response.json()) as ClubDetailType;
+        },
+        meta: {
+            successMessage: "Invite link regenerated.",
+            errorMessage: "Unable to regenerate invite link, try again.",
+        },
+        onSuccess: (updated) => {
             setClubData(updated);
             setIsConfirmingRegenerate(false);
             onOpenModal("inviteCode");
-            toast.success("Invite link regenerated.");
-        } catch (error) {
-            if (import.meta.env.DEV) {
-                console.error(error instanceof Error ? error.message : error);
-            }
-            toast.error("Unable to regenerate invite link, try again.");
-        } finally {
-            setIsRegeneratingInvite(false);
-        }
-    }, [clubId, setClubData, onOpenModal]);
+        },
+    });
+
+    const handleConfirmRegenerate = useCallback(() => {
+        regenerateInviteMutation.mutate();
+    }, [regenerateInviteMutation]);
 
     const handleCloseInviteModal = useCallback(() => {
         onCloseModal();
@@ -66,7 +67,7 @@ const useClubInvite = () => {
         inviteUrl,
         inviteExpiry,
         isConfirmingRegenerate,
-        isRegeneratingInvite,
+        isRegeneratingInvite: regenerateInviteMutation.isPending,
         handleOpenInviteModal,
         handleCopyInviteLink,
         handleRequestRegenerate,
