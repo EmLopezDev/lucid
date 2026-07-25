@@ -3,10 +3,11 @@ import { useUserContext } from "@contexts/UserContext/useUserContext";
 import { nameCheck, emailCheck } from "@lib/string";
 import { isFormDataValid, hasErrors, type FormRules } from "@lib/form";
 import { objectCopy } from "@lib/generic";
-import { API_URL } from "@config/api";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
+import { apiFetch } from "@lib/apiFetch";
+import { type UserType } from "@lucid/types";
 
 type ProfileFormType = {
     first_name: string;
@@ -62,24 +63,12 @@ export const useProfileView = () => {
     }, []);
 
     const updateProfileMutation = useMutation({
-        mutationFn: async (data: ProfileFormType) => {
-            let res: Response;
-            try {
-                res = await fetch(`${API_URL}/user/${currentUser?._id}`, {
-                    method: "PATCH",
-                    credentials: "include",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(data),
-                });
-            } catch {
-                throw new Error("Something went wrong");
-            }
-            if (!res.ok) {
-                const error = await res.json();
-                throw new Error(error.message ?? "Something went wrong");
-            }
-            return res.json();
-        },
+        mutationFn: (data: ProfileFormType) =>
+            apiFetch<UserType>(`/user/${currentUser?._id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            }),
         // The server's error message is validation-specific (e.g. "Email
         // already in use"), so this opts out of the generic error toast and
         // fires its own with the real reason instead.
@@ -117,22 +106,15 @@ export const useProfileView = () => {
     }, [currentUser]);
 
     const deleteAccountMutation = useMutation({
-        mutationFn: async () => {
-            let response: Response;
-            try {
-                response = await fetch(`${API_URL}/user/${currentUser?._id}`, {
-                    credentials: "include",
-                    headers: { "Content-Type": "application/json" },
+        mutationFn: () =>
+            apiFetch(
+                `/user/${currentUser?._id}`,
+                {
                     method: "DELETE",
-                });
-            } catch {
-                throw new Error("Unable to delete account, try again.");
-            }
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.message ?? "Unable to delete account, try again.");
-            }
-        },
+                    headers: { "Content-Type": "application/json" },
+                },
+                "Unable to delete account, try again.",
+            ),
         // Some failures are permanent (e.g. protected demo accounts), so this
         // opts out of the generic error toast and shows the server's real
         // reason instead of implying a retry might work.
