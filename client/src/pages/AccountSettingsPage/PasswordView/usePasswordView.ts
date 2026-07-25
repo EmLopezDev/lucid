@@ -2,7 +2,7 @@ import { useState, useCallback, type ChangeEvent, type SubmitEvent } from "react
 import { useUserContext } from "@contexts/UserContext/useUserContext";
 import { isFormDataValid, hasErrors, type FormRules } from "@lib/form";
 import { objectCopy } from "@lib/generic";
-import { API_URL } from "@config/api";
+import { apiFetch } from "@lib/apiFetch";
 import { toast } from "sonner";
 import { useMutation } from "@tanstack/react-query";
 
@@ -36,23 +36,12 @@ export const usePasswordView = () => {
     }, []);
 
     const updatePasswordMutation = useMutation({
-        mutationFn: async (data: PasswordFormType) => {
-            let res: Response;
-            try {
-                res = await fetch(`${API_URL}/user/${currentUser!._id}/password`, {
-                    method: "PATCH",
-                    credentials: "include",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(data),
-                });
-            } catch {
-                throw new Error("Something went wrong");
-            }
-            if (!res.ok) {
-                const error = await res.json();
-                throw new Error(error.message ?? "Something went wrong");
-            }
-        },
+        mutationFn: (data: PasswordFormType) =>
+            apiFetch(`/user/${currentUser!._id}/password`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            }),
         meta: { successMessage: "Password updated", skipErrorToast: true },
         onSuccess: () => {
             setFormData(objectCopy(EMPTY_FORM));
