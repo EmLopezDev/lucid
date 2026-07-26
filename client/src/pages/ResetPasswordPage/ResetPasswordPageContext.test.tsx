@@ -104,7 +104,9 @@ describe("ResetPasswordPageContext", () => {
             const { result } = renderHook(() => useResetPasswordPageContext(), { wrapper });
             act(() => result.current.onPasswordChange(inputEvent("newpassword123")));
             await act(async () => result.current.onSubmitForm(submitEvent()));
-            await waitFor(() => expect(result.current.formDataError).toBe("Network error"));
+            await waitFor(() =>
+                expect(result.current.formDataError).toBe("Something went wrong, try again"),
+            );
         });
     });
 
@@ -118,7 +120,9 @@ describe("ResetPasswordPageContext", () => {
             );
             const { result } = renderHook(() => useResetPasswordPageContext(), { wrapper });
             act(() => result.current.onPasswordChange(inputEvent("newpassword123")));
-            act(() => { result.current.onSubmitForm(submitEvent()); });
+            act(() => {
+                result.current.onSubmitForm(submitEvent());
+            });
             await waitFor(() => expect(result.current.isSubmitting).toBe(true));
             await act(async () => {
                 settle({ ok: false, json: async () => ({ message: "err" }) });

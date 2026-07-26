@@ -9,9 +9,9 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import { objectCopy } from "@lib/generic";
 import { isFormDataValid, type FormRules, hasErrors } from "@lib/form";
-import { API_URL } from "@config/api";
 import { ResetPasswordPageContext } from "./useResetPasswordContext";
 import { type UserResetPasswordType } from "@lucid/types";
+import { apiFetch } from "@lib/apiFetch";
 
 const RESET_PASSWORD_EMPTY_FORM: UserResetPasswordType = {
     hash: "",
@@ -37,19 +37,6 @@ export interface ResetPasswordPageContextType {
     onResetForm: () => void;
 }
 
-const resetPassword = async (data: UserResetPasswordType) => {
-    const res = await fetch(`${API_URL}/auth/reset-password`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-    });
-    if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.message);
-    }
-};
-
 export const ResetPasswordPageProvider = ({
     children,
     token,
@@ -71,7 +58,17 @@ export const ResetPasswordPageProvider = ({
     }, []);
 
     const resetPasswordMutation = useMutation({
-        mutationFn: resetPassword,
+        mutationFn: (data: UserResetPasswordType) =>
+            apiFetch(
+                "/auth/reset-password",
+                {
+                    method: "POST",
+                    credentials: "include",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data),
+                },
+                "Something went wrong, try again",
+            ),
         meta: { skipErrorToast: true },
     });
 
