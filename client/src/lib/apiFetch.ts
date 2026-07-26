@@ -1,5 +1,13 @@
 import { API_URL } from "@config/api";
 
+export class ApiError extends Error {
+    status: number;
+
+    constructor(message: string, status: number) {
+        super(message);
+        this.status = status;
+    }
+}
 const isAbsoluteUrl = (value: string) => /^https?:\/\//.test(value);
 
 export async function apiFetch<T = void>(
@@ -16,7 +24,7 @@ export async function apiFetch<T = void>(
     }
     if (!res.ok) {
         const error = await res.json().catch(() => ({}));
-        throw new Error(error.message ?? fallbackMessage);
+        throw new ApiError(error.message ?? fallbackMessage, res.status);
     }
     try {
         return await res.json();
