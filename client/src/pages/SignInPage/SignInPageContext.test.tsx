@@ -153,7 +153,7 @@ describe("SignInPageContext", () => {
                 result.current.onPasswordChange(inputEvent(validForm.password));
             });
             await act(async () => result.current.onSubmitForm(submitEvent()));
-            expect(result.current.formDataError).toBe("Network error");
+            await waitFor(() => expect(result.current.formDataError).toBe("Something went wrong"));
         });
     });
 
@@ -265,7 +265,9 @@ describe("SignInPageContext", () => {
                 (globalThis.fetch as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error());
                 const { result } = renderHook(() => useSignInPageContext(), { wrapper });
                 await act(async () => result.current.onResendVerification());
-                expect(result.current.formDataError).toBe("Something went wrong. Please try again.");
+                expect(result.current.formDataError).toBe(
+                    "Something went wrong. Please try again.",
+                );
             });
         });
 

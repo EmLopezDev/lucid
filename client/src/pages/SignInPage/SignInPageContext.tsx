@@ -14,8 +14,8 @@ import { emailCheck } from "@lib/string";
 import { useUserContext } from "@contexts/UserContext/useUserContext";
 import { objectCopy } from "@lib/generic";
 import { isFormDataValid, type FormRules, hasErrors } from "@lib/form";
-import { API_URL } from "@config/api";
 import { toast } from "sonner";
+import { apiFetch, ApiError } from "@lib/apiFetch";
 
 const SIGNIN_EMPTY_FORM: UserSigninType = {
     email: "",
@@ -47,46 +47,6 @@ export interface SignInPageContextType {
     onSubmitForm: (e: SubmitEvent<HTMLFormElement>) => void;
     onResetForm: () => void;
 }
-
-class SignInError extends Error {
-    status: number;
-
-    constructor(message: string, status: number) {
-        super(message);
-        this.status = status;
-    }
-}
-
-const signIn = async (data: UserSigninType): Promise<UserType> => {
-    const res = await fetch(`${API_URL}/auth/signin`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-    });
-    if (!res.ok) {
-        const error = await res.json();
-        throw new SignInError(error.message, res.status);
-    }
-    return res.json();
-};
-
-const resendVerification = async (email: string) => {
-    let res: Response;
-    try {
-        res = await fetch(`${API_URL}/auth/resend-verification`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email }),
-        });
-    } catch {
-        throw new Error("Something went wrong. Please try again.");
-    }
-    if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.message);
-    }
-};
 
 export const SignInPageProvider = ({
     children,
@@ -120,7 +80,14 @@ export const SignInPageProvider = ({
     }, []);
 
     const signInMutation = useMutation({
-        mutationFn: signIn,
+        mutationFn: (data: UserSigninType): Promise<UserType> => {
+            return apiFetch<UserType>("/auth/signin", {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+        },
         meta: { skipErrorToast: true },
         onSuccess: (user) => {
             setUser(user);
@@ -129,13 +96,22 @@ export const SignInPageProvider = ({
             navigation(redirect);
         },
         onError: (error) => {
-            if (error instanceof SignInError && error.status === 403) setUnverified(true);
+            if (error instanceof ApiError && error.status === 403) setUnverified(true);
             setFormDataError(error.message);
         },
     });
 
     const resendVerificationMutation = useMutation({
-        mutationFn: resendVerification,
+        mutationFn: (email: string) =>
+            apiFetch(
+                "/auth/resend-verification",
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email }),
+                },
+                "Something went wrong. Please try again.",
+            ),
         meta: { skipErrorToast: true },
         onSuccess: () => setResendSuccess(true),
         onError: (error) => setFormDataError(error.message),
