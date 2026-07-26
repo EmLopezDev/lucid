@@ -169,7 +169,7 @@ describe("RegisterPageContext", () => {
                 result.current.onPasswordChange(inputEvent(validForm.password));
             });
             act(() => result.current.onSubmitForm(submitEvent()));
-            await waitFor(() => expect(result.current.formDataError).toBe("Network error"));
+            await waitFor(() => expect(result.current.formDataError).toBe("Something went wrong"));
         });
     });
 
@@ -224,7 +224,11 @@ describe("RegisterPageContext", () => {
             vi.useRealTimers();
         });
 
-        async function registerSuccessfully(result: ReturnType<typeof renderHook<ReturnType<typeof useRegisterPageContext>, unknown>>["result"]) {
+        async function registerSuccessfully(
+            result: ReturnType<
+                typeof renderHook<ReturnType<typeof useRegisterPageContext>, unknown>
+            >["result"],
+        ) {
             act(() => {
                 result.current.onFirstNameChange(inputEvent(validForm.first_name));
                 result.current.onLastNameChange(inputEvent(validForm.last_name));
