@@ -12,7 +12,7 @@ import { RegisterPageContext } from "./useRegisterPageContext";
 import { type UserRegisterType } from "@lucid/types";
 import { objectCopy } from "@lib/generic";
 import { isFormDataValid, type FormRules, hasErrors } from "@lib/form";
-import { API_URL } from "@config/api";
+import { apiFetch } from "@lib/apiFetch";
 
 const REGISTER_EMPTY_FORM: UserRegisterType = {
     first_name: "",
@@ -56,36 +56,6 @@ export interface RegisterPageContextType {
     onResendVerification: () => Promise<void>;
 }
 
-const registerUser = async (data: UserRegisterType) => {
-    const res = await fetch(`${API_URL}/auth/register`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-    });
-    if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.message);
-    }
-};
-
-const resendVerification = async (email: string) => {
-    let res: Response;
-    try {
-        res = await fetch(`${API_URL}/auth/resend-verification`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email }),
-        });
-    } catch {
-        throw new Error("Something went wrong. Please try again.");
-    }
-    if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.message);
-    }
-};
-
 export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
     const [formData, setFormData] = useState<UserRegisterType>(objectCopy(REGISTER_EMPTY_FORM));
     const [errors, setErrors] = useState<UserRegisterType>(objectCopy(REGISTER_EMPTY_FORM));
@@ -116,7 +86,12 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
     }, []);
 
     const registerMutation = useMutation({
-        mutationFn: registerUser,
+        mutationFn: (data: UserRegisterType) =>
+            apiFetch("/auth/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            }),
         meta: { skipErrorToast: true },
         onSuccess: () => {
             setTimeout(() => setCanResend(true), 60_000);
@@ -124,7 +99,16 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
     });
 
     const resendMutation = useMutation({
-        mutationFn: resendVerification,
+        mutationFn: (email: string) =>
+            apiFetch(
+                "/auth/resend-verification",
+                {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email }),
+                },
+                "Something went wrong. Please try again.",
+            ),
         meta: { skipErrorToast: true },
     });
 
