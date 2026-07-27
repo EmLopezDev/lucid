@@ -16,6 +16,7 @@ import { objectCopy } from "@lib/generic";
 import { isFormDataValid, type FormRules, hasErrors } from "@lib/form";
 import { toast } from "sonner";
 import { apiFetch, ApiError } from "@lib/apiFetch";
+import { resendVerificationEmail } from "@lib/verificationEmail";
 
 const SIGNIN_EMPTY_FORM: UserSigninType = {
     email: "",
@@ -102,16 +103,7 @@ export const SignInPageProvider = ({
     });
 
     const resendVerificationMutation = useMutation({
-        mutationFn: (email: string) =>
-            apiFetch(
-                "/auth/resend-verification",
-                {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email }),
-                },
-                "Something went wrong. Please try again.",
-            ),
+        mutationFn: resendVerificationEmail,
         meta: { skipErrorToast: true },
         onSuccess: () => setResendSuccess(true),
         onError: (error) => setFormDataError(error.message),

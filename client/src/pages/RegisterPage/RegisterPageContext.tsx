@@ -13,6 +13,7 @@ import { type UserRegisterType } from "@lucid/types";
 import { objectCopy } from "@lib/generic";
 import { isFormDataValid, type FormRules, hasErrors } from "@lib/form";
 import { apiFetch } from "@lib/apiFetch";
+import { resendVerificationEmail } from "@lib/verificationEmail";
 
 const REGISTER_EMPTY_FORM: UserRegisterType = {
     first_name: "",
@@ -99,16 +100,7 @@ export const RegisterPageProvider = ({ children }: { children: ReactNode }) => {
     });
 
     const resendMutation = useMutation({
-        mutationFn: (email: string) =>
-            apiFetch(
-                "/auth/resend-verification",
-                {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ email }),
-                },
-                "Something went wrong. Please try again.",
-            ),
+        mutationFn: resendVerificationEmail,
         meta: { skipErrorToast: true },
     });
 
