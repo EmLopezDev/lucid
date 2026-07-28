@@ -1,7 +1,7 @@
 import { useUserContext } from "@contexts/UserContext/useUserContext";
-import { API_URL } from "@config/api";
 import { type StatusType } from "@lucid/types";
 import { useQuery } from "@tanstack/react-query";
+import { apiFetch } from "@lib/apiFetch";
 
 export type ProfileStats = {
     totalGames: number;
@@ -37,17 +37,11 @@ export const useUserProfile = () => {
     const { currentUser } = useUserContext();
     const userId = currentUser?._id;
 
-    const fetchProfile = async () => {
-        const res = await fetch(`${API_URL}/user/${userId}/profile`, {
-            credentials: "include",
-        });
-        if (!res.ok) throw new Error("Failed to load profile");
-        return (await res.json()) as UserProfileType;
-    };
-
     const { data, isLoading, error } = useQuery({
         queryKey: ["user-profile", userId],
-        queryFn: fetchProfile,
+        queryFn: () => {
+            return apiFetch<UserProfileType>(`/user/${userId}/profile`);
+        },
         enabled: !!userId,
     });
 
