@@ -80,9 +80,7 @@ describe("ForgotPasswordPageContext", () => {
             const { result } = renderHook(() => useForgotPasswordPageContext(), { wrapper });
             act(() => result.current.onEmailChange(inputEvent("test@example.com")));
             await act(async () => result.current.onSubmitForm(submitEvent()));
-            await waitFor(() =>
-                expect(result.current.formDataError).toBe("Something went wrong"),
-            );
+            await waitFor(() => expect(result.current.formDataError).toBe("Something went wrong"));
         });
 
         it("sets formDataError when fetch throws", async () => {
@@ -92,7 +90,7 @@ describe("ForgotPasswordPageContext", () => {
             const { result } = renderHook(() => useForgotPasswordPageContext(), { wrapper });
             act(() => result.current.onEmailChange(inputEvent("test@example.com")));
             await act(async () => result.current.onSubmitForm(submitEvent()));
-            await waitFor(() => expect(result.current.formDataError).toBe("Network error"));
+            await waitFor(() => expect(result.current.formDataError).toBe("Something went wrong"));
         });
     });
 
@@ -106,7 +104,9 @@ describe("ForgotPasswordPageContext", () => {
             );
             const { result } = renderHook(() => useForgotPasswordPageContext(), { wrapper });
             act(() => result.current.onEmailChange(inputEvent("test@example.com")));
-            act(() => { result.current.onSubmitForm(submitEvent()); });
+            act(() => {
+                result.current.onSubmitForm(submitEvent());
+            });
             await waitFor(() => expect(result.current.isSubmitting).toBe(true));
             await act(async () => {
                 settle({ ok: false, json: async () => ({ message: "err" }) });

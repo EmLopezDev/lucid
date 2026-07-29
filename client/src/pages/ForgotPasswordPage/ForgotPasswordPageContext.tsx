@@ -10,9 +10,9 @@ import { useMutation } from "@tanstack/react-query";
 import { emailCheck } from "@lib/string";
 import { objectCopy } from "@lib/generic";
 import { isFormDataValid, type FormRules, hasErrors } from "@lib/form";
-import { API_URL } from "@config/api";
 import { ForgotPasswordPageContext } from "./useForgotPasswordPageContext";
 import { type UserForgotPasswordType } from "@lucid/types";
+import { apiFetch } from "@lib/apiFetch";
 
 const FORGOT_PASSWORD_EMPTY_FORM: UserForgotPasswordType = {
     email: "",
@@ -39,18 +39,12 @@ export interface ForgotPasswordPageContextType {
     onResend: () => Promise<void>;
 }
 
-const postForgotPassword = async (email: string) => {
-    const res = await fetch(`${API_URL}/auth/forgot-password`, {
+const postForgotPassword = (email: string) =>
+    apiFetch("/auth/forgot-password", {
         method: "POST",
-        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
     });
-    if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.message);
-    }
-};
 
 export const ForgotPasswordPageProvider = ({ children }: { children: ReactNode }) => {
     const [formData, setFormData] = useState<UserForgotPasswordType>(
