@@ -1,11 +1,11 @@
 import { useCallback } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { API_URL } from "@config/api";
 import type { GameSearchResult } from "../../../types/GameSearch";
 import { useClubPageContext } from "./useClubPageContext";
 import { type ClubDetailType } from "@lucid/types";
 import { toast } from "sonner";
 import { capitalizeString } from "@lib/string";
+import { apiFetch } from "@lib/apiFetch";
 
 type SetGameVariables = {
     game: GameSearchResult;
@@ -23,10 +23,9 @@ const useClubGame = () => {
     const handleOpenChangeGameModal = () => onOpenModal("changeGame");
 
     const setGameMutation = useMutation({
-        mutationFn: async ({ game, startDate, endDate }: SetGameVariables) => {
-            const response = await fetch(`${API_URL}/clubs/${clubId}/game`, {
+        mutationFn: ({ game, startDate, endDate }: SetGameVariables) => {
+            return apiFetch<ClubDetailType>(`/clubs/${clubId}/game`, {
                 method: "PATCH",
-                credentials: "include",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     title: game.title,
@@ -35,8 +34,6 @@ const useClubGame = () => {
                     end_date: endDate,
                 }),
             });
-            if (!response.ok) throw new Error("Failed to set game");
-            return (await response.json()) as ClubDetailType;
         },
         meta: { errorMessage: "Unable to set game, try again." },
         onSuccess: (updatedClub, { game }) => {
@@ -47,10 +44,9 @@ const useClubGame = () => {
     });
 
     const changeGameMutation = useMutation({
-        mutationFn: async ({ game, startDate, endDate, gameStatus }: ChangeGameVariables) => {
-            const response = await fetch(`${API_URL}/clubs/${clubId}/game`, {
+        mutationFn: ({ game, startDate, endDate, gameStatus }: ChangeGameVariables) => {
+            return apiFetch<ClubDetailType>(`/clubs/${clubId}/game`, {
                 method: "PATCH",
-                credentials: "include",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     title: game.title,
@@ -60,8 +56,6 @@ const useClubGame = () => {
                     game_status: gameStatus,
                 }),
             });
-            if (!response.ok) throw new Error("Failed to change game");
-            return (await response.json()) as ClubDetailType;
         },
         meta: { errorMessage: "Unable to change game, try again." },
         onSuccess: (updatedClub, { game }) => {
