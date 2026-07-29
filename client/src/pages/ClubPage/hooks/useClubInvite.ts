@@ -2,9 +2,9 @@ import { useCallback, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useClubPageContext } from "./useClubPageContext";
 import { type ClubDetailType } from "@lucid/types";
-import { API_URL } from "@config/api";
 import { toast } from "sonner";
 import { formatInviteExpiry } from "@lib/date";
+import { apiFetch } from "@lib/apiFetch";
 
 const useClubInvite = () => {
     const { clubId, clubData, setClubData, onOpenModal, onCloseModal } = useClubPageContext();
@@ -37,12 +37,9 @@ const useClubInvite = () => {
 
     const regenerateInviteMutation = useMutation({
         mutationFn: async () => {
-            const response = await fetch(`${API_URL}/clubs/${clubId}/invite/regenerate`, {
+            return apiFetch<ClubDetailType>(`/clubs/${clubId}/invite/regenerate`, {
                 method: "PATCH",
-                credentials: "include",
             });
-            if (!response.ok) throw new Error("Failed to regenerate invite code");
-            return (await response.json()) as ClubDetailType;
         },
         meta: {
             successMessage: "Invite link regenerated.",
