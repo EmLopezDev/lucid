@@ -1,9 +1,9 @@
 import { useCallback } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { type ClubDetailType } from "@lucid/types";
-import { API_URL } from "@config/api";
 import { toast } from "sonner";
 import { useClubPageContext } from "./useClubPageContext";
+import { apiFetch } from "@lib/apiFetch";
 
 const useClubMembers = () => {
     const {
@@ -23,13 +23,10 @@ const useClubMembers = () => {
     };
 
     const joinClubMutation = useMutation({
-        mutationFn: async () => {
-            const response = await fetch(`${API_URL}/clubs/${clubId}/join`, {
+        mutationFn: () => {
+            return apiFetch<ClubDetailType>(`/clubs/${clubId}/join`, {
                 method: "PATCH",
-                credentials: "include",
             });
-            if (!response.ok) throw new Error("Failed to join club");
-            return (await response.json()) as ClubDetailType;
         },
         meta: { errorMessage: "Unable to join club, try again." },
         onSuccess: (joinedClub) => {
@@ -39,13 +36,10 @@ const useClubMembers = () => {
     });
 
     const leaveClubMutation = useMutation({
-        mutationFn: async () => {
-            const response = await fetch(`${API_URL}/clubs/${clubId}/leave`, {
+        mutationFn: () => {
+            return apiFetch<ClubDetailType>(`/clubs/${clubId}/leave`, {
                 method: "PATCH",
-                credentials: "include",
             });
-            if (!response.ok) throw new Error("Failed to leave club");
-            return (await response.json()) as ClubDetailType;
         },
         meta: { errorMessage: "Unable to leave club, try again." },
         onSuccess: (leftClub) => {
@@ -56,13 +50,10 @@ const useClubMembers = () => {
     });
 
     const removeMemberMutation = useMutation({
-        mutationFn: async () => {
-            const response = await fetch(`${API_URL}/clubs/${clubId}/members/${pendingMemberId}`, {
+        mutationFn: () => {
+            return apiFetch<ClubDetailType>(`/clubs/${clubId}/members/${pendingMemberId}`, {
                 method: "PATCH",
-                credentials: "include",
             });
-            if (!response.ok) throw new Error("Failed to remove member");
-            return (await response.json()) as ClubDetailType;
         },
         meta: { errorMessage: "Unable to remove member, try again." },
         onSuccess: (removedMemberClub) => {
