@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useClubPageContext } from "./useClubPageContext";
 import { type ClubPostType, type CreateClubPostType, type UpdateClubPostType } from "@lucid/types";
 import { objectCopy } from "@lib/generic";
-import { API_URL } from "@config/api";
+import { apiFetch } from "@lib/apiFetch";
 
 const EMPTY_POST: CreateClubPostType = {
     content: "",
@@ -86,15 +86,12 @@ const useClubPosts = () => {
     );
 
     const createPostMutation = useMutation({
-        mutationFn: async (data: CreateClubPostType) => {
-            const response = await fetch(`${API_URL}/clubs/${clubId}/posts`, {
+        mutationFn: (data: CreateClubPostType) => {
+            return apiFetch<ClubPostType>(`/clubs/${clubId}/posts`, {
                 method: "POST",
-                credentials: "include",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data),
             });
-            if (!response.ok) throw new Error("Failed to add post");
-            return (await response.json()) as ClubPostType;
         },
         meta: {
             successMessage: "Post was added.",
@@ -109,15 +106,12 @@ const useClubPosts = () => {
     });
 
     const updatePostMutation = useMutation({
-        mutationFn: async (data: UpdateClubPostType) => {
-            const response = await fetch(`${API_URL}/clubs/${clubId}/posts/${pendingPostId}`, {
+        mutationFn: (data: UpdateClubPostType) => {
+            return apiFetch<ClubPostType>(`/clubs/${clubId}/posts/${pendingPostId}`, {
                 method: "PATCH",
-                credentials: "include",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data),
             });
-            if (!response.ok) throw new Error("Failed to update post");
-            return (await response.json()) as ClubPostType;
         },
         meta: {
             successMessage: "Post was updated.",
@@ -133,13 +127,10 @@ const useClubPosts = () => {
     });
 
     const deletePostMutation = useMutation({
-        mutationFn: async () => {
-            const response = await fetch(`${API_URL}/clubs/${clubId}/posts/${pendingPostId}`, {
+        mutationFn: () =>
+            apiFetch(`/clubs/${clubId}/posts/${pendingPostId}`, {
                 method: "DELETE",
-                credentials: "include",
-            });
-            if (!response.ok) throw new Error("Failed to delete post");
-        },
+            }),
         meta: {
             successMessage: "Post was deleted.",
             errorMessage: "Unable to delete post, try again.",
