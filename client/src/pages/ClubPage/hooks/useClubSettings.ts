@@ -3,10 +3,10 @@ import { useNavigate } from "react-router";
 import { useMutation } from "@tanstack/react-query";
 import { useClubPageContext } from "./useClubPageContext";
 import { type ClubDetailType, type UpdateClubType } from "@lucid/types";
-import { API_URL } from "@config/api";
 import { isFormDataValid, hasErrors, type FormRules } from "@lib/form";
 import { objectCopy } from "@lib/generic";
 import { toast } from "sonner";
+import { apiFetch } from "@lib/apiFetch";
 
 type EditFormType = {
     name: string;
@@ -86,15 +86,12 @@ const useClubSettings = () => {
     }, []);
 
     const editClubMutation = useMutation({
-        mutationFn: async (data: UpdateClubType) => {
-            const response = await fetch(`${API_URL}/clubs/${clubId}`, {
+        mutationFn: (data: UpdateClubType) => {
+            return apiFetch<ClubDetailType>(`/clubs/${clubId}`, {
                 method: "PATCH",
-                credentials: "include",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data),
             });
-            if (!response.ok) throw new Error("Failed to update club");
-            return (await response.json()) as ClubDetailType;
         },
         meta: {
             successMessage: "Club updated successfully.",
@@ -125,13 +122,11 @@ const useClubSettings = () => {
     );
 
     const deleteClubMutation = useMutation({
-        mutationFn: async () => {
-            const response = await fetch(`${API_URL}/clubs/${clubId}`, {
+        mutationFn: () =>
+            apiFetch(`/clubs/${clubId}`, {
                 method: "DELETE",
                 credentials: "include",
-            });
-            if (!response.ok) throw new Error("Failed to delete club");
-        },
+            }),
         meta: { errorMessage: "Unable to delete club, try again." },
         onSuccess: () => {
             onCloseModal();
